@@ -19,5 +19,5 @@ jobs:
     - name: Build the Docker image
       run: docker compose up -d
     - name: Test if RHDH is running
-      run: curl https://localhost:7007
+      run: curl -k https://localhost:7007
     
