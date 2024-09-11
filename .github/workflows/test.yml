@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare .env
+      run: cp env.sample .env
+    - name: Build the Docker image
+      run: docker compose up -d
+    - name: Test if RHDH is running
+      run: curl https://localhost:7007
+    
