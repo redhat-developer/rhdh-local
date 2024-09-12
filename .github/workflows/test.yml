@@ -18,6 +18,19 @@ jobs:
       run: cp env.sample .env
     - name: Build the Docker image
       run: docker compose up -d
-    - name: Test if RHDH is running
-      run: curl -k https://localhost:7007
-    
+    - name: Wait for HTTP 200 response
+      run: |
+        URL="https://localhost:7007"
+        TIMEOUT=120
+        SLEEP=5
+        start_time=$(date +%s)
+        while [ $(( $(date +%s) - start_time )) -lt $TIMEOUT ]; do
+          if [ "$(curl -o /dev/null -s -w '%{http_code}' $URL)" -eq 200 ]; then
+            echo "HTTP 200 OK"
+            exit 0
+          fi
+          echo "Waiting for HTTP 200..."
+          sleep $SLEEP
+        done
+        echo "Timeout exceeded"
+        exit 1
