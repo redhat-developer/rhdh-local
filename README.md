@@ -1,22 +1,22 @@
-# Test Locally With Red Hat Developer Hub
+# Test Locally With Red Hat Developer Hub (RHDH)
 
-Welcome to RHDH Local, the simplest way to test your software catalogs, techdocs, plugins, and more!
+Welcome to RHDH Local - the fastest and simplest way for platform engineers to test their software catalogs, techdocs, plugins, templates, homepage customizations, configurations and more with RHDH!
 
-RHDH local is the ideal proving ground for trying out the basic features of RHDH (like Software Catalogs or TechDocs) but, it's also great for testing dynamic plugins and their configuration settings. To use RHDH Local, all you really need is a basic knowledge of tools like Docker or Podman, a PC, and a web browser. You can run it on your laptop, desktop, or homelab server. Better still, when you're done working it's easy to remove.
+RHDH local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for a Kubernetes cluster. RHDH Local is also great for testing dynamic plugins and their configuration settings. To use RHDH Local, all you really need is basic knowledge of Docker or Podman, a PC, and a web browser. You can run it on your laptop, desktop, or on your homelab. Better still, when you're done working it's easy to remove.
 
->**RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale to allow use by multiple people and it's not suitable for use by teams (there is no RBAC for example). There's also currently no support for RHDH Local. You use RHDH Local at your own risk. Contributions are welcome.
+>**RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not attempt to use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale and it's not suitable for use by teams (there is no RBAC for example). There's also (currently) no official support for RHDH Local. You use RHDH Local at your own risk. With all that being said, we think it's incredibly useful and any contributions you might have that could improve RHDH Local are welcome!
 
 ## What You'll Need Before You Get Started
 
 To use RHDH Local you'll need a few things:
 
-1. A PC based on an x86 64Bit (amd64) architecture
-1. Docker or Podman installed with adequate resources available
-1. An internet connection for downloading container images, plugins, etc.
+1. A PC based on an x86 64Bit (amd64) architecture (ARM is on the way)
+1. An insiallation of Docker or Podman (with adequate resources available)
+1. An internet connection (for downloading container images, plugins, etc.)
 1. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
-1. (Optional) A GitHub account if you want to integrate GitHub
-1. (Optional) The node `npx` tool if you intend to use GitHub authentication 
-1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) if you want to use PostgreSQL database
+1. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
+1. (Optional) The node `npx` tool (if you intend to use GitHub authentication in RHDH)
+1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database)
 
 ## Getting Started With RHDH Local
 
@@ -38,12 +38,11 @@ To use RHDH Local you'll need a few things:
    cp env.sample .env
    ```
 
-   In most cases, when you don't need GitHub Auth or testing different releases you
-   can leave it as it is, and it should work.
+   In most cases, when you don't need GitHub Auth or testing different releases you can leave it as it is, and it should work.
 
 1. (Optional) Update `configs/app-config.local.yaml`.
-   If you need fetching files form from GitHub you should configure `integrations.github`.
-   The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or mode detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
+   If you need features that fetch files from GitHub you should configure `integrations.github`.
+   The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 1. Start RHDH Local.
    This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
@@ -60,13 +59,13 @@ To use RHDH Local you'll need a few things:
 
 ## Changing Your Configuration
 
-When you change `app-config.local.yaml` you can restart `rhdh` to load RHDH with new configuration.
+When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.
 
 ```sh
 podman-compose stop rhdh && podman-compose start rhdh
 ```
 
-When you change `dynamic-plugins.yaml` you need to re-run `install-dynamic-plugins` container and than restart RHDH instance.
+When you change `dynamic-plugins.yaml` you need to re-run the `install-dynamic-plugins` container and then restart RHDH instance.
 
 ```sh
 podman-compose run install-dynamic-plugins
@@ -94,10 +93,10 @@ To use nightly build of Janus-IDP, set the variable as follows:
 RHDH_IMAGE=quay.io/janus-idp/backstage-showcase:next
 ```
 
-To use the official release of RHDH 1.3, set the variable as follows:
+To use the official release of RHDH 1.4, set the variable as follows:
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.3
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.4
 ```
 
 ## Testing RHDH in a simulated corporate proxy setup
@@ -121,13 +120,13 @@ The [`compose-with-corporate-proxy.yaml`](compose-with-corporate-proxy.yaml) fil
 
 ## Cleanup
 
-To reset RHDH Local you can use the following command. This will clean up any attached volumes, but your configuration changes will remain.
+To reset RHDH Local you can use the following command. This will clean up any container attached volumes, but configuration changes made to your `rhdh-local` YAML files will remain.
 
 ```sh
 podman-compose down --volumes
 ```
 
-To reset everything in the cloned rhdh-local repository, including any configuration changes you've made try:
+To reset everything in the cloned `rhdh-local` repository, including any configuration changes you've made to your YAML files try:
 
 ```sh
 git reset --hard
@@ -220,11 +219,11 @@ If you want to use PostgreSQL with RHDH, here are the steps:
    #   connection: ':memory:'
    ```
 
-## Using VSCode to debug backend plugins
+## Developers: Using VSCode to debug backend plugins
 
-You can use RHDH-local to debug your backend plugins using VSCode. Here is how you can do it:
+You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. Here is how:
 
-1. Start RHDH-local with debug compose file
+1. Start RHDH-local with the "debug" compose file
 
    ```sh
    # in rhdh-local directory
@@ -232,23 +231,23 @@ You can use RHDH-local to debug your backend plugins using VSCode. Here is how y
    ```
 
 2. Open your plugin source code in VSCode
-3. Export plugin as dynamic plugin
+3. Export plugin an RHDH "dynamic" plugin
 
    ```sh
    # in plugin source code directory
    npx @janus-idp/cli@latest package export-dynamic-plugin
    ```
 
-4. Copy exported derived plugin package to `dynamic-plugins-root` directory in RHDH container.
+4. Copy exported derived plugin package to `dynamic-plugins-root` directory in the `rhdh` container.
 
    ```sh
    # in plugin source code directory
    podman cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>
    ```
 
-5. If your plugin requires configuration add it to `app-config.local.yaml` of RHDH-local
+5. If your plugin requires configuration, add it to the `app-config.local.yaml` file in your cloned `rhdh-local` directory.
 
-6. Restart rhdh container
+6. Restart the `rhdh` container
 
    ```sh
    # in rhdh-local directory
@@ -256,7 +255,7 @@ You can use RHDH-local to debug your backend plugins using VSCode. Here is how y
    podman-compose start rhdh
    ```
 
-7. Configure VSCode debugger to attach to RHDH container.
+7. Configure VSCode debugger to attach to the `rhdh` container.
 
    `.vscode/launch.json` example:
 
