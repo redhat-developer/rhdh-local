@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: rhdh-local
+  title: RHDH local
+  description: RHDH local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for a Kubernetes cluster.
+  annotations:
+    #backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: redhat-developer/rhdh-local
+    github.com/team-slug: redhat-developer/rhdh-team
+    #sonarqube.org/project-key: redhat-developer_rhdh-local
+  tags:
+    - backstage
+    - rhdh
+  links:
+    - url: https://red.ht/rhdh
+      title: Product website
+      icon: star
+      type: website
+    - url: https://developers.redhat.com/blog
+      title: Red Hat Developer Blog
+      icon: catalog
+      type: blog
+    - url: https://docs.redhat.com/fr/documentation/red_hat_developer_hub/
+      title: Official documentation
+      icon: docs
+      type: docs
+    - url: https://issues.redhat.com/browse/RHIDP
+      title: Jira issues
+      icon: help
+      type: jira
+    - url: https://github.com/redhat-developer/rhdh-local
+      title: Sourcecode on GitHub
+      icon: github
+      type: sourcecode
+spec:
+  type: tool
+  lifecycle: development
+  owner: rhdh-team
+  # system and subcomponent refers https://github.com/redhat-developer/rhdh/blob/main/catalog-info.yaml
+  system: rhdh
+  subcomponentOf: rhdh
