@@ -279,3 +279,11 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
    If it doesn't work, most likely you need to adjust `localRoot` and `remoteRoot` paths in `launch.json`.
 
    Every time you make changes to your plugin source code, you need to repeat steps 3-6.
+
+## Contributing and reporting issues
+
+To report issues against this repository, please use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**
+
+To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
+
+Contributions are welcome!
