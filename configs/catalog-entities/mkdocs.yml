@@ -12,5 +12,6 @@ plugins:
 nav:
   - "Welcome To Red Hat Developer Hub": index.md
   - "Highlights Of Red Hat Developer Hub": features.md
+  - "TechDocs Extensions": extensions.md
 
   
