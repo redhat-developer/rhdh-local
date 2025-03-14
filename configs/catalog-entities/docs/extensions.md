@@ -1,6 +1,6 @@
 # Making Your TechDocs More Appealing
 
-Other MKdocs extensions that work in TAP and TDP. Taken and tested from the reference documentation [here](https://squidfunk.github.io/mkdocs-material/reference/).
+Using the following MKdocs extensions can make your TechDocs can make the user experience richer and more appealing for the reader. These samples were developed based on the the reference documentation [here](https://squidfunk.github.io/mkdocs-material/reference/). View the source code of this page to discover the correct markup to use for each item displayed below.
 
 ## Quotes
 
