@@ -33,15 +33,15 @@ metadata:
   title: RHDH Local
   description: |
     RHDH Local is used by platform engineers to test and experiment with RHDH configuration with a faster inner loop cycle time. 
-    RHDH Local offers a faster cycle time because it uses Docker or PodMan to run the RHDH container. No Kubernetes is required.
+    RHDH Local uses Docker or PodMan to run the RHDH container. No Kubernetes is required.
     When writing and testing TechDocs, Templates, or Catalog items, RHDH Local offers a fast and simple solution that lets you 
-    work quickly and retain full control over your setup and your database.
+    work quickly and retain full control over your setup and your database. See the TechDocs for more details.
   tags:
     - developer-hub
     - rhdh-local
   links:
     - url: https://red.ht/rhdh
-      title: Red Hat Developer Hub website
+      title: RHDH Homepage
       icon: star
       type: website
     - url: https://developers.redhat.com/blog
@@ -49,19 +49,19 @@ metadata:
       icon: catalog
       type: blog
     - url: https://docs.redhat.com/fr/documentation/red_hat_developer_hub/
-      title: Official RHDH Documentation
+      title: RHDH Documentation
       icon: docs
       type: docs
     - url: https://issues.redhat.com/browse/RHIDP
-      title: Red Hat Developer Hub Jira
+      title: RHDH Jira
       icon: help
       type: jira
     - url: https://github.com/redhat-developer/rhdh-local
-      title: RHDH-Local source code on GitHub
+      title: RHDH Local Source Code
       icon: github
       type: sourcecode
     - url: https://youtu.be/LB1w8hjBt5k?si=2LxmEtIxIyAKcHx6
-      title: Red Hat Developer Hub Overview
+      title: RHDH Video Overview (YouTube)
       type: video
       icon: YouTube
   annotations:
