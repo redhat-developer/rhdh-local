@@ -5,11 +5,11 @@ Using the following MKdocs extensions can make your TechDocs can make the user e
 ## Quotes
 
 !!! quote "This is a quote"
-    You don't have to add a title to an admonition, they're optional.
+    You don't have to add a title to a quote, they're optional.
 
 ## Callouts (Admonitions)
 
-There are lots of types to choose from. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
+There are lots of types to choose from. You don't have to add a title to an admonition, they're optional. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
 
 !!! info "This is a regular callout"
     There are lots of types to choose from. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
@@ -31,14 +31,14 @@ Particularly useful for code blocks for different programming languages or platf
 
     ```bash
     # Extract the tar archive into your ~/tanzu directory
-    tar -xvf tanzu-framework-linux-amd64.tar -C ./tanzu
+    tar -xvf my-bundle.tar -C ./tanzu
     ```
 
 === "Windows"
 
     ```powershell
     # Extract the zip
-    Expand-Archive .\tanzu-framework-windows-amd64.zip
+    Expand-Archive .\my-bundle.zip
     ```
 
 === "Text"
@@ -173,11 +173,8 @@ Link with tooltip (reference syntax)
 [A Download Link](./images/backstage-logo-cncf.svg){: download }
 
 
-## Abbreviations
+## Abbreviations & Acronyms
 
-The HTML specification is maintained by the W3C.
+Define an abbreviation once and wherever it appears on the page it will be underlined. Hover over the underlined abbreviation and the expanded abbreviation is shown as a tool tip. No more wondering what "CNCF" stands for!
 
-*[HTML]: Hyper Text Markup Language
-*[W3C]: World Wide Web Consortium
-*[TAP]: VMware Tanzu Application Platform
-*[TDP]: WMware Tanzu Developer Portal
+*[CNCF]: Cloud Native Compting Foundation

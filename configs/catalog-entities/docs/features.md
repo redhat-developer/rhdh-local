@@ -1,5 +1,3 @@
-# Red Hat Developer Hub Highlights
-
 Red Hat Developer Hub helps you and your team deliver better code with greater speed, confidence, and clarity. Here are some highlights of what you can expect when using the Red Hat Developer Hub...
 
 !!! success "**Single Pane Of Glass**"
@@ -12,7 +10,7 @@ Red Hat Developer Hub helps you and your team deliver better code with greater s
     No more waiting around for IT tickets to complete or repetitive meetings. Automate your common tasks and empower your developers. Provide access to your most important things through Developer Hub and watch everyone go faster!
 
 !!! success "**Plugins, Plugins, Plugins!**"
-    Red Hat Developer Hub is compatible with Backstage "dynamic plugins" giving you access to hundreds of additional integrations and features designed with developers in mind. Integrate your project management, software supply chain, CI/CD, observability, monitoring, metrics, reporting, infrastructure, security, testing, QA, and even state of the art AI chatbots!
+    Red Hat Developer Hub is compatible with Backstage "dynamic plugins" giving you access to hundreds of additional integrations and features designed with developers in mind. Integrate your project management, software supply chain, CI/CD, observability, monitoring, metrics, reporting, infrastructure, security, testing, QA, and more!
 
 !!! success "**Enterprise Grade Support**"
     In addition to the multitude of helpful resources maintained by the growing Backstage open-source community, Red Hat Developer Hub is also fully [supported by Red Hat](https://.red hat.com/support).
