@@ -10,7 +10,7 @@ docs_dir: docs
 plugins:
   - techdocs-core
 nav:
-  - "Welcome To Red Hat Developer Hub": index.md
+  - "Welcome To RHDH Local": index.md
   - "Highlights Of Red Hat Developer Hub": features.md
   - "TechDocs Extensions": extensions.md
 
