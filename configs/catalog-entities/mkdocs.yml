@@ -1,10 +1,5 @@
-# site_name: backstage
-# docs_dir: docs
-# plugins:
-#   - techdocs-core
-
-site_name: red-hat-developer-hub
-site_description: Red Hat Developer Hub
+site_name: rhdh-local
+site_description: RHDH Local
 site_author: user:user
 docs_dir: docs
 plugins:
