@@ -11,17 +11,17 @@ Using the following MKdocs extensions can make your TechDocs can make the user e
 
 There are lots of types to choose from. You don't have to add a title to an admonition, they're optional. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
 
-!!! info "This is a regular callout"
+!!! info "This is an Info Card"
     There are lots of types to choose from. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
 
-!!! warn "This is a warning"
+!!! warn "This is a Warning Card"
     This callout contains a warning.
 
-???+ info "Expanded"
-    This is expanded by default.
+???+ info "This is an Expanded Info Card"
+    This is expanded by default (but can be contracted).
 
-??? tip "Contracted"
-    This is contracted by default
+??? tip "This is a Contracted Tip Card"
+    This is contracted by default (but can be expanded).
 
 ## Content Tabs
 
@@ -30,8 +30,8 @@ Particularly useful for code blocks for different programming languages or platf
 === "Mac OS & Linux"
 
     ```bash
-    # Extract the tar archive into your ~/tanzu directory
-    tar -xvf my-bundle.tar -C ./tanzu
+    # Extract the tar archive into your ~/downloads directory
+    tar -xvf my-bundle.tar -C ./downloads
     ```
 
 === "Windows"
@@ -90,9 +90,11 @@ Automatic rendering of Markdown task lists.
 
 ## Emoji
 
-:smile: You can use Emoji's. Find the shortcodes [here](https://emojipedia.org/) :heart:.
+:smile: You can use Emoji's in your writing! Find the shortcodes [here](https://emojipedia.org/) :heart:.
 
 ## Images
+
+You can align and resize images.
 
 === "Image LEFT"
 
@@ -106,16 +108,16 @@ Automatic rendering of Markdown task lists.
 
     ![Image title](https://dummyimage.com/600x400/eee/aaa){ align=right width="200" }
 
-You can add captions.
+You can add captions to your images.
 
 <figure markdown>
   ![Image title](https://dummyimage.com/600x400/){ width="300" }
-  <figcaption>Image caption</figcaption>
+  <figcaption>This image now has a caption.</figcaption>
 </figure>
 
 ## Special Lists
 
-**This is a definition list. Notice the indentation.**
+Below is a "definition list." Notice the indentation...
 
 `Lorem ipsum dolor sit amet`
 
@@ -131,7 +133,7 @@ You can add captions.
     Nam vulputate tincidunt fringilla.
     Nullam dignissim ultrices urna non auctor.
 
-**This is a task list, with done and not done items.**
+Below is a task list, with done and not done items...
 
 - [x] Lorem ipsum dolor sit amet, consectetur adipiscing elit
 - [ ] Vestibulum convallis sit amet nisi a tincidunt
@@ -161,7 +163,7 @@ Links can have tool tips.
 
 [Link with tool tip](https://example.com "I'm a tooltip!")
 
-Link with tooltip (reference syntax)
+Link with tooltip (using the separate 'reference' syntax).
 
 [Hover me][example]
 
