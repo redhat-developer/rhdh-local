@@ -1,4 +1,4 @@
-name: test
+name: CI
 
 on:
   push:
@@ -8,16 +8,48 @@ on:
 
 jobs:
 
-  build:
-
+  lint:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    - name: Lint
+      # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
+      run: |
+        npx --yes dclint .
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - docker
+          - podman
+        composeFilesCLI:
+          - ""
+          - "-f compose.yaml -f compose-debug.yaml"
+          - "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+
+    name: ${{ matrix.tool }} test (composeFilesCLI="${{ matrix.composeFilesCLI }}")
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: prepare .env
       run: cp env.sample .env
-    - name: docker compose up
-      run: docker compose up -d
+
+    - name: Install tool
+      if: ${{ matrix.tool == 'podman' }}
+      env:
+        PODMAN_COMPOSE_VERSION: "v1.3.0"
+      run: |
+        curl -o /usr/local/bin/podman-compose https://raw.githubusercontent.com/containers/podman-compose/${PODMAN_COMPOSE_VERSION}/podman_compose.py
+        chmod +x /usr/local/bin/podman-compose
+
+    - name: Start app
+      run: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} up -d 
+
     - name: Wait for HTTP 200 response from homepage
       run: |
         max=30
@@ -27,7 +59,7 @@ jobs:
           i=$((i+1))
           if [ "$i" -ge "$max" ]; then
             echo "Max retries reached. Exiting."
-            docker compose logs
+            ${{ matrix.tool }} compose logs
             exit 1
           fi
           echo "($i/$max)Waiting for http://localhost:7007 to return HTTP 200..."
