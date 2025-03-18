@@ -46,10 +46,12 @@ jobs:
       env:
         PODMAN_COMPOSE_VERSION: "v1.3.0"
       run: |
-        curl -o /usr/local/bin/podman-compose https://raw.githubusercontent.com/containers/podman-compose/${PODMAN_COMPOSE_VERSION}/podman_compose.py
-        chmod +x /usr/local/bin/podman-compose
+        pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
 
     - name: Start app
+      env:
+        # To be able to call the "podman compose" wrapper using the "podman-compose" binary
+        PODMAN_COMPOSE_PROVIDER: "podman-compose"
       run: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} up -d 
 
     - name: Wait for HTTP 200 response from homepage
