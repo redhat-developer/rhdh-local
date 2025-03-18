@@ -15,7 +15,8 @@ networks:
 services:
   proxy:
     container_name: proxy
-    image: registry.redhat.io/rhel9/squid:latest
+    # https://catalog.redhat.com/software/containers/registry/registry.access.redhat.com/repository/rhel9/squid
+    image: registry.redhat.io/rhel9/squid:9.5
     environment:
       - TS=UTC
     entrypoint: [ '/bin/bash' ]

@@ -1,7 +1,7 @@
 services:
   rhdh:
-    ports:
+    ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
-      - "9229:9229"
+      - "127.0.0.1:9229:9229"
     environment:
       NODE_OPTIONS: "--inspect=0.0.0.0:9229"
