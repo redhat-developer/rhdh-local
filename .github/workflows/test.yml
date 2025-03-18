@@ -30,8 +30,10 @@ jobs:
           - "-f compose.yaml -f compose-debug.yaml"
           - "-f compose.yaml -f compose-with-corporate-proxy.yaml"
 
-    name: ${{ matrix.tool }} test (composeFilesCLI="${{ matrix.composeFilesCLI }}")
+    name: ${{ matrix.tool }} ${{ matrix.composeFilesCLI }}
     runs-on: ubuntu-latest
+    env:
+      CORPORATE_PROXY_IMAGE: "docker.io/ubuntu/squid:latest"
 
     steps:
     - uses: actions/checkout@v4
