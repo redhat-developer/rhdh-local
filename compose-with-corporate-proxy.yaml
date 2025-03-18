@@ -19,10 +19,13 @@ services:
     image: ${CORPORATE_PROXY_IMAGE:-registry.redhat.io/rhel9/squid:9.5}
     environment:
       - TS=UTC
-    entrypoint: [ '/bin/bash' ]
-    command:
-      - '-c'
-      - 'tail -vn 0 -F /var/log/squid/{access,cache,error,store}.log & /usr/sbin/container-entrypoint.sh'
+    entrypoint: [ '/usr/local/bin/start-squid.sh' ]
+    volumes:
+      - type: bind
+        source: "./start-squid.sh"
+        target: "/usr/local/bin/start-squid.sh"
+        bind:
+          selinux: "Z"
     networks:
       - internal_net
       - default
