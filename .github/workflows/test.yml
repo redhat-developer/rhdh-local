@@ -37,7 +37,6 @@ jobs:
     name: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }}
     runs-on: ubuntu-latest
     env:
-      CORPORATE_PROXY_IMAGE: "docker.io/ubuntu/squid:latest"
       # To be able to call the "podman compose" wrapper using the "podman-compose" binary
       PODMAN_COMPOSE_PROVIDER: "podman-compose"
 
