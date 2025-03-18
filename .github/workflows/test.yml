@@ -30,7 +30,7 @@ jobs:
           - "-f compose.yaml -f compose-debug.yaml"
           - "-f compose.yaml -f compose-with-corporate-proxy.yaml"
 
-    name: ${{ matrix.tool }} ${{ matrix.composeFilesCLI }}
+    name: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }}
     runs-on: ubuntu-latest
     env:
       CORPORATE_PROXY_IMAGE: "docker.io/ubuntu/squid:latest"
@@ -63,7 +63,7 @@ jobs:
           i=$((i+1))
           if [ "$i" -ge "$max" ]; then
             echo "Max retries reached. Exiting."
-            ${{ matrix.tool }} compose logs
+            ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} logs
             exit 1
           fi
           echo "($i/$max)Waiting for http://localhost:7007 to return HTTP 200..."
