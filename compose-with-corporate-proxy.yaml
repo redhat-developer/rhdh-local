@@ -16,7 +16,7 @@ services:
   proxy:
     container_name: proxy
     # https://catalog.redhat.com/software/containers/registry/registry.access.redhat.com/repository/rhel9/squid
-    image: "${CORPORATE_PROXY_IMAGE:-docker.io/ubuntu/squid:latest}"
+    image: "${CORPORATE_PROXY_IMAGE:-registry.redhat.io/rhel9/squid:latest}"
     environment:
       - TS=UTC
     networks:
@@ -31,10 +31,10 @@ services:
     networks:
       - internal_net
       # TODO(rm3l): There is a limitation with networks that have "internal: true": ports are not published with Docker, but are with Podman.
-      # So with Docker, port forwarding does not work at all from the host, because the host port is not exposed.
+      # With Docker, port forwarding does not work at all from the host, because the host port is not exposed.
       # See https://github.com/moby/moby/issues/36174
       # As a workaround, we are adding it to the default network,
-      # but note that there is nothing preventing requests from bypassing the proxy to reach the outside.
+      # but note that there is as such nothing preventing requests from bypassing the proxy to reach the outside.
       - default
 
   install-dynamic-plugins:
