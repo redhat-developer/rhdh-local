@@ -29,12 +29,15 @@ jobs:
         tool:
           - docker
           - podman
-        composeFilesCLI:
-          - ""
-          - "-f compose.yaml -f compose-debug.yaml"
-          - "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+        composeConfig:
+          - name: "default"
+            cliArgs: ""
+          - name: "debug"
+            cliArgs: "-f compose.yaml -f compose-debug.yaml"
+          - name: "corporate-proxy"
+            cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
 
-    name: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }}
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
     runs-on: ubuntu-latest
     env:
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
@@ -57,8 +60,8 @@ jobs:
 
     - name: Start app
       run: |
-        ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} up -d
-        ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} ps
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} up -d
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps
 
     - name: Wait for HTTP 200 response from homepage
       run: |
@@ -79,10 +82,10 @@ jobs:
 
     - name: Compose logs
       if: always()
-      run: ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} logs || true
+      run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} logs
 
     - name: Tear down
       if: always()
       run: |
-        ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} ps
-        ${{ matrix.tool }} compose ${{ matrix.composeFilesCLI }} down --volumes || true
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps || true
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} down --volumes || true
