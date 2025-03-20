@@ -51,6 +51,11 @@ jobs:
     - name: prepare .env
       run: cp env.sample .env
 
+    - name: Prepare config files
+      run: |
+        cp configs/app-config.local.yaml.sample configs/app-config.local.yaml
+        cp configs/dynamic-plugins.yaml.sample configs/dynamic-plugins.yaml
+
     - name: Install tool
       if: ${{ matrix.tool == 'podman' }}
       env:
