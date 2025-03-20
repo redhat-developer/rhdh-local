@@ -40,7 +40,13 @@ To use RHDH Local you'll need a few things:
 
    In most cases, when you don't need GitHub Auth or testing different releases you can leave it as it is, and it should work.
 
-1. (Optional) Update `configs/app-config.local.yaml`.
+1. (Recommended) Set up your configuration files.
+   To prevent merge conflicts, create copies of the provided sample configuration files:
+
+   ```sh
+   cp configs/app-config.local.yaml.sample configs/app-config.local.yaml
+   cp configs/dynamic-plugins.yaml.sample configs/dynamic-plugins.yaml
+   ```
    If you need features that fetch files from GitHub you should configure `integrations.github`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
