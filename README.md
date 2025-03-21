@@ -32,13 +32,8 @@ To use RHDH Local you'll need a few things:
    cd rhdh-local
    ```
 
-1. Create your own local `.env` file by using a copy of the `env.sample` provided.
-
-   ```sh
-   cp env.sample .env
-   ```
-
-   In most cases, when you don't need GitHub Auth or testing different releases you can leave it as it is, and it should work.
+1. (Optional) You can create a local `.env` file and override any of the default variables defined in the [`default.env`](./default.env) file provided. You can also add additional variables.
+   In most cases, when you don't need GitHub Auth or testing different releases, you can skip this step, and it should work.
 
 1. (Optional) Update `configs/app-config.local.yaml`.
    If you need features that fetch files from GitHub you should configure `integrations.github`.
@@ -189,8 +184,10 @@ If you want to use PostgreSQL with RHDH, here are the steps:
      volumes:
        - "/var/lib/pgsql/data"
      env_file:
-       - path: "./.env"
+       - path: "./default.env"
          required: true
+       - path: "./.env"
+         required: false
      environment:
        - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
      healthcheck:
