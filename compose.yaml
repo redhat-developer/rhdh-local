@@ -9,8 +9,10 @@ services:
   #   volumes:
   #     - "/var/lib/pgsql/data"
   #   env_file:
-  #     - path: "./.env"
+  #     - path: "./default.env"
   #       required: true
+  #     - path: "./.env"
+  #       required: false
   #   environment:
   #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
   #   healthcheck:
@@ -23,8 +25,10 @@ services:
     container_name: rhdh
     image: ${RHDH_IMAGE} # dclint disable-line service-image-require-explicit-tag
     env_file:
-      - path: "./.env"
+      - path: "./default.env"
         required: true
+      - path: "./.env"
+        required: false
     user: "1001"
     entrypoint:
       - "/opt/app-root/src/wait-for-plugins.sh"
@@ -61,8 +65,10 @@ services:
     entrypoint:
       - ./fixes.sh
     env_file:
-      - path: "./.env"
+      - path: "./default.env"
         required: true
+      - path: "./.env"
+        required: false
     volumes:
       - type: bind
         source: "./fixes.sh"
