@@ -56,10 +56,6 @@ jobs:
         cp configs/app-config.local.yaml.sample configs/app-config.local.yaml
         cp configs/dynamic-plugins.yaml.sample configs/dynamic-plugins.yaml
 
-    - name: Ensure Podman runs in rootless mode
-      if: ${{ matrix.tool == 'podman' }}
-      run: export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-
     - name: Install tool
       if: ${{ matrix.tool == 'podman' }}
       env:
@@ -70,20 +66,7 @@ jobs:
     - name: Start app
       run: |
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} up -d
-        echo "Checking if the RHDH container started correctly..."
-        sleep 10
-        ${{ matrix.tool }} compose ps
-        echo "Printing logs from RHDH container..."
-        ${{ matrix.tool }} compose logs rhdh || true
-
-    - name: Ensure RHDH container is running before HTTP check
-      run: |
-        echo "Verifying that the RHDH container is running..."
-        if ! ${{ matrix.tool }} compose ps | grep -q "rhdh"; then
-          echo "ERROR: RHDH container is NOT running! Printing logs..."
-          ${{ matrix.tool }} compose logs rhdh
-          exit 1
-        fi
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps
 
     - name: Wait for HTTP 200 response from homepage
       run: |
