@@ -7,3 +7,4 @@ configs/app-config/app-config.local.yaml
 configs/dynamic-plugins/dynamic-plugins.override.yaml
 configs/extra-files/*
 !configs/extra-files/github-app-credentials.example.yaml
+.qodo

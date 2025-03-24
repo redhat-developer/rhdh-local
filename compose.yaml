@@ -80,11 +80,6 @@ services:
         target: "/opt/app-root/src/configs"
         bind:
           selinux: "Z"
-      - type: bind
-        source: "./configs/dynamic-plugins.yaml"
-        target: "/opt/app-root/src/dynamic-plugins.yaml"
-        bind:
-          selinux: "Z"
       - type: volume
         source: dynamic-plugins-root
         target: /dynamic-plugins-root
