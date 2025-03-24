@@ -40,8 +40,8 @@ To use RHDH Local you'll need a few things:
 
    In most cases, when you don't need GitHub Auth or testing different releases you can leave it as it is, and it should work.
 
-1. (Recommended) Set up your configuration files.
-   To prevent merge conflicts, create copies of the provided sample configuration files:
+1. **Required**: Set up your configuration files.
+   To prevent merge conflicts, create copies of the provided sample configuration files. Do this before running `docker compose up` or `podman compose up` for the first time:
 
    ```sh
    cp configs/app-config.local.yaml.sample configs/app-config.local.yaml
