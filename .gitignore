@@ -2,6 +2,8 @@
 configs/github-app-credentials.yaml
 /tmp
 
-# Ignore user-modified config files
-configs/app-config.local.yaml
-configs/dynamic-plugins.yaml
+# Ignore user-specific config overrides
+configs/app-config/app-config.local.yaml
+configs/dynamic-plugins/dynamic-plugins.override.yaml
+configs/extra-files/*
+!configs/extra-files/github-app-credentials.example.yaml

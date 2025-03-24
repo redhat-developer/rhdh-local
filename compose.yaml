@@ -31,10 +31,7 @@ services:
     ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
     volumes:
-      - ./configs/app-config.local.yaml:/opt/app-root/src/app-config.local.yaml:ro
-      - ./configs/dynamic-plugins.yaml:/opt/app-root/src/dynamic-plugins.yaml:ro
-      - ./configs/app-config.local.yaml.sample:/opt/app-root/src/app-config.local.yaml:ro
-      - ./configs/dynamic-plugins.yaml.sample:/opt/app-root/src/dynamic-plugins.yaml:ro
+      - ./configs:/opt/app-root/src/configs:Z
       - type: bind
         source: "./wait-for-plugins.sh"
         target: "/opt/app-root/src/wait-for-plugins.sh"
