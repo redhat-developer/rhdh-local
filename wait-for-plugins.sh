@@ -21,8 +21,8 @@ fi
 
 # Run Backstage with default + optional config overrides
 node packages/backend --no-node-snapshot \
-    --config "$DEFAULT_APP_CONFIG" \
+    --config "app-config.yaml" \
     --config app-config.example.yaml \
     --config app-config.example.production.yaml \
     --config "$DYNAMIC_PLUGINS_CONFIG" \
-    $EXTRA_CLI_ARGS
+    --config "$DEFAULT_APP_CONFIG" "$EXTRA_CLI_ARGS"
