@@ -27,6 +27,9 @@ LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
     ln -sf "$DYNAMIC_PLUGINS_OVERRIDE" "$LINK_TARGET"
+elif [ -f "/opt/app-root/src/configs/dynamic-plugins.yaml" ]; then
+    echo "[warn] Using legacy dynamic-plugins.yaml. This method is deprecated. You can override the dynamic plugins configuration by renaming your file into configs/dynamic-plugins/dynamic-plugins.override.yaml"
+    ln -sf "/opt/app-root/src/configs/dynamic-plugins.yaml" "$LINK_TARGET"
 else
     echo "Using default dynamic-plugins.yaml"
     ln -sf "$DYNAMIC_PLUGINS_DEFAULT" "$LINK_TARGET"
