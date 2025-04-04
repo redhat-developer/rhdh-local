@@ -18,6 +18,12 @@ To use RHDH Local you'll need a few things:
 1. (Optional) The node `npx` tool (if you intend to use GitHub authentication in RHDH)
 1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database)
 
+### Note
+   For Mac M1 users, If you're using an Apple Silicon (M1/M2) Mac,
+   the default RHDH image (quay.io/rhdh/rhdh-hub-rhel9:1.4) is not compatible with the ARM64 architecture.To fix this, open your .env file and uncomment
+   or replace the RHDH_IMAGE line with the following image that supports both amd64 and arm64: `RHDH_IMAGE=quay.io/rhdh-community/rhdh:next`
+
+
 ## Getting Started With RHDH Local
 
 1. Clone this repository to a location on your PC
