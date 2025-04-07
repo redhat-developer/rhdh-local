@@ -62,7 +62,7 @@ spec:
 
 Software Templates can do much more than simply bootstrap Git repositories. Creative platform engineering teams can write templates that provision cloud resources using GitOps, trigger CI pipelines, open PRs to request approvals and much more. Take a look at the [RHDH Extensions Catalog](/extensions?filter=spec.categories%3DScaffolder) to find plugins that expose scaffolder actions you can utilize to create your own templates.
 
-!!! note "Free Software Template Samples"
+!!! abstract "Free Software Template Samples"
     Red Hat Developer Hub has a [free library of software templates](https://github.com/redhat-developer/red-hat-developer-hub-software-templates) which you can use to help you get started writing your templates of your own. 
       
 
@@ -106,10 +106,10 @@ templates-repository/
    ├─ skeleton/
 ```
 
-!!! note "About The Skeletons..."
-    The skeleton directory contains a template codebase that the [Backstage scaffolder (template engine)(https://backstage.io/docs/features/software-templates/writing-templates/)] will process using Nunjucks (more on this later) if you're using the `fetch:template` action. Samples are available upstream in [backstage/software-templates Git repository](https://github.com/backstage/software-templates/).
+!!! tip "About The Skeletons..."
+    The `skeleton` directory contains a template codebase that the [Backstage scaffolder (template engine)](https://backstage.io/docs/features/software-templates/writing-templates/) will process using Nunjucks (more on this later) if you're using the `fetch:template` action. Samples are available upstream in [backstage/software-templates Git repository](https://github.com/backstage/software-templates/).
 
-The [Backstage templates repository(https://github.com/rhdh-demo-gh/templates/)] demonstrates a sample implementation of this pattern. Organizations that need more granular control over template authorship and access might choose to create additional template repositories that split templates by knowledge domain or organizational boundaries.
+The [Backstage templates repository](https://github.com/rhdh-demo-gh/templates/) demonstrates a sample implementation of this pattern. Organizations that need more granular control over template authorship and access might choose to create additional template repositories that split templates by knowledge domain or organizational boundaries.
 
 Red Hat Developer Hub also has a [free library of software templates](https://github.com/redhat-developer/red-hat-developer-hub-software-templates) which you can use to help you get started writing your templates of your own. 
 
@@ -128,7 +128,7 @@ You can use the Template Editor to:
 
 This page allows experimenting with edits to a template, and seeing the changes rendered on the right. Once you're happy with the changes, you can copy them to your `template.yaml`.
 
-[Open The Template Editor Menu](/create/edit){ .md-button }
+[Open The Template Editor Menu](/create/edit){ .md-button .md-button--primary }
 
 ## Tip #3: Explore Installed Actions
 
@@ -138,7 +138,7 @@ For example, if the Quay Plugin is installed, it can be referenced in a template
 
 Use the Installed Actions page to understand the actions that are available to template authors in your Backstage instance.
 
-[View The Installed Template Actions](/create/actions){ .md-button }
+[View The Installed Template Actions](/create/actions){ .md-button .md-button--primary }
 
 ## Tip #4: Improve DevEx Using Custom Field Extensions
 
