@@ -1,4 +1,4 @@
-name: test
+name: CI
 
 on:
   push:
@@ -6,18 +6,63 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
 jobs:
 
-  build:
-
+  lint:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    - name: Lint
+      # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
+      run: |
+        npx --yes dclint .
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - docker
+          - podman
+        composeConfig:
+          - name: "default"
+            cliArgs: ""
+          - name: "debug"
+            cliArgs: "-f compose.yaml -f compose-debug.yaml"
+          - name: "corporate-proxy"
+            cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
+    runs-on: ubuntu-latest
+    env:
+      # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
+      CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+      # To be able to call the "podman compose" wrapper using the "podman-compose" binary
+      PODMAN_COMPOSE_PROVIDER: "podman-compose"
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: prepare .env
       run: cp env.sample .env
-    - name: docker compose up
-      run: docker compose up -d
+
+    - name: Install tool
+      if: ${{ matrix.tool == 'podman' }}
+      env:
+        PODMAN_COMPOSE_VERSION: "v1.3.0"
+      run: |
+        pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
+
+    - name: Start app
+      run: |
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} up -d
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps
+
     - name: Wait for HTTP 200 response from homepage
       run: |
         max=30
@@ -26,12 +71,21 @@ jobs:
         until curl --head --fail http://localhost:7007; do
           i=$((i+1))
           if [ "$i" -ge "$max" ]; then
-            echo "Max retries reached. Exiting."
-            docker compose logs
+            echo "Max retries reached. Exiting. Take a look at the logs in the step below."
             exit 1
           fi
           echo "($i/$max)Waiting for http://localhost:7007 to return HTTP 200..."
           sleep 5
         done
         echo "RHDH is ready!"
-        curl --insecure http://localhost:7007
+        curl -i --insecure http://localhost:7007
+
+    - name: Compose logs
+      if: always()
+      run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} logs
+
+    - name: Tear down
+      if: always()
+      run: |
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps || true
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} down --volumes || true
