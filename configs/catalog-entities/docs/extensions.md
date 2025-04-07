@@ -1,5 +1,3 @@
-# Making Your TechDocs More Appealing
-
 Using the following MKdocs extensions can enhance your TechDocs, making the user experience richer and more appealing for the reader. These samples were developed based on the reference documentation [here](https://squidfunk.github.io/mkdocs-material/reference/). View the source code of this page to discover the correct markup to use for each item displayed below.
 
 ## Quotes
