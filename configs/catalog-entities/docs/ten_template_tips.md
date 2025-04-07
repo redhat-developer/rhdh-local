@@ -117,7 +117,7 @@ Red Hat Developer Hub also has a [free library of software templates](https://gi
 
 Pushing changes to a template repository, waiting for Backstage to synchronize the changes, and then doing a test run of changes is an inefficient development loop. A better approach is to use the Template Editor included in Backstage, and by extension, Red Hat Developer Hub.
 
-The template editor can be accessed by visiting the `/create/edit` page directly, or by using the Template Editor link on the Software Templates page.
+The template editor can be accessed by visiting the [`/create/edit`](/create/edit) page directly, or by using the Template Editor link on the Software Templates page.
 
 You can use the Template Editor to:
 
@@ -130,7 +130,7 @@ This page allows experimenting with edits to a template, and seeing the changes 
 
 ## Tip #3: Explore Installed Actions
 
-As mentioned earlier, Backstage includes built-in actions and supports actions provided by plugins. You can view available actions and their inputs and outputs by visiting the Installed Actions page via the Software Catalog or the `/create/actions` page directly.
+As mentioned earlier, Backstage includes built-in actions and supports actions provided by plugins. You can view available actions and their inputs and outputs by visiting the Installed Actions page via the Software Catalog or the [`/create/actions`](/create/actions) page directly.
 
 For example, if the Quay Plugin is installed, it can be referenced in a template using the action: `quay:create-repository` syntax, expects `name`, `visibility`, `description`, and `token` input parameters as shown in this view.
 
