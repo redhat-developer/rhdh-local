@@ -21,14 +21,14 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE}
+    image: ${RHDH_IMAGE} # dclint disable-line service-image-require-explicit-tag
     env_file:
       - path: "./.env"
         required: true
     user: "1001"
     entrypoint:
       - "/opt/app-root/src/wait-for-plugins.sh"
-    ports:
+    ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
     volumes:
       - type: bind
@@ -54,7 +54,7 @@ services:
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE}
+    image: ${RHDH_IMAGE} # dclint disable-line service-image-require-explicit-tag
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
