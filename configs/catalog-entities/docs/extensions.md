@@ -12,13 +12,16 @@ There are lots of types to choose from. You don't have to add a title to an admo
 !!! info "This is an Info Card"
     There are lots of types to choose from. See [here](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
 
-!!! warn "This is a Warning Card"
+!!! warning "This is a Warning Card"
     This callout contains a warning.
 
-???+ info "This is an Expanded Info Card"
+!!! note "This is a Note Card"
+    This callout contains a note.
+
+???+ question "This Question Can Be Contracted"
     This is expanded by default (but can be contracted).
 
-??? tip "This is a Contracted Tip Card"
+??? tip "This Tip is Contracted (By Default)"
     This is contracted by default (but can be expanded).
 
 ## Content Tabs
