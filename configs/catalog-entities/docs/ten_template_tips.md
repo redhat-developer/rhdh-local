@@ -128,6 +128,8 @@ You can use the Template Editor to:
 
 This page allows experimenting with edits to a template, and seeing the changes rendered on the right. Once you're happy with the changes, you can copy them to your `template.yaml`.
 
+[Open The Template Editor Menu](/create/edit){ .md-button }
+
 ## Tip #3: Explore Installed Actions
 
 As mentioned earlier, Backstage includes built-in actions and supports actions provided by plugins. You can view available actions and their inputs and outputs by visiting the Installed Actions page via the Software Catalog or the [`/create/actions`](/create/actions) page directly.
@@ -135,6 +137,8 @@ As mentioned earlier, Backstage includes built-in actions and supports actions p
 For example, if the Quay Plugin is installed, it can be referenced in a template using the action: `quay:create-repository` syntax, expects `name`, `visibility`, `description`, and `token` input parameters as shown in this view.
 
 Use the Installed Actions page to understand the actions that are available to template authors in your Backstage instance.
+
+[View The Installed Template Actions](/create/actions){ .md-button }
 
 ## Tip #4: Improve DevEx Using Custom Field Extensions
 
@@ -272,3 +276,5 @@ Software Templates and internal developer portals facilitate developer self-serv
 ## Additional Resources
 
 Read [Get started with Red Hat Developer Hub on OpenShift](https://developers.redhat.com/articles/2024/11/25/red-hat-developer-hub-fastest-path-backstage-kubernetes#) to begin building your enterprise ready internal developer portal on OpenShift.
+
+*[RHDH]: Red Hat Developer Hub
