@@ -40,11 +40,25 @@ To use RHDH Local you'll need a few things:
 
    In most cases, when you don't need GitHub Auth or testing different releases you can leave it as it is, and it should work.
 
-1. (Optional) Update `configs/app-config.local.yaml`.
+1. (Optional) Create local configuration overrides.
+
+   RHDH Local now supports user-specific configuration overrides using a structured `configs/` directory. You do not need to copy or modify default files. However, if you want to customize your setup:
+
+   - Add your app config overrides to:  
+   `configs/app-config/app-config.local.yaml`
+
+   - Add your plugin config overrides to:  
+   `configs/dynamic-plugins/dynamic-plugins.override.yaml`
+
+   - Add any extra files (like GitHub credentials) to:  
+   `configs/extra-files/` (already Git-ignored)
+
+   If present, these files will be automatically loaded by the system on startup.
+
    If you need features that fetch files from GitHub you should configure `integrations.github`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
-1. Start RHDH Local.
+2. Start RHDH Local.
    This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
 
    ```sh
