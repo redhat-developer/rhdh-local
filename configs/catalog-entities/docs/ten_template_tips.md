@@ -267,7 +267,7 @@ An outdated template is a liability, not an asset. Plan to regularly update your
 
 A local Backstage instance shrinks the feedback loop for template developers. You can deploy Red Hat Developer Hub locally using the open-source [RHDH Local](https://github.com/redhat-developer/rhdh-local) project. Alternatively, you can replicate a production-like deployment by using the [Red Hat Developer Hub Operator](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.4/html/installing_red_hat_developer_hub_on_openshift_container_platform/assembly-install-rhdh-ocp-operator) or [Red Hat Developer Hub Helm Chart](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.4/html/installing_red_hat_developer_hub_on_openshift_container_platform/assembly-install-rhdh-ocp-helm) on [OpenShift Local](https://developers.redhat.com/products/openshift-local/overview).
 
-Additionally, the quarkus-backstage extension simplifies the process of running Backstage locally with Gitea. It provides a DevUI, Dev Service, and a Backstage API client to simplify integration testing of your templates and other entities.
+Additionally, the [quarkus-backstage](https://github.com/quarkiverse/quarkus-backstage) extension simplifies the process of running Backstage locally with Gitea. It provides a DevUI, Dev Service, and a Backstage API client to simplify integration testing of your templates and other entities.
 
 ## Wrap Up
 
