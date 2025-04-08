@@ -6,26 +6,26 @@ Red Hat Developer Hub, built on top of Backstage, offers an enterprise-ready alt
 
 | Feature | CNCF Backstage | Red Hat Developer Hub |
 |--------|----------------|------------------------|
-| Software Catalog | ✔ | ✔ |
-| Software Templates (Scaffolder) | ✔ | ✔ |
-| TechDocs | ✔ | ✔ |
-| Global Search and Query | ✔ | ✔ |
-| Kubernetes Helm-based Installer | ✔ | ✔ |
-| Kubernetes Operator-based Installer | ✘ | ✔ |
-| Zero-Code solution (no need to maintain Backstage code) | ✘ | ✔ |
-| 24x7 Enterprise Support | ✘ | ✔ |
-| Supported on all major K8s platforms (GKE, AKS, EKS, OpenShift) | ✘ | ✔ |
-| Enterprise Grade Security | ✘ | ✔ |
-| Secure RHEL-based UBI Container | ✘ | ✔ |
-| Fast-track Security Fixes (Rapid CVE resolution) | ✘ | ✔ |
-| Authentication (e.g., Keycloak federated, Ping Federate) | ✘ | ✔ |
-| Audit Logging (template/catalog actions) | ✘ | ✔ |
-| Role-Based Access Control (RBAC) with GUI | ✘ | ✔ |
-| Workflow Automation Engine (Orchestrator) | ✘ | ✔ |
-| Docker/Podman Local Installation (faster inner-loop development) | ✘ | ✔ |
-| Dynamic Plug-Ins (no need to recompile) | ✘ | ✔ |
-| Verified Plugin Compatibility | ✘ (self-verify) | ✔ |
-| Extensions Catalog Plugin (marketplace) | ✘ | ✔ |
-| Adoption Insights Plugin (user metrics) | ✘ | ✔ |
-| 20+ Red Hat Plugins (e.g., Tekton, ArgoCD, Kiali, 3scale, ACS, Ansible) | ✘ | ✔ |
-| [Free Software Templates Library](https://github.com/redhat-developer/red-hat-developer-hub-software-templates) | ✘ | ✔ |
+| Software Catalog | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Software Templates (Scaffolder) | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| TechDocs | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Global Search and Query | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Kubernetes Helm-based Installer | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Kubernetes Operator-based Installer | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Zero-Code solution (no need to maintain Backstage code) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| 24x7 Enterprise Support | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Supported on all major K8s platforms (GKE, AKS, EKS, OpenShift) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Enterprise Grade Security | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Secure RHEL-based UBI Container | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Fast-track Security Fixes (Rapid CVE resolution) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Authentication (e.g., Keycloak federated, Ping Federate) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Audit Logging (template/catalog actions) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Role-Based Access Control (RBAC) with GUI | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Workflow Automation Engine (Orchestrator) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Docker/Podman Local Installation (faster inner-loop development) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Dynamic Plug-Ins (no need to recompile) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Verified Plugin Compatibility | <span style="color:#e6c200">✘</span> (self-verify) | <span style="color:green">✔</span> |
+| Extensions Catalog Plugin (marketplace) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Adoption Insights Plugin (user metrics) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| 20+ Red Hat Plugins (e.g., Tekton, ArgoCD, Kiali, 3scale, ACS, Ansible) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| [Free Software Templates Library](https://github.com/redhat-developer/red-hat-developer-hub-software-templates) | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
