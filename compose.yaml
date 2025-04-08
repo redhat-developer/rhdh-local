@@ -9,8 +9,10 @@ services:
   #   volumes:
   #     - "/var/lib/pgsql/data"
   #   env_file:
-  #     - path: "./.env"
+  #     - path: "./default.env"
   #       required: true
+  #     - path: "./.env"
+  #       required: false
   #   environment:
   #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
   #   healthcheck:
@@ -21,10 +23,12 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE} # dclint disable-line service-image-require-explicit-tag
+    image: ${RHDH_IMAGE:-quay.io/rhdh/rhdh-hub-rhel9:1.4}
     env_file:
-      - path: "./.env"
+      - path: "./default.env"
         required: true
+      - path: "./.env"
+        required: false
     user: "1001"
     entrypoint:
       - "/opt/app-root/src/wait-for-plugins.sh"
@@ -54,15 +58,17 @@ services:
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE} # dclint disable-line service-image-require-explicit-tag
+    image: ${RHDH_IMAGE:-quay.io/rhdh/rhdh-hub-rhel9:1.4}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
     entrypoint:
       - ./fixes.sh
     env_file:
-      - path: "./.env"
+      - path: "./default.env"
         required: true
+      - path: "./.env"
+        required: false
     volumes:
       - type: bind
         source: "./fixes.sh"
