@@ -141,6 +141,7 @@ If you would like to change your RHDH-Local setup, or add additional features or
 2. [Container Image Guide](./additional-config-guides/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
 3. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md) - testing in a simulated proxy environment
 4. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
+5. [Developer Lightspeed Guide](./additional-config-guides/lightspeed-guide.md) - using Developer Lightspeed in RHDH Local.
 
 ## Contributing and reporting issues
 

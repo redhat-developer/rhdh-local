@@ -1,0 +1,14 @@
+backend:
+  csp:
+   upgrade-insecure-requests: false
+   img-src:
+    - "'self'"
+    - "data:"
+    - https://avatars.githubusercontent.com # This is to load GitHub avatars in the UI
+
+lightspeed:
+  questionValidation: true
+  servers:
+    - id: ${LIGHTSPEED_SERVER_ID}
+      url: ${LIGHTSPEED_SERVER_URL}
+      token: ${LIGHTSPEED_SERVER_TOKEN}

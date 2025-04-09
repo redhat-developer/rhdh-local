@@ -1,0 +1,22 @@
+services:
+  road-core-service:
+    image: quay.io/redhat-ai-dev/road-core-service:latest
+    container_name: road-core-service
+    user: "root"
+    environment:
+      - PROJECT=rhdh
+      - RCS_CONFIG_FILE=/opt/app-root/src/configs/lightspeed/rcsconfig.yaml
+      - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
+      - LIGHTSPEED_SERVER_ID=${LIGHTSPEED_SERVER_ID}
+      - LIGHTSPEED_SERVER_URL=${LIGHTSPEED_SERVER_URL}
+      - LIGHTSPEED_SERVER_TOKEN=${LIGHTSPEED_SERVER_TOKEN}
+      - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
+    network_mode: "service:rhdh"
+    depends_on:
+      rhdh:
+        condition: service_started
+    volumes:
+      - ./configs:/opt/app-root/src/configs:Z
+      - user-data:/opt/app-root/src/user-data/feedback:Z
+volumes:
+  user-data:
