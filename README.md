@@ -88,14 +88,22 @@ podman-compose stop rhdh && podman-compose start rhdh
 
 ## Loading dynamic plugins from a local directory
 
-During boot the `install-dynamic-plugins` container reads the contents of the `configs/dynamic-plugins.yaml` file and activates, configures, or downloads any plugins contained in that file. In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container on the path `/opt/app-root/src/local-plugins`. Any plugins in that location can also be activated and configured in the same way (without downloading).
+During boot, the `install-dynamic-plugins` container reads the contents of the plugin configuration file and activates, configures, or downloads any plugins listed. RHDH Local supports two ways of specifying dynamic plugin configuration:
 
-You can use the `local-plugins` folder install dynamic plugins directly from your local machine using the following steps:
+1. Default path (tracked by Git): `configs/dynamic-plugins/dynamic-plugins.yaml`
+
+1. User override path (Git-ignored): `configs/dynamic-plugins/dynamic-plugins.override.yaml` If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container.
+
+In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container at `/opt/app-root/src/local-plugins`. Any plugins placed there can be activated/configured the same way (without downloading).
+
+To load dynamic plugins from your local machine:
 
 1. Copy the dynamic plugin binary file into the `local-plugins` directory.
-2. Make sure that the permissions are set to allow container to read files (quick and dirty solution is `chmod -R 777 local-plugins`)
-3. Configure your dynamic plugin in `dynamic-plugins.yaml`. See commented out examples in that file for examples.
-4. See [Changing Your Configuration](#changing-your-configuration) section for more information about how to change and load new configuration.
+2. Make sure permissions allow the container to read the files (e.g. `chmod -R 777 local-plugins` for quick testing).
+3. Configure your plugin in one of the supported config files:
+    - Prefer `configs/dynamic-plugins/dynamic-plugins.override.yaml` for local user overrides.
+    - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
+4. See [Changing Your Configuration](#changing-your-configuration) for more on updating and reloading configs.
 
 ## Changing The Container Image
 
