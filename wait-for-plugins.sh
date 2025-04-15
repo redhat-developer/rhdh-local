@@ -28,4 +28,4 @@ node packages/backend --no-node-snapshot \
     --config app-config.example.yaml \
     --config app-config.example.production.yaml \
     --config "$DYNAMIC_PLUGINS_CONFIG" \
-    --config "$DEFAULT_APP_CONFIG" "$EXTRA_CLI_ARGS"
+    --config "$DEFAULT_APP_CONFIG" $EXTRA_CLI_ARGS
