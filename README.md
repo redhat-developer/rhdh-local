@@ -48,10 +48,20 @@ To use RHDH Local you'll need a few things:
    `configs/app-config/app-config.local.yaml`
 
    - Add your plugin config overrides to:  
-   `configs/dynamic-plugins/dynamic-plugins.override.yaml`
+     `configs/dynamic-plugins/dynamic-plugins.override.yaml`
+     > The override file must start with:
+     > ```yaml
+     > includes:
+     >   - dynamic-plugins.default.yaml
+     > ```
+     > This ensures the base plugin list is preserved and extended, rather than replaced.
 
    - Add any extra files (like GitHub credentials) to:  
    `configs/extra-files/` (already Git-ignored)
+
+   You can also look at the provided example files for guidance:
+   - [`configs/app-config/app-config.local.example.yaml`](configs/app-config/app-config.local.example.yaml)
+   - [`configs/dynamic-plugins/dynamic-plugins.override.example.yaml`](configs/dynamic-plugins/dynamic-plugins.override.example.yaml)
 
    If present, these files will be automatically loaded by the system on startup.
 
