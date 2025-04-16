@@ -59,10 +59,6 @@ To use RHDH Local you'll need a few things:
    - Add any extra files (like GitHub credentials) to:  
    `configs/extra-files/` (already Git-ignored)
 
-   You can also look at the provided example files for guidance:
-   - [`configs/app-config/app-config.local.example.yaml`](configs/app-config/app-config.local.example.yaml)
-   - [`configs/dynamic-plugins/dynamic-plugins.override.example.yaml`](configs/dynamic-plugins/dynamic-plugins.override.example.yaml)
-
    If present, these files will be automatically loaded by the system on startup.
 
    If you need features that fetch files from GitHub you should configure `integrations.github`.
