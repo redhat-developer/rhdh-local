@@ -51,6 +51,22 @@ To use RHDH Local you'll need a few things:
    ```sh
    docker compose up -d
    ```
+### (Optional) Use a custom .npmrc for private registry plugins
+
+To install dynamic plugins from private NPM registries, you can supply a `.npmrc` file without editing any Compose files, you can run:
+```sh
+./start.sh ~/.npmrc
+```
+
+This script will:
+- Copy your .npmrc file to rhdh-local/user-npmrc
+- Mount it into the install-dynamic-plugins container
+- Set the NPM_CONFIG_USERCONFIG environment variable inside the container
+If you don't have or want to use a .npmrc, you can run:
+```sh
+./start.sh
+```
+The container will function normally without it.
 
 ## Changing Your Configuration
 

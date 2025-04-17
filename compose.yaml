@@ -69,6 +69,8 @@ services:
         required: true
       - path: "./.env"
         required: false
+    environment:
+      - ${NPMRC_ENV_LINE:-}  # <- Only set if start.sh exports it
     volumes:
       - type: bind
         source: "./fixes.sh"
@@ -90,6 +92,12 @@ services:
         target: "/opt/app-root/src/dynamic-plugins.yaml"
         bind:
           selinux: "Z"
+      - type: bind
+        source: "./user-npmrc"
+        target: "/opt/app-root/src/.npmrc"
+        bind:
+          selinux: "Z"
+        # Optional — created dynamically by start.sh
       - type: volume
         source: dynamic-plugins-root
         target: /dynamic-plugins-root
