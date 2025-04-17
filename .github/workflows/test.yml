@@ -48,9 +48,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: prepare .env
-      run: cp env.sample .env
-
     - name: Install tool
       if: ${{ matrix.tool == 'podman' }}
       env:
