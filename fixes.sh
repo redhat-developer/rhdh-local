@@ -19,5 +19,11 @@ fi
 echo "Removing ~/.npmrc to fix RHIDP-4410"
 rm -rf ~/.npmrc
 
+# If mounted .npmrc is present, symlink to expected npm path
+if [ -f "/opt/app-root/src/.npmrc" ]; then
+    echo "Using mounted .npmrc file"
+    cp /opt/app-root/src/.npmrc ~/.npmrc
+fi
+
 echo "Running install-dynamic-plugins.sh"
-./install-dynamic-plugins.sh /dynamic-plugins-root
+/opt/app-root/src/install-dynamic-plugins.sh /dynamic-plugins-root
