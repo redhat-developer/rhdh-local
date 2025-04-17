@@ -1,3 +1,17 @@
 .env
 configs/github-app-credentials.yaml
 /tmp
+
+# User-specific local configuration files
+*.local.yaml
+*-credentials.yaml
+/configs/dynamic-plugins/dynamic-plugins.override.yaml
+
+# Extra-files
+/configs/extra-files/*
+!/configs/extra-files/github-app-credentials.example.yaml
+
+# Kept for backward compatibility, but now Git-ignored
+/configs/app-config.local.yaml
+/configs/dynamic-plugins.yaml
+/configs/github-app-credentials.example.yaml

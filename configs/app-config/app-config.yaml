@@ -1,3 +1,4 @@
+# This is the default rhdh-local config, and any user configuration should be added app-config.local.yaml instead
 auth:
   environment: development
   providers:

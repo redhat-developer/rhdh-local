@@ -35,6 +35,7 @@ services:
     ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
     volumes:
+      - ./configs:/opt/app-root/src/configs:Z
       - type: bind
         source: "./wait-for-plugins.sh"
         target: "/opt/app-root/src/wait-for-plugins.sh"
@@ -83,11 +84,6 @@ services:
       - type: bind
         source: "./configs"
         target: "/opt/app-root/src/configs"
-        bind:
-          selinux: "Z"
-      - type: bind
-        source: "./configs/dynamic-plugins.yaml"
-        target: "/opt/app-root/src/dynamic-plugins.yaml"
         bind:
           selinux: "Z"
       - type: volume
