@@ -1,0 +1,13 @@
+# Example dynamic plugin override config.
+# Copy to dynamic-plugins.override.yaml to activate local plugins.
+
+includes:
+  - dynamic-plugins.default.yaml
+
+# Below you can add custom dynamic plugins, including local ones.
+dynamicPlugins:
+  - package: local-plugins/example-plugin
+    disabled: false
+    pluginConfig:
+      # Optional: Configuration passed to your plugin
+      message: "Hello from local plugin"
