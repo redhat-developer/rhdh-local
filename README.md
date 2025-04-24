@@ -52,7 +52,7 @@ To use RHDH Local you'll need a few things:
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
    - Add any extra files (like GitHub credentials) to:  
-   `configs/extra-files/` (already Git-ignored)
+   `configs/extra-files/`
 
    If present, these files will be automatically loaded by the system on startup.
 
@@ -91,9 +91,9 @@ podman-compose stop rhdh && podman-compose start rhdh
 
 During boot, the `install-dynamic-plugins` container reads the contents of the plugin configuration file and activates, configures, or downloads any plugins listed. RHDH Local supports two ways of specifying dynamic plugin configuration:
 
-1. Default path (tracked by Git): `configs/dynamic-plugins/dynamic-plugins.yaml`
+1. Default path: `configs/dynamic-plugins/dynamic-plugins.yaml`
 
-1. User override path (Git-ignored): `configs/dynamic-plugins/dynamic-plugins.override.yaml` If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container.
+1. User override path: `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins.yaml` If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container. `configs/dynamic-plugins/dynamic-plugins.override.yaml` takes precedence over `configs/dynamic-plugins.yaml`.
 
 In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container at `/opt/app-root/src/local-plugins`. Any plugins placed there can be activated/configured the same way (without downloading).
 
