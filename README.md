@@ -42,7 +42,7 @@ To use RHDH Local you'll need a few things:
 
 1. (Optional) Create local configuration overrides.
 
-   RHDH Local now supports user-specific configuration overrides using a structured `configs/` directory. You do not need to copy or modify default files. However, if you want to customize your setup:
+   RHDH Local supports user-specific configuration overrides using a structured `configs/` directory. You do not need to modify default files. However, if you want to customize your setup:
 
    - Add your app config overrides to:  
    `configs/app-config/app-config.local.yaml`
