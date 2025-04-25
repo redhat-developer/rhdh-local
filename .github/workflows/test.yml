@@ -29,6 +29,9 @@ jobs:
         tool:
           - docker
           - podman
+        userConfig:
+          - "false"
+          - "true"
         composeConfig:
           - name: "default"
             cliArgs: ""
@@ -55,9 +58,42 @@ jobs:
       run: |
         pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
 
+    - name: Add user-specific configuration
+      if: ${{ matrix.userConfig == 'true' }}
+      run: |
+        # Custom .env file
+        cat <<EOF > .env
+        LOG_LEVEL=debug
+        ROARR_LOG=true
+        NODE_DEBUG=fetch
+
+        GITHUB_APP_APP_ID=123456
+        GITHUB_APP_CLIENT_ID=MY_GITHUB_APP_CLIENT_ID
+        GITHUB_APP_CLIENT_SECRET=MY_GITHUB_APP_CLIENT_SECRET
+        GITHUB_APP_WEBHOOK_SECRET=MY_GITHUB_APP_WEBHOOK_SECRET
+        GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nxxx\n-----END RSA PRIVATE KEY-----" # notsecret
+
+        EOF
+
+        # Custom dynamic-plugins.override.yaml
+        cat <<EOF > configs/dynamic-plugins/dynamic-plugins.override.yaml
+        includes: [dynamic-plugins.default.yaml]
+        plugins:
+        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
+          disabled: false
+        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
+          disabled: false
+        EOF
+
+        # Custom extra files
+        cp -vr configs/extra-files/github-app-credentials.example.yaml configs/extra-files/github-app-credentials.yaml
+
+        # Custom app-config.local.yaml
+        cp -vr configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
+
     - name: Start app
       run: |
-        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} up -d
+        ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} up --detach --quiet-pull
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps
 
     - name: Wait for HTTP 200 response from homepage
