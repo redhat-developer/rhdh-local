@@ -20,7 +20,7 @@ To use RHDH Local you'll need a few things:
 
 ### Note
    For Mac M1 users, If you're using an Apple Silicon (M1/M2) Mac,
-   the default RHDH image (quay.io/rhdh/rhdh-hub-rhel9:1.4) is not compatible with the ARM64 architecture.To fix this, open your .env file and uncomment
+   the default RHDH image (quay.io/rhdh/rhdh-hub-rhel9:1.4) is not compatible with the ARM64 architecture. To fix this, open your `.env` file and uncomment
    or replace the RHDH_IMAGE line with the following image that supports both amd64 and arm64: `RHDH_IMAGE=quay.io/rhdh-community/rhdh:next`
 
 
