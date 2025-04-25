@@ -5,7 +5,7 @@ includes:
   - dynamic-plugins.default.yaml
 
 # Below you can add custom dynamic plugins, including local ones.
-dynamicPlugins:
+plugins:
   - package: local-plugins/example-plugin
     disabled: false
     pluginConfig:
