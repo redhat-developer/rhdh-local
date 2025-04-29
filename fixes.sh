@@ -35,5 +35,14 @@ else
     ln -sf "$DYNAMIC_PLUGINS_DEFAULT" "$LINK_TARGET"
 fi
 
+# If a .npmrc was mounted, set the NPM_CONFIG_USERCONFIG env var
+NPMRC_PATH="/opt/app-root/src/.npmrc"
+if [ -f "$NPMRC_PATH" ]; then
+    echo "Found .npmrc, setting NPM_CONFIG_USERCONFIG"
+    export NPM_CONFIG_USERCONFIG="$NPMRC_PATH"
+else
+    echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
+fi
+
 echo "Running install-dynamic-plugins.sh"
 ./install-dynamic-plugins.sh /dynamic-plugins-root
