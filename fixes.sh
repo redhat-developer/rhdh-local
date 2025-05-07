@@ -23,6 +23,7 @@ rm -rf ~/.npmrc
 DYNAMIC_PLUGINS_DEFAULT="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.yaml"
 DYNAMIC_PLUGINS_OVERRIDE="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.override.yaml"
 LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
+NPMRC_PATH="/opt/app-root/src/configs/extra-files/.npmrc"
 
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
@@ -33,6 +34,14 @@ elif [ -f "/opt/app-root/src/configs/dynamic-plugins.yaml" ]; then
 else
     echo "Using default dynamic-plugins.yaml"
     ln -sf "$DYNAMIC_PLUGINS_DEFAULT" "$LINK_TARGET"
+fi
+
+# If a .npmrc was mounted, set the NPM_CONFIG_USERCONFIG env var
+if [ -f "$NPMRC_PATH" ]; then
+    echo "Found .npmrc, setting NPM_CONFIG_USERCONFIG"
+    export NPM_CONFIG_USERCONFIG="$NPMRC_PATH"
+else
+    echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
 echo "Running install-dynamic-plugins.sh"
