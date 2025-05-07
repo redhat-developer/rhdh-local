@@ -6,7 +6,7 @@ includes:
 
 # Below you can add custom dynamic plugins, including local ones.
 plugins:
-  - package: local-plugins/example-plugin
+  - package: ./local-plugins/example-plugin
     disabled: false
     pluginConfig:
       # Optional: Configuration passed to your plugin
