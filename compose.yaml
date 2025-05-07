@@ -72,7 +72,7 @@ services:
         required: false
     volumes:
       - type: bind
-        source: ./configs/extra-files/.npmrc
+        source: ${NPMRC_PATH:-./configs/extra-files/.npmrc}
         target: /opt/app-root/src/.npmrc
         bind:
           selinux: "Z"
