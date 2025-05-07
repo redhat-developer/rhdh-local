@@ -120,13 +120,13 @@ To load dynamic plugins from your local machine:
 
 ## Optional: Customize `.npmrc` for Plugin Installation
 
-If you're installing dynamic plugins from a private registry or using a proxy, you can customize the `.npmrc` file provided at the root of this repository.
+If you're installing dynamic plugins from a private registry or using a proxy, you can customize the `.npmrc` file in `configs/extra-files/.npmrc` path of this repository.
 
-This file is automatically mounted into the `install-dynamic-plugins` container, and if present, the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
+This file is ignored by Git and automatically mounted into the `install-dynamic-plugins` container, and if present, the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
 
 To use it:
 
-1. Open the existing `.npmrc` file in the `rhdh-local` root directory.
+1. Open the existing `.npmrc` file in the `configs/extra-files/.npmrc` path of this repository.
 2. Add your configuration, such as private registry URLs or authentication tokens:
 
     ```sh

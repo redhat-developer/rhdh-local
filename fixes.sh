@@ -23,6 +23,7 @@ rm -rf ~/.npmrc
 DYNAMIC_PLUGINS_DEFAULT="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.yaml"
 DYNAMIC_PLUGINS_OVERRIDE="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.override.yaml"
 LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
+NPMRC_PATH="/opt/app-root/src/.npmrc"
 
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
@@ -36,7 +37,6 @@ else
 fi
 
 # If a .npmrc was mounted, set the NPM_CONFIG_USERCONFIG env var
-NPMRC_PATH="/opt/app-root/src/.npmrc"
 if [ -f "$NPMRC_PATH" ]; then
     echo "Found .npmrc, setting NPM_CONFIG_USERCONFIG"
     export NPM_CONFIG_USERCONFIG="$NPMRC_PATH"
