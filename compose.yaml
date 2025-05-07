@@ -73,7 +73,7 @@ services:
     volumes:
       - type: bind
         source: ./configs/extra-files
-        target: /opt/app-root/src
+        target: /opt/app-root/src/configs/extra-files
         bind:
           selinux: "Z"
       - type: bind
