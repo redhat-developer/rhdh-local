@@ -339,6 +339,8 @@ REGISTRY_AUTH_FILE=/opt/app-root/src/auth.json
 
 This ensures that RHDH-local can successfully pull OCI artifacts from registries like registry.redhat.io without authentication errors.
 
+**NOTE**: Make sure to add any auth secrets to your `.gitignore` file.
+
 ## Contributing and reporting issues
 
 To report issues against this repository, please use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**
@@ -364,4 +366,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
