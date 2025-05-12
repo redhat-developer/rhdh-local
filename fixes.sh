@@ -23,7 +23,7 @@ rm -rf ~/.npmrc
 DYNAMIC_PLUGINS_DEFAULT="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.yaml"
 DYNAMIC_PLUGINS_OVERRIDE="/opt/app-root/src/configs/dynamic-plugins/dynamic-plugins.override.yaml"
 LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
-NPMRC_PATH="/opt/app-root/src/configs/extra-files/.npmrc"
+NPMRC_PATH="/opt/app-root/src/configs/.npmrc"
 
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"

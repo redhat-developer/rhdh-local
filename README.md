@@ -120,12 +120,12 @@ To load dynamic plugins from your local machine:
 
 ## Optional: Customize `.npmrc` for Plugin Installation
 
-If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/extra-files/` directory as a template.
+If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/` directory as a template.
 
 1. Copy the example file to create your own `.npmrc`:
 
     ```sh
-    cp configs/extra-files/.npmrc.example configs/extra-files/.npmrc
+    cp configs/.npmrc.example configs/.npmrc
     ```
 
 2. Open the newly created `.npmrc` file and add your configuration, such as private registry URLs or authentication tokens:
