@@ -120,21 +120,24 @@ To load dynamic plugins from your local machine:
 
 ## Optional: Customize `.npmrc` for Plugin Installation
 
-If you're installing dynamic plugins from a private registry or using a proxy, you can customize the `.npmrc` file in `configs/extra-files/.npmrc` path of this repository.
+If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/extra-files/` directory as a template.
 
-This file is ignored by Git and automatically mounted into the `install-dynamic-plugins` container, and if present, the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
+1. Copy the example file to create your own `.npmrc`:
 
-To use it:
+    ```sh
+    cp configs/extra-files/.npmrc.example configs/extra-files/.npmrc
+    ```
 
-1. Open the existing `.npmrc` file in the `configs/extra-files/.npmrc` path of this repository.
-2. Add your configuration, such as private registry URLs or authentication tokens:
+2. Open the newly created `.npmrc` file and add your configuration, such as private registry URLs or authentication tokens:
 
     ```sh
     //registry.npmjs.org/:_authToken=YOUR_TOKEN
     registry=https://your-private-registry.example.com/
     ```
 
-If you don't need any custom settings, you can leave the file unchanged. Plugin installation will still work with the default public registry.
+When present, this `.npmrc` file will be automatically mounted into the `install-dynamic-plugins` container, and the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
+
+If you don't create a `.npmrc`, plugin installation will still work using the default public registry settings.
 
 > For more information on configuring `.npmrc`, see the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
 
