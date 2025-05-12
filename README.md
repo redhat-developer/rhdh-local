@@ -340,6 +340,16 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
 
    Every time you make changes to your plugin source code, you need to repeat steps 3-6.
 
+## Configuring Registry Credentials
+
+Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
+
+```bash
+REGISTRY_AUTH_FILE=/opt/app-root/src/configs/extra-files/auth.json
+```
+
+This allows RHDH-local to pull OCI artifacts from registries like registry.redhat.io without authentication errors.
+
 ## Contributing and reporting issues
 
 To report issues against this repository, please use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**
