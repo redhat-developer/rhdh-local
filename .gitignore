@@ -1,5 +1,6 @@
 .env
 configs/github-app-credentials.yaml
+configs/.npmrc
 /tmp
 
 # User-specific local configuration files
