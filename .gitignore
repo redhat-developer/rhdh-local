@@ -2,6 +2,7 @@
 configs/github-app-credentials.yaml
 configs/.npmrc
 /tmp
+dynamic-plugins-root
 
 # User-specific local configuration files
 *.local.yaml
