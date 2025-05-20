@@ -84,6 +84,8 @@ This image supports both `amd64` and `arm64`.
    docker compose up -d
    ```
 
+3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
+
 ## Changing Your Configuration
 
 When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.
