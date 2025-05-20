@@ -84,6 +84,8 @@ This image supports both `amd64` and `arm64`.
    docker compose up -d
    ```
 
+3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
+
 ## Changing Your Configuration
 
 When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.
@@ -143,18 +145,18 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 ## Changing The Container Image
 
-You can switch between RHDH and Janus-IDP by changing the container image name hold by the `RHDH_IMAGE` environment variable in your `.env` file.
+You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name hold by the `RHDH_IMAGE` environment variable in your `.env` file.
 
-To use nightly build of Janus-IDP, set the variable as follows:
+For example, to use the nightly community build, set the variable as follows:
 
 ```sh
-RHDH_IMAGE=quay.io/janus-idp/backstage-showcase:next
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
-To use the official release of RHDH 1.4, set the variable as follows:
+To use the official release of RHDH 1.y, set the variable as follows (replace `y` accordingly):
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.4
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.y
 ```
 
 ## Testing RHDH in a simulated corporate proxy setup
@@ -199,7 +201,7 @@ podman system prune --volumes # For rhdh-local running on podman
 
 ### Known Issues when using Podman Compose
 
-Works with `podman-compose` only with image that include this following fix https://github.com/janus-idp/backstage-showcase/pull/1585
+Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
 
 Older images don't work in combination with `podman-compose`.
 This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
