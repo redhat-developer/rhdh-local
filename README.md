@@ -145,7 +145,7 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 ## Changing The Container Image
 
-You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name hold by the `RHDH_IMAGE` environment variable in your `.env` file.
+You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file.
 
 For example, to use the nightly community build, set the variable as follows:
 
