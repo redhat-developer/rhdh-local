@@ -48,15 +48,28 @@ This image supports both `amd64` and `arm64`.
    RHDH Local supports user-specific configuration overrides using a structured `configs/` directory. You do not need to modify default files. However, if you want to customize your setup:
 
    - Add your app config overrides to: `configs/app-config/app-config.local.yaml`
-      > You can use the included `.example.yaml` files to get started quickly:
-      >
-      > ```sh
-      > cp configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
-      > cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
-      > ```
+
+     > You can use the included `.example.yaml` files to get started quickly:
+     >
+     > ```sh
+     > cp configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
+     > cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
+     > ```
+
+     This file can also be used to load your own catalog entities (such as users and components) from `configs/extra-files/`, like so:
+
+     ```yaml
+     catalog:
+       locations:
+         - type: file
+           target: ./configs/extra-files/users.yaml
+         - type: file
+           target: ./configs/extra-files/components.yaml
+     ```
 
    - Add your plugin config overrides to:  
      `configs/dynamic-plugins/dynamic-plugins.override.yaml`
+
      > The override file must start with:
      > ```yaml
      > includes:
@@ -64,9 +77,9 @@ This image supports both `amd64` and `arm64`.
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
-   - Add any extra files (like GitHub credentials) to: `configs/extra-files/`
+   - Add any extra files (like GitHub credentials, users.yaml, or components.yaml) to: `configs/extra-files/`
 
-   If present, these files will be automatically loaded by the system on startup.
+     These files will be automatically available for use in your local configuration.
 
    If you need features that fetch files from GitHub you should configure `integrations.github`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
