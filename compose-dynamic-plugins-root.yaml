@@ -12,13 +12,9 @@
 services:
   rhdh:
     volumes:
-      - type: bind
-        source: ./dynamic-plugins-root
-        target: /opt/app-root/src/dynamic-plugins-root
+      - ./dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
 
 
   install-dynamic-plugins:
     volumes:
-      - type: bind
-        source: ./dynamic-plugins-root
-        target: /dynamic-plugins-root
+      - ./dynamic-plugins-root:/dynamic-plugins-root
