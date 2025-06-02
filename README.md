@@ -55,7 +55,7 @@ This image supports both `amd64` and `arm64`.
       > cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
       > ```
 
-   - Add your plugin config overrides to:  
+   - Add your plugin config overrides to:
      `configs/dynamic-plugins/dynamic-plugins.override.yaml`
      > The override file must start with:
      > ```yaml
@@ -201,11 +201,15 @@ podman system prune --volumes # For rhdh-local running on podman
 
 ### Known Issues when using Podman Compose
 
+#### RHDH before 1.4.0
+
 Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
 
 Older images don't work in combination with `podman-compose`.
 This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
 Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
+
+#### Podman compose provider compatibility
 
 This also doesn't work with `podman compose` when using `docker-compose` as external compose provider on macOS.
 
