@@ -286,13 +286,13 @@ If you want to use PostgreSQL with RHDH, here are the steps:
 
 ## Developers: Using VSCode to debug backend plugins
 
-You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. Here is how:
+You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. The Node.js debugger is exposed on port 9229. Here is how:
 
-1. Start RHDH-local with the "debug" compose file
+1. Start RHDH-local
 
    ```sh
    # in rhdh-local directory
-   podman-compose up -f compose.yaml -f compose-debug.yaml
+   podman-compose up -d
    ```
 
 2. Open your plugin source code in VSCode

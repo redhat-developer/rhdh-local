@@ -34,6 +34,9 @@ services:
       - "/opt/app-root/src/wait-for-plugins.sh"
     ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
+      - "127.0.0.1:9229:9229"
+    environment:
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229"
     volumes:
       - ./wait-for-plugins.sh:/opt/app-root/src/wait-for-plugins.sh:Z
       - ./configs:/opt/app-root/src/configs:Z
