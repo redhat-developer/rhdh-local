@@ -91,7 +91,8 @@ jobs:
         # Custom app-config.local.yaml
         cp -vr configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
 
-    - name: Create dynamic plugins directory if needed
+    - name: Create dynamic plugins directory
+      if: ${{ matrix.composeConfig.name == "dynamic-plugins-root" }}
       run: |
         if [[ "${{ matrix.composeConfig.name }}" == "dynamic-plugins-root" ]]; then
           mkdir -p dynamic-plugins-root
