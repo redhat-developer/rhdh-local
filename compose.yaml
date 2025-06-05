@@ -54,6 +54,8 @@ services:
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
+    environment:
+      MAX_ENTRY_SIZE: "30000000"
     entrypoint:
       - ./prepare-and-install-dynamic-plugins.sh
     env_file:
