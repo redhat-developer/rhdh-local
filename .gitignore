@@ -7,7 +7,7 @@ dynamic-plugins-root
 # User-specific local configuration files
 *.local.yaml
 *-credentials.yaml
-/configs/dynamic-plugins/dynamic-plugins.override.yaml
+#/configs/dynamic-plugins/dynamic-plugins.override.yaml
 
 # Catalog-Entities
 /configs/catalog-entities/users.override.yaml
@@ -21,3 +21,5 @@ dynamic-plugins-root
 /configs/app-config.local.yaml
 /configs/dynamic-plugins.yaml
 /configs/github-app-credentials.example.yaml
+
+.idea
