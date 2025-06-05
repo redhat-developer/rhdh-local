@@ -55,7 +55,7 @@ This image supports both `amd64` and `arm64`.
       > cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
       > ```
 
-   - Add your plugin config overrides to:  
+   - Add your plugin config overrides to:
      `configs/dynamic-plugins/dynamic-plugins.override.yaml`
      > The override file must start with:
      > ```yaml
@@ -199,29 +199,6 @@ docker system prune --volumes # For rhdh-local running on docker
 podman system prune --volumes # For rhdh-local running on podman
 ```
 
-### Known Issues when using Podman Compose
-
-Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
-
-Older images don't work in combination with `podman-compose`.
-This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
-Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
-
-This also doesn't work with `podman compose` when using `docker-compose` as external compose provider on macOS.
-
-It fails with
-
-```
-install-dynamic-plugins-1  | Traceback (most recent call last):
-install-dynamic-plugins-1  |   File "/opt/app-root/src/install-dynamic-plugins.py", line 429, in <module>
-install-dynamic-plugins-1  |     main()
-install-dynamic-plugins-1  |   File "/opt/app-root/src/install-dynamic-plugins.py", line 206, in main
-install-dynamic-plugins-1  |     with open(dynamicPluginsFile, 'r') as file:
-install-dynamic-plugins-1  | PermissionError: [Errno 13] Permission denied: 'dynamic-plugins.yaml'
-```
-
-It looks like `docker-compose` when used with podman doesn't correctly propagate `Z` SElinux label.
-
 ## Using PostgreSQL database
 
 By default, in-memory db is used.
@@ -282,13 +259,13 @@ If you want to use PostgreSQL with RHDH, here are the steps:
 
 ## Developers: Using VSCode to debug backend plugins
 
-You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. Here is how:
+You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. The Node.js debugger is exposed on port 9229. Here is how:
 
-1. Start RHDH-local with the "debug" compose file
+1. Start RHDH-local
 
    ```sh
    # in rhdh-local directory
-   podman-compose up -f compose.yaml -f compose-debug.yaml
+   podman-compose up -d
    ```
 
 2. Open your plugin source code in VSCode
@@ -342,6 +319,40 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
 
    Every time you make changes to your plugin source code, you need to repeat steps 3-6.
 
+## Frontend Plugin Development
+
+Follow these steps to preview and test development changes for your frontend plugin in RHDH local:
+
+1. Ensure a clean start by running the following command:
+
+   ```shell
+   podman compose down -v
+   ```
+
+2. Create the dynamic plugins root directory where you will place your exported plugins:
+
+   ```shell
+   mkdir dynamic-plugins-root
+   ```
+
+3. Inside your plugin directory, run the following command to export your plugin:
+
+   ```shell
+   npx @janus-idp/cli@latest package export-dynamic-plugin --dev --dynamic-plugins-root <path_to_dynamic-plugins-root_in_rhdh-local_folder>
+   ```
+
+4. Add the plugin configuration for the plugin you want to develop into the `app-config.local.yaml` file under the `dynamicPlugins` key. Avoid adding this configuration to the `dynamic-plugins.override.yaml` file. You can add additional plugins into the `dynamic-plugins.override.yaml` file, but the one you are developing should be in the `app-config.local.yaml` file.
+
+5. Use the `compose-dynamic-plugins-root.yaml` override file to start RHDH local:
+
+   ```shell
+   podman compose -f compose.yaml -f compose-dynamic-plugins-root.yaml up
+   ```
+
+6. Verify that your plugin appears in RHDH.
+
+7. To apply code changes to your plugin, rerun the command in step 3 and refresh your browser. No need to restart any containers.
+
 ## Configuring Registry Credentials
 
 Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
@@ -359,6 +370,16 @@ To report issues against this repository, please use [JIRA](https://issues.redha
 To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
 Contributions are welcome!
+
+### Known Issues when using Podman Compose
+
+#### RHDH before 1.4.0
+
+Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
+
+Older images don't work in combination with `podman-compose`.
+This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
+Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
 
 ## License
 
