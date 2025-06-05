@@ -199,33 +199,6 @@ docker system prune --volumes # For rhdh-local running on docker
 podman system prune --volumes # For rhdh-local running on podman
 ```
 
-### Known Issues when using Podman Compose
-
-#### RHDH before 1.4.0
-
-Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
-
-Older images don't work in combination with `podman-compose`.
-This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
-Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
-
-#### Podman compose provider compatibility
-
-This also doesn't work with `podman compose` when using `docker-compose` as external compose provider on macOS.
-
-It fails with
-
-```
-install-dynamic-plugins-1  | Traceback (most recent call last):
-install-dynamic-plugins-1  |   File "/opt/app-root/src/install-dynamic-plugins.py", line 429, in <module>
-install-dynamic-plugins-1  |     main()
-install-dynamic-plugins-1  |   File "/opt/app-root/src/install-dynamic-plugins.py", line 206, in main
-install-dynamic-plugins-1  |     with open(dynamicPluginsFile, 'r') as file:
-install-dynamic-plugins-1  | PermissionError: [Errno 13] Permission denied: 'dynamic-plugins.yaml'
-```
-
-It looks like `docker-compose` when used with podman doesn't correctly propagate `Z` SElinux label.
-
 ## Using PostgreSQL database
 
 By default, in-memory db is used.
@@ -397,6 +370,16 @@ To report issues against this repository, please use [JIRA](https://issues.redha
 To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
 Contributions are welcome!
+
+### Known Issues when using Podman Compose
+
+#### RHDH before 1.4.0
+
+Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
+
+Older images don't work in combination with `podman-compose`.
+This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
+Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
 
 ## License
 
