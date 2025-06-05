@@ -15,13 +15,15 @@ plugins:
         frontend:
           red-hat-developer-hub.backstage-plugin-orchestrator:
             appIcons:
-              - importName: OrchestratorIcon                
+              - importName: OrchestratorIcon
+                module: OrchestratorPlugin
                 name: orchestratorIcon
             dynamicRoutes:
               - importName: OrchestratorPage
                 menuItem:
                   icon: orchestratorIcon
-                  text: Orchestrator                
+                  text: Orchestrator
+                module: OrchestratorPlugin
                 path: /orchestrator
   - disabled: false
 #    package: ./local-plugins/red-hat-developer-hub-backstage-plugin-orchestrator-backend-dynamic
