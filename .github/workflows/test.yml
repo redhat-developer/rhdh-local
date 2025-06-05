@@ -94,9 +94,7 @@ jobs:
     - name: Create dynamic plugins directory
       if: ${{ matrix.composeConfig.name == "dynamic-plugins-root" }}
       run: |
-        if [[ "${{ matrix.composeConfig.name }}" == "dynamic-plugins-root" ]]; then
           mkdir -p dynamic-plugins-root
-        fi
 
     - name: Start app
       run: |

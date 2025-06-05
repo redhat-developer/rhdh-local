@@ -5,10 +5,6 @@
 # You can run `[podman|docker] compose -f compose.yaml -f compose-dynamic-plugins-root.yaml config`
 # to view the effective merged config.
 
-# WARNING: this file currently only works with Docker Compose. 
-# Issue with Podman Compose: https://github.com/containers/podman-compose/issues/1204
-
-
 services:
   rhdh:
     volumes:
