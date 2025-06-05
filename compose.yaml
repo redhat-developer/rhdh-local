@@ -44,9 +44,10 @@ services:
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
-      # db:
-      #   condition: service_healthy
-
+    # db:
+    #   condition: service_healthy
+    networks:
+      - backstage-network
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
     image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
@@ -65,6 +66,25 @@ services:
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
+  backstage-internal-sonataflow:
+    container_name: backstage-internal-sonataflow
+    image: quay.io/kubesmarts/incubator-kie-sonataflow-devmode:9.103.x-prod
+    environment:
+      QUARKUS_HTTP_PORT: "8899"
+      KOGITO_SERVICE_URL: http://backstage-internal-sonataflow:8899
+      KOGITO.CODEGEN.PROCESS.FAILONERROR: "false"
+      QUARKUS_EMBEDDED_POSTGRESQL_DATA_DIR: /home/kogito/persistence
+      NOTIFICATIONS_BEARER_TOKEN: "***"
+      BACKSTAGE_NOTIFICATIONS_URL: http://host.docker.internal:7008
+    ports:
+      - "8899:8899"
+    volumes:
+      - /home/jennifer/code/rhdh/rhdh-workflow/backstage-orchestrator-workflows/workflows:/home/kogito/serverless-workflow-project/src/main/resources:Z
+    networks:
+      - backstage-network
 
 volumes:
   dynamic-plugins-root:
+networks:
+  backstage-network:
+    driver: bridge
