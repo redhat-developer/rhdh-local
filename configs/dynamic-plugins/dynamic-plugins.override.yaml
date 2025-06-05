@@ -8,7 +8,7 @@ includes:
 plugins:
 #  - package: ./local-plugins/red-hat-developer-hub-backstage-plugin-orchestrator
   - package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.5.1/backstage-plugin-orchestrator-1.5.1.tgz
-#    integrity: sha512-7VOe+XGTUzrdO/av0DNHbydOjB3Lo+XdCs6fj3JVODLP7Ypd3GXHf/nssYxG5ZYC9F1t9MNeguE2bZOB6ckqTA==  pluginConfig
+    integrity: sha512-7VOe+XGTUzrdO/av0DNHbydOjB3Lo+XdCs6fj3JVODLP7Ypd3GXHf/nssYxG5ZYC9F1t9MNeguE2bZOB6ckqTA==  pluginConfig
     disabled: false
     pluginConfig:
       dynamicPlugins:
@@ -26,7 +26,7 @@ plugins:
   - disabled: false
 #    package: ./local-plugins/red-hat-developer-hub-backstage-plugin-orchestrator-backend-dynamic
     package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.5.1/backstage-plugin-orchestrator-backend-dynamic-1.5.1.tgz
-#    integrity: sha512-VIenFStdq9QvvmgmEMG8O7b2wqIebvEcqNeJ9SWZ8jen9t+efTK6D3Rde74LQ1no1QaHLx8RoxNCOuTUEF8O/g==
+    integrity: sha512-VIenFStdq9QvvmgmEMG8O7b2wqIebvEcqNeJ9SWZ8jen9t+efTK6D3Rde74LQ1no1QaHLx8RoxNCOuTUEF8O/g==
     pluginConfig:
       orchestrator:        
         dataIndexService:
