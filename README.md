@@ -56,16 +56,22 @@ This image supports both `amd64` and `arm64`.
      > cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
      > ```
 
-     This file can also be used to load your own catalog entities (such as users and components) from `configs/extra-files/`, like so:
+### Customizing Catalog Entities (users.yaml and components.yaml)
 
-     ```yaml
-     catalog:
-       locations:
-         - type: file
-           target: ./configs/extra-files/users.yaml
-         - type: file
-           target: ./configs/extra-files/components.yaml
-     ```
+RHDH Local includes default catalog entities that are automatically loaded from:
+
+- `configs/extra-files/users.yaml`
+- `configs/extra-files/components.yaml`
+
+These files are preconfigured in `app-config.yaml` and are used to populate the catalog with default users and documentation (like RHDH Local TechDocs).
+
+#### To override these catalog entities:
+
+1. Copy the default files:
+   ```sh
+   cp configs/extra-files/users.yaml configs/extra-files/users.local.yaml
+   cp configs/extra-files/components.yaml configs/extra-files/components.local.yaml
+   ```
 
    - Add your plugin config overrides to:
      `configs/dynamic-plugins/dynamic-plugins.override.yaml`
@@ -79,7 +85,7 @@ This image supports both `amd64` and `arm64`.
 
    - Add any extra files (like GitHub credentials, users.yaml, or components.yaml) to: `configs/extra-files/`
 
-     These files will be automatically available for use in your local configuration.
+   These files are automatically loaded by default unless overridden via your local config.
 
    If you need features that fetch files from GitHub you should configure `integrations.github`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).

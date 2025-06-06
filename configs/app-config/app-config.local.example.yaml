@@ -3,9 +3,9 @@
 catalog:
   locations:
     - type: file
-      target: ./configs/extra-files/users.yaml
+      target: ./configs/extra-files/users.local.yaml
     - type: file
-      target: ./configs/extra-files/components.yaml
+      target: ./configs/extra-files/components.local.yaml
 integrations:
   github:
     - host: github.com
