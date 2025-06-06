@@ -1,0 +1,16 @@
+# This Compose file is not usable on its own.
+# It needs to be used alongside the default compose.yaml file,
+# since it overrides the containers defined in the latter.
+#
+# You can run `[podman|docker] compose -f compose.yaml -f compose-dynamic-plugins-root.yaml config`
+# to view the effective merged config.
+
+services:
+  rhdh:
+    volumes:
+      - ./dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
+
+
+  install-dynamic-plugins:
+    volumes:
+      - ./dynamic-plugins-root:/dynamic-plugins-root

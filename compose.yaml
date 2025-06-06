@@ -34,23 +34,13 @@ services:
       - "/opt/app-root/src/wait-for-plugins.sh"
     ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
+      - "127.0.0.1:9229:9229"
+    environment:
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229"
     volumes:
+      - ./wait-for-plugins.sh:/opt/app-root/src/wait-for-plugins.sh:Z
       - ./configs:/opt/app-root/src/configs:Z
-      - type: bind
-        source: "./wait-for-plugins.sh"
-        target: "/opt/app-root/src/wait-for-plugins.sh"
-        bind:
-          selinux: "Z"
-      - type: bind
-        source: "./configs"
-        target: "/opt/app-root/src/configs"
-        bind:
-          selinux: "Z"
-      - type: volume
-        source: dynamic-plugins-root
-        target: /opt/app-root/src/dynamic-plugins-root
-        volume:
-          nocopy: true
+      - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
@@ -71,26 +61,10 @@ services:
       - path: "./.env"
         required: false
     volumes:
-      - type: bind
-        source: "./fixes.sh"
-        target: "/opt/app-root/src/fixes.sh"
-        bind:
-          selinux: "Z"
-      - type: bind
-        source : "./local-plugins"
-        target: "/opt/app-root/src/local-plugins"
-        bind:
-          selinux: "Z"
-      - type: bind
-        source: "./configs"
-        target: "/opt/app-root/src/configs"
-        bind:
-          selinux: "Z"
-      - type: volume
-        source: dynamic-plugins-root
-        target: /dynamic-plugins-root
-        volume:
-          nocopy: true
+      - ./fixes.sh:/opt/app-root/src/fixes.sh:Z
+      - ./local-plugins:/opt/app-root/src/local-plugins:Z
+      - ./configs:/opt/app-root/src/configs:Z
+      - dynamic-plugins-root:/dynamic-plugins-root
 
 volumes:
   dynamic-plugins-root:
