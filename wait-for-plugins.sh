@@ -5,6 +5,8 @@
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
+DEFAULT_USERS_YAML="configs/extra-files/users.yaml"
+DEFAULT_COMPONENTS_YAML="configs/extra-files/components.yaml"
 
 # Wait for dynamic plugins config to be generated
 while [ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]; do
@@ -20,6 +22,21 @@ if [ -f "$USER_APP_CONFIG" ]; then
 elif [ -f "configs/app-config.local.yaml" ]; then
     echo "[warn] Using legacy app-config.local.yaml. This method is deprecated. You should move your local app-config file under configs/app-config/app-config.local.yaml and extra files under configs/extra-files."
     EXTRA_CLI_ARGS="--config configs/app-config.local.yaml"
+fi
+
+# Only load default catalog files if no local app config exists
+if [ ! -f "$USER_APP_CONFIG" ] && [ ! -f "configs/app-config.local.yaml" ]; then
+    if [ -f "$DEFAULT_USERS_YAML" ]; then
+        echo "Including default users.yaml catalog entity"
+        EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_USERS_YAML"
+    fi
+
+    if [ -f "$DEFAULT_COMPONENTS_YAML" ]; then
+        echo "Including default components.yaml catalog entity"
+        EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_COMPONENTS_YAML"
+    fi
+else
+    echo "User-defined app-config.local.yaml detected — skipping default catalog fallback"
 fi
 
 # Run Backstage with default + optional config overrides
