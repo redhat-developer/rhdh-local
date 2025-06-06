@@ -24,15 +24,19 @@ elif [ -f "configs/app-config.local.yaml" ]; then
     EXTRA_CLI_ARGS="--config configs/app-config.local.yaml"
 fi
 
-# Auto-load default users and components catalog files unless overridden
-if [ -f "$DEFAULT_USERS_YAML" ]; then
-    echo "Including default users.yaml catalog entity"
-    EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_USERS_YAML"
-fi
+# Only load default catalog files if no local app config exists
+if [ ! -f "$USER_APP_CONFIG" ] && [ ! -f "configs/app-config.local.yaml" ]; then
+    if [ -f "$DEFAULT_USERS_YAML" ]; then
+        echo "Including default users.yaml catalog entity"
+        EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_USERS_YAML"
+    fi
 
-if [ -f "$DEFAULT_COMPONENTS_YAML" ]; then
-    echo "Including default components.yaml catalog entity"
-    EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_COMPONENTS_YAML"
+    if [ -f "$DEFAULT_COMPONENTS_YAML" ]; then
+        echo "Including default components.yaml catalog entity"
+        EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $DEFAULT_COMPONENTS_YAML"
+    fi
+else
+    echo "User-defined app-config.local.yaml detected — skipping default catalog fallback"
 fi
 
 # Run Backstage with default + optional config overrides
