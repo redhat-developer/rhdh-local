@@ -1,6 +1,11 @@
 # Copy this file to app-config.local.yaml to override default app settings.
-# Example with GitHub integration referencing external secrets file.
-
+# Example with GitHub integration referencing external secrets file and custom catalog users.
+catalog:
+  locations:
+    - type: file
+      target: ./configs/extra-files/users.local.yaml
+    - type: file
+      target: ./configs/extra-files/components.local.yaml
 integrations:
   github:
     - host: github.com
