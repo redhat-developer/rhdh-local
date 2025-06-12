@@ -145,18 +145,28 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 ## Changing The Container Image
 
-You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file.
+By default, the [compose.yaml](./compose.yaml) points to the latest stable CI build of RHDH at [quay.io/rhdh/rhdh-hub-rhel9:latest](https://quay.io/rhdh/rhdh-hub-rhel9:latest).
 
-For example, to use the nightly community build, set the variable as follows:
+You can switch between unsupported [CI builds](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community builds](https://quay.io/repository/rhdh-community/rhdh?tab=tags) of RHDH by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file. 
+
+To use the nightly community build, set the variable as follows:
 
 ```sh
 RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
-To use the official release of RHDH 1.y, set the variable as follows (replace `y` accordingly):
+To use the latest CI builds of RHDH:
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.y
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:latest
+```
+
+To use an official release of RHDH, first [authenticate with the registry.redhat.io registry](https://access.redhat.com/articles/RegistryAuthentication).
+
+Then [browse for the tag you want to use](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba/history), and click though to find the digest of the image you want to use. For example, from the [Get this image](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?image=68360c12177ad86df31947d8&architecture=amd64&container-tabs=gti) tab for 1.6.1:
+
+```sh
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9@sha256:8729c21dc4b6e1339ed29bf87e2e2054c8802f401a029ebb1f397408f3656664
 ```
 
 ## Testing RHDH in a simulated corporate proxy setup
