@@ -30,6 +30,12 @@ DYNAMIC_PLUGINS_OVERRIDE="/opt/app-root/src/configs/dynamic-plugins/dynamic-plug
 LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
 NPMRC_PATH="/opt/app-root/src/configs/.npmrc"
 
+# Handle catalog-entities config overrides (users.yaml / components.yaml)
+USERS_DEFAULT="/opt/app-root/src/configs/catalog-entities/users.yaml"
+USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.yaml"
+COMPONENTS_DEFAULT="/opt/app-root/src/configs/catalog-entities/components.yaml"
+COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.yaml"
+
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
     ln -sf "$DYNAMIC_PLUGINS_OVERRIDE" "$LINK_TARGET"
@@ -47,6 +53,22 @@ if [ -f "$NPMRC_PATH" ]; then
     export NPM_CONFIG_USERCONFIG="$NPMRC_PATH"
 else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
+fi
+
+# Users override
+if [ -f "$USERS_OVERRIDE" ]; then
+    echo "Using users.override.yaml"
+    ln -sf "$USERS_OVERRIDE" "$USERS_DEFAULT"
+else
+    echo "Using default users.yaml"
+fi
+
+# Components override
+if [ -f "$COMPONENTS_OVERRIDE" ]; then
+    echo "Using components.override.yaml"
+    ln -sf "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
+else
+    echo "Using default components.yaml"
 fi
 
 echo "Running install-dynamic-plugins.sh"
