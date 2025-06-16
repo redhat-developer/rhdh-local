@@ -57,16 +57,16 @@ fi
 
 # Users override
 if [ -f "$USERS_OVERRIDE" ]; then
-    echo "Using users.override.yaml"
-    ln -sf "$USERS_OVERRIDE" "$USERS_DEFAULT"
+    echo "Copying users.override.yaml to users.yaml"
+    cp "$USERS_OVERRIDE" "$USERS_DEFAULT"
 else
     echo "Using default users.yaml"
 fi
 
 # Components override
 if [ -f "$COMPONENTS_OVERRIDE" ]; then
-    echo "Using components.override.yaml"
-    ln -sf "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
+    echo "Copying components.override.yaml to components.yaml"
+    cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
 else
     echo "Using default components.yaml"
 fi

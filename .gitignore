@@ -9,6 +9,9 @@ dynamic-plugins-root
 *-credentials.yaml
 /configs/dynamic-plugins/dynamic-plugins.override.yaml
 
+# Catalog-Entities
+/configs/catalog-entities/*
+
 # Extra-files
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
