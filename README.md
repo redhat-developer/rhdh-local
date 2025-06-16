@@ -64,6 +64,11 @@ This image supports both `amd64` and `arm64`.
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
+   - Add your catalog entity overrides to:
+      `configs/catalog-entities/users.override.yaml` and/or `components.override.yaml`
+      > If these `.override.yaml` files are present, RHDH Local will automatically use them **instead of** the default `users.yaml` or `components.yaml`.
+      > No additional configuration is required, you can just drop the file in place and restart RHDH.
+
    - Add any extra files (like GitHub credentials) to: `configs/extra-files/`
 
    If present, these files will be automatically loaded by the system on startup.
