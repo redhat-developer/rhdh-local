@@ -31,14 +31,14 @@ services:
         required: false
     user: "1001"
     entrypoint:
-      - "/opt/app-root/src/wait-for-plugins.sh"
+      - "/opt/app-root/src/wait-for-plugins-and-start.sh"
     ports: # dclint disable-line no-unbound-port-interfaces
       - "7007:7007"
       - "127.0.0.1:9229:9229"
     environment:
       NODE_OPTIONS: "--inspect=0.0.0.0:9229"
     volumes:
-      - ./wait-for-plugins.sh:/opt/app-root/src/wait-for-plugins.sh:Z
+      - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
     depends_on:
@@ -54,14 +54,14 @@ services:
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
     entrypoint:
-      - ./fixes.sh
+      - ./prepare-and-install-dynamic-plugins.sh
     env_file:
       - path: "./default.env"
         required: true
       - path: "./.env"
         required: false
     volumes:
-      - ./fixes.sh:/opt/app-root/src/fixes.sh:Z
+      - ./prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
