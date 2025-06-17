@@ -32,9 +32,9 @@ NPMRC_PATH="/opt/app-root/src/configs/.npmrc"
 
 # Handle catalog-entities config overrides (users.yaml / components.yaml)
 USERS_DEFAULT="/opt/app-root/src/configs/catalog-entities/users.yaml"
-USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.yaml"
+USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.example.yaml"
 COMPONENTS_DEFAULT="/opt/app-root/src/configs/catalog-entities/components.yaml"
-COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.yaml"
+COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.example.yaml"
 
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
