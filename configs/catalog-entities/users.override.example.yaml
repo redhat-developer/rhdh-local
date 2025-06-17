@@ -2,9 +2,9 @@
 # If present, this file will be used instead of users.yaml.
 # Uncomment and edit the entries below to override catalog users.
 
-# apiVersion: backstage.io/v1alpha1
-# kind: User
-# metadata:
-#   name: user
-# spec:
-#   memberOf: [default]
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: user
+spec:
+  memberOf: [default]
