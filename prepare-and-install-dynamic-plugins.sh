@@ -55,20 +55,26 @@ else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
+# Define final target locations where the app expects the files
+USERS_TARGET="/opt/app-root/src/catalog-entities-users.yaml"
+COMPONENTS_TARGET="/opt/app-root/src/catalog-entities-components.yaml"
+
 # Users override
 if [ -f "$USERS_OVERRIDE" ]; then
-    echo "Copying users.override.yaml to users.yaml"
-    cp "$USERS_OVERRIDE" "$USERS_DEFAULT"
+    echo "Using users.override.yaml"
+    ln -sf "$USERS_OVERRIDE" "$USERS_TARGET"
 else
     echo "Using default users.yaml"
+    ln -sf "$USERS_DEFAULT" "$USERS_TARGET"
 fi
 
 # Components override
 if [ -f "$COMPONENTS_OVERRIDE" ]; then
-    echo "Copying components.override.yaml to components.yaml"
-    cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
+    echo "Using components.override.yaml"
+    ln -sf "$COMPONENTS_OVERRIDE" "$COMPONENTS_TARGET"
 else
     echo "Using default components.yaml"
+    ln -sf "$COMPONENTS_DEFAULT" "$COMPONENTS_TARGET"
 fi
 
 echo "Running install-dynamic-plugins.sh"
