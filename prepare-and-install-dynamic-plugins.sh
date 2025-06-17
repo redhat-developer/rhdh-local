@@ -5,6 +5,11 @@
 # Fix for https://issues.redhat.com/browse/RHIDP-3939
 # needed for < 1.4
 # if there is no config than the files in dynamic-plugins-root are from the image, and we need to remove them
+
+# Entrypoint for the install-dynamic-plugins container.
+# Prepares the dynamic-plugins config, applies compatibility fixes,
+# and runs install-dynamic-plugins.sh to generate app-config.dynamic-plugins.yaml.
+
 if [ -d "dynamic-plugins-root" ]; then
     echo "dynamic-plugins-root exists"
     if [ ! -f "dynamic-plugins-root/app-config.dynamic-plugins.yaml" ]; then

@@ -2,6 +2,11 @@
 
 # This script is a workaround for podman-compose absence of support for depends_on
 
+# Entrypoint for the main RHDH container.
+# Waits for the dynamic plugins config to be generated,
+# then starts the Backstage backend with optional local overrides.
+
+
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
