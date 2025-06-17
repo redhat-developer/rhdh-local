@@ -10,8 +10,11 @@ dynamic-plugins-root
 /configs/dynamic-plugins/dynamic-plugins.override.yaml
 
 # Catalog-Entities
+/configs/catalog-entities/users.yaml
+/configs/catalog-entities/components.yaml
 /configs/catalog-entities/users.override.yaml
 /configs/catalog-entities/components.override.yaml
+
 
 # Extra-files
 /configs/extra-files/*

@@ -30,12 +30,6 @@ DYNAMIC_PLUGINS_OVERRIDE="/opt/app-root/src/configs/dynamic-plugins/dynamic-plug
 LINK_TARGET="/opt/app-root/src/dynamic-plugins.yaml"
 NPMRC_PATH="/opt/app-root/src/configs/.npmrc"
 
-# Handle catalog-entities config overrides (users.yaml / components.yaml)
-USERS_DEFAULT="/opt/app-root/src/configs/catalog-entities/users.yaml"
-USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.yaml"
-COMPONENTS_DEFAULT="/opt/app-root/src/configs/catalog-entities/components.yaml"
-COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.yaml"
-
 if [ -f "$DYNAMIC_PLUGINS_OVERRIDE" ]; then
     echo "Using dynamic-plugins.override.yaml"
     ln -sf "$DYNAMIC_PLUGINS_OVERRIDE" "$LINK_TARGET"
@@ -55,27 +49,30 @@ else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
-# Define final target locations where the app expects the files
-USERS_TARGET="/opt/app-root/src/catalog-entities-users.yaml"
-COMPONENTS_TARGET="/opt/app-root/src/catalog-entities-components.yaml"
 
-# Users override
+# Fixed paths
+USERS_DEFAULT="/opt/app-root/src/configs/catalog-entities/users.yaml"
+USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.yaml"
+
+COMPONENTS_DEFAULT="/opt/app-root/src/configs/catalog-entities/components.yaml"
+COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.yaml"
+
+# Users override logic
 if [ -f "$USERS_OVERRIDE" ]; then
     echo "Using users.override.yaml"
-    ln -sf "$USERS_OVERRIDE" "$USERS_TARGET"
+    cp "$USERS_OVERRIDE" "$USERS_DEFAULT"
 else
     echo "Using default users.yaml"
-    ln -sf "$USERS_DEFAULT" "$USERS_TARGET"
 fi
 
-# Components override
+# Components override logic
 if [ -f "$COMPONENTS_OVERRIDE" ]; then
     echo "Using components.override.yaml"
-    ln -sf "$COMPONENTS_OVERRIDE" "$COMPONENTS_TARGET"
+    cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
 else
     echo "Using default components.yaml"
-    ln -sf "$COMPONENTS_DEFAULT" "$COMPONENTS_TARGET"
 fi
+
 
 echo "Running install-dynamic-plugins.sh"
 ./install-dynamic-plugins.sh /dynamic-plugins-root
