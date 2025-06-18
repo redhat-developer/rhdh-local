@@ -50,11 +50,11 @@ catalog:
 
   locations:
     - type: file
-      target: /opt/app-root/src/configs/catalog-entities/users.yaml
+      target: /opt/app-root/src/generated/users.merged.yaml
       rules:
         - allow: [User, Group]
     - type: file
-      target: /opt/app-root/src/configs/catalog-entities/components.yaml
+      target: /opt/app-root/src/generated/components.merged.yaml
       rules:
         - allow: [Component, System]
     # - type: url

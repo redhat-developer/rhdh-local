@@ -49,37 +49,5 @@ else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
-
-# Paths
-USERS_DEFAULT="/opt/app-root/src/configs/catalog-entities/users.yaml"
-USERS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/users.override.yaml"
-
-COMPONENTS_DEFAULT="/opt/app-root/src/configs/catalog-entities/components.yaml"
-COMPONENTS_OVERRIDE="/opt/app-root/src/configs/catalog-entities/components.override.yaml"
-
-# Users override logic
-if [ -f "$USERS_OVERRIDE" ]; then
-    if [ ! -L "$USERS_DEFAULT" ] && [ ! -s "$USERS_DEFAULT" ]; then
-        echo "[info] Symlinking users.override.yaml -> users.yaml"
-        ln -sf "$USERS_OVERRIDE" "$USERS_DEFAULT"
-    else
-        echo "[info] Not overriding users.yaml, file already exists or is not a symlink"
-    fi
-else
-    echo "[info] No users.override.yaml found"
-fi
-
-# Components override logic
-if [ -f "$COMPONENTS_OVERRIDE" ]; then
-    if [ ! -L "$COMPONENTS_DEFAULT" ] && [ ! -s "$COMPONENTS_DEFAULT" ]; then
-        echo "[info] Symlinking components.override.yaml -> components.yaml"
-        ln -sf "$COMPONENTS_OVERRIDE" "$COMPONENTS_DEFAULT"
-    else
-        echo "[info] Not overriding components.yaml, file already exists or is not a symlink"
-    fi
-else
-    echo "[info] No components.override.yaml found"
-fi
-
 echo "Running install-dynamic-plugins.sh"
 ./install-dynamic-plugins.sh /dynamic-plugins-root

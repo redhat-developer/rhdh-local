@@ -27,6 +27,42 @@ elif [ -f "configs/app-config.local.yaml" ]; then
     EXTRA_CLI_ARGS="--config configs/app-config.local.yaml"
 fi
 
+# Handle catalog entity overrides
+USERS_DEFAULT="configs/catalog-entities/users.yaml"
+USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
+USERS_TARGET="generated/users.merged.yaml"
+
+COMPONENTS_DEFAULT="configs/catalog-entities/components.yaml"
+COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
+COMPONENTS_TARGET="generated/components.merged.yaml"
+
+mkdir -p generated
+
+# Users
+if [ -f "$USERS_OVERRIDE" ]; then
+    echo "[catalog] Using users.override.yaml"
+    cp "$USERS_OVERRIDE" "$USERS_TARGET"
+elif [ -f "$USERS_DEFAULT" ]; then
+    echo "[catalog] Using default users.yaml"
+    cp "$USERS_DEFAULT" "$USERS_TARGET"
+else
+    echo "[catalog] No users.yaml or override found. Creating empty file."
+    touch "$USERS_TARGET"
+fi
+
+# Components
+if [ -f "$COMPONENTS_OVERRIDE" ]; then
+    echo "[catalog] Using components.override.yaml"
+    cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_TARGET"
+elif [ -f "$COMPONENTS_DEFAULT" ]; then
+    echo "[catalog] Using default components.yaml"
+    cp "$COMPONENTS_DEFAULT" "$COMPONENTS_TARGET"
+else
+    echo "[catalog] No components.yaml or override found. Creating empty file."
+    touch "$COMPONENTS_TARGET"
+fi
+
+
 # Run Backstage with default + optional config overrides
 node packages/backend --no-node-snapshot \
     --config "app-config.yaml" \
