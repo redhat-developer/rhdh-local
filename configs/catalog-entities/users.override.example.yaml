@@ -5,6 +5,10 @@
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: user
+  name: my-user
 spec:
-  memberOf: [default]
+  profile:
+    displayName: My User
+  memberOf:
+    - my-group1
+    - my-group2
