@@ -54,6 +54,14 @@ fi
 if [ -f "$COMPONENTS_OVERRIDE" ]; then
     echo "[catalog] Using components.override.yaml"
     cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_TARGET"
+    
+    # If docs exist beside the override file, include them for TechDocs
+    if [ -f "configs/catalog-entities/mkdocs.yml" ]; then
+        cp configs/catalog-entities/mkdocs.yml generated/mkdocs.yml
+    fi
+    if [ -d "configs/catalog-entities/docs" ]; then
+        cp -r configs/catalog-entities/docs generated/docs
+    fi
 elif [ -f "$COMPONENTS_DEFAULT" ]; then
     echo "[catalog] Using default components.yaml"
     cp "$COMPONENTS_DEFAULT" "$COMPONENTS_TARGET"
@@ -61,6 +69,7 @@ else
     echo "[catalog] No components.yaml or override found. Creating empty file."
     touch "$COMPONENTS_TARGET"
 fi
+
 
 
 # Run Backstage with default + optional config overrides
