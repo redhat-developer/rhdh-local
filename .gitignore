@@ -14,8 +14,6 @@ dynamic-plugins-root
 /configs/catalog-entities/components.yaml
 /configs/catalog-entities/users.override.yaml
 /configs/catalog-entities/components.override.yaml
-/configs/catalog-entities/*.bak
-
 
 # Extra-files
 /configs/extra-files/*

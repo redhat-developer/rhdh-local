@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Workaround for various issues
 
