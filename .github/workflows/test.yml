@@ -91,6 +91,12 @@ jobs:
         # Custom app-config.local.yaml
         cp -vr configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
 
+        # Custom users.override.yaml
+        cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
+
+        # Custom components.override.yaml
+        cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
+
     - name: Create dynamic plugins directory
       if: ${{ matrix.composeConfig.name == 'dynamic-plugins-root' }}
       run: |
