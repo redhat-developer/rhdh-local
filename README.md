@@ -12,8 +12,8 @@ To use RHDH Local you'll need a few things:
 
 1. A PC based on an x86 64Bit (amd64) architecture (ARM is on the way)
 1. An installation of Docker or Podman (with adequate resources available)
-   1. Docker Compose v2.24.0 +
-   2. Podman Compose v1.3.0 +
+   - Docker Compose v2.24.0 +
+   - Podman Compose v1.3.0 +
 2. An internet connection (for downloading container images, plugins, etc.)
 3. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
 4. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
