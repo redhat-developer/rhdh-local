@@ -31,23 +31,26 @@ fi
 # Handle catalog entity overrides
 USERS_DEFAULT="configs/catalog-entities/users.yaml"
 USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
-
-COMPONENTS_DEFAULT="configs/catalog-entities/components.yaml"
-COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
-
-# Select sources (prioritize overrides)
 USERS_SOURCE="$USERS_DEFAULT"
 [ -f "$USERS_OVERRIDE" ] && USERS_SOURCE="$USERS_OVERRIDE"
 
+COMPONENTS_DEFAULT="configs/catalog-entities/components.yaml"
+COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
 COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
 [ -f "$COMPONENTS_OVERRIDE" ] && COMPONENTS_SOURCE="$COMPONENTS_OVERRIDE"
 
-# Create patched app-config.yaml with updated catalog.locations
 mkdir -p generated
 cp "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
+# Patch app-config to inject or update specific catalog locations
 yq eval "
-  .catalog.locations = [
+.catalog.locations |= (
+  map(select(
+    .target != \"$USERS_DEFAULT\" and
+    .target != \"$USERS_OVERRIDE\" and
+    .target != \"$COMPONENTS_DEFAULT\" and
+    .target != \"$COMPONENTS_OVERRIDE\"
+  )) + [
     {
       type: \"file\",
       target: \"$USERS_SOURCE\",
@@ -59,7 +62,7 @@ yq eval "
       rules: { allow: [\"Component\", \"System\"] }
     }
   ]
-" -i "$PATCHED_APP_CONFIG"
+)" -i "$PATCHED_APP_CONFIG"
 
 # Run Backstage with default + optional config overrides
 node packages/backend --no-node-snapshot \
