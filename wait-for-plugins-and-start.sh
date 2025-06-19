@@ -10,6 +10,7 @@
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
+PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
 
 # Wait for dynamic plugins config to be generated
 while [ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]; do
@@ -30,47 +31,35 @@ fi
 # Handle catalog entity overrides
 USERS_DEFAULT="configs/catalog-entities/users.yaml"
 USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
-USERS_TARGET="generated/users.merged.yaml"
 
 COMPONENTS_DEFAULT="configs/catalog-entities/components.yaml"
 COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
-COMPONENTS_TARGET="generated/components.merged.yaml"
 
+# Select sources (prioritize overrides)
+USERS_SOURCE="$USERS_DEFAULT"
+[ -f "$USERS_OVERRIDE" ] && USERS_SOURCE="$USERS_OVERRIDE"
+
+COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
+[ -f "$COMPONENTS_OVERRIDE" ] && COMPONENTS_SOURCE="$COMPONENTS_OVERRIDE"
+
+# Create patched app-config.yaml with updated catalog.locations
 mkdir -p generated
+cp "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
-# Users
-if [ -f "$USERS_OVERRIDE" ]; then
-    echo "[catalog] Using users.override.yaml"
-    cp "$USERS_OVERRIDE" "$USERS_TARGET"
-elif [ -f "$USERS_DEFAULT" ]; then
-    echo "[catalog] Using default users.yaml"
-    cp "$USERS_DEFAULT" "$USERS_TARGET"
-else
-    echo "[catalog] No users.yaml or override found. Creating empty file."
-    touch "$USERS_TARGET"
-fi
-
-# Components
-if [ -f "$COMPONENTS_OVERRIDE" ]; then
-    echo "[catalog] Using components.override.yaml"
-    cp "$COMPONENTS_OVERRIDE" "$COMPONENTS_TARGET"
-    
-    # If docs exist beside the override file, include them for TechDocs
-    if [ -f "configs/catalog-entities/mkdocs.yml" ]; then
-        cp configs/catalog-entities/mkdocs.yml generated/mkdocs.yml
-    fi
-    if [ -d "configs/catalog-entities/docs" ]; then
-        cp -r configs/catalog-entities/docs generated/docs
-    fi
-elif [ -f "$COMPONENTS_DEFAULT" ]; then
-    echo "[catalog] Using default components.yaml"
-    cp "$COMPONENTS_DEFAULT" "$COMPONENTS_TARGET"
-else
-    echo "[catalog] No components.yaml or override found. Creating empty file."
-    touch "$COMPONENTS_TARGET"
-fi
-
-
+yq eval "
+  .catalog.locations = [
+    {
+      type: \"file\",
+      target: \"$USERS_SOURCE\",
+      rules: { allow: [\"User\", \"Group\"] }
+    },
+    {
+      type: \"file\",
+      target: \"$COMPONENTS_SOURCE\",
+      rules: { allow: [\"Component\", \"System\"] }
+    }
+  ]
+" -i "$PATCHED_APP_CONFIG"
 
 # Run Backstage with default + optional config overrides
 node packages/backend --no-node-snapshot \
@@ -78,4 +67,4 @@ node packages/backend --no-node-snapshot \
     --config app-config.example.yaml \
     --config app-config.example.production.yaml \
     --config "$DYNAMIC_PLUGINS_CONFIG" \
-    --config "$DEFAULT_APP_CONFIG" $EXTRA_CLI_ARGS
+    --config "$PATCHED_APP_CONFIG" $EXTRA_CLI_ARGS
