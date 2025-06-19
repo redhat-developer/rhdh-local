@@ -42,27 +42,22 @@ COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
 mkdir -p generated
 cp "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
-# Patch app-config to inject or update specific catalog locations
-yq eval "
-.catalog.locations |= (
-  map(select(
-    .target != \"$USERS_DEFAULT\" and
-    .target != \"$USERS_OVERRIDE\" and
-    .target != \"$COMPONENTS_DEFAULT\" and
-    .target != \"$COMPONENTS_OVERRIDE\"
-  )) + [
-    {
-      type: \"file\",
-      target: \"$USERS_SOURCE\",
-      rules: { allow: [\"User\", \"Group\"] }
-    },
-    {
-      type: \"file\",
-      target: \"$COMPONENTS_SOURCE\",
-      rules: { allow: [\"Component\", \"System\"] }
-    }
-  ]
-)" -i "$PATCHED_APP_CONFIG"
+# Replace catalog.locations block in app-config.yaml using sed
+# WARNING: This assumes catalog.locations starts with `catalog:` and has no unrelated lines before `locations:`
+sed -i '/^catalog:/,/^[^[:space:]]/d' "$PATCHED_APP_CONFIG"
+
+cat <<EOF >> "$PATCHED_APP_CONFIG"
+catalog:
+  locations:
+    - type: file
+      target: $USERS_SOURCE
+      rules:
+        - allow: [User, Group]
+    - type: file
+      target: $COMPONENTS_SOURCE
+      rules:
+        - allow: [Component, System]
+EOF
 
 # Run Backstage with default + optional config overrides
 node packages/backend --no-node-snapshot \
