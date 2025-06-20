@@ -40,13 +40,8 @@ COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
 [ -f "$COMPONENTS_OVERRIDE" ] && COMPONENTS_SOURCE="$COMPONENTS_OVERRIDE"
 
 mkdir -p generated
-cp "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
-# Replace catalog.locations block in app-config.yaml using sed
-# WARNING: This assumes catalog.locations starts with `catalog:` and has no unrelated lines before `locations:`
-sed -i '/^catalog:/,/^[^[:space:]]/d' "$PATCHED_APP_CONFIG"
-
-cat <<EOF >> "$PATCHED_APP_CONFIG"
+cat <<EOF > "$PATCHED_APP_CONFIG"
 catalog:
   locations:
     - type: file
@@ -59,10 +54,11 @@ catalog:
         - allow: [Component, System]
 EOF
 
-# Run Backstage with default + optional config overrides
-node packages/backend --no-node-snapshot \
-    --config "app-config.yaml" \
-    --config app-config.example.yaml \
-    --config app-config.example.production.yaml \
-    --config "$DYNAMIC_PLUGINS_CONFIG" \
-    --config "$PATCHED_APP_CONFIG" $EXTRA_CLI_ARGS
+# Run Backstage backend with layered config
+exec node packages/backend --no-node-snapshot \
+  --config "app-config.yaml" \
+  --config app-config.example.yaml \
+  --config app-config.example.production.yaml \
+  --config "$DYNAMIC_PLUGINS_CONFIG" \
+  --config "$DEFAULT_APP_CONFIG" \
+  --config "$PATCHED_APP_CONFIG" $EXTRA_CLI_ARGS
