@@ -49,7 +49,7 @@ services:
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE:-quay.io/rhdh/rhdh-hub-rhel9:1.6}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
