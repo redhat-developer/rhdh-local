@@ -24,6 +24,8 @@ If you're using an Apple Silicon (M1/M2) Mac, the default images from `quay.io/r
 
 Instead, you can add this line to your `.env` file (create the file if it doesn't exist):
 
+`RHDH_IMAGE=quay.io/rhdh-community/rhdh:1.6`
+or
 `RHDH_IMAGE=quay.io/rhdh-community/rhdh:next`
 
 This image supports both `linux-amd64` and `linux-arm64`.
