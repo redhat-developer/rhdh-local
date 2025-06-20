@@ -1,0 +1,28 @@
+{
+  "$id": "classpath:/schemas/cohere-schema.json",
+  "title": "Data Input Schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Enter name of repository",
+      "type": "string",
+      "description": "Name of the GitHub repository"
+    },
+    "description": {
+      "title": "Enter description of the repository",
+      "type": "string",
+      "description": "Enter description of the repository"
+    },
+    "private": {
+      "title": "Create Private Repository",
+      "type": "boolean",
+      "description": "Check box if repository should be private",
+      "default": false
+    }
+  },
+  "required": [
+    "description",
+    "name"
+  ]
+}
