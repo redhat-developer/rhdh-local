@@ -10,6 +10,7 @@
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
+PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
 
 # Wait for dynamic plugins config to be generated
 while [ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]; do
@@ -27,10 +28,37 @@ elif [ -f "configs/app-config.local.yaml" ]; then
     EXTRA_CLI_ARGS="--config configs/app-config.local.yaml"
 fi
 
-# Run Backstage with default + optional config overrides
-node packages/backend --no-node-snapshot \
-    --config "app-config.yaml" \
-    --config app-config.example.yaml \
-    --config app-config.example.production.yaml \
-    --config "$DYNAMIC_PLUGINS_CONFIG" \
-    --config "$DEFAULT_APP_CONFIG" $EXTRA_CLI_ARGS
+# Handle catalog entity overrides
+USERS_DEFAULT="configs/catalog-entities/users.yaml"
+USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
+USERS_SOURCE="$USERS_DEFAULT"
+[ -f "$USERS_OVERRIDE" ] && USERS_SOURCE="$USERS_OVERRIDE"
+
+COMPONENTS_DEFAULT="configs/catalog-entities/components.yaml"
+COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
+COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
+[ -f "$COMPONENTS_OVERRIDE" ] && COMPONENTS_SOURCE="$COMPONENTS_OVERRIDE"
+
+mkdir -p generated
+
+cat <<EOF > "$PATCHED_APP_CONFIG"
+catalog:
+  locations:
+    - type: file
+      target: $USERS_SOURCE
+      rules:
+        - allow: [User, Group]
+    - type: file
+      target: $COMPONENTS_SOURCE
+      rules:
+        - allow: [Component, System]
+EOF
+
+# Run Backstage backend with layered config
+exec node packages/backend --no-node-snapshot \
+  --config "app-config.yaml" \
+  --config app-config.example.yaml \
+  --config app-config.example.production.yaml \
+  --config "$DYNAMIC_PLUGINS_CONFIG" \
+  --config "$DEFAULT_APP_CONFIG" \
+  --config "$PATCHED_APP_CONFIG" $EXTRA_CLI_ARGS
