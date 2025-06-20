@@ -2,7 +2,7 @@ id: slack
 version: "1.0.0-SNAPSHOT"
 specVersion: "0.8"
 name: "slack"
-description: "A workflow for housing applications to OCP cluster"
+description: "A Sending Slack Messages/Announcements"
 annotations:
   - "workflow-type/infrastructure"
 dataInputSchema:
