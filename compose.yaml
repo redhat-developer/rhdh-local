@@ -70,7 +70,7 @@ services:
       - dynamic-plugins-root:/dynamic-plugins-root
   backstage-internal-sonataflow:
     container_name: backstage-internal-sonataflow
-    image: quay.io/kubesmarts/incubator-kie-sonataflow-devmode:9.103.x-prod
+    image: registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0
     environment:
       QUARKUS_HTTP_PORT: "8899"
       KOGITO_SERVICE_URL: http://backstage-internal-sonataflow:8899
