@@ -41,7 +41,51 @@ COMPONENTS_SOURCE="$COMPONENTS_DEFAULT"
 
 mkdir -p generated
 
-cat <<EOF > "$PATCHED_APP_CONFIG"
+# Extract existing catalog.locations from DEFAULT_APP_CONFIG and filter out users.yaml/components.yaml
+# Then append our override entries
+if [ -f "$DEFAULT_APP_CONFIG" ]; then
+    echo "Merging catalog locations from $DEFAULT_APP_CONFIG with overrides..."
+    
+    # Start the patched config with catalog.locations header
+    echo "catalog:" > "$PATCHED_APP_CONFIG"
+    echo "  locations:" >> "$PATCHED_APP_CONFIG"
+    
+    # Extract existing locations, excluding users.yaml and components.yaml targets
+    # This is a simple approach - you might want to use yq for more robust YAML parsing
+    if grep -q "catalog:" "$DEFAULT_APP_CONFIG" && grep -q "locations:" "$DEFAULT_APP_CONFIG"; then
+        # Extract the locations block, filter out users.yaml and components.yaml entries
+        awk '
+        /^catalog:/{in_catalog=1; next}
+        in_catalog && /^  locations:/{in_locations=1; next}
+        in_locations && /^[^ ]/{in_locations=0; in_catalog=0}
+        in_locations && /^    - /{
+            entry=""
+            target_line=""
+        }
+        in_locations && /^    - /{entry=$0; getline; while(/^      / && NF>0){entry=entry"\n"$0; if(/target:/){target_line=$0}; getline}; 
+            if(target_line !~ /users\.yaml/ && target_line !~ /components\.yaml/){
+                print entry
+                if(NF>0 && /^      /) print $0
+            }
+        }
+        ' "$DEFAULT_APP_CONFIG" >> "$PATCHED_APP_CONFIG"
+    fi
+    
+    # Add our override entries
+    cat <<EOF >> "$PATCHED_APP_CONFIG"
+    - type: file
+      target: $USERS_SOURCE
+      rules:
+        - allow: [User, Group]
+    - type: file
+      target: $COMPONENTS_SOURCE
+      rules:
+        - allow: [Component, System]
+EOF
+
+else
+    # Fallback if DEFAULT_APP_CONFIG doesn't exist - just create our entries
+    cat <<EOF > "$PATCHED_APP_CONFIG"
 catalog:
   locations:
     - type: file
@@ -53,6 +97,7 @@ catalog:
       rules:
         - allow: [Component, System]
 EOF
+fi
 
 # Run Backstage backend with layered config
 exec node packages/backend --no-node-snapshot \
