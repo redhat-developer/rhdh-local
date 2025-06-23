@@ -10,7 +10,7 @@ RHDH Local is ideal for trying out the basic features of RHDH (like Software Cat
 
 To use RHDH Local you'll need a few things:
 
-1. A PC based on an x86 64Bit (amd64) architecture (ARM is on the way)
+1. A PC based on an x86 64-bit (amd64) or ARM64 architecture (see [Note for Mac users](#note-for-mac-m1-users) below)
 1. An installation of Docker or Podman (with adequate resources available)
 2. An internet connection (for downloading container images, plugins, etc.)
 3. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
