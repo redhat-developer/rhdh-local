@@ -12,8 +12,6 @@ To use RHDH Local you'll need a few things:
 
 1. A PC based on an x86 64Bit (amd64) architecture (ARM is on the way)
 1. An installation of Docker or Podman (with adequate resources available)
-   - Docker Compose v2.24.0 +
-   - Podman Compose v1.3.0 +
 2. An internet connection (for downloading container images, plugins, etc.)
 3. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
 4. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
@@ -74,16 +72,29 @@ This image supports both `amd64` and `arm64`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 2. Start RHDH Local.
-   This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
+   This repository should work with either Docker Engine or Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
 
-   ```sh
-   podman-compose up -d
-   ```
+   **Docker**
 
-   If you prefer `docker compose` you can just replace `podman-compose` with `docker compose`
+   [Docker Engine](https://docs.docker.com/engine/) needs to be at least v28.1.0 or newer, and the [Docker Compose](https://docs.docker.com/compose/) plugin should be at least v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
 
    ```sh
    docker compose up -d
+   ```
+
+   **Podman**
+
+   If using [Podman](https://podman.io/docs/installation), v5.4.1 or newer is recommended. This uses the ```podman compose``` subcommand. [Podman Compose](https://docs.podman.io/en/v5.3.1/markdown/podman-compose.1.html) is part of the Podman CLI and supports most Compose features required by rhdh-local.
+
+   ```sh
+   podman compose up -d
+   ```
+   **podman-compose**
+   
+   [podman-compose](https://github.com/containers/podman-compose) is a separate Python tool and standalone Compose provider that uses Podman. ```podman-compose``` requires v1.3.0 or newer, however, using ```podman compose``` with a recent version of Podman is recommended for best results.
+
+   ```sh
+   podman-compose up -d
    ```
 
 3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
