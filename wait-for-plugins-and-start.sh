@@ -32,12 +32,12 @@ done
 # Apply overrides by replacing target paths in the patched config
 if [ -f "$USERS_OVERRIDE" ]; then
   echo "Applying users override"
-  sed -i "s|target: /opt/app-root/src/configs/catalog-entities/users.yaml|target: $USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
+  sed -i "s|target: /opt/app-root/src/configs/catalog-entities/users.yaml|target: /opt/app-root/src/$USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
 
 if [ -f "$COMPONENTS_OVERRIDE" ]; then
   echo "Applying components override"
-  sed -i "s|target: /opt/app-root/src/configs/catalog-entities/components.yaml|target: $COMPONENTS_OVERRIDE|" "$PATCHED_APP_CONFIG"
+  sed -i "s|target: /opt/app-root/src/configs/catalog-entities/components.yaml|target: /opt/app-root/src/$COMPONENTS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
 
 # Add local config if available
