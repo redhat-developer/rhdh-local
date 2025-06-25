@@ -81,7 +81,7 @@ services:
     ports:
       - "8899:8899"
     volumes:
-#      - /home/jennifer/code/rhdh/rhdh-workflow/backstage-orchestrator-workflows/workflows:/home/kogito/serverless-workflow-project/src/main/resources:Z
+#      - /path/to/backstage-orchestrator-workflows:/home/kogito/serverless-workflow-project/src/main/resources:Z
       - ./rhdho-workflow-examples:/home/kogito/serverless-workflow-project/src/main/resources:Z
     networks:
       - backstage-network
