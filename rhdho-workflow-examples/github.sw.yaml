@@ -2,7 +2,7 @@ id: github
 version: "1.0.0-SNAPSHOT"
 specVersion: "0.8"
 name: "github"
-description: "A workflow for GITHUB actions"
+description: "A Workflow For Creating GitHub Repository"
 annotations:
   - "workflow-type/infrastructure"
 dataInputSchema:
