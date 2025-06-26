@@ -14,12 +14,12 @@ To use RHDH Local you'll need a few things:
 1. An installation of Docker or Podman (with adequate resources available)
    
    - [**Docker Engine**](https://docs.docker.com/engine/) needs to be at least v28.1.0 or newer, and the [Docker Compose](https://docs.docker.com/compose/) plugin should be at least v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
-   - If using [**Podman**](https://podman.io/docs/installation), v5.4.1 or newer is recommended. And, if using [**podman-compose**](https://github.com/containers/podman-compose) as a Compose provider, we ```podman-compose``` v1.3.0.
+   - If using [**Podman**](https://podman.io/docs/installation), v5.4.1 or newer is recommended. And, if using [**podman-compose**](https://github.com/containers/podman-compose) as a Compose provider, we recommend ```podman-compose``` v1.3.0.
   
 2. An internet connection (for downloading container images, plugins, etc.)
 3. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
 4. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
-5. (Optional) The node `npx` tool (if you intend to build dynamic plugins in RHDH). [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install the most up to date version of [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
+5. (Optional) The node `npx` tool (if you intend to build dynamic plugins in RHDH). [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
 6. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database)
 
 ### Note for Mac M1 users
