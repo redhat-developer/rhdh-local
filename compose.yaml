@@ -68,8 +68,8 @@ services:
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
-  backstage-internal-sonataflow:
-    container_name: backstage-internal-sonataflow
+  sonataflow:
+    container_name: sonataflow
     image: registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0
     environment:
       QUARKUS_HTTP_PORT: "8899"
