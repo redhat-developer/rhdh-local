@@ -63,7 +63,12 @@ To use RHDH Local you'll need a few things:
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
-   - Add your catalog entity overrides:
+     Note: In RHDH 1.7, by default, Orchestrator plugins are integrated in the dynamic plugins. If you intend to use these
+     plugins, ensure to copy the
+     orchestrator dynamic plugins from `dynamic-plugins.yamml` to your `dynamic-plugins.override.yaml` version for your local
+     development.
+
+- Add your catalog entity overrides:
 
       > Start by copying the example files provided:
       >
