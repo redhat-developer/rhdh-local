@@ -1,10 +1,20 @@
 # Test Locally With Red Hat Developer Hub (RHDH)
 
-Welcome to RHDH Local - the fastest and simplest way for platform engineers to test their software catalogs, techdocs, plugins, templates, homepage customizations, configurations and more with RHDH!
+Welcome to RHDH Local - the fastest and simplest way for platform engineers to test their software catalogs, techdocs,
+plugins, templates, homepage customizations, configurations and more with RHDH!
 
-RHDH Local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for a Kubernetes cluster. RHDH Local is also great for testing dynamic plugins and their configuration settings. To use RHDH Local, all you really need is basic knowledge of Docker or Podman, a PC, and a web browser. You can run it on your laptop, desktop, or on your homelab. Better still, when you're done working it's easy to remove.
+RHDH Local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for
+a Kubernetes cluster. RHDH Local is also great for testing dynamic plugins and their configuration settings. To use RHDH
+Local, all you really need is basic knowledge of Docker or Podman, a PC, and a web browser. You can run it on your
+laptop, desktop, or on your homelab. Better still, when you're done working it's easy to remove.
 
->**RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not attempt to use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale and it's not suitable for use by teams (there is no RBAC for example). There's also (currently) no official support for RHDH Local. You use RHDH Local at your own risk. With all that being said, we think it's incredibly useful and any contributions you might have that could improve RHDH Local are welcome!
+> **RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not attempt to use RHDH Local as a production system.
+> RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale and it's
+> not
+> suitable for use by teams (there is no RBAC for example). There's also (currently) no official support for RHDH Local.
+> You use RHDH Local at your own risk. With all that being said, we think it's incredibly useful and any contributions
+> you
+> might have that could improve RHDH Local are welcome!
 
 ## What You'll Need Before You Get Started
 
@@ -13,19 +23,23 @@ To use RHDH Local you'll need a few things:
 1. A PC based on an x86 64Bit (amd64) architecture (ARM is on the way)
 1. An installation of Docker or Podman (with adequate resources available)
 1. An internet connection (for downloading container images, plugins, etc.)
-1. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
+1. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from
+   GitHub)
 1. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
 1. (Optional) The node `npx` tool (if you intend to use GitHub authentication in RHDH)
-1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database)
+1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you
+   want to use a PostgreSQL database)
 
 ### Note for Mac M1 users
 
-If you're using an Apple Silicon (M1/M2) Mac, the default RHDH image (`quay.io/rhdh/rhdh-hub-rhel9:1.4`) is not compatible with the ARM64 architecture.
+If you're using an Apple Silicon (M1/M2) Mac, the default RHDH image (`quay.io/rhdh/rhdh-hub-rhel9:1.4`) is not
+compatible with the ARM64 architecture.
 To fix this, you can add this line to your `.env` file (create the file if it doesn't exist):
 
 `RHDH_IMAGE=quay.io/rhdh-community/rhdh:next`
 
 This image supports both `amd64` and `arm64`.
+
 ## Getting Started With RHDH Local
 
 1. Clone this repository to a location on your PC
@@ -40,14 +54,17 @@ This image supports both `amd64` and `arm64`.
    cd rhdh-local
    ```
 
-1. (Optional) You can create a local `.env` file and override any of the default variables defined in the [`default.env`](./default.env) file provided. You can also add additional variables.
-   In most cases, when you don't need GitHub Auth or testing different releases, you can skip this step, and it should work.
+1. (Optional) You can create a local `.env` file and override any of the default variables defined in the [
+   `default.env`](./default.env) file provided. You can also add additional variables.
+   In most cases, when you don't need GitHub Auth or testing different releases, you can skip this step, and it should
+   work.
 
 1. (Optional) Create local configuration overrides.
 
-   RHDH Local supports user-specific configuration overrides using a structured `configs/` directory. You do not need to modify default files. However, if you want to customize your setup:
+   RHDH Local supports user-specific configuration overrides using a structured `configs/` directory. You do not need to
+   modify default files. However, if you want to customize your setup:
 
-   - Add your app config overrides to: `configs/app-config/app-config.local.yaml`
+    - Add your app config overrides to: `configs/app-config/app-config.local.yaml`
       > You can use the included `.example.yaml` files to get started quickly:
       >
       > ```sh
@@ -64,7 +81,12 @@ This image supports both `amd64` and `arm64`.
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
-   - Add your catalog entity overrides:
+     Note: In RHDH 1.7, by default, Orchestrator plugins are integrated in the dynamic plugins. If you intend to use these
+     plugins, ensure to copy the
+     orchestrator dynamic plugins from `dynamic-plugins.yamml` to your `dynamic-plugins.override.yaml` version for your local
+     development.
+
+- Add your catalog entity overrides:
 
       > Start by copying the example files provided:
       >
@@ -84,10 +106,14 @@ This image supports both `amd64` and `arm64`.
    If present, these files will be automatically loaded by the system on startup.
 
    If you need features that fetch files from GitHub you should configure `integrations.github`.
-   The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
+   The recommended way is to use GitHub Apps. You can find hints on how to configure it
+   in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction
+   in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 2. Start RHDH Local.
-   This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
+   This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When
+   using Podman there are some exceptions.
+   Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
 
    ```sh
    podman-compose up -d
@@ -109,7 +135,8 @@ When you change `app-config.local.yaml` you must restart the `rhdh` container to
 podman-compose stop rhdh && podman-compose start rhdh
 ```
 
-When you change `dynamic-plugins.yaml` you need to re-run the `install-dynamic-plugins` container and then restart RHDH instance.
+When you change `dynamic-plugins.yaml` you need to re-run the `install-dynamic-plugins` container and then restart RHDH
+instance.
 
 ```sh
 podman-compose run install-dynamic-plugins
@@ -118,13 +145,18 @@ podman-compose stop rhdh && podman-compose start rhdh
 
 ## Loading dynamic plugins from a local directory
 
-During boot, the `install-dynamic-plugins` container reads the contents of the plugin configuration file and activates, configures, or downloads any plugins listed. RHDH Local supports two ways of specifying dynamic plugin configuration:
+During boot, the `install-dynamic-plugins` container reads the contents of the plugin configuration file and activates,
+configures, or downloads any plugins listed. RHDH Local supports two ways of specifying dynamic plugin configuration:
 
 1. Default path: `configs/dynamic-plugins/dynamic-plugins.yaml`
 
-1. User override path: `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins.yaml` If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container. `configs/dynamic-plugins/dynamic-plugins.override.yaml` takes precedence over `configs/dynamic-plugins.yaml`.
+1. User override path: `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins.yaml` If
+   present, this file will automatically override the default and be used by the `install-dynamic-plugins` container.
+   `configs/dynamic-plugins/dynamic-plugins.override.yaml` takes precedence over `configs/dynamic-plugins.yaml`.
 
-In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container at `/opt/app-root/src/local-plugins`. Any plugins placed there can be activated/configured the same way (without downloading).
+In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container at
+`/opt/app-root/src/local-plugins`. Any plugins placed there can be activated/configured the same way (without
+downloading).
 
 To load dynamic plugins from your local machine:
 
@@ -135,9 +167,32 @@ To load dynamic plugins from your local machine:
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
 4. See [Changing Your Configuration](#changing-your-configuration) for more on updating and reloading configs.
 
+## Testing Orchestrator Workflow Examples
+
+There are two workflow examples to get you started on testing Orchestrator workflow with RHDHO Local.
+
+1. In the project root, `rhdo-workflow-examples` folder contains example workflows and by default, it is already mounted
+   to
+   `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in the compose.yaml. The
+   directory contains two workflows; slack and github. For more information about the workflow and setup, refer to this
+   [link](rhdho-workflow-examples/README.md).
+
+2. A suite of workflows exists in
+   this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
+   Clone the repository to your local and update the mount directory (value of `sonataflow.volume`) in `compose.yaml`
+   file to point to your local `backstage-orchestrator-workflows` directory.
+
+Note: While developing workflow and after making changes to your resources, the pages might error out. Reloading the
+page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` pod by running:
+```shell
+   podman-compose stop sonataflow && podman-compose start sonataflow. 
+```
+This is a known issue.
+
 ## Optional: Customize `.npmrc` for Plugin Installation
 
-If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/` directory as a template.
+If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file.
+A `.npmrc.example` file is provided in the `configs/` directory as a template.
 
 1. Copy the example file to create your own `.npmrc`:
 
@@ -145,22 +200,27 @@ If you're installing dynamic plugins from a private registry or using a proxy, y
     cp configs/.npmrc.example configs/.npmrc
     ```
 
-2. Open the newly created `.npmrc` file and add your configuration, such as private registry URLs or authentication tokens:
+2. Open the newly created `.npmrc` file and add your configuration, such as private registry URLs or authentication
+   tokens:
 
     ```sh
     //registry.npmjs.org/:_authToken=YOUR_TOKEN
     registry=https://your-private-registry.example.com/
     ```
 
-When present, this `.npmrc` file will be automatically mounted into the `install-dynamic-plugins` container, and the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
+When present, this `.npmrc` file will be automatically mounted into the `install-dynamic-plugins` container, and the
+`NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
 
 If you don't create a `.npmrc`, plugin installation will still work using the default public registry settings.
 
-> For more information on configuring `.npmrc`, see the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
+> For more information on configuring `.npmrc`, see
+> the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
 
 ## Changing The Container Image
 
-You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file.
+You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags)
+and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container
+image name held by the `RHDH_IMAGE` environment variable in your `.env` file.
 
 For example, to use the nightly community build, set the variable as follows:
 
@@ -177,7 +237,8 @@ RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.y
 ## Testing RHDH in a simulated corporate proxy setup
 
 If you want to test how RHDH would behave if deployed in a corporate proxy environment,
-you can run `podman-compose` or `docker-compose` by merging both the [`compose.yaml`](./compose.yaml) and [`compose-with-corporate-proxy.yaml`](./compose-with-corporate-proxy.yaml) files.
+you can run `podman-compose` or `docker-compose` by merging both the [`compose.yaml`](./compose.yaml) and [
+`compose-with-corporate-proxy.yaml`](./compose-with-corporate-proxy.yaml) files.
 
 Example with `podman-compose` (note that the order of the YAML files is important):
 
@@ -188,20 +249,24 @@ podman-compose \
    up -d
 ```
 
-The [`compose-with-corporate-proxy.yaml`](compose-with-corporate-proxy.yaml) file includes a specific [Squid](https://www.squid-cache.org/)-based proxy container as well as an isolated network, such that:
+The [`compose-with-corporate-proxy.yaml`](compose-with-corporate-proxy.yaml) file includes a
+specific [Squid](https://www.squid-cache.org/)-based proxy container as well as an isolated network, such that:
 
 1. only the proxy container has access to the outside
-2. all containers part of the internal network need to communicate through the proxy container to reach the outside. This can be done with the `HTTP(S)_PROXY` and `NO_PROXY` environment variables.
+2. all containers part of the internal network need to communicate through the proxy container to reach the outside.
+   This can be done with the `HTTP(S)_PROXY` and `NO_PROXY` environment variables.
 
 ## Cleanup
 
-To reset RHDH Local you can use the following command. This will clean up any container attached volumes, but configuration changes made to your `rhdh-local` YAML files will remain.
+To reset RHDH Local you can use the following command. This will clean up any container attached volumes, but
+configuration changes made to your `rhdh-local` YAML files will remain.
 
 ```sh
 podman-compose down --volumes
 ```
 
-To reset everything in the cloned `rhdh-local` repository, including any configuration changes you've made to your YAML files try:
+To reset everything in the cloned `rhdh-local` repository, including any configuration changes you've made to your YAML
+files try:
 
 ```sh
 git reset --hard
@@ -219,7 +284,8 @@ podman system prune --volumes # For rhdh-local running on podman
 By default, in-memory db is used.
 If you want to use PostgreSQL with RHDH, here are the steps:
 
-> **NOTE**: You must have [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) to use `postgresql` image.
+> **NOTE**: You must have [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) to
+> use `postgresql` image.
 
 1. Login to container registry with *Red Hat Login* credentials to use `postgresql` image
 
@@ -298,7 +364,8 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
    podman cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>
    ```
 
-5. If your plugin requires configuration, add it to the `app-config.local.yaml` file in your cloned `rhdh-local` directory.
+5. If your plugin requires configuration, add it to the `app-config.local.yaml` file in your cloned `rhdh-local`
+   directory.
 
 6. Restart the `rhdh` container
 
@@ -322,7 +389,7 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
             "request": "attach",
             "port": 9229,
             "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>",
+            "remoteRoot": "/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>"
          }
       ]
    }
@@ -380,9 +447,11 @@ This allows RHDH-local to pull OCI artifacts from registries like registry.redha
 
 ## Contributing and reporting issues
 
-To report issues against this repository, please use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**
+To report issues against this repository, please use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: *
+*RHDH Local**
 
-To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
+To browse the existing issues, you can use
+this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
 Contributions are welcome!
 

@@ -1,0 +1,101 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "GitHub Actions for GitHub API",
+    "description": "GitHub Actions GitHub API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/user/repos": {
+      "post": {
+        "tags": [
+          "name",
+          "description"
+        ],
+        "summary": "Create Repository via GitHub API",
+        "description": "GitHub API to Create Public Repository",
+        "operationId": "createGitHubRepository",
+        "requestBody": {
+          "description": "Input parameters for the action CreateGitHubRepository",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGitHubRepositoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "Create Repository Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateGitHubRepositoryResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "ErrorCollection": {
+        "type": "object"
+      },
+      "CreateGitHubRepositoryRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateGitHubRepositoryResponse": {
+        "type": "object",
+        "properties": {
+          "private": {
+            "type": "boolean",
+            "description": "Indicates if the repository is private.",
+            "readOnly": true
+          },
+          "full_name": {
+            "type": "string",
+            "description": "The full name of the repository.",
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "description": "The ID of the repository",
+            "readOnly": true
+          }
+        }
+      }
+    }
+  }
+}

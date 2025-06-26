@@ -1,0 +1,22 @@
+{
+  "$id": "classpath:/schemas/slack-schema.json",
+  "title": "Data Input Schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "message": {
+      "title": "Enter message",
+      "type": "string",
+      "description": "Slack message supports markdown format"
+    },
+    "channel": {
+      "title": "Enter public channel",
+      "type": "string",
+      "description": "Public channel to be prefixed with #"
+    }
+  },
+  "required": [
+    "message",
+    "channel"
+  ]
+}
