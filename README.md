@@ -16,8 +16,8 @@ To use RHDH Local you'll need a few things:
 1. A PC based on an x86_64 (amd64) or arm64 (aarch64) architecture
 2. An installation of Podman (or Docker) (with adequate resources available)
    
-   - [**Podman**](https://podman.io/docs/installation) needs to be v5.4.1. And, if using [**podman-compose**](https://github.com/containers/podman-compose) as a Compose provider, we recommend ```podman-compose``` v1.3.0.
-   - [**Docker Engine**](https://docs.docker.com/engine/) needs to be at least v28.1.0 or newer, and the [Docker Compose](https://docs.docker.com/compose/) plugin should be at least v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
+   - [**Podman**](https://podman.io/docs/installation) v5.4.1 or newer; [**Podman Compose**](https://github.com/containers/podman-compose) v1.3.0 or newer.
+   - [**Docker Engine**](https://docs.docker.com/engine/) v28.1.0 or newer; [**Docker Compose**](https://docs.docker.com/compose/) plugin v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
   
 3. An internet connection (for downloading container images, plugins, etc.)
 4. (Optional) The `git` command line client for cloning this repository (or you can download and extract the zip from GitHub)
@@ -168,9 +168,9 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 By default, the [compose.yaml](./compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.6](https://quay.io/rhdh-community/rhdh:1.6), which includes both `linux-amd64` and `linux-arm64` images.
 
-Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml).
+Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml), using the same sources as the commercially supported builds. 
 
-Commercially supported Red Hat images are built with [Konflux](https://konflux-ci.dev/) and [buildah](https://buildah.io/) using a [RHEL 9 container image](https://github.com/redhat-developer/rhdh/blob/main/.rhdh/docker/Dockerfile). Additionally, [Hermeto](https://github.com/hermetoproject/hermeto/tree/main) is used to pre-fetch dependencies so that builds are declarative, reproduceable and predictable. CI builds are pushed to quay.io, then later official releases are pushed to registry.redhat.io. 
+Commercially supported Red Hat images are built with [Konflux](https://konflux-ci.dev/) and [buildah](https://buildah.io/) using a [RHEL 9 container image](https://github.com/redhat-developer/rhdh/blob/main/.rhdh/docker/Dockerfile). Additionally, [Hermeto](https://github.com/hermetoproject/hermeto/tree/main) is used to pre-fetch dependencies so that builds are declarative, reproduceable and predictable. CI builds are pushed to quay.io, then later official releases are pushed to registry.redhat.io.
 
 You can switch between these different images by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file, or editing the [compose.yaml](./compose.yaml) file.
 
