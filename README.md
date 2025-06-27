@@ -1,35 +1,30 @@
-# Test Locally With Red Hat Developer Hub (RHDH)
+# Test locally with Red Hat Developer Hub (RHDH)
 
 Welcome to RHDH Local - the fastest and simplest way for platform engineers to test their software catalogs, techdocs, plugins, templates, homepage customizations, configurations and more with RHDH!
 
-RHDH Local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for a Kubernetes cluster. RHDH Local is also great for testing dynamic plugins and their configuration settings. To use RHDH Local, all you really need is basic knowledge of Docker or Podman, a PC, and a web browser. You can run it on your laptop, desktop, or on your homelab. Better still, when you're done working it's easy to remove.
+RHDH Local is ideal for trying out the basic features of RHDH (like Software Catalogs or TechDocs) without the need for a Kubernetes cluster. RHDH Local is also great for testing dynamic plugins and their configuration settings. To use RHDH Local, all you really need is basic knowledge of Podman (or Docker), a PC, and a web browser. You can run it on your laptop, desktop, or on your homelab. Better still, when you're done working it's easy to remove.
 
->**RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not attempt to use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale and it's not suitable for use by teams (there is no RBAC for example). There's also (currently) no official support for RHDH Local. You use RHDH Local at your own risk. With all that being said, we think it's incredibly useful and any contributions you might have that could improve RHDH Local are welcome!
+>**RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do not attempt to use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It's not designed to scale and it's not suitable for use by teams (there is no RBAC for example). 
 
-## What You'll Need Before You Get Started
+> [!CAUTION]
+> There is no official, commercial support for RHDH Local. Use RHDH Local at your own risk. With all that being said, we think it's incredibly useful and any contributions you might have that could improve RHDH Local are welcome!
+
+## What you'll need before you get started
 
 To use RHDH Local you'll need a few things:
 
-1. A PC based on an x86 64-bit (amd64) architecture (ARM is on the way, but see [Note for Mac M-series users](#note-for-mac-m1-users) below)
-2. An installation of Docker or Podman (with adequate resources available)
+1. A PC based on an x86_64 (amd64) or arm64 (aarch64) architecture
+2. An installation of Podman (or Docker) (with adequate resources available)
    
-   - [**Docker Engine**](https://docs.docker.com/engine/) needs to be at least v28.1.0 or newer, and the [Docker Compose](https://docs.docker.com/compose/) plugin should be at least v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
-   - If using [**Podman**](https://podman.io/docs/installation), v5.4.1 or newer is recommended. And, if using [**podman-compose**](https://github.com/containers/podman-compose) as a Compose provider, we recommend ```podman-compose``` v1.3.0.
+   - [**Podman**](https://podman.io/docs/installation) v5.4.1 or newer; [**Podman Compose**](https://github.com/containers/podman-compose) v1.3.0 or newer.
+   - [**Docker Engine**](https://docs.docker.com/engine/) v28.1.0 or newer; [**Docker Compose**](https://docs.docker.com/compose/) plugin v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
   
 3. An internet connection (for downloading container images, plugins, etc.)
-4. (Optional) The `git` command line client for cloning this repository (or you can download and extract the Zip from GitHub)
+4. (Optional) The `git` command line client for cloning this repository (or you can download and extract the zip from GitHub)
 5. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
 6. (Optional) The node `npx` tool (if you intend to build dynamic plugins in RHDH). [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
-7. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database)
+7. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database or the commercially supported official RHDH images)
 
-### Note for Mac M1 users
-
-If you're using an Apple Silicon (M1/M2) Mac, the default RHDH image (`quay.io/rhdh/rhdh-hub-rhel9:1.4`) is not compatible with the ARM64 architecture.
-To fix this, you can add this line to your `.env` file (create the file if it doesn't exist):
-
-`RHDH_IMAGE=quay.io/rhdh-community/rhdh:next`
-
-This image supports both `amd64` and `arm64`.
 ## Getting Started With RHDH Local
 
 1. Clone this repository to a location on your PC
@@ -112,7 +107,7 @@ This image supports both `amd64` and `arm64`.
 
 3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
 
-## Changing Your Configuration
+## Changing your configuration
 
 When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.
 
@@ -146,7 +141,7 @@ To load dynamic plugins from your local machine:
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
 4. See [Changing Your Configuration](#changing-your-configuration) for more on updating and reloading configs.
 
-## Optional: Customize `.npmrc` for Plugin Installation
+## Optional: Customize `.npmrc` for plugin installation
 
 If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/` directory as a template.
 
@@ -169,20 +164,52 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 > For more information on configuring `.npmrc`, see the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
 
-## Changing The Container Image
+## Changing the container image
 
-You can switch between the [downstream](https://quay.io/repository/rhdh/rhdh-hub-rhel9?tab=tags) and [community](https://quay.io/repository/rhdh-community/rhdh?tab=tags) versions of RHDH by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file.
+By default, the [compose.yaml](./compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.6](https://quay.io/rhdh-community/rhdh:1.6), which includes both `linux-amd64` and `linux-arm64` images.
 
-For example, to use the nightly community build, set the variable as follows:
+Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml), using the same sources as the commercially supported builds. 
+
+Commercially supported Red Hat images are built with [Konflux](https://konflux-ci.dev/) and [buildah](https://buildah.io/) using a [RHEL 9 container image](https://github.com/redhat-developer/rhdh/blob/main/.rhdh/docker/Dockerfile). Additionally, [Hermeto](https://github.com/hermetoproject/hermeto/tree/main) is used to pre-fetch dependencies so that builds are declarative, reproduceable and predictable. CI builds are pushed to quay.io, then later official releases are pushed to registry.redhat.io.
+
+You can switch between these different images by changing the container image name held by the `RHDH_IMAGE` environment variable in your `.env` file, or editing the [compose.yaml](./compose.yaml) file.
+
+### Using nightly community builds
+
+Looking for the bleeding edge? To use the most recent nightly community build of RHDH from the main branch, set the variable as follows.
 
 ```sh
 RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
-To use the official release of RHDH 1.y, set the variable as follows (replace `y` accordingly):
+### Using unsupported pre-release CI builds
+
+Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https://quay.io/rhdh/rhdh-hub-rhel9), while unsupported, provide early access to commercially supported builds and bug fixes.
+
+NOTE: Only `linux-amd64` builds are currently commercially supported.
+
+To use the most recent nightly CI build of RHDH 1.y (for example, 1.7), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.y
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.7
+```
+
+### Using commercially supported official images
+
+To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.6), which includes only `linux-amd64`, set the variable as follows. 
+
+NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
+
+```sh
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.6
+```
+
+#### Using image digests
+
+If you prefer to use digests to floating tags, [browse for the tag you want to use](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba/history), and click through to find the digest of the image you want to use. For example, from the [Get this image](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?image=68360c12177ad86df31947d8&architecture=amd64&container-tabs=gti) tab for 1.6.1 provides this image:
+
+```sh
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9@sha256:8729c21dc4b6e1339ed29bf87e2e2054c8802f401a029ebb1f397408f3656664
 ```
 
 ## Testing RHDH in a simulated corporate proxy setup
@@ -225,7 +252,7 @@ docker system prune --volumes # For rhdh-local running on docker
 podman system prune --volumes # For rhdh-local running on podman
 ```
 
-## Using PostgreSQL database
+## Using a PostgreSQL database
 
 By default, in-memory db is used.
 If you want to use PostgreSQL with RHDH, here are the steps:
@@ -345,7 +372,7 @@ You can use RHDH-local with a debugger to to debug your backend plugins in VSCod
 
    Every time you make changes to your plugin source code, you need to repeat steps 3-6.
 
-## Frontend Plugin Development
+## Frontend plugin development
 
 Follow these steps to preview and test development changes for your frontend plugin in RHDH local:
 
@@ -379,7 +406,7 @@ Follow these steps to preview and test development changes for your frontend plu
 
 7. To apply code changes to your plugin, rerun the command in step 3 and refresh your browser. No need to restart any containers.
 
-## Configuring Registry Credentials
+## Configuring registry credentials
 
 Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
 
@@ -396,16 +423,6 @@ To report issues against this repository, please use [JIRA](https://issues.redha
 To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
 Contributions are welcome!
-
-### Known Issues when using Podman Compose
-
-#### RHDH before 1.4.0
-
-Works with `podman-compose` only with images that include this following fix https://github.com/redhat-developer/rhdh/pull/1585
-
-Older images don't work in combination with `podman-compose`.
-This is due to https://issues.redhat.com/browse/RHIDP-3939. RHDH images currently populate dynamic-plugins-root directory with all plugins that are packaged inside the image.
-Before podman mounts volume over `dynamic-plugins-root` directory it copies all existing files into the volume. When the plugins are installed using `install-dynamic-plugins.sh` script it create duplicate installations of some plugins, this situation than prevents Backstage to start.
 
 ## License
 
