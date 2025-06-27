@@ -13,12 +13,16 @@ NOTE: There is no official, commercial support for RHDH Local. Use RHDH Local at
 To use RHDH Local you'll need a few things:
 
 1. A PC based on an x86_64 (amd64) or arm64 (aarch64) architecture
-1. An installation of Podman (or Docker) (with adequate resources available)
-1. An internet connection (for downloading container images, plugins, etc.)
-1. (Optional) The `git` command line client for cloning this repository (or you can download and extract the zip from GitHub)
-1. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
-1. (Optional) The node `npx` tool (if you intend to use GitHub authentication in RHDH)
-1. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database or the commercially supported official RHDH images)
+2. An installation of Podman (or Docker) (with adequate resources available)
+   
+   - [**Podman**](https://podman.io/docs/installation) needs to be v5.4.1. And, if using [**podman-compose**](https://github.com/containers/podman-compose) as a Compose provider, we recommend ```podman-compose``` v1.3.0.
+   - [**Docker Engine**](https://docs.docker.com/engine/) needs to be at least v28.1.0 or newer, and the [Docker Compose](https://docs.docker.com/compose/) plugin should be at least v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
+  
+3. An internet connection (for downloading container images, plugins, etc.)
+4. (Optional) The `git` command line client for cloning this repository (or you can download and extract the zip from GitHub)
+5. (Optional) A GitHub account (if you want to integrate GitHub features into RHDH)
+6. (Optional) The node `npx` tool (if you intend to build dynamic plugins in RHDH). [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
+7. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database or the commercially supported official RHDH images)
 
 ## Getting Started With RHDH Local
 
@@ -58,6 +62,21 @@ To use RHDH Local you'll need a few things:
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
+   - Add your catalog entity overrides:
+
+      > Start by copying the example files provided:
+      >
+      > ```sh
+      > cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
+      > cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
+      > ```
+
+      Once copied, you can modify these override files to customize your catalog users or components.
+      If these `.override.yaml` files are present, RHDH Local will automatically use them instead of the default `users.yaml` or `components.yaml`.
+
+      No additional configuration is required — just drop the file in place and restart RHDH.
+
+
    - Add any extra files (like GitHub credentials) to: `configs/extra-files/`
 
    If present, these files will be automatically loaded by the system on startup.
@@ -66,16 +85,23 @@ To use RHDH Local you'll need a few things:
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 2. Start RHDH Local.
-   This repository should work with either `docker compose` using Docker Engine or `podman-compose` using Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
+   This repository should work with either Docker Engine or Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
 
-   ```sh
-   podman-compose up -d
-   ```
-
-   If you prefer `docker compose` you can just replace `podman-compose` with `docker compose`
+   **Docker**
 
    ```sh
    docker compose up -d
+   ```
+
+   **Podman**
+
+   ```sh
+   podman compose up -d
+   ```
+   **podman-compose**
+
+   ```sh
+   podman-compose up -d
    ```
 
 3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
