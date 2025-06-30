@@ -1,3 +1,7 @@
+## Greeting workflow
+
+A simple workflow that greets the user in a selected language, either in english or spanish.
+
 ## Slack interacting workflow
 
 This workflow sends a message to a public channel in slack. Example of public channels: #general or #random.
