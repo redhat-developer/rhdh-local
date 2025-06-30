@@ -150,7 +150,7 @@ To load dynamic plugins from your local machine:
 
 There are two workflow examples to get you started on testing Orchestrator workflow with RHDHO Local.
 
-1. In the project root, `rhdo-workflow-examples` folder contains example workflows and by default, it is already mounted
+1. In the project root, `rhdho-workflow-examples` folder contains example workflows and by default, it is already mounted
    to
    `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in the compose.yaml. The
    directory contains two workflows; slack and github. For more information about the workflow and setup, refer to this
