@@ -153,7 +153,7 @@ There are two workflow examples to get you started on testing Orchestrator workf
 1. In the project root, `rhdho-workflow-examples` folder contains example workflows and by default, it is already mounted
    to
    `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in the compose.yaml. The
-   directory contains two workflows; slack and github. For more information about the workflow and setup, refer to this
+   directory contains three workflows; greeting, slack and github. For more information about the workflow and setup, refer to this
    [link](rhdho-workflow-examples/README.md).
 
 2. A suite of workflows exists in
