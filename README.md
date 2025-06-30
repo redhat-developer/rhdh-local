@@ -25,7 +25,9 @@ To use RHDH Local you'll need a few things:
 6. (Optional) The node `npx` tool (if you intend to build dynamic plugins in RHDH). [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
 7. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (if you want to use a PostgreSQL database or the commercially supported official RHDH images)
 
-## Getting Started With RHDH Local
+## RHDH Local - Quick Start
+
+This method creates RHDH Local without any additional configurations or plugins. It is just the baseline to get you up and running as quickly as possible. If you wish to install any additional features, please check out the documentation for what you would specifically like to add to your RHDH Local setup.
 
 1. Clone this repository to a location on your PC
 
@@ -33,16 +35,17 @@ To use RHDH Local you'll need a few things:
    git clone https://github.com/redhat-developer/rhdh-local.git
    ```
 
-1. Move to the `rhdh-local` folder.
+2. Move to the `rhdh-local` folder.
 
    ```sh
    cd rhdh-local
    ```
 
-1. (Optional) You can create a local `.env` file and override any of the default variables defined in the [`default.env`](./default.env) file provided. You can also add additional variables.
+3. ***(Optional)*** You can create a local `.env` file and override any of the default variables defined in the [`default.env`](./default.env) file provided. You can also add additional variables.
+ 
    In most cases, when you don't need GitHub Auth or testing different releases, you can skip this step, and it should work.
 
-1. (Optional) Create local configuration overrides.
+4. ***(Optional)*** Create local configuration overrides.
 
    RHDH Local supports user-specific configuration overrides using a structured `configs/` directory. You do not need to modify default files. However, if you want to customize your setup:
 
@@ -85,7 +88,7 @@ To use RHDH Local you'll need a few things:
    If you need features that fetch files from GitHub you should configure `integrations.github`.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
-2. Start RHDH Local.
+5. Start RHDH Local.
    This repository should work with either Docker Engine or Podman. When using Podman there are some exceptions. Check [Known Issues when using Podman Compose](#known-issues-when-using-podman-compose) for more info.
 
    **Docker**
@@ -105,7 +108,31 @@ To use RHDH Local you'll need a few things:
    podman-compose up -d
    ```
 
-3. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
+6. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH.
+
+## Cleanup
+
+To reset RHDH Local you can use the following command. This will clean up any container attached volumes, but configuration changes made to your `rhdh-local` YAML files will remain.
+
+```sh
+docker compose down --volumes # For rhdh-local running on docker
+podman compose down --volumes # For rhdh-local running on podman
+podman-compose down --volumes # For rhdh-local running on podman-compose
+```
+
+To reset everything in the cloned `rhdh-local` repository, including any configuration changes you've made to your YAML files try:
+
+```sh
+git reset --hard
+```
+
+To remove the RHDH containers completely from your system (after you have run a `compose down`):
+
+```sh
+docker system prune --volumes # For rhdh-local running on docker
+podman system prune --volumes # For rhdh-local running on podman
+```
+
 
 ## Changing your configuration
 
@@ -230,27 +257,6 @@ The [`compose-with-corporate-proxy.yaml`](compose-with-corporate-proxy.yaml) fil
 
 1. only the proxy container has access to the outside
 2. all containers part of the internal network need to communicate through the proxy container to reach the outside. This can be done with the `HTTP(S)_PROXY` and `NO_PROXY` environment variables.
-
-## Cleanup
-
-To reset RHDH Local you can use the following command. This will clean up any container attached volumes, but configuration changes made to your `rhdh-local` YAML files will remain.
-
-```sh
-podman-compose down --volumes
-```
-
-To reset everything in the cloned `rhdh-local` repository, including any configuration changes you've made to your YAML files try:
-
-```sh
-git reset --hard
-```
-
-To remove the RHDH containers completely from your system (after you have run a `compose down`):
-
-```sh
-docker system prune --volumes # For rhdh-local running on docker
-podman system prune --volumes # For rhdh-local running on podman
-```
 
 ## Using a PostgreSQL database
 
