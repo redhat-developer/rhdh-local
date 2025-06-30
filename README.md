@@ -63,7 +63,12 @@ To use RHDH Local you'll need a few things:
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
-   - Add your catalog entity overrides:
+     Note: In RHDH 1.7, by default, Orchestrator plugins are integrated in the dynamic plugins. If you intend to use these
+     plugins, ensure to copy the
+     orchestrator dynamic plugins from `dynamic-plugins.yaml` to your `dynamic-plugins.override.yaml` version for your local
+     development.
+
+- Add your catalog entity overrides:
 
       > Start by copying the example files provided:
       >
@@ -140,6 +145,28 @@ To load dynamic plugins from your local machine:
     - Prefer `configs/dynamic-plugins/dynamic-plugins.override.yaml` for local user overrides.
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
 4. See [Changing Your Configuration](#changing-your-configuration) for more on updating and reloading configs.
+
+## Testing Orchestrator Workflow Examples
+
+There are two workflow examples to get you started on testing Orchestrator workflow with RHDHO Local.
+
+1. In the project root, `rhdho-workflow-examples` folder contains example workflows and by default, it is already mounted
+   to
+   `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in the compose.yaml. The
+   directory contains three workflows; greeting, slack and github. For more information about the workflow and setup, refer to this
+   [link](rhdho-workflow-examples/README.md).
+
+2. A suite of workflows exists in
+   this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
+   Clone the repository to your local and update the mount directory (value of `sonataflow.volume`) in `compose.yaml`
+   file to point to your local `backstage-orchestrator-workflows` directory.
+
+Note: While developing workflow and after making changes to your resources, the pages might error out. Reloading the
+page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` pod by running:
+```shell
+   podman-compose stop sonataflow && podman-compose start sonataflow. 
+```
+This is a known issue.
 
 ## Optional: Customize `.npmrc` for plugin installation
 
