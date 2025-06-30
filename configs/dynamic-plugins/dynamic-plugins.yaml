@@ -3,7 +3,7 @@ includes:
   - dynamic-plugins.default.yaml
 plugins:
   - package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-1.6.0.tgz
-    integrity: sha512-0/Eo9SqRtC9AmWkdJk+nhJSmSDBvKg1eWl0to5rOqsQiWRk57MUEaWRLwjK6fwu9975EJw3XvrTrmgYmFsI0mg==
+    integrity: sha512-fOSJv2PgtD2urKwBM7p9W6gV/0UIHSf4pkZ9V/wQO0eg0Zi5Mys/CL1ba3nO9x9l84MX11UBZ2r7PPVJPrmOtw==
     disabled: false
     pluginConfig:
       dynamicPlugins:
@@ -20,21 +20,21 @@ plugins:
                 path: /orchestrator
   - disabled: false
     package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-backend-dynamic-1.6.0.tgz
-    integrity: sha512-LQVUYGUSelYDubbwMG5PT9ITYlaghsTCp37ktIsLjC9Qlr2NeA20xAIV4oDhtNVkoRraR6iFmVVKXnD/D2yrLg==
+    integrity: sha512-Kr55YbuVwEADwGef9o9wyimcgHmiwehPeAtVHa9g2RQYoSPEa6BeOlaPzB6W5Ke3M2bN/0j0XXtpLuvrlXQogA==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - disabled: false
     package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic-1.6.0.tgz
-    integrity: sha512-4F563LxlAzGakDx4J63szF0i8YyO6ZVRz0i9Bp/Qessdp1E+zlRCgyIqHWSgQGUopzVzNrT20LmHQUzosH0naw==
+    integrity: sha512-Bueeix4661fXEnfJ9y31Yw91LXJgw6hJUG7lPVdESCi9VwBCjDB9Rm8u2yPqP8sriwr0OMtKtqD+Odn3LOPyVw==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - disabled: false
     package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-form-widgets-1.6.0.tgz
-    integrity: sha512-O5lwQ4dezu6ueZEHJ3rUXsjBGs8N5zTK540L8nAufx2DYyKApBuEMj4PJStW6rKFuA53HB49+y35wUhS40Fw1g==
+    integrity: sha512-Tqn6HO21Q1TQ7TFUoRhwBVCtSBzbQYz+OaanzzIB0R24O6YtVx3wR7Chtr5TzC05Vz5GkBO1+FZid8BKpqljgA==
     pluginConfig:
       dynamicPlugins:
         frontend:
