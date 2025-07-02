@@ -44,7 +44,7 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 ## Developers: Using VSCode to debug backend plugins
 
-You can use RHDH-local with a debugger to to debug your backend plugins in VSCode. The Node.js debugger is exposed on port 9229. Here is how:
+You can use RHDH-local with a debugger to debug your backend plugins in VSCode. The Node.js debugger is exposed on port 9229. Here is how:
 
 1. Start RHDH-local
 

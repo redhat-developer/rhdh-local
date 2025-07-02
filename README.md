@@ -127,11 +127,11 @@ docker system prune --volumes # For rhdh-local running on docker
 
 If you would like to change your RHDH-Local setup, or add additional features or plugins, please check out the guides below.
 
-1. [Change Configuration](additional-config-guides/change-config.md)
-2. [Plugins Guide](additional-config-guides/plugins-guide.md)
-3. [Container Image Guide](additional-config-guides/container-image-guide.md)
-4. [Simulated Proxy Setup](additional-config-guides/proxy-setup-sim.md)
-5. [PostgreSQL Guide](additional-config-guides/postgresql-guide.md)
+1. [Change Configuration](./additional-config-guides/change-config.md)
+2. [Plugins Guide](./additional-config-guides/plugins-guide.md)
+3. [Container Image Guide](./additional-config-guides/container-image-guide.md)
+4. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md)
+5. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md)
 
 ## Configuring registry credentials
 
