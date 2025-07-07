@@ -23,7 +23,7 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6.1}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
     env_file:
       - path: "./default.env"
         required: true
@@ -44,18 +44,15 @@ services:
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
-    # db:
-    #   condition: service_healthy
-    networks:
-      - backstage-network
+      # db:
+      #   condition: service_healthy
+
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
     image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
-    environment:
-      MAX_ENTRY_SIZE: "30000000"
     entrypoint:
       - ./prepare-and-install-dynamic-plugins.sh
     env_file:
@@ -68,26 +65,6 @@ services:
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
-  sonataflow:
-    container_name: sonataflow
-    image: registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0
-    environment:
-      QUARKUS_HTTP_PORT: "8899"
-      KOGITO_SERVICE_URL: http://sonataflow:8899
-      KOGITO.CODEGEN.PROCESS.FAILONERROR: "false"
-      QUARKUS_EMBEDDED_POSTGRESQL_DATA_DIR: /home/kogito/persistence
-      NOTIFICATIONS_BEARER_TOKEN: "***"
-      BACKSTAGE_NOTIFICATIONS_URL: http://host.docker.internal:7008
-    ports:
-      - "8899:8899"
-    volumes:
-#      - /path/to/backstage-orchestrator-workflows:/home/kogito/serverless-workflow-project/src/main/resources:Z
-      - ./rhdho-workflow-examples:/home/kogito/serverless-workflow-project/src/main/resources:Z
-    networks:
-      - backstage-network
 
 volumes:
   dynamic-plugins-root:
-networks:
-  backstage-network:
-    driver: bridge
