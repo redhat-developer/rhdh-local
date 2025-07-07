@@ -99,7 +99,7 @@ This method creates RHDH Local without any additional configurations or plugins.
 
 5. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH. If you have not set up and enabled GitHub authentication, you will need to login as 'GUEST'.
    
-   ![RHDH-Local Homepage](RHDH-Homepage.png)
+   ![RHDH-Local Homepage](additional-config-guides/RHDH-Homepage.png)
 
 ## Cleanup
 
@@ -132,16 +132,6 @@ If you would like to change your RHDH-Local setup, or add additional features or
 3. [Container Image Guide](./additional-config-guides/container-image-guide.md)
 4. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md)
 5. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md)
-
-## Configuring registry credentials
-
-Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
-
-```bash
-REGISTRY_AUTH_FILE=/opt/app-root/src/configs/extra-files/auth.json
-```
-
-This allows RHDH-local to pull OCI artifacts from registries like registry.redhat.io without authentication errors.
 
 ## Contributing and reporting issues
 

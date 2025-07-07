@@ -1,5 +1,15 @@
 # Container Image Guide
 
+## Configuring registry credentials
+
+Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
+
+```bash
+REGISTRY_AUTH_FILE=/opt/app-root/src/configs/extra-files/auth.json
+```
+
+This allows RHDH-local to pull OCI artifacts from registries like registry.redhat.io without authentication errors.
+
 ## Changing the container image
 
 By default, the [compose.yaml](./compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.6](https://quay.io/rhdh-community/rhdh:1.6), which includes both `linux-amd64` and `linux-arm64` images.
