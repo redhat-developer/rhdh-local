@@ -99,7 +99,7 @@ This method creates RHDH Local without any additional configurations or plugins.
 
 5. Open [http://localhost:7007](http://localhost:7007) in your browser to access RHDH. If you have not set up and enabled GitHub authentication, you will need to login as 'GUEST'.
    
-   ![RHDH-Local Homepage](additional-config-guides/RHDH-Homepage.png)
+   ![RHDH-Local Homepage](additional-config-guides/images/RHDH-Homepage.png)
 
 ## Cleanup
 
@@ -123,15 +123,29 @@ podman system prune --volumes # For rhdh-local running on podman
 docker system prune --volumes # For rhdh-local running on docker
 ```
 
+## Changing your configuration
+
+When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.
+
+```sh
+podman compose stop rhdh && podman compose start rhdh
+```
+
+When you change `dynamic-plugins.yaml` you need to re-run the `install-dynamic-plugins` container and then restart RHDH instance.
+
+```sh
+podman compose run install-dynamic-plugins
+podman compose stop rhdh && podman compose start rhdh
+```
+
 ## Additional Configuration Guides
 
 If you would like to change your RHDH-Local setup, or add additional features or plugins, please check out the guides below.
 
-1. [Change Configuration](./additional-config-guides/change-config.md)
-2. [Plugins Guide](./additional-config-guides/plugins-guide.md)
-3. [Container Image Guide](./additional-config-guides/container-image-guide.md)
-4. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md)
-5. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md)
+1. [Plugins Guide](./additional-config-guides/plugins-guide.md) - how to include your own plugins
+2. [Container Image Guide](./additional-config-guides/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
+3. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md) - testing in a simulated proxy environment
+4. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
 
 ## Contributing and reporting issues
 
