@@ -56,4 +56,4 @@ exec node packages/backend --no-node-snapshot \
   --config app-config.example.yaml \
   --config app-config.example.production.yaml \
   --config "$DYNAMIC_PLUGINS_CONFIG" \
-  --config "$PATCHED_APP_CONFIG" "$EXTRA_CLI_ARGS"
+  --config "$PATCHED_APP_CONFIG" $EXTRA_CLI_ARGS
