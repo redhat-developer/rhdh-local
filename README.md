@@ -118,13 +118,6 @@ To reset everything in the cloned `rhdh-local` repository, including any configu
 git reset --hard
 ```
 
-To remove the RHDH containers completely from your system (after you have run a `compose down`):
-
-```sh
-podman system prune --volumes # For rhdh-local running on podman
-docker system prune --volumes # For rhdh-local running on docker
-```
-
 ## Changing your configuration
 
 When you change `app-config.local.yaml` you must restart the `rhdh` container to load RHDH your updated configuration.

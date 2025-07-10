@@ -19,7 +19,7 @@ To load dynamic plugins from your local machine:
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
 4. See [Changing Your Configuration](/rhdh-local/additional-config-guides/changing-config.md) for more on updating and reloading configs.
 
-## Optional: Customize `.npmrc` for plugin installation
+## Customize `.npmrc` for plugin installation
 
 If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/` directory as a template.
 
