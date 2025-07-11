@@ -85,7 +85,7 @@ This method creates RHDH Local without any additional configurations or plugins.
    The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 4. Start RHDH Local.
-   This repository works with both Podman and Docker. When using Podman there are some exceptions.
+   This repository works with both Podman and Docker.
 
    **Podman**
 
