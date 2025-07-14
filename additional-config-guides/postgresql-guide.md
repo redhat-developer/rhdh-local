@@ -57,3 +57,17 @@ If you want to use PostgreSQL with RHDH, here are the steps:
    #   client: better-sqlite3
    #   connection: ':memory:'
    ```
+
+5. Add Postgres configuration in [`app-config.local.yaml`](configs/app-config.local.yaml)
+
+   ```yaml
+   database:
+    client: pg
+    pluginDivisionMode: schema
+    connection:
+      host: db
+      port: 5432
+      user: postgres
+      password: ${POSTGRES_PASSWORD}
+      database: postgres
+   ```
