@@ -42,23 +42,22 @@ if [ -f "$COMPONENTS_OVERRIDE" ]; then
 fi
 
 # Add local config if available
-EXTRA_CONFIGS=()
+EXTRA_CONFIGS=""
 if [ -f "$USER_APP_CONFIG" ]; then
   echo "Using user app-config.local.yaml"
-  EXTRA_CONFIGS+=("$USER_APP_CONFIG")
+  EXTRA_CONFIGS="$USER_APP_CONFIG"
 elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
   echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to configs/app-config/app-config.local.yaml."
-  EXTRA_CONFIGS+=("$LEGACY_USER_APP_CONFIG")
+  EXTRA_CONFIGS="$LEGACY_USER_APP_CONFIG"
 fi
 
 if [ -f "$LIGHTSPEED_APP_CONFIG" ]; then
   echo "Using lightspeed app-config.lightspeed.local.yaml"
-  EXTRA_CONFIGS+=("$LIGHTSPEED_APP_CONFIG")
+  EXTRA_CONFIGS="$EXTRA_CONFIGS $LIGHTSPEED_APP_CONFIG"
 fi
 
-
 EXTRA_CLI_ARGS=""
-for config in "${EXTRA_CONFIGS[@]}"; do
+for config in $EXTRA_CONFIGS; do
   EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $config"
 done
 
