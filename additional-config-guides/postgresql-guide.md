@@ -64,8 +64,8 @@ If you want to use PostgreSQL with RHDH, here are the steps:
    database:
     client: pg
     connection:
-      host: db
-      port: 5432
-      user: postgres
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
       password: ${POSTGRES_PASSWORD}
    ```
