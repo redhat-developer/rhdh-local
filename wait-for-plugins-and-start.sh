@@ -51,6 +51,8 @@ elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
 fi
 
 # Start Backstage backend
+# shellcheck disable=SC2086 
+# Allows variable expansion for CLI args
 exec node packages/backend --no-node-snapshot \
   --config "app-config.yaml" \
   --config app-config.example.yaml \
