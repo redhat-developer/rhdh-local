@@ -65,20 +65,7 @@ Follow these steps to configure and launch Developer Lightspeed using `podman-co
 
    > Replace the values in brackets with your actual server URL and API key. The `.env` file is used to inject values into your runtime environment and configurations.
 
-4. **Update `rcsconfig.yaml`**
-
-   Open the file at **`configs/lightspeed/rcsconfig.yaml`** and replace the `${LIGHTSPEED_SERVER_URL}` placeholder with the actual value:
-
-   ```yaml
-   llm_providers:
-     - name: ollama
-       type: openai
-       url: [your-value-here, e.g. https://your.lightspeed.server/v1]
-   ```
-
-   ⚠️ This is a temporary manual step. Ensure the value matches what's in `.env`.
-
-5. **Start the application**
+4. **Start the application**
 
    Use the following command to start the services:
 
@@ -92,7 +79,7 @@ Follow these steps to configure and launch Developer Lightspeed using `podman-co
    - Adds the **compose-with-lightspeed.yaml** overlay
    - Runs all services in detached mode (`-d`)
 
-6. **Verify that all services are running**
+5. **Verify that all services are running**
 
    After starting the application, make sure all services are running:
 
@@ -106,7 +93,7 @@ Follow these steps to configure and launch Developer Lightspeed using `podman-co
    | ------------------------ | ------------------------------------------------ | ---------------------- | ------------- | ------------------------------------------------------------------------- |
    | `rhdh-plugins-installer` | `quay.io/rhdh-community/rhdh:next`               |                        | Exited (0)    | `8080/tcp`                                                                |
    | `rhdh`                   | `quay.io/rhdh-community/rhdh:next`               |                        | Up (starting) | `7007/tcp`, `9229/tcp`, `8080/tcp`<br> → `0.0.0.0:7007`, `127.0.0.1:9229` |
-   | `road-core-service`      | `quay.io/redhat-ai-dev/road-core-service:latest` | `python3.11 runner...` | Up (starting) | `8080/tcp`, `8443/tcp`                                                    |
+   | `road-core-service`      | `quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6` | `python3.11 runner...` | Up (starting) | `8080/tcp`, `8443/tcp`                                                    |
 
    _Note: If any service is not running, you can inspect the logs:_
 

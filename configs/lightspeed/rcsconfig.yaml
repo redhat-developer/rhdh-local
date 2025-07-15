@@ -4,10 +4,6 @@ llm_providers:
     url: https://dummy.com
     models:
       - name: dummymodel
-  - name: ollama
-    type: openai
-    url: ${LIGHTSPEED_SERVER_URL}
-    disable_model_check: true
 ols_config:
   user_data_collection:
     log_level: "DEBUG"
