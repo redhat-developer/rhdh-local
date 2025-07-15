@@ -1,8 +1,13 @@
 services:
   road-core-service:
-    image: quay.io/redhat-ai-dev/road-core-service:latest
+    image: quay.io/redhat-ai-dev/road-core-service:latest # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
-    user: "root"
+    depends_on:
+      rhdh:
+        condition: service_started
+    volumes:
+      - ./configs:/opt/app-root/src/configs:Z
+      - user-data:/opt/app-root/src/user-data/feedback:Z
     environment:
       - PROJECT=rhdh
       - RCS_CONFIG_FILE=/opt/app-root/src/configs/lightspeed/rcsconfig.yaml
@@ -12,11 +17,6 @@ services:
       - LIGHTSPEED_SERVER_TOKEN=${LIGHTSPEED_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
     network_mode: "service:rhdh"
-    depends_on:
-      rhdh:
-        condition: service_started
-    volumes:
-      - ./configs:/opt/app-root/src/configs:Z
-      - user-data:/opt/app-root/src/user-data/feedback:Z
+    user: "root"
 volumes:
   user-data:
