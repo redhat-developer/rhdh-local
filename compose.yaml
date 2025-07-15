@@ -36,7 +36,7 @@ services:
       - "7007:7007"
       - "127.0.0.1:9229:9229"
     environment:
-      NODE_OPTIONS: "--inspect=0.0.0.0:9229"
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229 --no-node-snapshot"
     volumes:
       - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
       - ./configs:/opt/app-root/src/configs:Z

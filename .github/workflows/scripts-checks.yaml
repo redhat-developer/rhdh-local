@@ -1,0 +1,43 @@
+name: Differential ShellCheck
+
+on:
+  push:
+    paths:
+      - '**.sh'
+      - '.github/workflows/scripts-checks.yaml'
+    branches: [ main ]
+  pull_request:
+    paths:
+      - '**.sh'
+      - '.github/workflows/scripts-checks.yaml'
+    branches: [ 'main' ]
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck-lint:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          # Differential ShellCheck requires full git history
+          fetch-depth: 0
+
+      - id: ShellCheck
+        name: Differential ShellCheck
+        uses: redhat-plumbers-in-action/differential-shellcheck@dd551ce780d8af741f8cd8bab6982667b906b457 # v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: always()
+        name: Upload artifact with ShellCheck defects in SARIF format
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Differential ShellCheck SARIF
+          path: ${{ steps.ShellCheck.outputs.sarif }}
