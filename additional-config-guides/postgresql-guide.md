@@ -50,10 +50,22 @@ If you want to use PostgreSQL with RHDH, here are the steps:
        condition: service_healthy
    ```
 
-4. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](configs/app-config.local.yaml)
+4. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](configs/app-config/app-config.local.yaml)
 
    ```yaml
    # database:
    #   client: better-sqlite3
    #   connection: ':memory:'
+   ```
+
+5. Add Postgres configuration in [`app-config.local.yaml`](configs/app-config/app-config.local.yaml)
+
+   ```yaml
+   database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
    ```
