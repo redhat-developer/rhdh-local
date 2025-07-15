@@ -8,16 +8,13 @@
 
 
 services:
-  rhdh:
-    networks:
-      - backstage-network
   install-dynamic-plugins:
     environment:
       MAX_ENTRY_SIZE: "30000000"
 
   sonataflow:
     container_name: sonataflow
-    image: registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0
+    image: "${SONATAFLOW_IMAGE:-registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0}"
     environment:
       QUARKUS_HTTP_PORT: "8899"
       KOGITO_SERVICE_URL: http://sonataflow:8899
@@ -26,13 +23,6 @@ services:
       NOTIFICATIONS_BEARER_TOKEN: "***"
       BACKSTAGE_NOTIFICATIONS_URL: http://host.docker.internal:7008
     ports:
-      - "8899:8899"
+      - "127.0.0.1:8899:8899"
     volumes:
-      #      - /path/to/backstage-orchestrator-workflows:/home/kogito/serverless-workflow-project/src/main/resources:Z
-      - ./rhdho-workflow-examples:/home/kogito/serverless-workflow-project/src/main/resources:Z
-    networks:
-      - backstage-network
-
-networks:
-  backstage-network:
-    driver: bridge
+      - ${RHDH_ORCHESTRATOR_WORKFLOWS:-./rhdho-workflow-examples}:/home/kogito/serverless-workflow-project/src/main/resources:Z
