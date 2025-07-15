@@ -1,6 +1,6 @@
 services:
   road-core-service:
-    image: quay.io/redhat-ai-dev/road-core-service:latest # dclint disable-line service-image-require-explicit-tag
+    image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
     depends_on:
       rhdh:
