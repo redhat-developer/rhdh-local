@@ -1,10 +1,35 @@
 services:
+  ollama:
+    image: ollama/ollama # dclint disable-line service-image-require-explicit-tag
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - '127.0.0.1:7007:7007'
+      - '0.0.0.0:8080:8080'
+      - '127.0.0.1:9229:9229'
+      - '0.0.0.0:11434:11434'
+    command: >
+      "ollama serve & sleep 5 && ollama pull tinyllama && touch /tmp/ready && wait"
+    entrypoint: [ "sh", "-c" ]
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "test", "-f", "/tmp/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  rhdh:
+    container_name: rhdh
+    depends_on:
+      ollama:
+        condition: service_healthy
+    network_mode: "service:ollama"
   road-core-service:
     image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
     depends_on:
-      rhdh:
-        condition: service_started
+      ollama:
+        condition: service_healthy
     volumes:
       - ./configs:/opt/app-root/src/configs:Z
       - user-data:/opt/app-root/src/user-data/feedback:Z
@@ -16,7 +41,8 @@ services:
       - LIGHTSPEED_SERVER_URL=${LIGHTSPEED_SERVER_URL}
       - LIGHTSPEED_SERVER_TOKEN=${LIGHTSPEED_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
-    network_mode: "service:rhdh"
+    network_mode: "service:ollama"
     user: "root"
 volumes:
   user-data:
+  ollama_data:
