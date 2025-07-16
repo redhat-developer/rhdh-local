@@ -33,13 +33,15 @@ services:
     volumes:
       - ./configs:/opt/app-root/src/configs:Z
       - user-data:/opt/app-root/src/user-data/feedback:Z
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
     environment:
       - PROJECT=rhdh
       - RCS_CONFIG_FILE=/opt/app-root/src/configs/lightspeed/rcsconfig.yaml
       - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
-      - LIGHTSPEED_SERVER_ID=${LIGHTSPEED_SERVER_ID}
-      - LIGHTSPEED_SERVER_URL=${LIGHTSPEED_SERVER_URL}
-      - LIGHTSPEED_SERVER_TOKEN=${LIGHTSPEED_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
     network_mode: "service:ollama"
     user: "root"
