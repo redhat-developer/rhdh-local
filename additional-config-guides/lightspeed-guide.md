@@ -58,6 +58,24 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
          token: ${LIGHTSPEED_SERVER_TOKEN}
    ```
 
+
+   By default, the required environment variables for Lightspeed are already set in the `default.env` file:
+
+   ```env
+   LIGHTSPEED_SERVER_ID=ollama
+   LIGHTSPEED_SERVER_URL=http://0.0.0.0:11434/v1
+   LIGHTSPEED_SERVER_TOKEN=dummy
+   ```
+
+   You do **not** need to change these unless you want to use your own model server.  
+   If you do, you can override them by creating a `.env` file in the project root with your desired values:
+
+   ```env
+   LIGHTSPEED_SERVER_ID=your-server-id
+   LIGHTSPEED_SERVER_URL=https://your.lightspeed.server/v1
+   LIGHTSPEED_SERVER_TOKEN=your-api-key
+   ```
+
 3. **Start the application**
 
    Use the following command to start the services:
