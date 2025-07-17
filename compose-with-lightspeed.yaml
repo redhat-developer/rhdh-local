@@ -10,7 +10,7 @@ services:
       - '127.0.0.1:9229:9229'
       - '0.0.0.0:11434:11434'
     command: >
-      "ollama serve & sleep 5 && ollama pull tinyllama && touch /tmp/ready && wait"
+      "ollama serve & sleep 5 && ollama pull gemma:2b && touch /tmp/ready && wait"
     entrypoint: [ "sh", "-c" ]
     restart: unless-stopped
     healthcheck:
@@ -40,7 +40,7 @@ services:
         required: false
     environment:
       - PROJECT=rhdh
-      - RCS_CONFIG_FILE=/opt/app-root/src/configs/lightspeed/rcsconfig.yaml
+      - RCS_CONFIG_FILE=/opt/app-root/src/configs/extra-files/road-core-service-config.yaml
       - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
     network_mode: "service:ollama"
