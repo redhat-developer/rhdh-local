@@ -44,15 +44,15 @@ fi
 # Add local config if available
 EXTRA_CONFIGS=""
 if [ -f "$USER_APP_CONFIG" ]; then
-  echo "Using user app-config.local.yaml"
+  echo "Using user config: $USER_APP_CONFIG"
   EXTRA_CONFIGS="$USER_APP_CONFIG"
 elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
-  echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to configs/app-config/app-config.local.yaml."
+  echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to $USER_APP_CONFIG."
   EXTRA_CONFIGS="$LEGACY_USER_APP_CONFIG"
 fi
 
 if [ -f "$LIGHTSPEED_APP_CONFIG" ]; then
-  echo "Using lightspeed app-config.lightspeed.local.yaml"
+  echo "Using lightspeed config: $LIGHTSPEED_APP_CONFIG"
   EXTRA_CONFIGS="$EXTRA_CONFIGS $LIGHTSPEED_APP_CONFIG"
 fi
 
