@@ -7,7 +7,7 @@ backend:
     - https://avatars.githubusercontent.com # This is to load GitHub avatars in the UI
 
 lightspeed:
-  questionValidation: true
+  questionValidation: false
   servers:
     - id: ${LIGHTSPEED_SERVER_ID}
       url: ${LIGHTSPEED_SERVER_URL}
