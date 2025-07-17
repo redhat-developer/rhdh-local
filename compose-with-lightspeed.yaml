@@ -10,7 +10,7 @@ services:
       - '127.0.0.1:9229:9229'
       - '0.0.0.0:11434:11434'
     command: >
-      "ollama serve & sleep 5 && ollama pull gemma:2b && touch /tmp/ready && wait"
+      "ollama serve & sleep 5 && ollama pull tinyllama && touch /tmp/ready && wait"
     entrypoint: [ "sh", "-c" ]
     restart: unless-stopped
     healthcheck:
