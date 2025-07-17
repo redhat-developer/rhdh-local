@@ -5,7 +5,9 @@ backend:
     - "'self'"
     - "data:"
     - https://avatars.githubusercontent.com # This is to load GitHub avatars in the UI
-
+# Check out the below links for all the available lightspeed configurations.
+# Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
+# Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
 lightspeed:
   questionValidation: false
   servers:
