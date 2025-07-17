@@ -121,6 +121,47 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 ---
 
+
+## Advanced Configuration Guides
+
+### Running Larger Models with Ollama
+
+Some AI models require more memory than the default Podman machine allocation. If you encounter errors such as “model requires more system memory than is available,” you can increase the memory available to your Podman virtual machine:
+
+```bash
+podman machine stop
+podman machine set --memory=8192
+podman machine start
+```
+
+- The example above sets the memory to **8 GiB** (`8192` MB).
+- Adjust the value as needed (e.g., `--memory=16384` for 16 GiB).
+- Ensure your host system has enough free RAM.
+
+After increasing the memory, restart your containers to use the new limits.
+
+---
+
+### How do I change the Ollama model?
+
+By default, the Ollama service pulls and loads the `tinyllama` model.  
+To use a larger or different model, edit the `command` in your Ollama service definition in your Compose file (e.g., `compose-with-lightspeed.yaml`):
+
+```yaml
+command: >
+  "ollama serve &
+  sleep 5 &&
+  ollama pull llama2:13b &&
+  touch /tmp/ready &&
+  wait"
+```
+
+- Replace `llama2:13b` with the name of the model you want to use (e.g., `mistral`, `llama2:70b`, etc.).
+- Make sure the model you choose fits within your available memory.
+
+> **Tip:** You can find available models and their memory requirements in the [Ollama model library](https://ollama.com/library).
+
+
 ## Cleanup
 
 To stop and remove the running containers:
