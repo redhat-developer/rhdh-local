@@ -119,6 +119,8 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 5. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
 
+   ![Developer Lightspeed](images/Developer-Lightspeed.png)
+
 ---
 
 
@@ -160,6 +162,61 @@ command: >
 - Make sure the model you choose fits within your available memory.
 
 > **Tip:** You can find available models and their memory requirements in the [Ollama model library](https://ollama.com/library).
+
+---
+
+### Using Your Own Ollama Models from Your System
+
+If you have custom or pre-downloaded Ollama models on your local system, you can make them available to the Ollama container by mounting your host’s model directory into the container.
+
+#### **Step 1: Locate Your Ollama Model Directory**
+
+By default, Ollama stores models in:
+- **Linux/macOS:** `~/.ollama`
+- **Windows:** `%USERPROFILE%\.ollama`
+
+#### **Step 2: Mount the Directory in Your Compose File**
+
+Edit your `compose-with-lightspeed.yaml` to mount your local `.ollama` directory instead of `ollama-data` volume:
+
+```yaml
+services:
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - /absolute/path/to/your/.ollama:/root/.ollama
+```
+
+- Replace `/absolute/path/to/your/.ollama` with the full path to your `.ollama` directory on your host system.
+- This will make all your local models available inside the container.
+
+**Example:**
+
+In Linux or macOS, you might use:
+
+```yaml
+volumes:
+  - /home/your-username/.ollama:/root/.ollama
+```
+or
+
+```yaml
+volumes:
+  - /Users/your-username/.ollama:/root/.ollama
+```
+---
+
+#### **Step 3: Use Your Models in the Container**
+
+Once mounted, you can reference your model in the `ollama pull` command in the `compose-with-lightspeed.yaml`. 
+
+Ollama will use the models from the mounted directory, so you don’t need to re-download them inside the container.
+
+> **Tip:** If you add new models to your local `.ollama` directory, they will automatically be available in the container after a restart.
+
+---
+
+**This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you’ve created locally.**
 
 
 ## Cleanup

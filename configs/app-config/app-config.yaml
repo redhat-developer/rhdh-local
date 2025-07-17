@@ -88,9 +88,3 @@ techdocs:
     type: local
     local:
       publishDirectory: /tmp/techdocs
-
-lightspeed:
-  servers:
-    - id: ${LIGHTSPEED_SERVER_ID}
-      url: ${LIGHTSPEED_SERVER_URL}
-      token: ${LIGHTSPEED_SERVER_TOKEN}
