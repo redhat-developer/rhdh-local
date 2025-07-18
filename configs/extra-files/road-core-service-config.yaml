@@ -8,7 +8,7 @@ ols_config:
   user_data_collection:
     log_level: "DEBUG"
     feedback_disabled: false
-    feedback_storage: "/opt/app-root/src/user-data/feedback"
+    feedback_storage: "/tmp/feedback"
   reference_content:
     product_docs_index_path: "./vector_db/rhdh_product_docs/1.6"
     product_docs_index_id: rhdh-product-docs-1_6
