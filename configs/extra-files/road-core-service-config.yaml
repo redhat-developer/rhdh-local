@@ -1,9 +1,11 @@
+# This configuration is used to control the "Road Core Service" - a peice of middleware created by Red Hat that supports Lightspeed products by providing an intermediary service that handles for common Chatbot features.
+
 llm_providers:
-  - name: dummy
-    type: openai
+  - name: dummy # RCS always needs at least one LLM provider as a backup
+    type: openai # Specifies the API to use with this provider
     url: https://dummy.com
     models:
-      - name: dummymodel
+      - name: dummymodel # RCS always needs a model, this is a backup model name
 ols_config:
   user_data_collection:
     log_level: "DEBUG"
@@ -13,23 +15,23 @@ ols_config:
     product_docs_index_path: "./vector_db/rhdh_product_docs/1.6"
     product_docs_index_id: rhdh-product-docs-1_6
     embeddings_model_path: "./embeddings_model"
-  conversation_cache:
-    type: memory
+  conversation_cache: 
+    type: memory # Where should chats be kept?
     memory:
-      max_entries: 1000
+      max_entries: 1000 # How many chats should we keep?
   logging_config:
-    app_log_level: info
-    lib_log_level: warning
-    uvicorn_log_level: info
+    app_log_level: info # Level for logging app
+    lib_log_level: warning # Level for logging in libraries
+    uvicorn_log_level: info # Level for logging the http server
     suppress_metrics_in_log: false
     suppress_auth_checks_warning_in_log: false
   authentication_config:
     module: "noop"
-  default_provider: dummy
-  default_model: dummymodel
-  query_validation_method: disabled
+  default_provider: dummy # See the llm_providers section for details
+  default_model: dummymodel # See the llm_providers section for details
+  query_validation_method: disabled # Set the default for the query validation feature (can be overidden by clients)
 dev_config:
-  enable_dev_ui: false
+  enable_dev_ui: false # RCS can provide a simple UI of it's own. False = headless.
   disable_auth: true
   disable_tls: true
   enable_system_prompt_override: true
