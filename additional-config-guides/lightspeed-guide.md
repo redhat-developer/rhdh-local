@@ -1,3 +1,10 @@
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Getting Started](#getting-started)
+3. [Cleanup](#cleanup)
+4. [Troubleshooting](#troubleshooting)
+5. [Advanced Configuration Guides](#advanced-configuration-guides)
+
 ## Developer Lightspeed in RHDH local
 
 Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant powered by generative AI that offers in-depth insights into Red Hat Developer Hub (RHDH), including its wide range of capabilities. You can interact with this assistant to explore and learn more about RHDH in greater detail.
@@ -29,13 +36,14 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
    Copy the Lightspeed dynamic plugin overrides to **`configs/dynamic-plugins/dynamic-plugins.override.yaml`**.
 
-   > **Warning:** This will overwrite your existing `dynamic-plugins.override.yaml` file. If you have customizations, back up or manually merge the content as needed.
-
    To get started quickly with Developer Lightspeed, you can copy the entire content with the following command:
 
-   ```bash
-   cp configs/dynamic-plugins/dynamic-plugins.lightspeed.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
-   ```
+   >  ⚠️ **Warning:** This will overwrite your existing `dynamic-plugins.override.yaml` file. If you have customizations, back up or *manually merge* the content as needed.
+
+
+      ```bash
+      cp configs/dynamic-plugins/dynamic-plugins.lightspeed.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
+      ```
 
    Alternatively, you can manually copy the content inside the `plugins` property and paste it into your existing `dynamic-plugins.override.yaml` file. If merging manually, ensure correct YAML structure and avoid duplicate keys.
 
@@ -122,6 +130,81 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    ![Developer Lightspeed](images/Developer-Lightspeed.png)
 
 ---
+
+## Cleanup
+
+To stop and remove the running containers:
+
+```bash
+podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+# OR
+docker compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+```
+
+---
+
+> **Note:** All instructions in this guide apply to both Podman and Docker.  
+> Replace `podman compose` with `docker compose` if you are using Docker.
+
+
+
+
+## Troubleshooting
+
+If you encounter issues while setting up or running Developer Lightspeed, try the following solutions:
+
+### 1. Services Not Starting or Exiting Unexpectedly
+
+- **Check container logs:**  
+  Use the following command to view logs for a specific container:
+  ```bash
+  podman logs <container-name>
+  # OR
+  docker logs <container-name>
+  ```
+  Look for error messages that can help diagnose the problem.
+
+- **Common causes:**
+  - Port conflicts (another service is using the same port)
+  - Insufficient memory or CPU resources
+  - Incorrect or Missing environment variables
+
+### 2. "model requires more system memory than is available" Error
+
+- Increase the memory allocated to your Podman or Docker virtual machine.  
+  See the [Running Larger Models with Ollama](#running-larger-models-with-ollama) section for instructions.
+
+### 3. "Permission Denied" or File Access Errors
+
+- Ensure you have the necessary permissions to access files and directories, especially when mounting volumes.
+- On Linux/macOS, you may need to adjust permissions with `chmod` or run commands with `sudo`.
+
+### 4. Web UI Not Accessible at http://localhost:7007/lightspeed
+
+- Make sure all containers are running:
+  ```bash
+  podman compose ps
+  # OR
+  docker compose ps
+  ```
+- Check for firewall or VPN issues that may block access to localhost ports.
+
+### 5. Environment Variables Not Set
+
+- Double-check that your `.env` or `default.env` files are present and correctly configured.
+- Restart the containers after making changes to environment files.
+
+### 6. Still Stuck?
+
+- Try stopping and removing all containers, then starting again:
+  ```bash
+  podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+  podman compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
+  # OR use docker compose
+  ```
+
+If your issue persists, please [open an issue on GitHub](https://github.com/redhat-developer/rhdh-local/issues) with details about your problem so we can help you troubleshoot.
+
 
 
 ## Advanced Configuration Guides
@@ -218,18 +301,3 @@ Ollama will use the models from the mounted directory, so you don’t need to re
 
 **This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you’ve created locally.**
 
-
-## Cleanup
-
-To stop and remove the running containers:
-
-```bash
-podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
-# OR
-docker compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
-```
-
----
-
-> **Note:** All instructions in this guide apply to both Podman and Docker.  
-> Replace `podman compose` with `docker compose` if you are using Docker.
