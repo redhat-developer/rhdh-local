@@ -1,0 +1,23 @@
+{
+  "$id": "classpath:/schemas/greet-input-schema.json",
+  "title": "Data Input Schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "language": {
+      "title": "Language",
+      "description": "Language to greet",
+      "type": "string",
+      "enum": ["English", "Spanish"],
+      "default": "English"
+    },
+    "name": {
+      "title": "Name",
+      "description": "Name of the person",
+      "type": "string",
+      "default": "John",
+      "pattern": "^[a-zA-Z0-9]([-a-z0-9]*[a-zA-Z0-9])?$"
+    }
+  },
+  "required": ["name"]
+}

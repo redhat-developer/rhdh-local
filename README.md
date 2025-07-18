@@ -62,7 +62,12 @@ This method creates RHDH Local without any additional configurations or plugins.
      > ```
      > This ensures the base plugin list is preserved and extended, rather than replaced.
 
-   - Add your catalog entity overrides:
+     Note: In RHDH 1.7, by default, Orchestrator plugins are integrated in the dynamic plugins. If you intend to use these
+     plugins, ensure to copy the
+     orchestrator dynamic plugins from `dynamic-plugins.yaml` to your `dynamic-plugins.override.yaml` version for your local
+     development.
+
+- Add your catalog entity overrides:
 
       > Start by copying the example files provided:
       >
@@ -141,6 +146,7 @@ If you would like to change your RHDH-Local setup, or add additional features or
 2. [Container Image Guide](./additional-config-guides/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
 3. [Simulated Proxy Setup](./additional-config-guides/proxy-setup-sim.md) - testing in a simulated proxy environment
 4. [PostgreSQL Guide](./additional-config-guides/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
+5. [Orchestrator Workflow Guide](./additional-config-guides/orchestrator-workflow-guide.md) - using Orchestrator with RHDH to develop workflows.
 
 ## Contributing and reporting issues
 

@@ -1,0 +1,38 @@
+id: github
+version: "1.0.0-SNAPSHOT"
+specVersion: "0.8"
+name: "github"
+description: "A Workflow For Creating GitHub Repository"
+annotations:
+  - "workflow-type/infrastructure"
+dataInputSchema:
+  failOnValidationErrors: true
+  schema: schemas/github-input-schema.json
+functions:
+  - name: logInfo
+    type: custom
+    operation: "sysout:INFO"
+  - name: createGitHubRepository
+    operation: specs/github-openapi.json#createGitHubRepository
+start: "StartState"
+states:
+  - name: "StartState"
+    type: "operation"
+    actions:
+      - name: logInput
+        functionRef:
+          refName: logInfo
+          arguments:
+            message: '"Creating GitHub Repository: " + .name'
+    transition: Create GitHub Repository
+  - name: Create GitHub Repository
+    type: operation
+    actions:
+      - name: createGitHubRepository
+        functionRef:
+          refName: createGitHubRepository
+          arguments:
+            name: .name
+            description: .description
+            private: .private
+    end: true
