@@ -1,0 +1,37 @@
+id: slack
+version: "1.0.0-SNAPSHOT"
+specVersion: "0.8"
+name: "slack"
+description: "A Workflow For Slack Messages/Announcements"
+annotations:
+  - "workflow-type/infrastructure"
+dataInputSchema:
+  failOnValidationErrors: true
+  schema: schemas/slack-input-schema.json
+functions:
+  - name: logInfo
+    type: custom
+    operation: "sysout:INFO"
+  - name: sendSlackMessage
+    operation: specs/slack-openapi.json#sendSlackMessage
+start: "StartState"
+states:
+  - name: "StartState"
+    type: "operation"
+    actions:
+      - name: logInput
+        functionRef:
+          refName: logInfo
+          arguments:
+            message: '"Sending slack msg: " + .message'
+    transition: Send Slack Message
+  - name: Send Slack Message
+    type: operation
+    actions:
+      - name: sendSlackMessage
+        functionRef:
+          refName: sendSlackMessage
+          arguments:
+            text: .message
+            channel: .channel
+    end: true

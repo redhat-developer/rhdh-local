@@ -1,0 +1,28 @@
+# This compose file is not usable on its own.
+# It needs to be used alongside the default compose.yaml file,
+# since it overrides the containers defined in the latter
+# and spins up Sonataflow container for running workflows.
+#
+# You can run `[podman|docker]-compose -f compose.yaml -f compose-with-orchestrator.yaml config`
+# to view the effective merged config.
+
+
+services:
+  install-dynamic-plugins:
+    environment:
+      MAX_ENTRY_SIZE: "30000000"
+
+  sonataflow:
+    container_name: sonataflow
+    image: "${SONATAFLOW_IMAGE:-registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0}"
+    environment:
+      QUARKUS_HTTP_PORT: "8899"
+      KOGITO_SERVICE_URL: http://sonataflow:8899
+      KOGITO.CODEGEN.PROCESS.FAILONERROR: "false"
+      QUARKUS_EMBEDDED_POSTGRESQL_DATA_DIR: /home/kogito/persistence
+      NOTIFICATIONS_BEARER_TOKEN: "***"
+      BACKSTAGE_NOTIFICATIONS_URL: http://host.docker.internal:7008
+    ports:
+      - "127.0.0.1:8899:8899"
+    volumes:
+      - ${RHDH_ORCHESTRATOR_WORKFLOWS:-./rhdho-workflow-examples}:/home/kogito/serverless-workflow-project/src/main/resources:Z

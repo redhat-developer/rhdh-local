@@ -21,3 +21,5 @@ dynamic-plugins-root
 /configs/app-config.local.yaml
 /configs/dynamic-plugins.yaml
 /configs/github-app-credentials.example.yaml
+
+.idea
