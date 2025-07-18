@@ -1,0 +1,33 @@
+# Developer Lightspeed dynamic plugin override config.
+# Copy to dynamic-plugins.override.yaml to activate dynamic plugins.
+
+includes:
+  - dynamic-plugins.default.yaml
+
+plugins:
+  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:next__0.5.7!red-hat-developer-hub-backstage-plugin-lightspeed
+    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-lightspeed:
+            appIcons:
+              - name: LightspeedIcon
+                module: LightspeedPlugin
+                importName: LightspeedIcon
+            dynamicRoutes:
+              - path: /lightspeed
+                importName: LightspeedPage
+                module: LightspeedPlugin
+                menuItem:
+                  icon: LightspeedIcon
+                  text: Lightspeed
+  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__0.5.6!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+    disabled: false
+    pluginConfig:
+      lightspeed:
+        questionValidation: true
+        servers:
+          - id: ${LIGHTSPEED_SERVER_ID}
+            url: ${LIGHTSPEED_SERVER_URL}
+            token: ${LIGHTSPEED_SERVER_TOKEN}

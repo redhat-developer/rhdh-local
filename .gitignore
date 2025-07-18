@@ -16,6 +16,7 @@ dynamic-plugins-root
 # Extra-files
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
+!/configs/extra-files/road-core-service-config.yaml
 
 # Kept for backward compatibility, but now Git-ignored
 /configs/app-config.local.yaml
