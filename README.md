@@ -69,18 +69,17 @@ This method creates RHDH Local without any additional configurations or plugins.
 
 - Add your catalog entity overrides:
 
-      > Start by copying the example files provided:
-      >
-      > ```sh
-      > cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
-      > cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
-      > ```
+   Start by copying the example files provided:
 
-      Once copied, you can modify these override files to customize your catalog users or components.
-      If these `.override.yaml` files are present, RHDH Local will automatically use them instead of the default `users.yaml` or `components.yaml`.
+   ```sh
+      cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
+      cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
+   ```
 
-      No additional configuration is required — just drop the file in place and restart RHDH.
+   Once copied, you can modify these override files to customize your catalog users or components.
+   If these `.override.yaml` files are present, RHDH Local will automatically use them instead of the default `users.yaml` or `components.yaml`.
 
+   No additional configuration is required — just drop the file in place and restart RHDH.
 
    - Add any extra files (like GitHub credentials) to: `configs/extra-files/`
 
