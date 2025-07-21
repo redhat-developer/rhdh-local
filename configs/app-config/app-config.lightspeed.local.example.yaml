@@ -7,7 +7,7 @@ backend:
     - https://avatars.githubusercontent.com # This is to load GitHub avatars in the UI
 
 # Check out the below guide for more information.
-# Lightspeed on rhdh-local: https://github.com/redhat-developer/rhdh-local/blob/main/additional-config-guides/lightspeed-guide.md
+# Lightspeed on rhdh-local: https://github.com/redhat-developer/rhdh-local/blob/main/additional-config-guides/developer-lightspeed-guide.md
 # For additional plugin configurations, see
 # Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
 # Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
