@@ -4,11 +4,10 @@ services:
     container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
-    ports:
-      - '127.0.0.1:7007:7007'
-      - '0.0.0.0:8080:8080'
-      - '127.0.0.1:9229:9229'
-      - '0.0.0.0:11434:11434'
+    depends_on:
+      rhdh:
+        condition: service_started
+    network_mode: "service:rhdh"
     command: >
       "ollama serve & sleep 5 && ollama pull tinyllama && touch /tmp/ready && wait"
     entrypoint: [ "sh", "-c" ]
@@ -18,17 +17,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  rhdh:
-    container_name: rhdh
-    depends_on:
-      ollama:
-        condition: service_healthy
-    network_mode: "service:ollama"
-    ports: []
   road-core-service:
     image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
     depends_on:
+      rhdh:
+        condition: service_started
       ollama:
         condition: service_healthy
     volumes:
@@ -43,6 +37,6 @@ services:
         required: true
       - path: "./.env"
         required: false
-    network_mode: "service:ollama"
+    network_mode: "service:rhdh"
 volumes:
   ollama_data:
