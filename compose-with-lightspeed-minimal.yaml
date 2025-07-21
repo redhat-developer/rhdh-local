@@ -1,0 +1,22 @@
+services:
+  road-core-service:
+    image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
+    container_name: road-core-service
+    network_mode: "service:rhdh"
+    depends_on:
+      rhdh:
+        condition: service_started
+    volumes:
+      - ./configs:/opt/app-root/src/configs:Z
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    environment:
+      - PROJECT=rhdh
+      - RCS_CONFIG_FILE=/opt/app-root/src/configs/extra-files/road-core-service-config.yaml
+      - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
+      - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
+volumes:
+  user-data:

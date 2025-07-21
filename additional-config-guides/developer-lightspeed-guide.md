@@ -68,17 +68,14 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    ```
 
    You do **not** need to change these unless you want to use your own model server.  
-   If you do, you can override them by creating a `.env` file in the project root with your desired values:
-
-   ```env
-   LIGHTSPEED_SERVER_ID=your-server-id
-   LIGHTSPEED_SERVER_URL=https://your.lightspeed.server/v1
-   LIGHTSPEED_SERVER_TOKEN=your-api-key
-   ```
 
 3. **Start the application**
 
-   Use the following command to start the services:
+   You can start Developer Lightspeed in two ways, depending on your model server setup:
+
+   #### **A. Use the default (Ollama included) setup**
+
+   This will start all services, including the built-in Ollama model server:
 
    ```bash
    podman compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
@@ -86,11 +83,25 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    docker compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
    ```
 
-   This command:
+   #### **B. Use your own model server (minimal setup)**
 
-   - Uses the base **compose.yaml**
-   - Adds the **compose-with-lightspeed.yaml** overlay
-   - Runs all services in detached mode (`-d`)
+   If you want to use your own model server (such as a remote Ollama instance or another provider), use the minimal setup and set your server details in a `.env` file:
+
+   ```bash
+   podman compose -f compose.yaml -f compose-with-lightspeed-minimal.yaml up -d
+   # OR, if using Docker:
+   docker compose -f compose.yaml -f compose-with-lightspeed-minimal.yaml up -d
+   ```
+
+   Make sure your `.env` file in the project root contains:
+   ```env
+   LIGHTSPEED_SERVER_ID=your-server-id
+   LIGHTSPEED_SERVER_URL=https://your.lightspeed.server/v1
+   LIGHTSPEED_SERVER_TOKEN=your-api-key
+   ```
+
+---
+
 
 4. **Verify that all services are running**
 

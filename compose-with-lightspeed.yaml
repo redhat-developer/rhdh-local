@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama # dclint disable-line service-image-require-explicit-tag
+    image: docker.io/ollama/ollama:latest
     container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
