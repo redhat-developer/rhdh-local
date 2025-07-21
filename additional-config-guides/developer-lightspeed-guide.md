@@ -6,17 +6,6 @@ Developer Lightspeed provides a natural language interface within the RHDH conso
 
 ---
 
-**Prerequisites**
-
-1. A PC based on an x86_64 (amd64) or arm64 (aarch64) architecture
-2. An installation of Podman (or Docker) (with adequate resources available)
-   
-   - [**Podman**](https://podman.io/docs/installation) v5.4.1 or newer; [**Podman Compose**](https://github.com/containers/podman-compose) v1.3.0 or newer.
-   - [**Docker Engine**](https://docs.docker.com/engine/) v28.1.0 or newer; [**Docker Compose**](https://docs.docker.com/compose/) plugin v2.24.0 or newer. This is necessary for compatibility with features such as ```env_file``` with the ```required``` key used in our compose.yaml.
-
-   > **Note:** If you prefer to work with a graphical user interface, we recommend managing your container environments using [Podman Desktop](https://podman-desktop.io/). Podman Desktop can be [installed on a number of different systems](https://podman-desktop.io/docs/installation), and can be easier to work with if you are not as familiar with command line.
----
-
 ## Getting Started
 
 Follow these steps to configure and launch Developer Lightspeed using either `podman compose` or `docker compose`.  
