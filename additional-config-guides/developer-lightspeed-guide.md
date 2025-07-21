@@ -72,6 +72,8 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    docker compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
    ```
 
+   ---
+
    #### **B. Use your own model server (minimal setup)**
 
    If you want to use your own model server (such as a remote Ollama instance or another provider), use the minimal setup and set your server details in a `.env` file:
@@ -104,12 +106,28 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
    Look for all services to show `running` or `Up (starting)` in the Status column, like:
 
-| CONTAINER ID | IMAGE                                                          | COMMAND                | CREATED         | STATUS                    | PORTS                                                                                                         | NAMES                  |
-|--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
-| 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
-| 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp            | ollama                 |
-| 2860fc13b036 | quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp, 8443/tcp  | road-core-service      |
-| f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp            | rhdh                   |                                        |
+
+   #### **A. Default setup (with Ollama):**
+   You should see output similar to:
+
+   | CONTAINER ID | IMAGE                                                          | COMMAND                | CREATED         | STATUS                    | PORTS                                                                                                         | NAMES                  |
+   |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
+   | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
+   | 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp            | ollama                 |
+   | 2860fc13b036 | quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp, 8443/tcp  | road-core-service      |
+   | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp            | rhdh                   |                                        |
+   ---
+
+   #### **B. Minimal setup (own model server, no ollama):**
+   You should see output similar to:
+
+   | CONTAINER ID | IMAGE                                                          | COMMAND                | CREATED         | STATUS                    | PORTS                                                                                                         | NAMES                  |
+   |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
+   | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
+   | 2860fc13b036 | quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp, 8443/tcp  | road-core-service      |
+   | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 0.0.0.0:8080->8080/tcp, 0.0.0.0:11434->11434/tcp, 127.0.0.1:9229->9229/tcp            | rhdh                   |                                        |
+
+   ---
 
    _Note: If any service is not running, you can inspect the logs:_
 

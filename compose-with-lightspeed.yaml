@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: docker.io/ollama/ollama:0.10.0-rc0-rocm
+    image: docker.io/ollama/ollama:0.10.0-rc0
     container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
@@ -24,6 +24,7 @@ services:
       ollama:
         condition: service_healthy
     network_mode: "service:ollama"
+    ports: []
   road-core-service:
     image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
