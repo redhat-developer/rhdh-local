@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: docker.io/ollama/ollama:latest
+    image: docker.io/ollama/ollama:0.10.0-rc0-rocm
     container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
@@ -32,16 +32,16 @@ services:
         condition: service_healthy
     volumes:
       - ./configs:/opt/app-root/src/configs:Z
-    env_file:
-      - path: "./default.env"
-        required: true
-      - path: "./.env"
-        required: false
     environment:
       - PROJECT=rhdh
       - RCS_CONFIG_FILE=/opt/app-root/src/configs/extra-files/road-core-service-config.yaml
       - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
     network_mode: "service:ollama"
 volumes:
   ollama_data:
