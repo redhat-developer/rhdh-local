@@ -67,27 +67,26 @@ This method creates RHDH Local without any additional configurations or plugins.
      orchestrator dynamic plugins from `dynamic-plugins.yaml` to your `dynamic-plugins.override.yaml` version for your local
      development.
 
-- Add your catalog entity overrides:
+   - Add your catalog entity overrides:
 
-      > Start by copying the example files provided:
-      >
-      > ```sh
-      > cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
-      > cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
-      > ```
+      Start by copying the example files provided:
+
+      ```sh
+         cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
+         cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
+      ```
 
       Once copied, you can modify these override files to customize your catalog users or components.
       If these `.override.yaml` files are present, RHDH Local will automatically use them instead of the default `users.yaml` or `components.yaml`.
 
       No additional configuration is required — just drop the file in place and restart RHDH.
 
+      You can add any extra files (like GitHub credentials) to: `configs/extra-files/`
 
-   - Add any extra files (like GitHub credentials) to: `configs/extra-files/`
+      If present, these files will be automatically loaded by the system on startup.
 
-   If present, these files will be automatically loaded by the system on startup.
-
-   If you need features that fetch files from GitHub you should configure `integrations.github`.
-   The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
+      If you need features that fetch files from GitHub you should configure `integrations.github`.
+      The recommended way is to use GitHub Apps. You can find hints on how to configure it in [github-app-credentials.example.yaml](configs/github-app-credentials.example.yaml) or a more detailed instruction in [Backstage documentation](https://backstage.io/docs/integrations/github/github-apps).
 
 4. Start RHDH Local.
    This repository works with both Podman and Docker.
