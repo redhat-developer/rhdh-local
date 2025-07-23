@@ -14,16 +14,16 @@ To get started, run the command below or override the `RHDH_ORCHESTRATOR_WORKFLO
 point to your local workflow development directory before running the command.
 
 ```shell
-podman compose -f compose.yaml -f compose-with-orchestrator.yaml up -d
+podman compose -f compose.yaml -f orchestrator/compose.yaml up -d
 ```
 
 To make custom changes/configuration, it is recommended to use a `compose-orchestrator.local.yaml` by merging
-`compose.yaml` and `compose-with-orchestrator.yaml` to prevent conflicts with version controlled files.
+`compose.yaml` and `orchestrator/compose.yaml` to prevent conflicts with version controlled files.
 
 Run this command to merge compose files:
 
 ```shell
-podman compose -f compose.yaml -f compose-with-orchestrator.yaml config >> compose-orchestrator.local.yaml
+podman compose -f compose.yaml -f orchestrator/compose.yaml config >> compose-orchestrator.local.yaml
 ```
 
 And this command to spin up the containers:
