@@ -7,7 +7,7 @@ services:
       rhdh:
         condition: service_started
     volumes:
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
     env_file:
       - path: "./default.env"
         required: true
@@ -15,8 +15,8 @@ services:
         required: false
     environment:
       - PROJECT=rhdh
-      - RCS_CONFIG_FILE=/opt/app-root/src/configs/extra-files/road-core-service-config.yaml
+      - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
       - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
-      - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
+      - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
 volumes:
   user-data:

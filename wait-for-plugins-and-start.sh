@@ -15,7 +15,7 @@ DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
 
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
-LIGHTSPEED_APP_CONFIG="configs/app-config/app-config.lightspeed.local.yaml"
+LIGHTSPEED_APP_CONFIG="developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml"
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
 
 USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"

@@ -3,13 +3,13 @@ services:
     image: docker.io/ollama/ollama:0.10.0-rc0
     container_name: ollama
     volumes:
-      - ollama_data:/root/.ollama
+      - ${OLLAMA_MODELS_PATH:-ollama_data}:/root/.ollama
     depends_on:
       rhdh:
         condition: service_started
     network_mode: "service:rhdh"
     command: >
-      "ollama serve & sleep 5 && ollama pull tinyllama && touch /tmp/ready && wait"
+      "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL:-tinyllama} && touch /tmp/ready && wait"
     entrypoint: [ "sh", "-c" ]
     restart: unless-stopped
     healthcheck:
@@ -26,12 +26,12 @@ services:
       ollama:
         condition: service_healthy
     volumes:
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
     environment:
       - PROJECT=rhdh
-      - RCS_CONFIG_FILE=/opt/app-root/src/configs/extra-files/road-core-service-config.yaml
+      - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
       - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
-      - RHDH_CONFIG_FILE=/opt/app-root/src/configs/app-config/app-config.lightspeed.local.yaml
+      - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
     env_file:
       - path: "./default.env"
         required: true

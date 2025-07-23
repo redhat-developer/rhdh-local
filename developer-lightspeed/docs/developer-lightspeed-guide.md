@@ -14,26 +14,28 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 ---
 
-1. **Load the Developer Lightspeed dynamic plugin**
+1. **Load the Developer Lightspeed dynamic plugins**
 
-   Copy the Lightspeed dynamic plugin overrides to **`configs/dynamic-plugins/dynamic-plugins.override.yaml`**.
+   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable developer lighstpeed plugins within RHDH.
+  
+   Example:
 
-   > **Warning:** This will overwrite your existing `dynamic-plugins.override.yaml` file. If you have customizations, back up or manually merge the content as needed.
+   ```yaml
 
-   To get started quickly with Developer Lightspeed, you can copy the entire content with the following command:
+   includes:
+   - dynamic-plugins.default.yaml
+   - developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml # <-- to add to enable the developer lightspeed plugins
 
-   ```bash
-   cp configs/dynamic-plugins/dynamic-plugins.lightspeed.override.example.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
+   # Below you can add your own custom dynamic plugins, including local ones.
+   plugins: []
    ```
-
-   Alternatively, you can manually copy the content inside the `plugins` property and paste it into your existing `dynamic-plugins.override.yaml` file. If merging manually, ensure correct YAML structure and avoid duplicate keys.
 
 2. **Copy the Lightspeed App Config example**
 
    Start by creating a new local app config file for Lightspeed:
 
    ```bash
-   cp configs/app-config/app-config.lightspeed.local.example.yaml configs/app-config/app-config.lightspeed.local.yaml
+   cp developer-lightspeed/configs/app-config/app-config.lightspeed.local.example.yaml developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
    ```
 
    This file contains placeholder values that will be replaced using environment variables:
@@ -67,9 +69,9 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    This will start all services, including the built-in Ollama model server:
 
    ```bash
-   podman compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
+   podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml up -d
    # OR, if using Docker:
-   docker compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
+   docker compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml up -d
    ```
 
    ---
@@ -79,9 +81,9 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    If you want to use your own model server (such as a remote Ollama instance or another provider), use the minimal setup and set your server details in a `.env` file:
 
    ```bash
-   podman compose -f compose.yaml -f compose-with-lightspeed-minimal.yaml up -d
+   podman compose -f compose.yaml -f developer-lightspeed/compose.yaml up -d
    # OR, if using Docker:
-   docker compose -f compose.yaml -f compose-with-lightspeed-minimal.yaml up -d
+   docker compose -f compose.yaml -f developer-lightspeed/compose.yaml up -d
    ```
 
    Make sure your `.env` file in the project root contains:
@@ -166,18 +168,25 @@ After increasing the memory, restart your containers to use the new limits.
 ### How do I change the Ollama model?
 
 By default, the Ollama service pulls and loads the `tinyllama` model.  
-To use a larger or different model, edit the `command` in your Ollama service definition in your Compose file (e.g., `compose-with-lightspeed.yaml`):
+To use a larger or different model, you can now specify the model name using the `OLLAMA_MODEL` environment variable. The Compose file supports a default value using the `${OLLAMA_MODEL:-tinyllama}` syntax.
+
+**Example in your Compose file:**
 
 ```yaml
 command: >
   "ollama serve &
   sleep 5 &&
-  ollama pull llama2:13b &&
+  ollama pull ${OLLAMA_MODEL:-tinyllama} &&
   touch /tmp/ready &&
   wait"
 ```
 
-- Replace `llama2:13b` with the name of the model you want to use (e.g., `mistral`, `llama2:70b`, etc.).
+- If you set `OLLAMA_MODEL` in your `.env` file or environment, that model will be used.
+- If not set, it will default to `tinyllama`.
+- Example `.env` entry:
+  ```env
+  OLLAMA_MODEL=llama2:13b
+  ```
 - Make sure the model you choose fits within your available memory.
 
 > **Tip:** You can find available models and their memory requirements in the [Ollama model library](https://ollama.com/library).
@@ -196,38 +205,27 @@ By default, Ollama stores models in:
 
 #### **Step 2: Mount the Directory in Your Compose File**
 
-Edit your `compose-with-lightspeed.yaml` to mount your local `.ollama` directory instead of `ollama-data` volume:
+You can set the path to your local `.ollama` directory using an environment variable in your `.env` file:
 
-```yaml
-services:
-  ollama:
-    image: ollama/ollama
-    volumes:
-      - /absolute/path/to/your/.ollama:/root/.ollama
+**In your `.env` file:**
+```env
+OLLAMA_MODELS_PATH=/absolute/path/to/your/.ollama
 ```
 
-- Replace `/absolute/path/to/your/.ollama` with the full path to your `.ollama` directory on your host system.
-- This will make all your local models available inside the container.
-
-**Example:**
-
-In Linux or macOS, you might use:
-
+**In your Compose file (already set up):**
 ```yaml
 volumes:
-  - /home/your-username/.ollama:/root/.ollama
+  - ${OLLAMA_MODELS_PATH:-ollama_data}:/root/.ollama
 ```
-or
 
-```yaml
-volumes:
-  - /Users/your-username/.ollama:/root/.ollama
-```
+- If you set `OLLAMA_MODELS_PATH` in your `.env` file, that directory will be mounted.
+- If not set, it will default to using the `ollama_data` volume.
+
 ---
 
 #### **Step 3: Use Your Models in the Container**
 
-Once mounted, you can reference your model in the `ollama pull` command in the `compose-with-lightspeed.yaml`. 
+Once mounted, you can reference your model in the `ollama pull` command in the `developer-lightspeed/compose-with-ollama.yaml`. 
 
 Ollama will use the models from the mounted directory, so you don’t need to re-download them inside the container.
 
@@ -243,9 +241,9 @@ Ollama will use the models from the mounted directory, so you don’t need to re
 To stop and remove the running containers:
 
 ```bash
-podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
 # OR
-docker compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+docker compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
 ```
 
 ---
