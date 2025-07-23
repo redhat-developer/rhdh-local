@@ -43,8 +43,9 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
-#          - name: "orchestrator-workflow"
-#            cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+          # TODO(jenniferubah): Uncomment this when https://issues.redhat.com/browse/FLPATH-2500 is resolved.
+#         - name: "orchestrator-workflow"
+#           cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
 
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
     runs-on: ubuntu-latest
