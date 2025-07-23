@@ -1,11 +1,21 @@
-## Setup Orchestrator and Workflow Examples
+# Setup Orchestrator and Workflow Examples
 
-Before you begin, ensure to copy the orchestrator dynamic plugins from `dynamic-plugins-orchestrator.yaml` to your
-`dynamic-plugins.override.yaml`
-to enable orchestrator plugins within RHDH.
+Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to your
+list of `includes` of your `dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
+Example:
+
+```yaml
+
+includes:
+  - dynamic-plugins.default.yaml
+  - orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml # <-- to add
+
+# Below you can add your own custom dynamic plugins, including local ones.
+plugins: []
+```
 
 To set up the infrastructure for developing workflow with Orchestrator, you must merge and run these two compose files:
-[`compose.yaml`](./compose.yaml) and [`compose-with-orchestrator.yaml`](compose-with-orchestrator.yaml) configs.
+[`compose.yaml`](./compose.yaml) and [`orchestrator/compose.yaml`](orchestrator/compose.yaml) configs.
 
 > **NOTE**: You must log in to RedHat Registry to use the Sonataflow dev image. To get an account,
 > check [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2).
@@ -36,14 +46,14 @@ podman compose \
 
 There are three workflow examples to get you started on testing Orchestrator workflow with RHDH Local.
 
-1. In the project root, `rhdho-workflow-examples` folder contains example workflows and by default, it is already
+1. The [`orchestrator/workflow-examples`](orchestrator/workflow-examples) folder contains example workflows and by default, it is already
    mounted
    to
    `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in your
    `compose-orchestrator.local.yaml`. The
    directory contains three workflows; greeting, slack and github. For more information about the workflow and setup,
    refer to this
-   [link](rhdho-workflow-examples/README.md).
+   [link](orchestrator/workflow-examples/README.md).
 
 2. A suite of workflows exists in
    this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
