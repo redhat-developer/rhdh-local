@@ -44,7 +44,7 @@ jobs:
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
 #          - name: "orchestrator-workflow"
-#            cliArgs: "-f compose.yaml -f compose-with-orchestrator.yaml"
+#            cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
 
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
     runs-on: ubuntu-latest
