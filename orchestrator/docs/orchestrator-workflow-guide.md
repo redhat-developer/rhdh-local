@@ -1,14 +1,14 @@
 # Setup Orchestrator and Workflow Examples
 
-Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to your
-list of `includes` of your `dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
+Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to the
+list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
 Example:
 
 ```yaml
 
 includes:
   - dynamic-plugins.default.yaml
-  - orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml # <-- to add
+  - orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml # <-- to add to enable the Orchestrator plugins
 
 # Below you can add your own custom dynamic plugins, including local ones.
 plugins: []
