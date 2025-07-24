@@ -28,6 +28,12 @@ Looking for the bleeding edge? To use the most recent nightly community build of
 RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
+Or, for builds from a given `release-1.y` branch (for example, 1.7), set the variable as follows.
+
+```sh
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.7
+```
+
 ### Using unsupported pre-release CI builds
 
 Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https://quay.io/rhdh/rhdh-hub-rhel9), while unsupported, provide early access to commercially supported builds and bug fixes.
