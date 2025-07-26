@@ -25,7 +25,7 @@ services:
       retries: 5
   road-core-service:
     extends:
-      file: "./compose.yaml"
+      file: "../developer-lightspeed/compose.yaml"
       service: road-core-service
     depends_on:
       rhdh:
