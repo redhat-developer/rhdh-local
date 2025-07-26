@@ -50,6 +50,7 @@ jobs:
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
+            
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
     runs-on: ubuntu-latest
     env:
