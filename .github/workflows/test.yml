@@ -46,7 +46,11 @@ jobs:
           # TODO(jenniferubah): Uncomment this when https://issues.redhat.com/browse/FLPATH-2500 is resolved.
 #         - name: "orchestrator-workflow"
 #           cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
-
+          - name: "developer-lightspeed-minimal"
+            cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+          - name: "developer-lightspeed"
+            cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
+            
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
     runs-on: ubuntu-latest
     env:

@@ -1,0 +1,36 @@
+services:
+  install-dynamic-plugins:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  rhdh:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  ollama:
+    image: docker.io/ollama/ollama:0.10.0-rc0
+    container_name: ollama
+    volumes:
+      - ${OLLAMA_MODELS_PATH:-ollama_data}:/root/.ollama
+    depends_on:
+      rhdh:
+        condition: service_started
+    network_mode: "service:rhdh"
+    command: >
+      "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL:-tinyllama} && touch /tmp/ready && wait"
+    entrypoint: [ "sh", "-c" ]
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "test", "-f", "/tmp/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  road-core-service:
+    extends:
+      file: "./compose.yaml"
+      service: road-core-service
+    depends_on:
+      rhdh:
+        condition: service_started
+      ollama:
+        condition: service_healthy
+volumes:
+  ollama_data:
