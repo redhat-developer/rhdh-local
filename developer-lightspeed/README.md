@@ -16,7 +16,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 1. **Load the Developer Lightspeed dynamic plugins**
 
-   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable developer lighstpeed plugins within RHDH.
+   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable developer lightspeed plugins within RHDH.
   
    Example:
 

@@ -1,6 +1,12 @@
 services:
+  install-dynamic-plugins:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  rhdh:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
   road-core-service:
-    image: quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6 # dclint disable-line service-image-require-explicit-tag
+    image: ${ROAD_CORE_IMAGE:-quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6} # dclint disable-line service-image-require-explicit-tag
     container_name: road-core-service
     network_mode: "service:rhdh"
     depends_on:
