@@ -24,13 +24,25 @@ services:
       timeout: 5s
       retries: 5
   road-core-service:
-    extends:
-      file: "./compose.yaml"
-      service: road-core-service
+    image: ${ROAD_CORE_IMAGE:-quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6} # dclint disable-line service-image-require-explicit-tag
+    container_name: road-core-service
     depends_on:
       rhdh:
         condition: service_started
       ollama:
         condition: service_healthy
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+    environment:
+      - PROJECT=rhdh
+      - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
+      - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
+      - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    network_mode: "service:rhdh"
 volumes:
   ollama_data:
