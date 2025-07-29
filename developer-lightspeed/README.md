@@ -4,6 +4,13 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
+
+## Table of Contents
+1. [Getting Started](#getting-started)
+2. [Cleanup](#cleanup)
+3. [Troubleshooting](#troubleshooting)
+4. [Advanced Configuration Guides](#advanced-configuration-guides)
+
 ---
 
 ## Getting Started
@@ -42,7 +49,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
    ```yaml
    lightspeed:
-     questionValidation: true
+     questionValidation: false
      servers:
        - id: ${LIGHTSPEED_SERVER_ID}
          url: ${LIGHTSPEED_SERVER_URL}
@@ -144,6 +151,80 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 ---
 
+## Cleanup
+
+To stop and remove the running containers:
+
+```bash
+podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+# OR
+docker compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+```
+
+---
+
+> **Note:** All instructions in this guide apply to both Podman and Docker.  
+> Replace `podman compose` with `docker compose` if you are using Docker.
+
+
+
+## Troubleshooting
+
+If you encounter issues while setting up or running Developer Lightspeed, try the following solutions:
+
+### 1. Services Not Starting or Exiting Unexpectedly
+
+- **Check container logs:**  
+  Use the following command to view logs for a specific container:
+  ```bash
+  podman logs <container-name>
+  # OR
+  docker logs <container-name>
+  ```
+  Look for error messages that can help diagnose the problem.
+
+- **Common causes:**
+  - Port conflicts (another service is using the same port)
+  - Insufficient memory or CPU resources
+  - Incorrect environment variables
+
+### 2. "model requires more system memory than is available" Error
+
+- Increase the memory allocated to your Podman or Docker virtual machine.  
+  See the [Running Larger Models with Ollama](#running-larger-models-with-ollama) section for instructions.
+
+### 3. "Permission Denied" or File Access Errors
+
+- Ensure you have the necessary permissions to access files and directories, especially when mounting volumes.
+- On Linux/macOS, you may need to adjust permissions with `chmod` or run commands with `sudo`.
+
+### 4. Web UI Not Accessible at http://localhost:7007/lightspeed
+
+- Make sure all containers are running:
+  ```bash
+  podman compose ps
+  # OR
+  docker compose ps
+  ```
+- Check for firewall or VPN issues that may block access to localhost ports.
+
+### 5. Environment Variables Not Set
+
+- Double-check that your `.env` or `default.env` files are present and correctly configured.
+- Restart the containers after making changes to environment files.
+
+### 6. Still Stuck?
+
+- Try stopping and removing all containers, then starting again:
+  ```bash
+  podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+  podman compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
+  # OR use docker compose
+  ```
+
+If your issue persists, please [open an issue on GitHub](https://github.com/your-org/your-repo/issues) with details about your problem so we can help you troubleshoot.
+
+
 
 ## Advanced Configuration Guides
 
@@ -236,17 +317,5 @@ Ollama will use the models from the mounted directory, so you don’t need to re
 **This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you’ve created locally.**
 
 
-## Cleanup
-
-To stop and remove the running containers:
-
-```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
-# OR
-docker compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
-```
-
 ---
 
-> **Note:** All instructions in this guide apply to both Podman and Docker.  
-> Replace `podman compose` with `docker compose` if you are using Docker.
