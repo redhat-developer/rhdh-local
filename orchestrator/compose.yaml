@@ -17,7 +17,7 @@ services:
 
   sonataflow:
     container_name: sonataflow
-    image: "${SONATAFLOW_IMAGE:-registry.redhat.io/openshift-serverless-1/logic-swf-devmode-rhel8:1.36.0}"
+    image: "${SONATAFLOW_IMAGE:-quay.io/kubesmarts/incubator-kie-sonataflow-devmode:main}"
     env_file:
       - path: "./default.env"
         required: true
