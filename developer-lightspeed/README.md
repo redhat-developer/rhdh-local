@@ -228,6 +228,75 @@ If your issue persists, please [open an issue on GitHub](https://github.com/your
 
 ## Advanced Configuration Guides
 
+  ### Plugin Configuration Reference
+
+  Available configuration options:
+
+  ```yaml
+  lightspeed:
+    # REQUIRED: Configure LLM servers with OpenAI API compatibility
+    servers:
+      - id: <server_id>                    # REQUIRED: Unique identifier for the server
+        url: <server_URL>                  # REQUIRED: Base URL of the LLM server (e.g., https://api.openai.com/v1)
+        token: <api_key>                   # REQUIRED: Authentication token/API key for the server
+    
+    # OPTIONAL: Enable/disable question validation (default: true)
+    # When enabled, restricts questions to RHDH-related topics for better security
+    questionValidation: true
+    
+    # OPTIONAL: Custom users prompts displayed to users
+    # If not provided, the plugin uses built-in default prompts
+    prompts:
+      - title: <prompt_title>              # REQUIRED: Display title for the prompt
+        message: <prompt_message>          # REQUIRED: The actual prompt text/question
+    
+    # OPTIONAL: Backend-only configurations
+    servicePort: 8080                      # OPTIONAL: Port for lightspeed service (default: 8080)
+    systemPrompt: <custom_system_prompt>   # OPTIONAL: Override default RHDH system prompt
+  ```
+
+  #### Configuration Fields
+
+  | Field | Type | Required | Default | Description |
+  |-------|------|----------|---------|-------------|
+  | `servers` | Array | ✅ Yes | - | Array of LLM server configurations |
+  | `servers[].id` | String | ✅ Yes | - | Unique identifier for the server |
+  | `servers[].url` | String | ✅ Yes | - | Base URL of the LLM server with OpenAI API compatibility |
+  | `servers[].token` | String | ✅ Yes | - | Authentication token or API key for accessing the server |
+  | `questionValidation` | Boolean | ❌ No | `true` | Enable/disable question validation for security |
+  | `prompts` | Array | ❌ No | Built-in prompts | Custom welcome prompts for users |
+  | `prompts[].title` | String | ✅ Yes* | - | Display title for the prompt (*required if prompts array is provided) |
+  | `prompts[].message` | String | ✅ Yes* | - | The actual prompt text/question (*required if prompts array is provided) |
+  | `servicePort` | Number | ❌ No | `8080` | Port for lightspeed backend service |
+  | `systemPrompt` | String | ❌ No | RHDH default | Custom system prompt to override default behavior |
+
+  ### Example Configurations
+
+  #### Basic Configuration (Required fields only)
+  ```yaml
+  lightspeed:
+    servers:
+      - id: ${LIGHTSPEED_SERVER_ID}
+        url: ${LIGHTSPEED_SERVER_URL}
+        token: ${LIGHTSPEED_SERVER_TOKEN}
+  ```
+
+  #### Complete Configuration with All Options
+  ```yaml
+  lightspeed:
+    servers:
+      - id: ${LIGHTSPEED_SERVER_ID}
+        url: ${LIGHTSPEED_SERVER_URL}
+        token: ${LIGHTSPEED_SERVER_TOKEN}
+    questionValidation: true
+    prompts:
+      - title: "Quick Start"
+        message: "How do I enable a dynamic plugin?"
+    servicePort: 8080
+    systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
+  ```
+
+
 ### Running Larger Models with Ollama
 
 Some AI models require more memory than the default Podman machine allocation. If you encounter errors such as “model requires more system memory than is available,” you can increase the memory available to your Podman virtual machine:
