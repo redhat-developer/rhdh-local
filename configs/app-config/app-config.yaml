@@ -21,6 +21,11 @@ app:
   branding:
     # If using a different logo, replace these lines with your own image(s)
     # fullLogo: data:image/svg+xml;base64,your-image-goes-here==
+    # - or -
+    # fullLogo: 
+    #   dark: data:image/svg+xml;base64,your-image-in-dark-mode-goes-here==
+    #   light: data:image/svg+xml;base64,your-image-in-light-mode-goes-here==
+    # iconLogo: data:image/svg+xml;base64,your-image-goes-here==
     # iconLogo: data:image/svg+xml;base64,your-image-goes-here==
     fullLogoWidth: ${FULL_LOGO_WIDTH}
     theme:
