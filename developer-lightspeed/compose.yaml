@@ -22,7 +22,7 @@ services:
     environment:
       - PROJECT=rhdh
       - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
-      - OPENAI_API_KEY=${LIGHTSPEED_SERVER_TOKEN}
+      - OPENAI_API_KEY=${LLM_SERVER_TOKEN}
       - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
 volumes:
   user-data:

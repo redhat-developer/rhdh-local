@@ -35,9 +35,9 @@ plugins:
       lightspeed:
         # REQUIRED: Configure LLM servers with OpenAI API compatibility
         servers:
-          - id: ${LIGHTSPEED_SERVER_ID}
-            url: ${LIGHTSPEED_SERVER_URL}
-            token: ${LIGHTSPEED_SERVER_TOKEN}
+          - id: ${LLM_SERVER_ID}
+            url: ${LLM_SERVER_URL}
+            token: ${LLM_SERVER_TOKEN}
 
         # OPTIONAL: Enable/disable question validation (default: true)
         # When enabled, restricts questions to RHDH-related topics for better security

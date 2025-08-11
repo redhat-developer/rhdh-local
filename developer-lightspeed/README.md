@@ -5,6 +5,14 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
 
+## Supported architecture
+Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Road-Core Service (RCS) as a sidecar container.
+
+> **Note:** 
+> Currently, the provided RCS image is built for x86 platforms. To use other platforms (for example, arm64), ensure that you enable emulation.
+
+
+
 ## Table of Contents
 1. [Getting Started](#getting-started)
 2. [Cleanup](#cleanup)
@@ -51,18 +59,18 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    lightspeed:
      questionValidation: false
      servers:
-       - id: ${LIGHTSPEED_SERVER_ID}
-         url: ${LIGHTSPEED_SERVER_URL}
-         token: ${LIGHTSPEED_SERVER_TOKEN}
+       - id: ${LLM_SERVER_ID}
+         url: ${LLM_SERVER_URL}
+         token: ${LLM_SERVER_TOKEN}
    ```
 
 
    By default, the required environment variables for Lightspeed are already set in the `default.env` file:
 
    ```env
-   LIGHTSPEED_SERVER_ID=ollama
-   LIGHTSPEED_SERVER_URL=http://0.0.0.0:11434/v1
-   LIGHTSPEED_SERVER_TOKEN=dummy
+   LLM_SERVER_ID=ollama
+   LLM_SERVER_URL=http://0.0.0.0:11434/v1
+   LLM_SERVER_TOKEN=dummy
    ```
 
    You do **not** need to change these unless you want to use your own model server.  
@@ -95,9 +103,9 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
    Make sure your `.env` file in the project root contains:
    ```env
-   LIGHTSPEED_SERVER_ID=your-server-id
-   LIGHTSPEED_SERVER_URL=https://your.lightspeed.server/v1
-   LIGHTSPEED_SERVER_TOKEN=your-api-key
+   LLM_SERVER_ID=your-server-id
+   LLM_SERVER_URL=https://your.lightspeed.server/v1
+   LLM_SERVER_TOKEN=your-api-key
    ```
 
 ---
@@ -276,18 +284,18 @@ If your issue persists, please [open an issue on GitHub](https://github.com/your
   ```yaml
   lightspeed:
     servers:
-      - id: ${LIGHTSPEED_SERVER_ID}
-        url: ${LIGHTSPEED_SERVER_URL}
-        token: ${LIGHTSPEED_SERVER_TOKEN}
+      - id: ${LLM_SERVER_ID}
+        url: ${LLM_SERVER_URL}
+        token: ${LLM_SERVER_TOKEN}
   ```
 
   #### Complete Configuration with All Options
   ```yaml
   lightspeed:
     servers:
-      - id: ${LIGHTSPEED_SERVER_ID}
-        url: ${LIGHTSPEED_SERVER_URL}
-        token: ${LIGHTSPEED_SERVER_TOKEN}
+      - id: ${LLM_SERVER_ID}
+        url: ${LLM_SERVER_URL}
+        token: ${LLM_SERVER_TOKEN}
     questionValidation: true
     prompts:
       - title: "Quick Start"
