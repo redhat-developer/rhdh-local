@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -euo pipefail
+
 # This script is a workaround for podman-compose absence of support for depends_on
 
 # Entrypoint for the main RHDH container.
@@ -8,7 +10,6 @@
 #
 # If user-supplied override files for catalog entities (users/components) exist,
 # this script replaces their paths in the base config accordingly.
-
 
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
