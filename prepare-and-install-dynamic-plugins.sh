@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -euo pipefail
+
 # Workaround for various issues
 
 # Fix for https://issues.redhat.com/browse/RHIDP-3939
