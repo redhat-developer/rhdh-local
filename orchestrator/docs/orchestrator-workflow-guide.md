@@ -17,9 +17,6 @@ plugins: []
 To set up the infrastructure for developing workflow with Orchestrator, you must merge and run these two compose files:
 [`compose.yaml`](../../compose.yaml) and [`orchestrator/compose.yaml`](../compose.yaml) configs.
 
-> **NOTE**: You must log in to RedHat Registry to use the Sonataflow dev image. To get an account,
-> check [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2).
-
 To get started, run the command below or override the `RHDH_ORCHESTRATOR_WORKFLOWS` variable in your `.env` file to
 point to your local workflow development directory before running the command.
 
