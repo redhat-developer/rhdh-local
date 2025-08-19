@@ -15,7 +15,7 @@ plugins: []
 ```
 
 To set up the infrastructure for developing workflow with Orchestrator, you must merge and run these two compose files:
-[`compose.yaml`](../../compose.yaml) and [`orchestrator/compose.yaml`](../compose.yaml) configs.
+[`compose.yaml`](../compose.yaml) and [`orchestrator/compose.yaml`](./compose.yaml) configs.
 
 To get started, run the command below or override the `RHDH_ORCHESTRATOR_WORKFLOWS` variable in your `.env` file to
 point to your local workflow development directory before running the command.
@@ -43,14 +43,14 @@ podman compose \
 
 There are three workflow examples to get you started on testing Orchestrator workflow with RHDH Local.
 
-1. The [`orchestrator/workflow-examples`](../workflow-examples/) folder contains example workflows and by default, it is already
+1. The [`orchestrator/workflow-examples`](./workflow-examples/) folder contains example workflows and by default, it is already
    mounted
    to
    `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in your
    `compose-orchestrator.local.yaml`. The
    directory contains three workflows; greeting, slack and github. For more information about the workflow and setup,
    refer to this
-   [link](../workflow-examples/README.md).
+   [link](./workflow-examples/README.md).
 
 2. A suite of workflows exists in
    this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
