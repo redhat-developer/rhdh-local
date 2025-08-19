@@ -1,11 +1,11 @@
 # Copy this file to app-config.local.yaml to override default app settings.
 # Example with GitHub integration referencing external secrets file.
 
-integrations:
-  github:
-    - host: github.com
-      apps:
-        - $include: ../extra-files/github-app-credentials.yaml
+# integrations:
+#   github:
+#     - host: github.com
+#       apps:
+#         - $include: ../extra-files/github-app-credentials.yaml
 
 app:
   title: Red Hat Developer Hub

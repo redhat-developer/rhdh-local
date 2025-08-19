@@ -16,10 +16,15 @@ dynamic-plugins-root
 # Extra-files
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
+/developer-lightspeed/configs/extra-files/*
+!/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
 
 # Kept for backward compatibility, but now Git-ignored
 /configs/app-config.local.yaml
 /configs/dynamic-plugins.yaml
 /configs/github-app-credentials.example.yaml
+
+# Generated during local development
+generated/
 
 .idea

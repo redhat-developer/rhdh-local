@@ -1,0 +1,28 @@
+services:
+  install-dynamic-plugins:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  rhdh:
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  road-core-service:
+    image: ${ROAD_CORE_IMAGE:-quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6} # dclint disable-line service-image-require-explicit-tag
+    container_name: road-core-service
+    network_mode: "service:rhdh"
+    depends_on:
+      rhdh:
+        condition: service_started
+    volumes:
+      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    environment:
+      - PROJECT=rhdh
+      - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
+      - OPENAI_API_KEY=${LLM_SERVER_TOKEN}
+      - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
+volumes:
+  user-data:
