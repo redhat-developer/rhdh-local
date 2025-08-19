@@ -24,4 +24,7 @@ dynamic-plugins-root
 /configs/dynamic-plugins.yaml
 /configs/github-app-credentials.example.yaml
 
+# Generated during local development
+generated/
+
 .idea
