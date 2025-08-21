@@ -12,7 +12,7 @@ This allows RHDH-local to pull OCI artifacts from registries like registry.redha
 
 ## Changing the container image
 
-By default, the [compose.yaml](./compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.6](https://quay.io/rhdh-community/rhdh:1.6), which includes both `linux-amd64` and `linux-arm64` images.
+By default, the [compose.yaml](./compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.7](https://quay.io/rhdh-community/rhdh:1.7), which includes both `linux-amd64` and `linux-arm64` images.
 
 Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml), using the same sources as the commercially supported builds.
 
@@ -40,10 +40,10 @@ Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https:/
 
 NOTE: Only `linux-amd64` builds are currently commercially supported.
 
-To use the most recent nightly CI build of RHDH 1.y (for example, 1.7), set the variable as follows.
+To use the most recent nightly CI build of RHDH 1.y (for example, 1.8), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.7
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.8
 ```
 
 ### Using commercially supported official images
@@ -53,7 +53,7 @@ To use the [official release of RHDH](https://catalog.redhat.com/software/contai
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
 ```sh
-RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.6
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.7.0
 ```
 
 #### Using image digests
