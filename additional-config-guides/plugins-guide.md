@@ -58,7 +58,7 @@ You can use RHDH-local with a debugger to debug your backend plugins in VSCode. 
 
    ```sh
    # in plugin source code directory
-   npx @janus-idp/cli@latest package export-dynamic-plugin
+   npx @red-hat-developer-hub/cli@latest plugin export
    ```
 
 4. Copy exported derived plugin package to `dynamic-plugins-root` directory in the `rhdh` container.
@@ -123,7 +123,7 @@ Follow these steps to preview and test development changes for your frontend plu
 3. Inside your plugin directory, run the following command to export your plugin:
 
    ```shell
-   npx @janus-idp/cli@latest package export-dynamic-plugin --dev --dynamic-plugins-root <path_to_dynamic-plugins-root_in_rhdh-local_folder>
+   npx @red-hat-developer-hub/cli@latest plugin export --dev --dynamic-plugins-root <path_to_dynamic-plugins-root_in_rhdh-local_folder>
    ```
 
 4. Add the plugin configuration for the plugin you want to develop into the `app-config.local.yaml` file under the `dynamicPlugins` key. Avoid adding this configuration to the `dynamic-plugins.override.yaml` file. You can add additional plugins into the `dynamic-plugins.override.yaml` file, but the one you are developing should be in the `app-config.local.yaml` file.
