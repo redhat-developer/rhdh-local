@@ -13,7 +13,7 @@ auth:
 #   github:
 #     - host: github.com
 #       apps:
-#         - $include: github-app-credentials.yaml
+#         - $include: ../extra-files/github-app-credentials.yaml
 
 app:
   title: Red Hat Developer Hub
