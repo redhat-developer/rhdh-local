@@ -175,6 +175,312 @@
       "quadrant": "frameworks",
       "description": "Fast, small, and feature-rich JavaScript library",
       "ring": "hold"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Widely used for scripting and backend development"
+        }
+      ],
+      "url": "https://www.python.org/",
+      "key": "python",
+      "id": "python",
+      "title": "Python",
+      "quadrant": "languages",
+      "description": "High-level programming language for rapid development",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Essential for frontend development"
+        }
+      ],
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      "key": "javascript",
+      "id": "javascript",
+      "title": "JavaScript",
+      "quadrant": "languages",
+      "description": "Programming language for web development",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Evaluating for enterprise applications"
+        }
+      ],
+      "url": "https://www.java.com/",
+      "key": "java",
+      "id": "java",
+      "title": "Java",
+      "quadrant": "languages",
+      "description": "Object-oriented programming language",
+      "ring": "trial"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Exploring for systems programming"
+        }
+      ],
+      "url": "https://www.rust-lang.org/",
+      "key": "rust",
+      "id": "rust",
+      "title": "Rust",
+      "quadrant": "languages",
+      "description": "Systems programming language focused on safety and performance",
+      "ring": "assess"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "React framework for production applications"
+        }
+      ],
+      "url": "https://nextjs.org/",
+      "key": "nextjs",
+      "id": "nextjs",
+      "title": "Next.js",
+      "quadrant": "frameworks",
+      "description": "React framework with server-side rendering",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Standard Node.js web framework"
+        }
+      ],
+      "url": "https://expressjs.com/",
+      "key": "express",
+      "id": "express",
+      "title": "Express.js",
+      "quadrant": "frameworks",
+      "description": "Fast, minimalist web framework for Node.js",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Alternative frontend framework for specific projects"
+        }
+      ],
+      "url": "https://vuejs.org/",
+      "key": "vue",
+      "id": "vue",
+      "title": "Vue.js",
+      "quadrant": "frameworks",
+      "description": "Progressive JavaScript framework",
+      "ring": "trial"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Considering for large-scale applications"
+        }
+      ],
+      "url": "https://angular.io/",
+      "key": "angular",
+      "id": "angular",
+      "title": "Angular",
+      "quadrant": "frameworks",
+      "description": "Platform for building mobile and desktop web applications",
+      "ring": "assess"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Essential version control system"
+        }
+      ],
+      "url": "https://git-scm.com/",
+      "key": "git",
+      "id": "git",
+      "title": "Git",
+      "quadrant": "tools",
+      "description": "Distributed version control system",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Primary CI/CD automation server"
+        }
+      ],
+      "url": "https://www.jenkins.io/",
+      "key": "jenkins",
+      "id": "jenkins",
+      "title": "Jenkins",
+      "quadrant": "tools",
+      "description": "Open source automation server for CI/CD",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "DevOps platform for collaboration"
+        }
+      ],
+      "url": "https://about.gitlab.com/",
+      "key": "gitlab",
+      "id": "gitlab",
+      "title": "GitLab CI",
+      "quadrant": "tools",
+      "description": "DevOps platform with built-in CI/CD",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Evaluating for GitHub-based workflows"
+        }
+      ],
+      "url": "https://github.com/features/actions",
+      "key": "github-actions",
+      "id": "github-actions",
+      "title": "GitHub Actions",
+      "quadrant": "tools",
+      "description": "Workflow automation platform for GitHub",
+      "ring": "trial"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Infrastructure as code tool"
+        }
+      ],
+      "url": "https://www.terraform.io/",
+      "key": "terraform",
+      "id": "terraform",
+      "title": "Terraform",
+      "quadrant": "tools",
+      "description": "Infrastructure as code software tool",
+      "ring": "trial"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Configuration management and automation"
+        }
+      ],
+      "url": "https://www.ansible.com/",
+      "key": "ansible",
+      "id": "ansible",
+      "title": "Ansible",
+      "quadrant": "tools",
+      "description": "IT automation platform for configuration management",
+      "ring": "assess"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Cloud-native CI/CD platform"
+        }
+      ],
+      "url": "https://circleci.com/",
+      "key": "circleci",
+      "id": "circleci",
+      "title": "CircleCI",
+      "quadrant": "tools",
+      "description": "Continuous integration and delivery platform",
+      "ring": "assess"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "hold",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Being replaced by more modern CI/CD solutions"
+        }
+      ],
+      "url": "https://www.jetbrains.com/teamcity/",
+      "key": "teamcity",
+      "id": "teamcity",
+      "title": "TeamCity",
+      "quadrant": "tools",
+      "description": "Build management and continuous integration server",
+      "ring": "hold"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Cloud computing platform"
+        }
+      ],
+      "url": "https://aws.amazon.com/",
+      "key": "aws",
+      "id": "aws",
+      "title": "AWS",
+      "quadrant": "platforms",
+      "description": "Amazon Web Services cloud platform",
+      "ring": "use"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Evaluating for multi-cloud strategy"
+        }
+      ],
+      "url": "https://azure.microsoft.com/",
+      "key": "azure",
+      "id": "azure",
+      "title": "Azure",
+      "quadrant": "platforms",
+      "description": "Microsoft cloud computing platform",
+      "ring": "trial"
     }
   ]
 }
