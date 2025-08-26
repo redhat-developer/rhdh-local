@@ -1,6 +1,13 @@
 # This is the default dynamic plugins config, and any user configuration should be added dynamic-plugins.override.yaml instead
 includes:
   - dynamic-plugins.default.yaml
-plugins: []
 
+plugins:
+  #Tech Radar frontend plugin
+  - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+    disabled: false
+
+  # Tech Radar backend plugin  
+  - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+    disabled: false
  

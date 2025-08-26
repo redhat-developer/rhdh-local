@@ -88,3 +88,6 @@ techdocs:
     type: local
     local:
       publishDirectory: /tmp/techdocs
+
+techRadar:
+  url: https://raw.githubusercontent.com/backstage/community-plugins/main/workspaces/tech-radar/plugins/tech-radar-common/src/sampleTechRadarResponse.json
