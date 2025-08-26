@@ -9,11 +9,11 @@ auth:
     #     clientId: ${AUTH_GITHUB_CLIENT_ID}
     #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
-# integrations:
-#   github:
-#     - host: github.com
-#       apps:
-#         - $include: ../extra-files/github-app-credentials.yaml
+    # integrations:
+    #   github:
+    #     - host: github.com
+    #       apps:
+    #         - $include: ../extra-files/github-app-credentials.yaml
 
 app:
   title: Red Hat Developer Hub
@@ -45,39 +45,39 @@ backend:
   # https: true
   cors:
     origin: ${BASE_URL}
-    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    methods: [ GET, HEAD, PATCH, POST, PUT, DELETE ]
     credentials: true
-  csp:
-   upgrade-insecure-requests: false
+  # csp:
+  #   upgrade-insecure-requests: false
 
-# comment out the following 'database' section to use the PostgreSQL database
+  # comment out the following 'database' section to use the PostgreSQL database
   database:
     client: better-sqlite3
     connection: ':memory:'
 
   auth:
     keys:
-      - secret: "development"
+    - secret: "development"
 
 # You can use local files from catalog-entities directory to load entities into the catalog
 catalog:
 
   rules:
-    - allow: [Component, API, Location, Template, Domain, User, Group, System, Resource]
+  - allow: [ Component, API, Location, Template, Domain, User, Group, System, Resource ]
 
   locations:
-    - type: file
-      target: /opt/app-root/src/configs/catalog-entities/users.yaml
-      rules:
-        - allow: [User, Group]
-    - type: file
-      target: /opt/app-root/src/configs/catalog-entities/components.yaml
-      rules:
-        - allow: [Component, System]
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-    #   rules:
-    #     - allow: [Component, User, Group, Domain]
+  - type: file
+    target: /opt/app-root/src/configs/catalog-entities/users.yaml
+    rules:
+    - allow: [ User, Group ]
+  - type: file
+    target: /opt/app-root/src/configs/catalog-entities/components.yaml
+    rules:
+    - allow: [ Component, System ]
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+  #   rules:
+  #     - allow: [Component, User, Group, Domain]
 
 
 techdocs:
@@ -88,3 +88,9 @@ techdocs:
     type: local
     local:
       publishDirectory: /tmp/techdocs
+
+# Tech Radar Configuration  
+techRadar:
+  width: 1500
+  height: 900
+  url: /configs/tech-radar.json

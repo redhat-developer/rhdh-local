@@ -1,0 +1,172 @@
+{
+  "rings": [
+    {
+      "id": "use",
+      "name": "USE",
+      "color": "#5ba300"
+    },
+    {
+      "id": "trial",
+      "name": "TRIAL", 
+      "color": "#009eb0"
+    },
+    {
+      "id": "assess",
+      "name": "ASSESS",
+      "color": "#c7ba00"
+    },
+    {
+      "id": "hold",
+      "name": "HOLD",
+      "color": "#e09b96"
+    }
+  ],
+  "quadrants": [
+    {
+      "id": "languages",
+      "name": "Languages"
+    },
+    {
+      "id": "frameworks",
+      "name": "Frameworks"
+    },
+    {
+      "id": "platforms",
+      "name": "Platforms"
+    },
+    {
+      "id": "tools",
+      "name": "Tools"
+    }
+  ],
+  "entries": [
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Proven technology with widespread adoption"
+        }
+      ],
+      "url": "https://nodejs.org/",
+      "key": "nodejs",
+      "id": "nodejs",
+      "title": "Node.js",
+      "quadrant": "platforms",
+      "description": "JavaScript runtime built on Chrome's V8 JavaScript engine"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Essential container technology"
+        }
+      ],
+      "url": "https://www.docker.com/",
+      "key": "docker",
+      "id": "docker",
+      "title": "Docker",
+      "quadrant": "platforms",
+      "description": "Platform for developing, shipping, and running applications in containers"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Primary programming language for backend services"
+        }
+      ],
+      "url": "https://www.typescriptlang.org/",
+      "key": "typescript",
+      "id": "typescript",
+      "title": "TypeScript",
+      "quadrant": "languages",
+      "description": "Typed superset of JavaScript that compiles to plain JavaScript"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Standard for container orchestration"
+        }
+      ],
+      "url": "https://kubernetes.io/",
+      "key": "kubernetes",
+      "id": "kubernetes", 
+      "title": "Kubernetes",
+      "quadrant": "platforms",
+      "description": "Container orchestration platform"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "use",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Our primary frontend framework"
+        }
+      ],
+      "url": "https://reactjs.org/",
+      "key": "react",
+      "id": "react",
+      "title": "React",
+      "quadrant": "frameworks",
+      "description": "A JavaScript library for building user interfaces"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Evaluating for specific use cases"
+        }
+      ],
+      "url": "https://golang.org/",
+      "key": "golang",
+      "id": "golang",
+      "title": "Go",
+      "quadrant": "languages",
+      "description": "Programming language developed at Google"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess", 
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Potential for serverless applications"
+        }
+      ],
+      "url": "https://deno.land/",
+      "key": "deno",
+      "id": "deno",
+      "title": "Deno",
+      "quadrant": "platforms",
+      "description": "A secure runtime for JavaScript and TypeScript"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "hold",
+          "date": "2024-01-01T00:00:00.000Z",
+          "description": "Legacy technology being phased out"
+        }
+      ],
+      "url": "https://jquery.com/",
+      "key": "jquery",
+      "id": "jquery",
+      "title": "jQuery",
+      "quadrant": "frameworks",
+      "description": "Fast, small, and feature-rich JavaScript library"
+    }
+  ]
+}
