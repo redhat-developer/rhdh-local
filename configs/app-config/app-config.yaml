@@ -47,8 +47,13 @@ backend:
     origin: ${BASE_URL}
     methods: [ GET, HEAD, PATCH, POST, PUT, DELETE ]
     credentials: true
-  # csp:
-  #   upgrade-insecure-requests: false
+  csp:
+    upgrade-insecure-requests: false
+  reading:
+    allow:
+    - host: localhost:7007
+    - host: '*.localhost'
+    - host: 127.0.0.1:7007
 
   # comment out the following 'database' section to use the PostgreSQL database
   database:
