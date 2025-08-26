@@ -54,7 +54,8 @@
       "id": "nodejs",
       "title": "Node.js",
       "quadrant": "platforms",
-      "description": "JavaScript runtime built on Chrome's V8 JavaScript engine"
+      "description": "JavaScript runtime built on Chrome's V8 JavaScript engine",
+      "ring": "use"
     },
     {
       "timeline": [
@@ -70,7 +71,8 @@
       "id": "docker",
       "title": "Docker",
       "quadrant": "platforms",
-      "description": "Platform for developing, shipping, and running applications in containers"
+      "description": "Platform for developing, shipping, and running applications in containers",
+      "ring": "use"
     },
     {
       "timeline": [
@@ -86,7 +88,8 @@
       "id": "typescript",
       "title": "TypeScript",
       "quadrant": "languages",
-      "description": "Typed superset of JavaScript that compiles to plain JavaScript"
+      "description": "Typed superset of JavaScript that compiles to plain JavaScript",
+      "ring": "use"
     },
     {
       "timeline": [
@@ -102,7 +105,8 @@
       "id": "kubernetes", 
       "title": "Kubernetes",
       "quadrant": "platforms",
-      "description": "Container orchestration platform"
+      "description": "Container orchestration platform",
+      "ring": "use"
     },
     {
       "timeline": [
@@ -118,7 +122,8 @@
       "id": "react",
       "title": "React",
       "quadrant": "frameworks",
-      "description": "A JavaScript library for building user interfaces"
+      "description": "A JavaScript library for building user interfaces",
+      "ring": "use"
     },
     {
       "timeline": [
@@ -134,7 +139,8 @@
       "id": "golang",
       "title": "Go",
       "quadrant": "languages",
-      "description": "Programming language developed at Google"
+      "description": "Programming language developed at Google",
+      "ring": "trial"
     },
     {
       "timeline": [
@@ -150,7 +156,8 @@
       "id": "deno",
       "title": "Deno",
       "quadrant": "platforms",
-      "description": "A secure runtime for JavaScript and TypeScript"
+      "description": "A secure runtime for JavaScript and TypeScript",
+      "ring": "assess"
     },
     {
       "timeline": [
@@ -166,7 +173,8 @@
       "id": "jquery",
       "title": "jQuery",
       "quadrant": "frameworks",
-      "description": "Fast, small, and feature-rich JavaScript library"
+      "description": "Fast, small, and feature-rich JavaScript library",
+      "ring": "hold"
     }
   ]
 }

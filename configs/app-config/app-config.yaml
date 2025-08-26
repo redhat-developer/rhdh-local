@@ -48,12 +48,24 @@ backend:
     methods: [ GET, HEAD, PATCH, POST, PUT, DELETE ]
     credentials: true
   csp:
-    upgrade-insecure-requests: false
+    connect-src: [ "'self'", 'http:', 'https:' ]
+    # Uncomment the line below if using https
+    # upgrade-insecure-requests: false
   reading:
     allow:
     - host: localhost:7007
     - host: '*.localhost'
     - host: 127.0.0.1:7007
+    - host: raw.githubusercontent.com
+
+  # Tech Radar proxy configuration (must come before homepage proxy)
+  proxy:
+    endpoints:
+      /api/proxy/developer-hub/tech-radar:
+        target: 'https://raw.githubusercontent.com/Fortune-Ndlovu/research/main/tech-radar-rhdh.json'
+        changeOrigin: true
+        pathRewrite:
+          '^/api/proxy/developer-hub/tech-radar': ''
 
   # comment out the following 'database' section to use the PostgreSQL database
   database:
@@ -96,6 +108,28 @@ techdocs:
 
 # Tech Radar Configuration  
 techRadar:
-  width: 1500
+  width: 1400
   height: 900
-  url: /configs/tech-radar.json
+  url: '/api/proxy/developer-hub/tech-radar'
+
+# Custom CSS for full-screen tech radar
+customStyles: |
+  .tech-radar-page {
+    height: 100vh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .tech-radar-page .MuiContainer-root {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .tech-radar-component {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+  .tech-radar-component svg {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
