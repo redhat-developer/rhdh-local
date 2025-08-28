@@ -90,6 +90,3 @@ techdocs:
     type: local
     local:
       publishDirectory: /tmp/techdocs
-
-techRadar:
-  url: # frontend defaults to demo data
