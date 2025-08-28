@@ -90,4 +90,4 @@ techdocs:
       publishDirectory: /tmp/techdocs
 
 techRadar:
-  url: https://raw.githubusercontent.com/backstage/community-plugins/main/workspaces/tech-radar/plugins/tech-radar-common/src/sampleTechRadarResponse.json
+  url: #To personalize Tech Radar data, add hosted Json URL here after uncommenting backend plugin

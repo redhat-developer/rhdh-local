@@ -7,7 +7,7 @@ plugins:
   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
     disabled: false
 
-  # Tech Radar backend plugin  
-  - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
-    disabled: false
+  # Tech Radar backend plugin - uncomment to personalize Tech Radar data
+  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+  #   disabled: false
  
