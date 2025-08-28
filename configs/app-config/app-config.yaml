@@ -90,4 +90,4 @@ techdocs:
       publishDirectory: /tmp/techdocs
 
 techRadar:
-  url: #To personalize Tech Radar data, add hosted Json URL here after uncommenting backend plugin
+  url: # frontend defaults to demo data

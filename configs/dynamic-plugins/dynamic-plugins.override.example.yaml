@@ -4,6 +4,16 @@
 includes:
   - dynamic-plugins.default.yaml
 
+# Functioning example, uncomment to use
+# plugins:
+  #Tech Radar frontend plugin
+  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+  #   disabled: false
+
+  # Tech Radar backend plugin
+  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+  #   disabled: false
+
 # # Below you can add custom dynamic plugins, including local ones.
 # # EXAMPLES:
 # plugins: 
