@@ -31,3 +31,7 @@ app:
         headerColor2: ${HEADER_DARK_COLOR_2}
         navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
 
+# Tech Radar Plugin Example - uncomment with plugin override to use
+# Replace URL with your own hosted json to visualize data in Tech Radar
+# techRadar:
+#   url: https://raw.githubusercontent.com/backstage/community-plugins/main/workspaces/tech-radar/plugins/tech-radar-common/src/sampleTechRadarResponse.json

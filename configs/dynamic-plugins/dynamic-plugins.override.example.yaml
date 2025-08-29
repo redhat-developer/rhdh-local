@@ -5,8 +5,19 @@ includes:
   - dynamic-plugins.default.yaml
 
 # # Below you can add custom dynamic plugins, including local ones.
+
 # # EXAMPLES:
 # plugins: 
+# Functioning example using Tech Radar, uncomment to use
+  #Tech Radar frontend plugin
+  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+  #   disabled: false
+
+  # Tech Radar backend plugin. Required if you want to customize the tech radar URL 
+  # (see the `techRadar.url` app-config property).
+  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+  #   disabled: false
+
 # # loading plugin from host directory
 #   - package: ./local-plugins/todo
 #     disabled: false
