@@ -3,7 +3,24 @@ includes:
   - dynamic-plugins.default.yaml
 
 plugins:
-  #Tech Radar frontend plugin
+  # Tech Radar frontend plugin
   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
     disabled: false
+
+  # Quay plugin
+  - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
+    disabled: true
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          backstage-community.plugin-quay:
+            mountPoints:
+              - mountPoint: entity.page.image-registry/cards
+                importName: QuayPage
+                config:
+                  layout:
+                    gridColumn: 1 / -1
+                  if:
+                    anyOf:
+                    - isQuayAvailable
  
