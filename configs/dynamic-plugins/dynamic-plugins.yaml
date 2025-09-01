@@ -9,11 +9,15 @@ plugins:
 
   # Quay plugin
   - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
-    disabled: true
+    disabled: false
     pluginConfig:
       dynamicPlugins:
         frontend:
           backstage-community.plugin-quay:
+            entityTabs:
+              - path: /image-registry
+                title: Image Registry
+                mountPoint: entity.page.image-registry
             mountPoints:
               - mountPoint: entity.page.image-registry/cards
                 importName: QuayPage
