@@ -26,7 +26,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: image-registry
-  description: Testing if this will allow the component to appear in the Software Catalog.
+  description: Quay Image Registry
   annotations:
     quay.io/repository-slug: rhdh-community/rhdh
 spec:
