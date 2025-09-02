@@ -1,7 +1,7 @@
 services:
   # Uncomment the following block to use a PostgreSQL database
   # don't forget to also uncomment 'depends_on' 'db' section in the rhdh service
-  # and commentout or delete 'database' section in the app-config.local.yaml
+  # and comment out or delete 'database' section in app-config.yaml or app-config.local.yaml
 
   # db:
   #   container_name: db
