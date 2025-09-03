@@ -21,21 +21,6 @@
 #   owner: CNCF
 #   lifecycle: experimental
 
-# Quay Example Component
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: image-registry
-  description: Quay Image Registry
-  annotations:
-    quay.io/repository-slug: rhdh-community/rhdh
-spec:
-  type: service
-  lifecycle: production
-  owner: user:default/user
-
----
-
 ###############################
 # SYSTEMS
 ###############################
