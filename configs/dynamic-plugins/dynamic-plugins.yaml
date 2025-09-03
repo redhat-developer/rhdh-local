@@ -3,7 +3,11 @@ includes:
   - dynamic-plugins.default.yaml
 
 plugins:
-  #Tech Radar frontend plugin
+  # Tech Radar frontend plugin
   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+    disabled: false
+
+  # Quay plugin
+  - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
     disabled: false
  

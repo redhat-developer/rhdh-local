@@ -51,6 +51,12 @@ backend:
     credentials: true
   csp:
    upgrade-insecure-requests: false
+   # CSP for Quay Images
+   img-src:
+    - "'self'"
+    - "data:"
+    - "https://quay.io"
+    - "https://*.quay.io"
 
 # comment out the following 'database' section to use the PostgreSQL database
   database:
@@ -90,3 +96,23 @@ techdocs:
     type: local
     local:
       publishDirectory: /tmp/techdocs
+
+
+proxy:
+  endpoints:
+    '/quay/api':
+      target: 'https://quay.io'
+      credentials: require
+      headers:
+        X-Requested-With: 'XMLHttpRequest'
+        # Uncomment and use the Authorization header below to access a private Quay
+        # Repository using a token. Refer to the "Applications and Tokens" section
+        # at https://docs.quay.io/api/ to find the instructions to generate a token
+        # Authorization: 'Bearer <YOUR TOKEN>'
+      changeOrigin: true
+      # Change to "false" in case of using self hosted quay instance with a self-signed certificate
+      secure: true
+
+quay:
+  # The UI url for Quay, used to generate the link to Quay
+  uiUrl: 'https://quay.io'
