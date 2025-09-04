@@ -84,6 +84,8 @@ catalog:
       target: /opt/app-root/src/configs/catalog-entities/components.yaml
       rules:
         - allow: [Component, System]
+    - type: url
+      target: https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/templates/create-frontend-plugin/template.yaml
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
     #   rules:
