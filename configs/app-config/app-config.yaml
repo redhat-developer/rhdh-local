@@ -89,6 +89,11 @@ catalog:
       target: https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/templates/create-frontend-plugin/template.yaml
       rules:
         - allow: [Template]
+    # Load Backend Dynamic Plugin Software Template
+    - type: url
+      target: https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/templates/create-backend-plugin/template.yaml
+      rules:
+        - allow: [Template]
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
     #   rules:
