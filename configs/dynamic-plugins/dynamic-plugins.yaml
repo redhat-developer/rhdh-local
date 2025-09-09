@@ -10,4 +10,8 @@ plugins:
   # Quay plugin
   - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
     disabled: false
+
+  # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
+  - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
+    disabled: false 
  
