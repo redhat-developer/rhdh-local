@@ -96,6 +96,12 @@ catalog:
       target: https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/templates/create-backend-plugin/template.yaml
       rules:
         - allow: [Template]
+    # Load 'Create Tech Docs' Software Template
+    # Using this template in RHDH requires GitHub integration to be set up.
+    - type: url
+      target: https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/templates/github/techdocs/template.yaml
+      rules:
+        - allow: [Template]
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
     #   rules:
