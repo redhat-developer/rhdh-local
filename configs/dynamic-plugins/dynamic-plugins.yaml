@@ -15,7 +15,7 @@ plugins:
   - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
     disabled: false 
 
-  # Floating Action Button plugin
+  # Floating Action Button plugin with submenu actions
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
     disabled: false
     pluginConfig:
