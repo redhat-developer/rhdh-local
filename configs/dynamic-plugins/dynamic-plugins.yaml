@@ -40,7 +40,7 @@ plugins:
                 importName: NullComponent
                 config:
                   icon: github
-                  label: "RHDH Local GitHub"
+                  label: "RHDH Local on GitHub"
                   showLabel: true
                   toolTip: "RHDH Local on GitHub"
                   to: "https://github.com/redhat-developer/rhdh-local"
@@ -49,7 +49,7 @@ plugins:
                 importName: NullComponent
                 config:
                   icon: docs
-                  label: "RHDH Docs"
+                  label: "RHDH Documentation"
                   showLabel: true
                   toolTip: "RHDH Documentation"
                   to: "https://docs.redhat.com/en/documentation/red_hat_developer_hub/"
