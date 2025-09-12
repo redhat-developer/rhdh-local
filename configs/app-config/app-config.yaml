@@ -57,7 +57,6 @@ backend:
     - "data:"
     - "https://quay.io"
     - "https://*.quay.io"
-
 # comment out the following 'database' section to use the PostgreSQL database
   database:
     client: better-sqlite3
