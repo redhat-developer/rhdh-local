@@ -23,21 +23,38 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  road-core-service:
-    image: ${ROAD_CORE_IMAGE:-quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6} # dclint disable-line service-image-require-explicit-tag
-    container_name: road-core-service
+  llama-stack:
+    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:latest} # dclint disable-line service-image-require-explicit-tag
+    container_name: llama-stack
+    volumes:
+      - ./developer-lightspeed/configs/extra-files/run.yaml:/app-root/run.yaml:Z
+    depends_on:
+      ollama:
+        condition: service_healthy
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    network_mode: "service:rhdh"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8321/v1/models || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  lightspeed-core-service:
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-latest} # dclint disable-line service-image-require-explicit-tag
+    container_name: lightspeed-core-service
     depends_on:
       rhdh:
         condition: service_started
       ollama:
         condition: service_healthy
+      llama-stack:
+        condition: service_healthy
     volumes:
-      - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
-    environment:
-      - PROJECT=rhdh
-      - RCS_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
-      - OPENAI_API_KEY=${LLM_SERVER_TOKEN}
-      - RHDH_CONFIG_FILE=/opt/app-root/src/developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
+      - ./developer-lightspeed/configs/extra-files/lightspeed-core-service-config.yaml:/app-root/lightspeed-stack.yaml:Z
     env_file:
       - path: "./default.env"
         required: true
