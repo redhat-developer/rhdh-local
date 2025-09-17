@@ -5,8 +5,8 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
 
-## Supported architecture
-Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed-Core Service (LCS) as a sidecar container.
+## Supported Architecture
+Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed-Core Service (LCS) and Llama Stack as sidecar containers.
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
@@ -26,7 +26,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 1. **Load the Developer Lightspeed dynamic plugins**
 
-   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable developer lightspeed plugins within RHDH.
+   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable Developer Lightspeed plugins within RHDH.
   
    Example:
 
@@ -95,7 +95,6 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    # OR, if using Docker:
    docker compose -f compose.yaml -f developer-lightspeed/compose.yaml up -d
    ```
-   **Note:** Make sure your `LLM_SERVER_ID` value matches with the `provider_id` in the `run.yaml` file for Llama Stack.
 
    Make sure your `.env` file in the project root contains:
    ```env
@@ -130,6 +129,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
    | 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 11434/tcp             | ollama                 |
    | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:latest  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:latest | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -141,6 +141,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
    | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:latest  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:latest | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -150,7 +151,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    podman logs <container-name>
    ```
 
-5. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
+2. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
 
    ![Developer Lightspeed](images/Developer-Lightspeed.png)
 
