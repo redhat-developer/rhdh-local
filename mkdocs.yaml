@@ -1,0 +1,27 @@
+site_name: rhdh-local
+site_description: RHDH Local
+site_author: user:user
+docs_dir: docs
+plugins:
+  - techdocs-core
+nav:
+  - "Intro To RHDH Local": index.md
+  - "RHDH":
+    - "What Is Red Hat Developer Hub (RHDH)?": intro/rhdh.md
+    - "Highlights Of Red Hat Developer Hub": intro/features.md
+    - "Comparing Red Hat Developer Hub to CNCF Backstage": intro/comparison.md
+  - "Getting Started With RHDH Local": getting-started.md
+  - "How-To Guides":
+    - "Configuration": guides/configuration.md
+    - "Loading Content": guides/loading-content.md
+    - "Dynamic Plugin Management": guides/dynamic-plugins-management.md
+    - "Local Plugin Development": guides/plugins-guide.md
+    - "GitHub Authentication": guides/github-auth.md
+    - "Making Your TechDocs More Appealing": guides/making-techdocs-appealing.md
+    - "Top 10 Tips For Better Software Templates": guides/ten_template_tips.md
+    # - "Orchestrator": guides/index.md
+    # - "LightSpeed": guides/index.md
+    #- "Orchestrator": ../orchestrator/README.md
+    - "Operating RHDH Local": guides/operating-rhdh-local.md
+  - "Getting Help & Contributing": help-and-contrib.md
+  - "References": references.md
