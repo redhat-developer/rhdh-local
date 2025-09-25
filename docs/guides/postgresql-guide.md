@@ -19,7 +19,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
    docker login registry.redhat.io
    ```
 
-2. Uncomment the `db` service block in [compose.yaml](compose.yaml) file
+2. Uncomment the `db` service block in [https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) file
 
    ```yaml
    db:
@@ -40,7 +40,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
        retries: 5
    ```
 
-3. Uncomment the `db` section in the `depends_on` section of `rhdh` service in [compose.yaml](compose.yaml)
+3. Uncomment the `db` section in the `depends_on` section of `rhdh` service in [https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml)
 
    ```yaml
    depends_on:
@@ -50,7 +50,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
        condition: service_healthy
    ```
 
-4. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](configs/app-config/app-config.local.yaml)
+4. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
 
    ```yaml
    # database:
@@ -58,7 +58,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
    #   connection: ':memory:'
    ```
 
-5. Add Postgres configuration in [`app-config.local.yaml`](configs/app-config/app-config.local.yaml)
+5. Add Postgres configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
 
    ```yaml
    database:

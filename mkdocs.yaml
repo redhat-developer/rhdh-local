@@ -17,6 +17,9 @@ nav:
     - "Dynamic Plugin Management": guides/dynamic-plugins-management.md
     - "Local Plugin Development": guides/plugins-guide.md
     - "GitHub Authentication": guides/github-auth.md
+    - "Container Image Guide": guides/container-image-guide.md
+    - "Corporate Proxy Setup": guides/corporate-proxy-setup-sim.md
+    - "PostgreSQL Guide": guides/postgresql-guide.md
     - "Making Your TechDocs More Appealing": guides/making-techdocs-appealing.md
     - "Top 10 Tips For Better Software Templates": guides/ten_template_tips.md
     # - "Orchestrator": guides/index.md
