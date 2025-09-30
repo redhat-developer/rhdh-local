@@ -10,6 +10,11 @@
 app:
   title: Red Hat Developer Hub
   baseUrl: ${BASE_URL}
+  analytics:
+    adoptionInsights:
+      enabled: false
+    segment:
+      writeKey: ""
   branding:
     # If using a different logo, replace these lines with your own image(s)
     # fullLogo: data:image/svg+xml;base64,your-image-goes-here==
