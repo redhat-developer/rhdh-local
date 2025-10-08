@@ -10,7 +10,7 @@ llama_stack:
   use_as_library_client: false
   url: http://localhost:8321
 user_data_collection:
-  feedback_enabled: false
+  feedback_enabled: true
   feedback_storage: "/tmp/data/feedback"
 authentication:
   module: "noop"
