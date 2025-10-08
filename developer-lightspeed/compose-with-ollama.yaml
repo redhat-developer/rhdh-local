@@ -14,8 +14,13 @@ services:
       rhdh:
         condition: service_started
     network_mode: "service:rhdh"
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
     command: >
-      "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL:-tinyllama} && touch /tmp/ready && wait"
+      "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL:-llama3.2:1b} && touch /tmp/ready && wait"
     entrypoint: [ "sh", "-c" ]
     restart: unless-stopped
     healthcheck:
@@ -27,7 +32,9 @@ services:
     image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:latest} # dclint disable-line service-image-require-explicit-tag
     container_name: llama-stack
     volumes:
-      - ./developer-lightspeed/configs/extra-files/run.yaml:/app-root/run.yaml:Z
+      - ./developer-lightspeed/configs/extra-files/run-no-validation.yaml:/app-root/run.yaml:Z
+      - ./developer-lightspeed/configs/extra-files/embeddings_model:/app-root/embeddings_model:Z
+      - ./developer-lightspeed/configs/extra-files/vector_db:/app-root/vector_db:Z
     depends_on:
       ollama:
         condition: service_healthy

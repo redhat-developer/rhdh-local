@@ -1,5 +1,5 @@
 version: '2'
-image_name: llama-stack
+image_name: llama-stack-no-question-validation
 
 apis:
   - agents
@@ -15,7 +15,7 @@ apis:
 benchmarks: []
 container_image: null
 datasets: []
-external_providers_dir: "/app-root/config/providers.d"
+external_providers_dir: null
 inference_store:
   db_path: .llama/distributions/ollama/inference_store.db
   type: sqlite
@@ -78,61 +78,7 @@ providers:
       dpo_output_dir: "."
     provider_id: huggingface
     provider_type: inline::huggingface
-  safety:
-    - config:
-        excluded_categories: []
-      provider_id: llama-guard
-      provider_type: inline::llama-guard
-    - provider_id: lightspeed_question_validity
-      provider_type: inline::lightspeed_question_validity
-      config:
-        model_id: ${env.LLM_SERVER_ID}/${env.VALIDATION_MODEL}
-        model_prompt: |-
-          Instructions:
-
-          You are a question classifying tool
-          You are an expert in Backstage, Red Hat Developer Hub (RHDH), Kubernetes, Openshift, CI/CD and GitOps Pipelines
-          Your job is to determine if a user's question is related to Backstage or Red Hat Developer Hub (RHDH) technologies, \
-          including integrations, plugins, catalog exploration, service creation, or workflow automation.
-          If a question appears to be related to Backstage, RHDH, Kubernetes, Openshift, or any of their features, answer with the word ${allowed}
-          If a question is not related to Backstage, RHDH, Kubernetes, Openshift, or their features, answer with the word ${rejected}
-          Do not explain your answer, just provide the one-word response
-          Example Question:
-          Why is the sky blue?
-          Example Response:
-          ${rejected}
-
-          Example Question:
-          Can you help configure my cluster to automatically scale?
-          Example Response:
-          ${allowed}
-
-          Example Question:
-          How do I create import an existing software template in Backstage?
-          Example Response:
-          ${allowed}
-
-          Example Question:
-          How do I accomplish a task in RHDH?
-          Example Response:
-          ${allowed}
-
-          Example Question:
-          How do I explore a component in RHDH catalog?
-          Example Response:
-          ${allowed}
-
-          Example Question:
-          How can I integrate GitOps into my pipeline?
-          Example Response:
-          ${allowed}
-
-          Question:
-          ${message}
-          Response:
-        invalid_question_response: |-
-          Hi, I'm the Red Hat Developer Hub Lightspeed assistant, I can help you with questions about Red Hat Developer Hub or Backstage.
-          Please ensure your question is about these topics, and feel free to ask again!
+  safety: []
   scoring:
   - config: {}
     provider_id: basic
@@ -182,9 +128,7 @@ server:
   tls_cafile: null
   tls_certfile: null
   tls_keyfile: null
-shields:
-  - shield_id: lightspeed_question_validity-shield
-    provider_id: lightspeed_question_validity
+shields: []
 tool_groups:
 - provider_id: rag-runtime
   toolgroup_id: builtin::rag

@@ -8,10 +8,13 @@ service:
   access_log: true
 llama_stack:
   use_as_library_client: false
-  # url: http://host.docker.internal:8321
   url: http://localhost:8321
 user_data_collection:
   feedback_enabled: false
   feedback_storage: "/tmp/data/feedback"
 authentication:
   module: "noop"
+conversation_cache:
+  type: "sqlite"
+  sqlite:
+    db_path: "/tmp/cache.db"
