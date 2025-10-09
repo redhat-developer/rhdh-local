@@ -42,8 +42,10 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    Run the following [script](./scripts/setup-rag.sh) to get a local copy of the RAG data to mount to Llama Stack:
    ```
-   bash ./scripts/setup-rag.sh
+   bash ./scripts/setup-rag.sh <container_engine>
    ```
+
+   Where `container_engine` is one of `podman` or `docker`. No argument defaults to `podman`.
 
    **Note:** You will need to ensure your LLM provider has tool calling enabled.
 
