@@ -17,7 +17,7 @@ RHDH Local is a containerized, local environment that provides a complete Red Ha
 
 !!! warning "Support Notice"
 
-    There is no official, commercial support for RHDH Local. Use at your own risk. With all that being said, we think it is incredibly useful and any contributions you might have that could improve RHDH Local are welcome!
+    There is no official, commercial support for RHDH Local. Use at your own risk.
 
 !!! info
 

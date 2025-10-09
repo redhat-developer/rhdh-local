@@ -72,7 +72,7 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 ### Software Templates
 
-- **[RHDH Software Templates](https://github.com/redhat-developer/red-hat-developer-hub-software-templates)** - Software Templates for RHDH
+- **[Software Templates from RHDH users](https://github.com/redhat-developer/red-hat-developer-hub-software-templates)** - Software Templates contributed by other users of RHDH
 - **[Backstage Software Templates](https://github.com/backstage/software-templates)** - Community Backstage Software Templates
 
 ---

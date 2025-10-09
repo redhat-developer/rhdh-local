@@ -290,7 +290,7 @@ podman volume prune
 ### When to Restart vs. Full Reset
 
 - **Restart**: Configuration changes, plugin updates, debugging
-- **Full reset**: Major version changes, persistent issues, starting fresh
+- **Full reset (clean up)**: Major version changes, persistent issues, starting fresh
 
 ---
 
