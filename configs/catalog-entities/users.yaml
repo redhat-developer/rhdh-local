@@ -4,3 +4,14 @@ metadata:
   name: user
 spec:
   memberOf: [default]
+
+---
+
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: rhdh-team
+  title: RHDH team
+spec:
+  type: team
+  children: []

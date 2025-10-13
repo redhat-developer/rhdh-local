@@ -1,4 +1,6 @@
-# Plugins Guide
+# Local Plugin Development
+
+RHDH Local excels at supporting **local plugin development**, enabling you to build, test, and iterate on dynamic plugins before publishing them to a registry. This guide covers the complete development workflow from scaffolding to testing.
 
 ## Loading dynamic plugins from a local directory
 
@@ -6,7 +8,7 @@ During boot, the `install-dynamic-plugins` container reads the contents of the p
 
 1. Default path: `configs/dynamic-plugins/dynamic-plugins.yaml`
 
-1. User override path: `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins.yaml` If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container. `configs/dynamic-plugins/dynamic-plugins.override.yaml` takes precedence over `configs/dynamic-plugins.yaml`.
+1. User override path: `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins.yaml`. If present, this file will automatically override the default and be used by the `install-dynamic-plugins` container. `configs/dynamic-plugins/dynamic-plugins.override.yaml` takes precedence over `configs/dynamic-plugins.yaml`.
 
 In addition, the `local-plugins` directory is mounted into the `install-dynamic-plugins` container at `/opt/app-root/src/local-plugins`. Any plugins placed there can be activated/configured the same way (without downloading).
 
@@ -18,29 +20,6 @@ To load dynamic plugins from your local machine:
     - Prefer `configs/dynamic-plugins/dynamic-plugins.override.yaml` for local user overrides.
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
 4. See [Changing Your Configuration](/rhdh-local/additional-config-guides/changing-config.md) for more on updating and reloading configs.
-
-## Customize `.npmrc` for plugin installation
-
-If you're installing dynamic plugins from a private registry or using a proxy, you can customize your own `.npmrc` file. A `.npmrc.example` file is provided in the `configs/` directory as a template.
-
-1. Copy the example file to create your own `.npmrc`:
-
-    ```sh
-    cp configs/.npmrc.example configs/.npmrc
-    ```
-
-2. Open the newly created `.npmrc` file and add your configuration, such as private registry URLs or authentication tokens:
-
-    ```sh
-    //registry.npmjs.org/:_authToken=YOUR_TOKEN
-    registry=https://your-private-registry.example.com/
-    ```
-
-When present, this `.npmrc` file will be automatically mounted into the `install-dynamic-plugins` container, and the `NPM_CONFIG_USERCONFIG` environment variable will be set to point to it.
-
-If you don't create a `.npmrc`, plugin installation will still work using the default public registry settings.
-
-> For more information on configuring `.npmrc`, see the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
 
 ## Developers: Using VSCode to debug backend plugins
 
@@ -123,7 +102,8 @@ Follow these steps to preview and test development changes for your frontend plu
 3. Inside your plugin directory, run the following command to export your plugin:
 
    ```shell
-   npx @red-hat-developer-hub/cli@latest plugin export --dev --dynamic-plugins-root <path_to_dynamic-plugins-root_in_rhdh-local_folder>
+   npx @red-hat-developer-hub/cli@latest plugin export --dev \
+      --dynamic-plugins-root <path_to_dynamic-plugins-root_in_rhdh-local_folder>
    ```
 
 4. Add the plugin configuration for the plugin you want to develop into the `app-config.local.yaml` file under the `dynamicPlugins` key. Avoid adding this configuration to the `dynamic-plugins.override.yaml` file. You can add additional plugins into the `dynamic-plugins.override.yaml` file, but the one you are developing should be in the `app-config.local.yaml` file.

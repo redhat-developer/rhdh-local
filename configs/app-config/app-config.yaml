@@ -76,13 +76,13 @@ catalog:
 
   locations:
     - type: file
+      target: /opt/app-root/src/catalog-info.yaml
+    - type: file
       target: /opt/app-root/src/configs/catalog-entities/users.yaml
       rules:
         - allow: [User, Group]
     - type: file
-      target: /opt/app-root/src/configs/catalog-entities/components.yaml
-      rules:
-        - allow: [Component, System]
+      target: /opt/app-root/src/configs/catalog-entities/components.override.yaml
     # Load Frontend Dynamic Plugin Software Template.
     # Using this template in RHDH requires GitHub integration to be set up.
     - type: url
@@ -112,7 +112,6 @@ catalog:
     #   rules:
     #     - allow: [Component, User, Group, Domain]
 
-
 techdocs:
   generator:
     runIn: local
@@ -122,6 +121,16 @@ techdocs:
     local:
       publishDirectory: /tmp/techdocs
 
+dynamicPlugins:
+  frontend:
+    default.main-menu-items:
+        menuItems:
+          default.help:
+            title: RHDH Local Guide
+            icon: help
+            priority: 5
+            to: /catalog/default/system/rhdh-local/docs
+            enabled: true
 
 proxy:
   endpoints:

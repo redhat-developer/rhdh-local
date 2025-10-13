@@ -38,6 +38,9 @@ services:
     environment:
       NODE_OPTIONS: "--inspect=0.0.0.0:9229 --no-node-snapshot"
     volumes:
+      - ./mkdocs.yaml:/opt/app-root/src/mkdocs.yaml:Z
+      - ./docs:/opt/app-root/src/docs:Z
+      - ./catalog-info.yaml:/opt/app-root/src/catalog-info.yaml:Z
       - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root

@@ -20,7 +20,6 @@ LIGHTSPEED_APP_CONFIG="developer-lightspeed/configs/app-config/app-config.lights
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
 
 USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
-COMPONENTS_OVERRIDE="configs/catalog-entities/components.override.yaml"
 
 mkdir -p generated
 cp -f "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
@@ -35,11 +34,6 @@ done
 if [ -f "$USERS_OVERRIDE" ]; then
   echo "Applying users override"
   sed -i "s|/opt/app-root/src/configs/catalog-entities/users.yaml|/opt/app-root/src/$USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
-fi
-
-if [ -f "$COMPONENTS_OVERRIDE" ]; then
-  echo "Applying components override"
-  sed -i "s|/opt/app-root/src/configs/catalog-entities/components.yaml|/opt/app-root/src/$COMPONENTS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
 
 # Add local config if available
@@ -61,7 +55,6 @@ EXTRA_CLI_ARGS=""
 for config in $EXTRA_CONFIGS; do
   EXTRA_CLI_ARGS="$EXTRA_CLI_ARGS --config $config"
 done
-
 
 # Start Backstage backend
 # Allows variable expansion for CLI args
