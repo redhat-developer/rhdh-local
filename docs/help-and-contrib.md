@@ -176,6 +176,7 @@ docs/
 - **Code examples**: Include working examples that users can copy and modify
 - **Cross-references**: Link to related documentation appropriately
 - **Troubleshooting focus**: Anticipate common issues and provide solutions
+- Update `mkdocs.yaml` if adding new pages or changing structure
 
 #### Formatting Standards
 
@@ -187,3 +188,15 @@ See [Making Your TechDocs More Appealing](./guides/making-techdocs-appealing.md)
 2. **Test the instructions** by following them yourself on a fresh setup
 3. **Preview in RHDH Local** to verify formatting and links work
 4. **Have someone else test** your instructions (when possible)
+
+#### TechDocs Review Process
+
+Note that TechDocs changes may need to be reviewed by a Product Manager and/or Architect to ensure content accuracy, clarity, and alignment with user needs.
+
+#### Best Practices for TechDocs Contributions
+
+- **Start small**: Begin with minor improvements to learn the workflow
+- **Collaborate early**: Discuss major documentation changes via [JIRA issues](https://issues.redhat.com/browse/RHIDP-8291?filter=-4&jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC) before investing significant effort
+- **Keep it practical and engineer-oriented**: Keep the built-in TechDocs oriented toward engineers with practical commands. The goal is not to repeat the official RHDH documentation
+- **Update regularly**: Keep documentation current as features evolve
+- **Ask for help**: Reach out to the team if you're unsure about content direction
