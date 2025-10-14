@@ -85,7 +85,7 @@ You can use RHDH-local with a debugger to debug your backend plugins in VSCode. 
 
 ## Frontend plugin development
 
-Follow these steps to preview and test development changes for your frontend plugin in RHDH local:
+Follow these steps to preview and test development changes for your frontend plugin in RHDH Local:
 
 1. Ensure a clean start by running the following command:
 
@@ -108,7 +108,7 @@ Follow these steps to preview and test development changes for your frontend plu
 
 4. Add the plugin configuration for the plugin you want to develop into the `app-config.local.yaml` file under the `dynamicPlugins` key. Avoid adding this configuration to the `dynamic-plugins.override.yaml` file. You can add additional plugins into the `dynamic-plugins.override.yaml` file, but the one you are developing should be in the `app-config.local.yaml` file.
 
-5. Use the `compose-dynamic-plugins-root.yaml` override file to start RHDH local:
+5. Use the `compose-dynamic-plugins-root.yaml` override file to start RHDH Local:
 
    ```shell
    podman compose -f compose.yaml -f compose-dynamic-plugins-root.yaml up
