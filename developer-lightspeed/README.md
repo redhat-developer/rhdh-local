@@ -38,18 +38,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    plugins: []
    ```
 
-2. **Download RAG Content**
-
-   Run the following [script](./scripts/setup-rag.sh) to get a local copy of the RAG data to mount to Llama Stack:
-   ```
-   bash ./scripts/setup-rag.sh <container_engine>
-   ```
-
-   Where `container_engine` is one of `podman` or `docker`. No argument defaults to `podman`.
-
-   **Note:** You will need to ensure your LLM provider has tool calling enabled.
-
-3. **Copy the Lightspeed App Config example**
+2. **Copy the Lightspeed App Config example**
 
    Start by creating a new local app config file for Lightspeed:
 
@@ -57,7 +46,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    cp developer-lightspeed/configs/app-config/app-config.lightspeed.local.example.yaml developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
    ```
 
-4. **Set Environment Variables**
+3. **Set Environment Variables**
 
    In the root of this repository there is a `default.env` file, you can copy the contents to `.env` and fill in the required values.
 
@@ -74,7 +63,7 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    You do **not** need to change these unless you want to use your own model server and/or validate queries.
 
-5. **Start the application**
+4. **Start the application**
 
    To start the Developer Lightspeed interactive setup script, run the following from the root of the repository:
 
