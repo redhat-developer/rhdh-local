@@ -5,19 +5,39 @@ services:
   rhdh:
     volumes:
       - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
+  rag-init:
+    image: 'quay.io/redhat-ai-dev/rag-content:release-1.7-lcs'
+    container_name: rag-init
+    user: "0:0"
+    volumes:
+      - rag_embeddings:/data/embeddings_model
+      - rag_vector_db:/data/vector_db
+    entrypoint: [ "sh", "-c" ]
+    command: >
+      "set -e; echo 'Copying RAG data...' && \
+      mkdir -p /data/vector_db /data/embeddings_model && \
+      cp -r /rag/vector_db/* /data/vector_db/ && \
+      cp -r /rag/embeddings_model/* /data/embeddings_model/ && \
+      chown -R 1001:0 /data/vector_db /data/embeddings_model || true && \
+      chmod -R a+rwX /data/vector_db /data/embeddings_model && \
+      echo 'Copy complete.'"
+    restart: "no"
   llama-stack:
     image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:latest} # dclint disable-line service-image-require-explicit-tag
     container_name: llama-stack
     volumes:
       - ./developer-lightspeed/configs/extra-files/run-no-validation.yaml:/app-root/run.yaml:Z
-      - ./developer-lightspeed/configs/extra-files/embeddings_model:/app-root/embeddings_model:Z
-      - ./developer-lightspeed/configs/extra-files/vector_db:/app-root/vector_db:Z
+      - rag_embeddings:/app-root/embeddings_model
+      - rag_vector_db:/app-root/vector_db
     env_file:
       - path: "./default.env"
         required: true
       - path: "./.env"
         required: false
     network_mode: "service:rhdh"
+    depends_on:
+      rag-init:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8321/v1/models || exit 1"]
       interval: 5s
@@ -25,7 +45,7 @@ services:
       retries: 5
       start_period: 10s
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:latest} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.3.0} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     network_mode: "service:rhdh"
     depends_on:
@@ -42,3 +62,5 @@ services:
         required: false
 volumes:
   user-data:
+  rag_embeddings:
+  rag_vector_db:

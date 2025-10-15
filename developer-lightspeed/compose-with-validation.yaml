@@ -2,5 +2,5 @@ services:
   llama-stack:
     volumes:
       - ./developer-lightspeed/configs/extra-files/run.yaml:/app-root/run.yaml:Z
-      - ./developer-lightspeed/configs/extra-files/embeddings_model:/app-root/embeddings_model:Z
-      - ./developer-lightspeed/configs/extra-files/vector_db:/app-root/vector_db:Z
+      - rag_embeddings:/app-root/embeddings_model
+      - rag_vector_db:/app-root/vector_db
