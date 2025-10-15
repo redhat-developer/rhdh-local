@@ -22,9 +22,16 @@ nav:
     - "PostgreSQL Guide": guides/postgresql-guide.md
     - "Making Your TechDocs More Appealing": guides/making-techdocs-appealing.md
     - "Top 10 Tips For Better Software Templates": guides/ten_template_tips.md
-    # - "Orchestrator": guides/index.md
-    # - "LightSpeed": guides/index.md
-    #- "Orchestrator": ../orchestrator/README.md
     - "Operating RHDH Local": guides/operating-rhdh-local.md
+  - "Orchestrator":
+    - "Intro": orchestrator/index.md
+    - "Getting Started": orchestrator/getting-started.md
+    - "Custom Configuration": orchestrator/config.md
+    - "Workflows": orchestrator/workflows.md
+  - "Developer Lightspeed":
+    - "Intro": developer-lightspeed/index.md
+    - "Getting Started": developer-lightspeed/getting-started.md
+    - "Advanced Config": developer-lightspeed/advanced-config.md
+    - "Troubleshooting": developer-lightspeed/troubleshooting.md
   - "Getting Help & Contributing": help-and-contrib.md
   - "References": references.md
