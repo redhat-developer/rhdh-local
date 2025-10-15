@@ -12,7 +12,7 @@ RHDH Local is an open-source project maintained by the Red Hat Developer Hub tea
 ### Before Seeking Help
 
 1. **Check Built-in Documentation**: Review this comprehensive guide and related pages
-2. **Search Existing Issues**: Look through [JIRA issues](https://issues.redhat.com/browse/RHIDP-8291?filter=-4&jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC) for similar problems
+2. **Search Existing Issues**: Look through [JIRA issues](https://issues.redhat.com/issues/?jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC) for similar problems
 3. **Verify Your Setup**: Ensure you meet the [prerequisites](getting-started.md#prerequisites)
 
 ### Support Channels
@@ -27,7 +27,7 @@ Use [JIRA (Component: RHDH Local)](https://issues.redhat.com/browse/RHIDP) for:
 - **Feature requests** with clear use cases
 
 !!! tip "Issue Reporting"
-    To report issues against RHDH Local, use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**. You can browse existing issues using this [query](https://issues.redhat.com/browse/RHIDP-8291?filter=-4&jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
+    To report issues against RHDH Local, use [JIRA](https://issues.redhat.com/browse/RHIDP) with Component: **RHDH Local**. You can browse existing issues using this [query](https://issues.redhat.com/issues/?jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
 **When opening an issue, include:**
 
@@ -196,7 +196,7 @@ Note that TechDocs changes may need to be reviewed by a Product Manager and/or A
 #### Best Practices for TechDocs Contributions
 
 - **Start small**: Begin with minor improvements to learn the workflow
-- **Collaborate early**: Discuss major documentation changes via [JIRA issues](https://issues.redhat.com/browse/RHIDP-8291?filter=-4&jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC) before investing significant effort
+- **Collaborate early**: Discuss major documentation changes via [JIRA issues](https://issues.redhat.com/issues/?jql=project%20in%20(%22Red%20Hat%20Developer%20Hub%20Bugs%22%2C%20%22Red%20Hat%20Internal%20Developer%20Platform%22)%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC) before investing significant effort
 - **Keep it practical and engineer-oriented**: Keep the built-in TechDocs oriented toward engineers with practical commands. The goal is not to repeat the official RHDH documentation
 - **Update regularly**: Keep documentation current as features evolve
 - **Ask for help**: Reach out to the team if you're unsure about content direction
