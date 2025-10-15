@@ -51,7 +51,7 @@ services:
       retries: 5
       start_period: 10s
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-latest} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:latest} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     depends_on:
       rhdh:
