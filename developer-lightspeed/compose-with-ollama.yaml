@@ -20,8 +20,8 @@ services:
       cp -r /rag/embeddings_model/* /data/embeddings_model/ && \
       chown -R 1001:0 /data/vector_db /data/embeddings_model || true && \
       chmod -R a+rwX /data/vector_db /data/embeddings_model && \
-      echo 'Copy complete.'"
-    restart: "no"
+      echo 'Copy complete.' && sleep 10"
+    restart: "on-failure"
   ollama:
     image: docker.io/ollama/ollama:0.10.0-rc0
     container_name: ollama
