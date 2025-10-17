@@ -20,7 +20,7 @@ services:
       cp -r /rag/embeddings_model/* /data/embeddings_model/ && \
       chown -R 1001:0 /data/vector_db /data/embeddings_model || true && \
       chmod -R a+rwX /data/vector_db /data/embeddings_model && \
-      echo 'Copy complete.' && sleep 10"
+      echo 'Copy complete.'"
     restart: "on-failure"
   ollama:
     image: docker.io/ollama/ollama:0.10.0-rc0
@@ -53,8 +53,6 @@ services:
       - rag_embeddings:/app-root/embeddings_model
       - rag_vector_db:/app-root/vector_db
     depends_on:
-      rag-init:
-        condition: service_completed_successfully
       ollama:
         condition: service_healthy
     env_file:
