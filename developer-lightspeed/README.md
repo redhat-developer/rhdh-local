@@ -54,11 +54,11 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    ```env
    LLM_SERVER_ID=ollama
-   LLM_SERVER_URL=http://localhost:11434/v1
+   LLM_SERVER_URL=http://ollama:11434/v1
    LLM_SERVER_TOKEN=dummy
    OLLAMA_MODEL=llama3.2:1b
    # FOR QUESTION VALIDATION
-   VALIDATION_MODEL=
+   VALIDATION_MODEL=llama3.2:1b
    ```
 
    You do **not** need to change these unless you want to use your own model server and/or validate queries.
