@@ -4,7 +4,7 @@
 includes:
   - dynamic-plugins.default.yaml
 plugins:
-  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.39.1__0.5.7!red-hat-developer-hub-backstage-plugin-lightspeed
+  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:next__1.0.0!red-hat-developer-hub-backstage-plugin-lightspeed
     disabled: false
     pluginConfig:
       lightspeed:
@@ -18,6 +18,10 @@ plugins:
       dynamicPlugins:
         frontend:
           red-hat-developer-hub.backstage-plugin-lightspeed:
+            translationResources:
+              - importName: lightspeedTranslations
+                module: Alpha
+                ref: lightspeedTranslationRef
             appIcons:
               - name: LightspeedIcon
                 module: LightspeedPlugin
@@ -29,21 +33,5 @@ plugins:
                 menuItem:
                   icon: LightspeedIcon
                   text: Lightspeed
-  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.39.1__0.5.7!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__1.0.0!red-hat-developer-hub-backstage-plugin-lightspeed-backend
     disabled: false
-    pluginConfig:
-      lightspeed:
-        # REQUIRED: Configure LLM servers with OpenAI API compatibility
-        servers:
-          - id: ${LLM_SERVER_ID}
-            url: ${LLM_SERVER_URL}
-            token: ${LLM_SERVER_TOKEN}
-
-        # OPTIONAL: Enable/disable question validation (default: true)
-        # When enabled, restricts questions to RHDH-related topics for better security
-        questionValidation: true
-        # OPTIONAL: Port for lightspeed service (default: 8080)
-        # servicePort: ${LIGHTSPEED_SERVICE_PORT}
-
-        # OPTIONAL: Override default RHDH system prompt
-        # systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
