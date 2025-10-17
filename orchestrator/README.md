@@ -1,4 +1,10 @@
-# Setup Orchestrator and Workflow Examples
+# Orchestrator in RHDH Local
+
+Orchestrator brings serverless workflows into Red Hat Developer Hub (RHDH), focusing on the journey for application migration to the cloud, onboarding developers, and user-made workflows of RHDH actions or external systems.
+
+![Orchestrator](images/Orchestrator.png)
+
+## Getting Started
 
 Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to the
 list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
@@ -24,44 +30,23 @@ point to your local workflow development directory before running the command.
 podman compose -f compose.yaml -f orchestrator/compose.yaml up -d
 ```
 
-To make custom changes/configuration, it is recommended to use a `compose-orchestrator.local.yaml` by merging
-`compose.yaml` and `orchestrator/compose.yaml` to prevent conflicts with version controlled files.
+Open http://localhost:7007/orchestrator and you will see the Orchestrator plugin enabled in the RHDH UI:
 
-Run this command to merge compose files:
+![Orchestrator Preview](images/Orchestrator-home--preview.png)
 
-```shell
-podman compose -f compose.yaml -f orchestrator/compose.yaml config >> compose-orchestrator.local.yaml
+## Known Issues
+
+While developing workflows and after making changes to your resources, the pages might error out. Reloading the page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` container by running:
+
+```bash
+podman compose -f compose.yaml -f orchestrator/compose.yaml stop sonataflow
+
+podman compose -f compose.yaml -f orchestrator/compose.yaml start sonataflow
 ```
 
-And this command to spin up the containers:
+## Advanced
 
-```sh
-podman compose \
-   -f compose-orchestrator.local.yaml \
-   up -d
-```
+Please refer to the following docs (also rendered as built-in TechDocs in the running app):
 
-There are three workflow examples to get you started on testing Orchestrator workflow with RHDH Local.
-
-1. The [`orchestrator/workflow-examples`](./workflow-examples/) folder contains example workflows and by default, it is already
-   mounted
-   to
-   `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in your
-   `compose-orchestrator.local.yaml`. The
-   directory contains three workflows; greeting, slack and github. For more information about the workflow and setup,
-   refer to this
-   [link](./workflow-examples/README.md).
-
-2. A suite of workflows exists in
-   this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
-   Clone the repository to your local and override the mount directory `RHDH_ORCHESTRATOR_WORKFLOWS` in your
-   `.env` file
-   file to point to your local `backstage-orchestrator-workflows` directory.
-   Note: While developing workflow and after making changes to your resources, the pages might error out. Reloading the
-   page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` pod by running:
-
-```shell
-   podman compose stop sonataflow && podman compose start sonataflow. 
-```
-
-This is a known issue.
+- [Custom Configuration](../docs/orchestrator/config.md)
+- [Workflows](../docs/orchestrator/workflows.md)
