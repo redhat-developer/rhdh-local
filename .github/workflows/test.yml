@@ -50,7 +50,7 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
-    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}"
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ubuntu-latest
     env:
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
@@ -70,10 +70,13 @@ jobs:
 
     - name: Add user-specific configuration
       if: ${{ matrix.userConfig == 'true' }}
+      env:
+        # https://docs.github.com/en/actions/how-tos/monitor-workflows/enable-debug-logging#enabling-runner-diagnostic-logging
+        LOG_LEVEL: ${{ vars.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
       run: |
         # Custom .env file
         cat <<EOF > .env
-        LOG_LEVEL=debug
+        LOG_LEVEL=${{ env.LOG_LEVEL }}
         ROARR_LOG=true
         NODE_DEBUG=fetch
 
