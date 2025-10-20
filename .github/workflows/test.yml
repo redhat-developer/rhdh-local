@@ -133,7 +133,7 @@ jobs:
 
     - name: Wait for HTTP 200 response from homepage
       run: |
-        max=30
+        max=50
         i=0
         echo "Waiting for localhost to respond with status code 200..."
         until curl -i --head --fail http://localhost:7007; do
