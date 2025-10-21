@@ -46,7 +46,7 @@ services:
       retries: 5
 
   llama-stack:
-    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:latest} # dclint disable-line service-image-require-explicit-tag
+    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc} # dclint disable-line service-image-require-explicit-tag
     container_name: llama-stack
     network_mode: "service:rhdh"
     depends_on:
@@ -69,7 +69,7 @@ services:
       start_period: 10s
 
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.3.0} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     depends_on:
       rhdh:
