@@ -128,16 +128,16 @@ jobs:
         max=30
         i=0
         echo "Waiting for localhost to respond with status code 200..."
-        until curl --head --fail http://localhost:7007; do
+        until curl -i --head --fail http://localhost:7007; do
           i=$((i+1))
           if [ "$i" -ge "$max" ]; then
-            echo "Max retries reached. Exiting. Take a look at the logs in the step below."
+            echo "[$(date)] Max retries reached. Exiting. Take a look at the logs in the step below."
             exit 1
           fi
-          echo "($i/$max)Waiting for http://localhost:7007 to return HTTP 200..."
-          sleep 5
+          echo "($i/$max) [$(date)] Waiting for http://localhost:7007 to return HTTP 200..."
+          sleep 10
         done
-        echo "RHDH is ready!"
+        echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
 
     - name: Compose logs
