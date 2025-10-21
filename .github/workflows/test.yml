@@ -68,6 +68,9 @@ jobs:
       run: |
         pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
 
+    - name: Compose config
+      run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
+
     - name: Add user-specific configuration
       if: ${{ matrix.userConfig == 'true' }}
       env:
@@ -139,7 +142,13 @@ jobs:
 
     - name: Compose logs
       if: always()
-      run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} logs
+      run: |
+        for svc in $(${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config --services | sort); do
+          echo "=== $svc ==="
+          ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} logs --timestamps "$svc" || true
+          echo "============"
+          echo
+        done
 
     - name: Tear down
       if: always()
