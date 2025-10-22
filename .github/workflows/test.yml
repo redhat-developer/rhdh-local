@@ -59,18 +59,127 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - name: Install tool
+    - name: Remove conflicting packages
+      run: |
+        # Remove any previous installations of Podman and Docker
+        for pkg in docker.io \
+            docker-doc \
+            docker-compose \
+            docker-compose-v2 \
+            podman-docker \
+            containerd \
+            crun \
+            runc \
+            docker-ce \
+            docker-ce-cli \
+            containerd.io \
+            docker-buildx-plugin \
+            docker-compose-plugin \
+            podman \
+            containers-common \
+            crun \
+            runc \
+            buildah \
+          ; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+    - name: Update Docker version
+      # https://docs.docker.com/engine/install/ubuntu#install-using-the-repository
+      if: ${{ matrix.tool == 'docker' }}
+      run: |
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        # Add the repository to Apt sources:
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce \
+          docker-ce-cli \
+          containerd.io \
+          docker-buildx-plugin \
+          docker-compose-plugin
+
+    - name: Update Podman version
+      # https://github.com/containers/podman/discussions/25582
       if: ${{ matrix.tool == 'podman' }}
       run: |
-        sudo apt update
-        sudo apt install -y podman podman-docker
-        curl -LO https://github.com/docker/compose/releases/download/v2.40.0/docker-compose-linux-x86_64
-        chmod +x docker-compose-linux-x86_64
-        sudo mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+        ### Podman ###
+        # Define file paths
+        PINNING_FILE="/etc/apt/preferences.d/podman-plucky.pref"
+        SOURCE_LIST="/etc/apt/sources.list.d/plucky.list"
+
+        # Write plucky APT source list
+        echo "Adding plucky repo to $SOURCE_LIST..."
+        echo "deb http://archive.ubuntu.com/ubuntu plucky main universe" | \
+          sudo tee "$SOURCE_LIST"
+
+        # Write APT pinning rules
+        echo "Writing APT pinning rules to $PINNING_FILE..."
+        cat <<EOF > /tmp/pinning_file
+        Package: podman buildah golang-github-containers-common crun libgpgme11t64 libgpg-error0 golang-github-containers-image catatonit conmon containers-storage
+        Pin: release n=plucky
+        Pin-Priority: 991
+
+        Package: libsubid4 netavark passt aardvark-dns containernetworking-plugins libslirp0 slirp4netns
+        Pin: release n=plucky
+        Pin-Priority: 991
+
+        Package: *
+        Pin: release n=plucky
+        Pin-Priority: 400
+        EOF
+        sudo mv -f /tmp/pinning_file "$PINNING_FILE"
+
+        # Update APT cache
+        echo "Updating APT package list..."
+        sudo apt-get update
+
+        echo "plucky pinning setup complete."
+        sudo apt-get install -y podman podman-docker
+
+        # Remove the Docker compose plugin so Podman doesn't try to use it
+        # (the GitHub runner comes with Docker pre-installed)
+        sudo rm -f /usr/libexec/docker/cli-plugins/docker-compose
+        sudo rm -f /usr/lib/docker/cli-plugins/docker-compose
+        sudo rm -f /usr/local/lib/docker/cli-plugins/docker-compose
+        sudo rm -f ~/.docker/cli-plugins/docker-compose
+
+        # Install standalone docker-compose binary for Podman to use
+        COMPOSE_VERSION="v5.0.1"
+        echo "Installing standalone docker-compose $COMPOSE_VERSION..."
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64" \
+          -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+    - name: Configure Podman socket
+      if: ${{ matrix.tool == 'podman' }}
+      run: |
         sudo systemctl enable --now podman.socket
         systemctl --user enable --now podman.socket
 
-    - name: Display versions
+        # Wait for the user socket to be ready
+        SOCKET_PATH="$(podman info --format '{{.Host.RemoteSocket.Path}}')"
+        echo "Waiting for Podman socket at $SOCKET_PATH..."
+        for i in {1..30}; do
+          if curl --unix-socket "$SOCKET_PATH" http://localhost/_ping 2>/dev/null | grep -q OK; then
+            echo "Podman socket is ready"
+            break
+          fi
+          echo "Attempt $i: Socket not ready yet, waiting..."
+          sleep 1
+        done
+
+        echo "DOCKER_HOST=unix://$SOCKET_PATH" >> $GITHUB_ENV
+
+    - name: Display container engine version
       run: |
         echo "*** ${{ matrix.tool }} version ***"
         ${{ matrix.tool }} version
@@ -78,9 +187,8 @@ jobs:
         echo "*** ${{ matrix.tool }} compose version ***"
         ${{ matrix.tool }} compose version
 
-    - name: Configure DOCKER_HOST for Podman
-      if: ${{ matrix.tool == 'podman' }}
-      run: echo "DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')" >> $GITHUB_ENV
+    - name: ${{ matrix.tool }} info
+      run: ${{ matrix.tool }} info
 
     - name: Compose config
       run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
