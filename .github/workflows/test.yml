@@ -57,6 +57,7 @@ jobs:
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
       # To be able to call the "podman compose" wrapper using the "podman-compose" binary
       PODMAN_COMPOSE_PROVIDER: "podman-compose"
+      PODMAN_COMPOSE_WARNING_LOGS: "false"
 
     steps:
     - uses: actions/checkout@v4
