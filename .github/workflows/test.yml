@@ -68,6 +68,14 @@ jobs:
       run: |
         pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
 
+    - name: Display versions
+      run: |
+        echo "*** ${{ matrix.tool }} version ***"
+        ${{ matrix.tool }} version
+        echo
+        echo "*** ${{ matrix.tool }} compose version ***"
+        ${{ matrix.tool }} compose version
+
     - name: Compose config
       run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
 
@@ -140,13 +148,18 @@ jobs:
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
 
+    - name: curl from RHDH Container (for troubleshooting)
+      if: failure()
+      run: |
+        ${{ matrix.tool }} exec -it rhdh curl -i --head --fail http://localhost:7007
+
     - name: Compose logs
       if: always()
       run: |
         for svc in $(${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config --services | sort); do
-          echo "=== $svc ==="
+          echo "*** $svc ***"
           ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} logs --timestamps "$svc" || true
-          echo "============"
+          echo "************"
           echo
         done
 
