@@ -57,24 +57,118 @@ jobs:
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
       # To be able to call the "podman compose" wrapper using the "podman-compose" binary
       PODMAN_COMPOSE_PROVIDER: "podman-compose"
+      PODMAN_COMPOSE_WARNING_LOGS: "false"
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install tool
+    - name: Update docker version
+      if: ${{ matrix.tool == 'docker' }}
+      # https://docs.docker.com/engine/install/ubuntu#install-using-the-repository
+      run: |
+        # Remove any previous installation
+        for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd crun runc docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+        # Remove podman
+        for pkg in podman containers-common crun runc buildah; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        # Add the repository to Apt sources:
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+        # Just check that podman is not available
+        if podman version 2>/dev/null; then
+          echo "podman should not be available"
+          exit 1
+        fi
+
+    - name: Update podman version
+      if: ${{ matrix.tool == 'podman' }}
+      # https://github.com/containers/podman/discussions/25582
+      run: |
+        # Remove any previous installation
+        for pkg in podman containers-common crun runc buildah; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+        # Remove docker and docker-compose
+        for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd crun runc docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+        # Define file paths
+        PINNING_FILE="/etc/apt/preferences.d/podman-plucky.pref"
+        SOURCE_LIST="/etc/apt/sources.list.d/plucky.list"
+
+        # Write plucky APT source list
+        echo "Adding plucky repo to $SOURCE_LIST..."
+        echo "deb http://archive.ubuntu.com/ubuntu plucky main universe" | \
+          sudo tee "$SOURCE_LIST"
+
+        # Write APT pinning rules
+        echo "Writing APT pinning rules to $PINNING_FILE..."
+        cat <<EOF > /tmp/pinning_file
+        Package: podman buildah golang-github-containers-common crun libgpgme11t64 libgpg-error0 golang-github-containers-image catatonit conmon containers-storage
+        Pin: release n=plucky
+        Pin-Priority: 991
+
+        Package: libsubid4 netavark passt aardvark-dns containernetworking-plugins libslirp0 slirp4netns
+        Pin: release n=plucky
+        Pin-Priority: 991
+
+        Package: *
+        Pin: release n=plucky
+        Pin-Priority: 400
+        EOF
+        sudo mv -f /tmp/pinning_file "$PINNING_FILE"
+
+        # Update APT cache
+        echo "Updating APT package list..."
+        sudo apt-get update
+
+        echo "plucky pinning setup complete."
+        sudo apt-get install -y podman crun
+
+        # Just check that docker and docker-compose are not available
+        for cmd in docker docker-compose; do
+          if $cmd version 2>/dev/null; then
+            echo "$cmd should not be available"
+            exit 1
+          fi
+        done
+
+    - name: Install podman-compose provider
       if: ${{ matrix.tool == 'podman' }}
       env:
-        PODMAN_COMPOSE_VERSION: "v1.3.0"
+        PODMAN_COMPOSE_VERSION: "v1.5.0"
       run: |
         pip3 install podman-compose=="${PODMAN_COMPOSE_VERSION}"
 
-    - name: Display versions
+    - name: Display container engine version
       run: |
         echo "*** ${{ matrix.tool }} version ***"
         ${{ matrix.tool }} version
         echo
         echo "*** ${{ matrix.tool }} compose version ***"
         ${{ matrix.tool }} compose version
+
+    - name: ${{ matrix.tool }} info
+      run: ${{ matrix.tool }} info
 
     - name: Compose config
       run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
