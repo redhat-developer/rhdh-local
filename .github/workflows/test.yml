@@ -151,7 +151,7 @@ jobs:
     - name: curl from RHDH Container (for troubleshooting)
       if: failure()
       run: |
-        ${{ matrix.tool }} exec -it rhdh curl -i --head --fail http://localhost:7007
+        ${{ matrix.tool }} exec rhdh curl -i --head --fail http://localhost:7007
 
     - name: Compose logs
       if: always()
