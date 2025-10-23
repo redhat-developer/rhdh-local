@@ -5,13 +5,8 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
 
-## Supported architecture
-Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Road-Core Service (RCS) as a sidecar container.
-
-> **Note:** 
-> Currently, the provided RCS image is built for x86 platforms. To use other platforms (for example, arm64), ensure that you enable emulation.
-
-
+## Supported Architecture
+Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed-Core Service (LCS) and Llama Stack as sidecar containers.
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
@@ -23,15 +18,13 @@ Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all 
 
 ## Getting Started
 
-Follow these steps to configure and launch Developer Lightspeed using either `podman compose` or `docker compose`.  
-
-**Substitute `podman compose` with `docker compose` if you are using Docker.**
+Follow these steps to configure and launch Developer Lightspeed.
 
 ---
 
 1. **Load the Developer Lightspeed dynamic plugins**
 
-   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable developer lightspeed plugins within RHDH.
+   Add the `developer-lightspeed/configs/dynamic-plugins/dynamic-plugins.lightspeed.yaml` file to the list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable Developer Lightspeed plugins within RHDH.
   
    Example:
 
@@ -53,65 +46,44 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    cp developer-lightspeed/configs/app-config/app-config.lightspeed.local.example.yaml developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
    ```
 
-   This file contains placeholder values that will be replaced using environment variables:
+3. **Set Environment Variables**
 
-   ```yaml
-   lightspeed:
-     questionValidation: false
-     servers:
-       - id: ${LLM_SERVER_ID}
-         url: ${LLM_SERVER_URL}
-         token: ${LLM_SERVER_TOKEN}
-   ```
+   In the root of this repository there is a `default.env` file, you can copy the contents to `.env` and fill in the required values.
 
-
-   By default, the required environment variables for Lightspeed are already set in the `default.env` file:
+   You should ensure the following are set:
 
    ```env
    LLM_SERVER_ID=ollama
-   LLM_SERVER_URL=http://0.0.0.0:11434/v1
+   LLM_SERVER_URL=http://ollama:11434/v1
    LLM_SERVER_TOKEN=dummy
+   OLLAMA_MODEL=llama3.2:1b
+   # FOR QUESTION VALIDATION
+   VALIDATION_MODEL=llama3.2:1b
    ```
 
-   You do **not** need to change these unless you want to use your own model server.  
+   You do **not** need to change these unless you want to use your own model server and/or validate queries.
 
-3. **Start the application**
+4. **Start the application**
 
-   You can start Developer Lightspeed in two ways, depending on your model server setup:
-
-   #### **A. Use the default (Ollama included) setup**
-
-   This will start all services, including the built-in Ollama model server:
+   To start the Developer Lightspeed interactive setup script, run the following from the root of the repository:
 
    ```bash
-   podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml up -d
-   # OR, if using Docker:
-   docker compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml up -d
+   bash ./developer-lightspeed/scripts/start-lightspeed.sh
    ```
 
-   ---
+   > [!IMPORTANT]
+   >
+   > For question validation you **must** ensure the provided model is capable of handling larger context windows.
+   >
+   > For Ollama based setups, you can try `llama3.2:3b`.
+   >
+   > You will need to make sure you set `VALIDATION_MODEL` in your environment variables file to enable question validation.
 
-   #### **B. Use your own model server (minimal setup)**
-
-   If you want to use your own model server (such as a remote Ollama instance or another provider), use the minimal setup and set your server details in a `.env` file:
-
-   ```bash
-   podman compose -f compose.yaml -f developer-lightspeed/compose.yaml up -d
-   # OR, if using Docker:
-   docker compose -f compose.yaml -f developer-lightspeed/compose.yaml up -d
-   ```
-
-   Make sure your `.env` file in the project root contains:
-   ```env
-   LLM_SERVER_ID=your-server-id
-   LLM_SERVER_URL=https://your.lightspeed.server/v1
-   LLM_SERVER_TOKEN=your-api-key
-   ```
 
 ---
 
 
-4. **Verify that all services are running**
+1. **Verify that all services are running**
 
    After starting the application, make sure all services are running:
 
@@ -132,7 +104,8 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
    | 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 11434/tcp             | ollama                 |
-   | 2860fc13b036 | quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | road-core-service      |
+   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -143,7 +116,8 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
    | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
-   | 2860fc13b036 | quay.io/redhat-ai-dev/road-core-service:rcs-06302025-rhdh-1.6  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | road-core-service      |
+   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -153,7 +127,7 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
    podman logs <container-name>
    ```
 
-5. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
+2. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
 
    ![Developer Lightspeed](images/Developer-Lightspeed.png)
 
@@ -161,12 +135,34 @@ Follow these steps to configure and launch Developer Lightspeed using either `po
 
 ## Cleanup
 
+> [!NOTE]
+> Replace `podman` with `docker` if that is your chosen container engine.
+
+
 To stop and remove the running containers:
 
+#### **A. Default setup (with Ollama)**
+
+##### **Without Question Validation**
 ```bash
-podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
-# OR
-docker compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
+podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
+```
+
+##### **With Question Validation**
+```bash
+podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml -f developer-lightspeed/compose-with-validation.yaml down -v
+```
+
+#### **B. Minimal setup (own model server, no ollama)**
+
+##### **Without Question Validation**
+```bash
+podman compose -f compose.yaml -f developer-lightspeed/compose.yaml down -v
+```
+
+##### **With Question Validation**
+```bash
+podman compose -f compose.yaml -f developer-lightspeed/compose.yaml -f developer-lightspeed/compose-with-validation.yaml down -v
 ```
 
 ---
@@ -223,12 +219,7 @@ If you encounter issues while setting up or running Developer Lightspeed, try th
 
 ### 6. Still Stuck?
 
-- Try stopping and removing all containers, then starting again:
-  ```bash
-  podman compose -f compose.yaml -f compose-with-lightspeed.yaml down -v
-  podman compose -f compose.yaml -f compose-with-lightspeed.yaml up -d
-  # OR use docker compose
-  ```
+- Try stopping and removing all containers, then starting again, see [cleanup](#cleanup).
 
 If your issue persists, please [open an issue on GitHub](https://github.com/your-org/your-repo/issues) with details about your problem so we can help you troubleshoot.
 
@@ -242,16 +233,6 @@ If your issue persists, please [open an issue on GitHub](https://github.com/your
 
   ```yaml
   lightspeed:
-    # REQUIRED: Configure LLM servers with OpenAI API compatibility
-    servers:
-      - id: <server_id>                    # REQUIRED: Unique identifier for the server
-        url: <server_URL>                  # REQUIRED: Base URL of the LLM server (e.g., https://api.openai.com/v1)
-        token: <api_key>                   # REQUIRED: Authentication token/API key for the server
-    
-    # OPTIONAL: Enable/disable question validation (default: true)
-    # When enabled, restricts questions to RHDH-related topics for better security
-    questionValidation: true
-    
     # OPTIONAL: Custom users prompts displayed to users
     # If not provided, the plugin uses built-in default prompts
     prompts:
@@ -267,36 +248,16 @@ If your issue persists, please [open an issue on GitHub](https://github.com/your
 
   | Field | Type | Required | Default | Description |
   |-------|------|----------|---------|-------------|
-  | `servers` | Array | ✅ Yes | - | Array of LLM server configurations |
-  | `servers[].id` | String | ✅ Yes | - | Unique identifier for the server |
-  | `servers[].url` | String | ✅ Yes | - | Base URL of the LLM server with OpenAI API compatibility |
-  | `servers[].token` | String | ✅ Yes | - | Authentication token or API key for accessing the server |
-  | `questionValidation` | Boolean | ❌ No | `true` | Enable/disable question validation for security |
   | `prompts` | Array | ❌ No | Built-in prompts | Custom welcome prompts for users |
   | `prompts[].title` | String | ✅ Yes* | - | Display title for the prompt (*required if prompts array is provided) |
   | `prompts[].message` | String | ✅ Yes* | - | The actual prompt text/question (*required if prompts array is provided) |
   | `servicePort` | Number | ❌ No | `8080` | Port for lightspeed backend service |
   | `systemPrompt` | String | ❌ No | RHDH default | Custom system prompt to override default behavior |
 
-  ### Example Configurations
+  ### Example Configuration
 
-  #### Basic Configuration (Required fields only)
   ```yaml
   lightspeed:
-    servers:
-      - id: ${LLM_SERVER_ID}
-        url: ${LLM_SERVER_URL}
-        token: ${LLM_SERVER_TOKEN}
-  ```
-
-  #### Complete Configuration with All Options
-  ```yaml
-  lightspeed:
-    servers:
-      - id: ${LLM_SERVER_ID}
-        url: ${LLM_SERVER_URL}
-        token: ${LLM_SERVER_TOKEN}
-    questionValidation: true
     prompts:
       - title: "Quick Start"
         message: "How do I enable a dynamic plugin?"
@@ -325,8 +286,8 @@ After increasing the memory, restart your containers to use the new limits.
 
 ### How do I change the Ollama model?
 
-By default, the Ollama service pulls and loads the `tinyllama` model.  
-To use a larger or different model, you can now specify the model name using the `OLLAMA_MODEL` environment variable. The Compose file supports a default value using the `${OLLAMA_MODEL:-tinyllama}` syntax.
+By default, the Ollama service pulls and loads the `llama3.2:1b` model.  
+To use a larger or different model, you can now specify the model name using the `OLLAMA_MODEL` environment variable. The Compose file supports a default value using the `${OLLAMA_MODEL:-llama3.2:1b}` syntax.
 
 **Example in your Compose file:**
 
@@ -334,13 +295,13 @@ To use a larger or different model, you can now specify the model name using the
 command: >
   "ollama serve &
   sleep 5 &&
-  ollama pull ${OLLAMA_MODEL:-tinyllama} &&
+  ollama pull ${OLLAMA_MODEL:-llama3.2:1b} &&
   touch /tmp/ready &&
   wait"
 ```
 
 - If you set `OLLAMA_MODEL` in your `.env` file or environment, that model will be used.
-- If not set, it will default to `tinyllama`.
+- If not set, it will default to `llama3.2:1b`.
 - Example `.env` entry:
   ```env
   OLLAMA_MODEL=llama2:13b

@@ -17,7 +17,10 @@ dynamic-plugins-root
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
 /developer-lightspeed/configs/extra-files/*
-!/developer-lightspeed/configs/extra-files/road-core-service-config.yaml
+!/developer-lightspeed/configs/extra-files/lightspeed-core-service-config.yaml
+!/developer-lightspeed/configs/extra-files/run.yaml
+!/developer-lightspeed/configs/extra-files/run-no-validation.yaml
+
 
 # Kept for backward compatibility, but now Git-ignored
 /configs/app-config.local.yaml

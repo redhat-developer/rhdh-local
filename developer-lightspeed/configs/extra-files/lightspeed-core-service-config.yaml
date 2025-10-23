@@ -1,0 +1,20 @@
+name: Lightspeed Core Service (LCS)
+service:
+  host: 0.0.0.0
+  port: 8080
+  auth_enabled: false
+  workers: 1
+  color_log: true
+  access_log: true
+llama_stack:
+  use_as_library_client: false
+  url: http://localhost:8321
+user_data_collection:
+  feedback_enabled: true
+  feedback_storage: "/tmp/data/feedback"
+authentication:
+  module: "noop"
+conversation_cache:
+  type: "sqlite"
+  sqlite:
+    db_path: "/tmp/cache.db"

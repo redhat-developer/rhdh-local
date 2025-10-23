@@ -17,16 +17,6 @@ backend:
 # Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
 # Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
 lightspeed:
-  # REQUIRED: Configure LLM servers with OpenAI API compatibility
-  servers:
-    - id: ${LLM_SERVER_ID}
-      url: ${LLM_SERVER_URL}
-      token: ${LLM_SERVER_TOKEN}
-
-  # OPTIONAL: Enable/disable question validation (default: true)
-  # When enabled, restricts questions to RHDH-related topics for better security
-  questionValidation: false 
-
   # OPTIONAL: Custom users prompts displayed to users
   # If not provided, the plugin uses built-in default prompts
   prompts:
