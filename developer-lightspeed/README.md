@@ -18,6 +18,12 @@ Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all 
 
 ## Getting Started
 
+> [!IMPORTANT]
+> Developer Lightspeed can be resource intensive on the model side because of the use of RAG and in some cases question validation. If using the provided Ollama server locally you may encounter unforeseen responses if the model cannot handle the context. 
+>
+> For best results it is recommended to provide your own external LLM provider.
+
+
 Follow these steps to configure and launch Developer Lightspeed.
 
 ---
@@ -75,7 +81,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    >
    > For question validation you **must** ensure the provided model is capable of handling larger context windows.
    >
-   > For Ollama based setups, you can try `llama3.2:3b`.
+   > For Ollama based setups, you can try `llama3.2:1b`.
    >
    > You will need to make sure you set `VALIDATION_MODEL` in your environment variables file to enable question validation.
 

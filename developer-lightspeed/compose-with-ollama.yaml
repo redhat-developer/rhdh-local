@@ -35,45 +35,16 @@ services:
         required: true
       - path: "./.env"
         required: false
+    command: >
+      "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL:-llama3.2:1b} && touch /tmp/ollama-model-ready && wait"
     entrypoint: [ "sh", "-c" ]
-    command:
-      - |
-        set -e
-        
-        # Start the server in the background
-        ollama serve &
-        pid=$$!
-
-        # Wait for the server to be ready using ollama list command
-        echo "Waiting for Ollama server to start..."
-        max_attempts=60
-        attempt=0
-        while [ $$attempt -lt $$max_attempts ]; do
-          if ollama list >/dev/null 2>&1; then
-            echo "Ollama server is ready."
-            break
-          fi
-          attempt=$$((attempt + 1))
-          sleep 1
-        done
-
-        if [ $$attempt -eq $$max_attempts ]; then
-          echo "ERROR: Ollama server failed to start within $$max_attempts seconds"
-          exit 1
-        fi
-
-        # Pull the model in the background
-        echo "Pulling model: $${OLLAMA_MODEL:-llama3.2:1b}"
-        ollama pull "$${OLLAMA_MODEL:-llama3.2:1b}" &
-        
-        # Wait for the server process to exit
-        wait "$$pid"
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "ollama", "list" ]
+      test: ["CMD-SHELL", "ollama list | grep -q $$OLLAMA_MODEL && [ -f /tmp/ollama-model-ready ]"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 40
+      start_period: 60s
 
   llama-stack:
     image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc} # dclint disable-line service-image-require-explicit-tag
@@ -82,6 +53,8 @@ services:
     depends_on:
       rhdh:
         condition: service_started
+      ollama:
+        condition: service_healthy
     volumes:
       - ./developer-lightspeed/configs/extra-files/run-no-validation.yaml:/app-root/run.yaml:Z
       - rag_embeddings:/app-root/embeddings_model
