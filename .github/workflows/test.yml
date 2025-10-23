@@ -80,7 +80,7 @@ jobs:
 
     - name: Configure DOCKER_HOST for Podman
       if: ${{ matrix.tool == 'podman' }}
-      run: echo "DOCKER_HOST=unix:///run/user/1001/podman/podman.sock" >> $GITHUB_ENV
+      run: echo "DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')" >> $GITHUB_ENV
 
     - name: Compose config
       run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
