@@ -10,6 +10,7 @@ backend:
 
    script-src:
      - "'self'"
+     - "'unsafe-eval'" # this is required for scaffolder usage, and ajv validation.
      - https://cdn.jsdelivr.net
 # Check out the below guide for more information.
 # Lightspeed on rhdh-local: https://github.com/redhat-developer/rhdh-local/blob/main/developer-lightspeed/README.md
