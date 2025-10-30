@@ -7,7 +7,11 @@ dynamic-plugins-root
 # User-specific local configuration files
 *.local.yaml
 *-credentials.yaml
-/configs/dynamic-plugins/dynamic-plugins.override.yaml
+/configs/dynamic-plugins/dynamic-plugins.override.yaml*
+compose.override.yaml
+
+# Local shell scripts in the root folder
+*.sh 
 
 # Catalog-Entities
 /configs/catalog-entities/users.override.yaml
