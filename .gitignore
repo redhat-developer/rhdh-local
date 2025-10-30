@@ -8,7 +8,7 @@ dynamic-plugins-root
 *.local.yaml
 *-credentials.yaml
 /configs/dynamic-plugins/dynamic-plugins.override.yaml*
-compose.override.yaml
+compose.override.yaml*
 
 # Local shell scripts in the root folder
 *.sh 
