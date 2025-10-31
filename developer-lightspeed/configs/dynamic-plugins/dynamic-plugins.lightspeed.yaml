@@ -33,5 +33,5 @@ plugins:
                 menuItem:
                   icon: LightspeedIcon
                   text: Lightspeed
-  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__1.0.0!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__1.0.1!red-hat-developer-hub-backstage-plugin-lightspeed-backend
     disabled: false
