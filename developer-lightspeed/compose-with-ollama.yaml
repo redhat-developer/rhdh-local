@@ -64,6 +64,8 @@ services:
         required: true
       - path: "./.env"
         required: false
+    environment:
+      ENABLE_OLLAMA: 'true'
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8321/v1/models || exit 1"]
       interval: 5s

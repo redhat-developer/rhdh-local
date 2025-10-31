@@ -54,22 +54,38 @@ Follow these steps to configure and launch Developer Lightspeed.
 
 3. **Set Environment Variables**
 
-   In the root of this repository there is a `default.env` file, you can copy the contents to `.env` and fill in the required values.
+    In the root of this repository there is a `default.env` file, you can copy the contents to `.env` and fill in the required values.
 
-   You should ensure the following are set:
+    If you intend on using the provided `Ollama` provider and model, you **do not** need to touch these variables.
 
-   ```env
-   LLM_SERVER_ID=ollama
-   LLM_SERVER_URL=http://ollama:11434/v1
-   LLM_SERVER_TOKEN=dummy
-   OLLAMA_MODEL=llama3.2:1b
-   # FOR QUESTION VALIDATION
-   VALIDATION_MODEL=llama3.2:1b
-   ```
+    **Enabling vLLM**
+    ```env
+    ENABLE_VLLM=true
+    VLLM_URL=<your-url>/v1
+    VLLM_API_KEY=<your-api-key>
+    ```
 
-   You do **not** need to change these unless you want to use your own model server and/or validate queries.
+    **Enabling OpenAI**
+    ```env
+    ENABLE_OPENAI=true
+    OPENAI_API_KEY=<your-api-key>
+    ```
 
-4. **Start the application**
+    **Enabling Gemini**
+    ```env
+    ENABLE_GEMINI=true
+    GEMINI_API_KEY=
+    ```
+
+    **Preparing For External Provider Question Validation**
+    ```env
+    ## Ensure VALIDATION_PROVIDER is one of your enabled Inference Providers
+    ## E.g. VALIDATION_PROVIDER=vllm if ENABLE_VLLM=true
+    VALIDATION_PROVIDER=ollama
+    VALIDATION_MODEL=llama3.2:1b
+    ```
+
+1. **Start the application**
 
    To start the Developer Lightspeed interactive setup script, run the following from the root of the repository:
 
@@ -83,7 +99,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    >
    > For Ollama based setups, you can try `llama3.2:1b`.
    >
-   > You will need to make sure you set `VALIDATION_MODEL` in your environment variables file to enable question validation.
+   > You will need to make sure you set `VALIDATION_MODEL` and `VALIDATION_PROVIDER` in your environment variables file to enable question validation.
 
 
 ---
