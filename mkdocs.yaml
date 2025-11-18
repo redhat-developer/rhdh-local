@@ -5,23 +5,21 @@ docs_dir: docs
 plugins:
   - techdocs-core
 nav:
-  - "Intro To RHDH Local": index.md
-  - "RHDH":
-    - "What Is Red Hat Developer Hub (RHDH)?": intro/rhdh.md
-    - "Highlights Of Red Hat Developer Hub": intro/features.md
-    - "Comparing Red Hat Developer Hub to CNCF Backstage": intro/comparison.md
+  - "Welcome To RHDH Local": index.md
   - "Getting Started With Red Hat Developer Hub":
     - "What is RHDH and why is it useful?": getting-started-rhdh/index.md
+    - "Highlights Of Red Hat Developer Hub": getting-started-rhdh/highlights.md
     - "Navigating Around": getting-started-rhdh/navigation.md
     - "Understanding & Using the Software Catalog": getting-started-rhdh/software-catalog.md
-    # - "Understanding & Using TechDocs": getting-started-rhdh/techdocs.md
+    - "Understanding & Using TechDocs": getting-started-rhdh/techdocs.md
     # - "Understanding & Using APIs": getting-started-rhdh/apis.md
     # - "Understanding & Using Templates": getting-started-rhdh/templates.md
     - "Using Search": getting-started-rhdh/search.md
     # - "Understanding & Using Extensions (Plugins)": getting-started-rhdh/extensions.md
     # - "Using Developer Lightspeed": getting-started-rhdh/developer-lightspeed.md
-  - "Getting Started With RHDH Local": getting-started.md
-  - "How-To Guides":
+    - "Comparing Red Hat Developer Hub to CNCF Backstage": getting-started-rhdh/comparison.md
+  - "RHDH Local User Guide":
+    - "Getting Started With RHDH Local": guides/getting-started.md
     - "Configuration": guides/configuration.md
     - "Loading Content": guides/loading-content.md
     - "Dynamic Plugin Management": guides/dynamic-plugins-management.md
@@ -36,5 +34,5 @@ nav:
     # - "LightSpeed": guides/index.md
     #- "Orchestrator": ../orchestrator/README.md
     - "Operating RHDH Local": guides/operating-rhdh-local.md
-  - "Getting Help & Contributing": help-and-contrib.md
+    - "Getting Help & Contributing": guides/help-and-contrib.md
   - "References": references.md
