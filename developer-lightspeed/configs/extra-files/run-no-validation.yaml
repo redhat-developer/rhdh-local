@@ -76,10 +76,6 @@ providers:
       provider_type: remote::openai
       config:
         api_key: ${env.OPENAI_API_KEY:=}
-    - provider_id: ${env.ENABLE_GEMINI:+gemini}
-      provider_type: remote::gemini
-      config:
-        api_key: ${env.GEMINI_API_KEY:=}
     - provider_id: sentence-transformers
       provider_type: inline::sentence-transformers
       config: {}
@@ -131,7 +127,7 @@ providers:
       kvstore:
         type: sqlite
         namespace: null
-        db_path: /app-root/vector_db/rhdh_product_docs/1.7/faiss_store.db
+        db_path: /app-root/vector_db/rhdh_product_docs/1.8/faiss_store.db
 scoring_fns: []
 server:
   auth: null
@@ -150,7 +146,7 @@ vector_dbs:
 - embedding_dimension: 768
   embedding_model: /app-root/embeddings_model
   provider_id: rhdh-docs
-  vector_db_id: rhdh-product-docs-1_7
+  vector_db_id: rhdh-product-docs-1_8
 models:
 - model_id: sentence-transformers/all-mpnet-base-v2
   metadata:

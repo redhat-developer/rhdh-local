@@ -71,12 +71,6 @@ Follow these steps to configure and launch Developer Lightspeed.
     OPENAI_API_KEY=<your-api-key>
     ```
 
-    **Enabling Gemini**
-    ```env
-    ENABLE_GEMINI=true
-    GEMINI_API_KEY=
-    ```
-
     **Preparing For External Provider Question Validation**
     ```env
     ## Ensure VALIDATION_PROVIDER is one of your enabled Inference Providers
