@@ -1,5 +1,3 @@
-# Navigating Around Red Hat Developer Hub
-
 When you first open Red Hat Developer Hub, you'll notice two main navigation areas: the **Global Header** at the top and the **Left Hand Navigation** sidebar. Understanding these areas is key to efficiently using Developer Hub.
 
 !!! note "RHDH vs. Backstage UI"

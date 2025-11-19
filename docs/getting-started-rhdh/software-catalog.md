@@ -1,5 +1,3 @@
-# Understanding & Using the Software Catalog
-
 The Software Catalog is the heart of Red Hat Developer Hub. It's a centralized inventory of all your software components, services, APIs, and resources—giving you a complete view of your software ecosystem in one place.
 
 ## What is the catalog and why is it useful?

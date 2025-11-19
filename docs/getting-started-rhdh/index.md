@@ -1,5 +1,3 @@
-# Getting Started with Red Hat Developer Hub
-
 ## What is RHDH and why is it useful?
 
 Red Hat Developer Hub (RHDH) is an **Internal Developer Portal** that brings together all the tools, services, and information your development teams need in one unified interface. Think of it as your team's central command center for building, deploying, and managing software.

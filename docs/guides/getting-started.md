@@ -39,7 +39,7 @@ In most cases, when you don't need GitHub Authentication or testing different re
 
 ### 3. (Optional) Create local configuration overrides
 
-You can optionally customize the application configuration and dynamic plugins to load. See [Configuration Overview](./guides/configuration.md) for more details.
+You can optionally customize the application configuration and dynamic plugins to load. See [Configuration Overview](configuration.md) for more details.
 
 ### 4. Start RHDH Local
 
@@ -76,12 +76,12 @@ You'll see the RHDH homepage once logged in. If GitHub authentication isn't conf
 
 Now that RHDH Local is running, explore these areas:
 
-- **[Configuration](guides/configuration.md)**: Provide your own configuration files
-- **[Loading Content](guides/loading-content.md)**: Add your catalogs, templates, and TechDocs
-- **[Dynamic Plugin Management](guides/dynamic-plugins-management.md)**: Install and configure plugins
-- **[GitHub Authentication](guides/github-auth.md)**: Set up GitHub integration for full functionality
-- **[Local Plugin Development](guides/plugins-guide.md)**: Build and test custom plugins
-- **[Operating RHDH Local](guides/operating-rhdh-local.md)**: Learn operational commands and maintenance
+- **[Configuration](configuration.md)**: Provide your own configuration files
+- **[Loading Content](loading-content.md)**: Add your catalogs, templates, and TechDocs
+- **[Dynamic Plugin Management](dynamic-plugins-management.md)**: Install and configure plugins
+- **[GitHub Authentication](github-auth.md)**: Set up GitHub integration for full functionality
+- **[Local Plugin Development](plugins-guide.md)**: Build and test custom plugins
+- **[Operating RHDH Local](operating-rhdh-local.md)**: Learn operational commands and maintenance
 
 ### Troubleshooting
 

@@ -1,5 +1,3 @@
-# Understanding & Using Templates
-
 Software Templates are one of the most powerful features in Red Hat Developer Hub. They transform your developer portal into a self-service productivity powerhouse, enabling developers to create new projects, services, and components with just a few clicks—all while following your organization's best practices automatically.
 
 ## What are Templates and why are they useful?

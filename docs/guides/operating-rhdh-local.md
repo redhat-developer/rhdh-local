@@ -294,4 +294,4 @@ podman volume prune
 
 ---
 
-For questions or contributions, visit [Help & Contributing](../help-and-contrib.md).
+For questions or contributions, visit [Help & Contributing](help-and-contrib.md).

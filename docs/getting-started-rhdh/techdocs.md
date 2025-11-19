@@ -1,5 +1,3 @@
-# Understanding & Using TechDocs
-
 TechDocs is Red Hat Developer Hub's built-in documentation system that brings your technical documentation directly into the developer portal. Instead of hunting through wikis, README files, or separate documentation sites, TechDocs makes all your documentation discoverable, searchable, and accessible right where developers need it—alongside the components they're working with.
 
 ## What are TechDocs and why are they useful?

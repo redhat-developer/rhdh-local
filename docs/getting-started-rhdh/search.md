@@ -1,5 +1,3 @@
-# Using Search
-
 Search is one of the most powerful features in Red Hat Developer Hub. It allows you to quickly find components, services, APIs, documentation, templates, and more across your entire software ecosystem.
 
 Developer Hub provides a quick search from the Global Header that shows instant results. When you need more detailed results with advanced filtering options, you can click the **"All results..."** link to view the dedicated search results page.

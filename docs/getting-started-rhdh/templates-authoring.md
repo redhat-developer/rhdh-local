@@ -1,5 +1,3 @@
-# Creating Templates
-
 This guide is for platform engineers and template authors who want to create Software Templates for their organization. If you're looking to use existing templates, see the [Understanding & Using Templates](templates.md) guide.
 
 Creating your own templates allows you to codify your organization's best practices and make them available to all developers. Templates are written in YAML and define the parameters (inputs) and steps (actions) that the template will execute.

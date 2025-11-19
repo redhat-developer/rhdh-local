@@ -68,9 +68,9 @@ To use RHDH Local effectively, you need:
 - **Local Environment**: Laptop, desktop, or homelab with adequate resources
 - **Internet Connection**: For downloading images and accessing external catalogs
 
-## Getting Started
+## Getting Started With RHDH Local
 
-Ready to dive in? Start with our [Getting Started Guide](guides/getting-started.md) for a quick setup, or explore specific topics:
+Ready to dive in? Start with our [RHDH Local User Guide](guides/getting-started.md) for a quick setup, or explore specific topics:
 
 - [Configuration](guides/configuration.md) - Understand RHDH Local configuration
 - [Loading Content](guides/loading-content.md) - Configure catalogs, templates, and TechDocs
@@ -79,3 +79,27 @@ Ready to dive in? Start with our [Getting Started Guide](guides/getting-started.
 - [Operating RHDH Local](guides/operating-rhdh-local.md) - Start, stop, and manage your instance
 - [GitHub Authentication](guides/github-auth.md) - Configure GitHub integration
 - [Help & Contributing](guides/help-and-contrib.md) - Get support and contribute back
+
+## New to Developer Hub or Backstage?
+
+If you're new to Red Hat Developer Hub or Backstage, we've got you covered! Start with our comprehensive getting started guide to understand the core concepts and features:
+
+!!! tip "Start Here 📚"
+
+    Begin with [**What is RHDH and why is it useful?**](getting-started-rhdh/index.md) to understand the fundamentals, then explore:
+
+    * [**Navigating Around**](getting-started-rhdh/navigation.md) - Learn your way around the interface
+    * [**Understanding & Using the Software Catalog**](getting-started-rhdh/software-catalog.md) - Discover and manage your services and components
+    * [**Understanding & Using TechDocs**](getting-started-rhdh/techdocs.md) - Access and create documentation
+    * [**Understanding & Using Templates**](getting-started-rhdh/templates.md) - Use templates to create new projects
+    * [**Understanding & Using Developer Lightspeed**](getting-started-rhdh/developer-lightspeed.md) - Get AI-powered assistance
+
+!!! info "Backstage vs RHDH"
+
+    Red Hat Developer Hub is based on [CNCF Backstage](https://backstage.io), the open-source Internal Developer Portal. If you're familiar with Backstage, you'll find RHDH very similar, with additional enterprise features and support from Red Hat. If you're new to both, our guides will help you understand the concepts regardless of which platform you're using.
+    
+    Want to understand the differences in detail? See our [**Comparing Red Hat Developer Hub to CNCF Backstage**](guides/comparison.md) guide for a comprehensive feature comparison.
+
+!!! success "Learn by Doing 🚀"
+
+    The best way to learn is hands-on! Use RHDH Local to experiment with features, test configurations, and explore the platform in a safe, local environment. Start with our [Getting Started Guide](guides/getting-started.md) to set up your local instance.

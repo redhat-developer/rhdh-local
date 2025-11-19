@@ -146,7 +146,7 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 ### RHDH Local Documentation
 
-- See [Help & Contributing](help-and-contrib.md) for guidelines on improving this documentation
+- See [Help & Contributing](guides/help-and-contrib.md) for guidelines on improving this documentation
 - All RHDH Local specific docs are maintained in the [GitHub repository](https://github.com/redhat-developer/rhdh-local/tree/main/docs)
 
 ### Upstream Documentation

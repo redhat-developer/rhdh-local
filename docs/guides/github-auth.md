@@ -9,7 +9,7 @@ This guide focuses more on RHDH Local, but feel free to refer to the [official R
 Before setting up GitHub authentication:
 
 - **GitHub Account**: Personal or organization account
-- **RHDH Local Running**: Complete the [Getting Started Guide](../getting-started.md) first
+- **RHDH Local Running**: Complete the [Getting Started Guide](getting-started.md) first
 - **Admin Access**: To your GitHub account or organization settings
 - **Port 7007 Available**: Default RHDH Local port (or note your custom port)
 
@@ -132,4 +132,4 @@ Then try to login using GitHub.
 
 ---
 
-For additional help, see [Help & Contributing](../help-and-contrib.md).
+For additional help, see [Help & Contributing](help-and-contrib.md).

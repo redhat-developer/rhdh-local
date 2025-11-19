@@ -1,45 +1,62 @@
-# Highlights of Red Hat Developer Hub
+Red Hat Developer Hub provides several key features that help development teams work more efficiently. This page explains what these features are and how they can help you in your daily work.
 
-Red Hat Developer Hub helps you and your team deliver better code with greater speed, confidence, and clarity. Here are some highlights of what you can expect when using Red Hat Developer Hub:
+!!! info "Turn-key Solution 🚀"
 
-!!! success "Turn-key Portal 🚀"
+    Red Hat Developer Hub is a pre-configured, production-ready platform. Unlike CNCF Backstage (the open-source project it's based on), which typically requires coding and manual plugin integration, Red Hat Developer Hub comes ready to use out of the box.
+    
+    This means you don't need to rebuild the application or spend extensive time on setup. Platform engineering teams can focus on configuring it for their organization rather than building the infrastructure from scratch.
 
-    One of the key differentiators of Red Hat Developer Hub is that it is a true 'turn-key' solution. Unlike CNCF Backstage, which often requires additional coding effort and manual plugin integration to become fully functional, Red Hat Developer Hub comes ready to run out of the box.
+!!! info "Unified Interface 🪟"
 
-    Red Hat developer Hub provides a pre-configured, production-ready platform that eliminates the need for rebuilds, extensive setup, or brittle customizations. This streamlined experience allows platform engineering teams to focus on delivering value rather than building and maintaining the developer portal infrastructure.
+    Red Hat Developer Hub provides a single, consistent interface that brings together your applications, services, teams, documentation, and APIs in one place. Instead of switching between multiple tools and systems, you can find everything you need in one location.
+    
+    The platform supports dynamic plugins that are compatible with Backstage, allowing you to add integrations with your existing tools without requiring application rebuilds.
 
-!!! info "Single Pane Of Glass For All Your Developers 🪟"
+!!! tip "Software Templates for Consistency 🏆"
 
-    Red Hat Developer Hub uses one consistent user interface to bring together all your applications, services, teams, documentation, and APIs in one place.
+    Software Templates help standardize how new projects are created. Platform engineers can create templates that capture your organization's best practices and workflows. When developers use these templates, new projects automatically follow your standards for project structure, CI/CD configuration, security settings, and more.
+    
+    This helps ensure consistency across projects and reduces the time developers spend on repetitive setup tasks. Learn more in [Understanding & Using Templates](templates.md).
 
-    With Backstage compatible dynamic plugins, you can customize your experience faster by adding your favorite tools with less downtime.
+!!! info "Self-Service Capabilities ⚡"
 
-!!! tip "Golden Path Templates To Encourage Best Practices 🏆"
+    Red Hat Developer Hub enables self-service workflows, which means developers can perform common tasks without waiting for IT tickets or approvals. For example, you can create new projects, access documentation, view service dependencies, and more—all through the interface.
+    
+    This reduces wait times and allows developers to be more productive. Common tasks that might have required tickets or meetings can now be completed directly in the platform.
 
-    Capture your development best practices and software supply chain provisioning workflows as reusable templates to help developers bootstrap new applications more quickly, follow your standard approaches, and stick to the golden path.
+!!! note "Extensible with Plugins 🔌"
 
-!!! success "Self Service For Greater Productivity ⚡"
+    Red Hat Developer Hub is compatible with many Backstage plugins, giving you access to a wide range of integrations and features. You can integrate with systems for project management, security scanning, CI/CD pipelines, observability, monitoring, infrastructure management, testing, and more.
+    
+    Plugins can be added dynamically without rebuilding the application, making it easy to extend the platform's capabilities as your needs grow.
 
-    No more waiting around for IT tickets to complete or repetitive meetings. Automate your common tasks and empower your developers.
+!!! info "Enterprise Support 🛡️"
 
-    Provide access to your most important systems through Developer Hub and watch everyone go faster!
+    In addition to community resources from the Backstage open-source community, Red Hat Developer Hub includes enterprise support from Red Hat. This means you have access to technical support, security updates, and issue resolution from Red Hat's support team.
+    
+    For more information, see [Red Hat Support](https://www.redhat.com/support).
 
-!!! note "Easy Extension With Plugins, Plugins, Plugins! 🔌"
+!!! info "Flexible Deployment Options ☁️"
 
-    Red Hat Developer Hub is compatible with many Backstage plugins giving you access to a wide array of additional integrations and features, all designed with developer productivity in mind.
+    Red Hat Developer Hub runs on any Kubernetes distribution that conforms to the Kubernetes API, including Red Hat OpenShift, AWS EKS, Azure AKS, Google GKE, and others.
+    
+    The platform can also be deployed on-premises or in air-gapped environments for organizations that require additional privacy and security controls.
 
-    Integrate your favorite systems for project management, security, CI/CD, observability, monitoring, metrics, reporting, infrastructure, testing, QA, and more!
+## Next Steps
 
-!!! tip "Enterprise Grade Technical Support 🛡️"
+Now that you understand the key features of Red Hat Developer Hub, explore these areas to get started:
 
-    In addition to the multitude of helpful resources maintained by the growing Backstage open-source community, Red Hat Developer Hub is also fully [supported](https://www.redhat.com/support) for fast fixes and issue resolution from Red Hat - the experts behind RHEL, Openshift, Ansible and more.
+* [Navigating Around](navigation.md) - Learn your way around the interface
+* [Understanding & Using the Software Catalog](software-catalog.md) - Discover and manage your services and components
+* [Understanding & Using Templates](templates.md) - Use templates to create new projects following best practices
+* [Understanding & Using TechDocs](techdocs.md) - Access and create documentation
+* [Using Search](search.md) - Find anything quickly across your organization
+* [Understanding & Using Developer Lightspeed](developer-lightspeed.md) - Get AI-powered assistance
 
-!!! info "Complete Deployment Flexibility ☁️"
+### Learn More
 
-    Red Hat Developer Hub runs on any API-conformant Kubernetes distribution including Red Hat OpenShift, AWS, Azure, Google GKE, and more.
-
-    You can even run on-prem and air-gapped for additional privacy and extra security.
+* [What is Developer Hub and why is it useful?](index.md) - Understand the fundamentals
+* [Comparing Red Hat Developer Hub to CNCF Backstage](../guides/comparison.md) - See how RHDH compares to open-source Backstage
+* [Official Red Hat Developer Hub Documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/) - Complete product documentation
 
 *[RHDH]: Red Hat Developer Hub
-
-
