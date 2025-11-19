@@ -51,7 +51,7 @@ Particularly useful for code blocks for different programming languages or platf
 [Subscribe to our newsletter](#){ .md-button }
 
 !!! note "More diagrams and examples"
-    You can find much more information about PlantUML and samples to try on their [website](https://plantuml.com/). Use the links at th top of the page for samples.
+    You can find much more information about PlantUML and samples to try on their [website](https://plantuml.com/). Use the links at the top of the page for samples.
 
 ## Footnotes
 
@@ -180,4 +180,4 @@ Link with tooltip (using the separate 'reference' syntax).
 
 Define an abbreviation once and wherever it appears on the page it will be underlined. Hover over the underlined abbreviation and the expanded abbreviation is shown as a tool tip. No more wondering what "CNCF" stands for!
 
-*[CNCF]: Cloud Native Compting Foundation
+*[CNCF]: Cloud Native Computing Foundation

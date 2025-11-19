@@ -126,7 +126,7 @@ As plugins are enabled in your Developer Hub instance, they may add their own na
 
 * AI tools like Developer Lightspeed
 * Bulk Import to fill your software catalog quickly
-* Learning Paths for traning and learning
+* Learning Paths for training and learning
 * Custom tools and workflows specific to your organization
 
 ### Navigation Best Practices

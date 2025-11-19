@@ -258,7 +258,7 @@ spec:
 
 **Step 2: Configure Catalog Location**
 
-You or your administrator needs to add your repository location to the catalog configuration. This is can be done using the ["self service"](/catalog-import) feature in the Global Header or it can be done in the RHDH instance's `app-config.yaml` file on boot:
+You or your administrator needs to add your repository location to the catalog configuration. This can be done using the ["self service"](/catalog-import) feature in the Global Header or it can be done in the RHDH instance's `app-config.yaml` file on boot:
 
 ```yaml
 catalog:
