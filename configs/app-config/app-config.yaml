@@ -82,14 +82,6 @@ app:
       cta:
         text: 'View the APIs'
         link: '/api-docs'
-    # Uncomment if you're using Developer Lightspeed in RHDH Local...
-    # - title: 'Ask Lightspeed To Help You'
-    #   description: 'Try Developer Lightspeed, the virtual assistant for everyday developer tasks — ask for summaries, troubleshoot issues, find docs, and more.'
-    #   icon: 'LightspeedIcon'
-    #   roles: ['admin', 'developer']
-    #   cta:
-    #     text: 'Open Developer Lightspeed'
-    #     link: '/lightspeed'
     - title: 'Add Software To The Catalog'
       description: 'You can register existing Backstage components into the catalog using catalog-info.yaml files. Alternatively, you could use our Bulk Import tool to register multiple components at once.'
       icon: 'add'
@@ -120,13 +112,6 @@ app:
         link: '/catalog/default/system/rhdh-local'
 
     # Quickstarts just for admins
-    - title: 'Manage Developer Roles and Permissions'
-      description: 'As an admin, you can manage roles and permissions for users in the system to ensure proper access control.'
-      icon: 'Rbac'
-      roles: ['admin'] # Show only to admins
-      cta:
-        text: 'Role Based Access Control'
-        link: '/rbac'
     - title: 'View Your Platform Adoption Metrics'
       description: 'See how your developers are using Developer Hub''s many tools and features.'
       icon: 'chart'
