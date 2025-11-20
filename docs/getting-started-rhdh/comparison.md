@@ -1,8 +1,6 @@
-# Comparing Red Hat Developer Hub to CNCF Backstage
+If you're new to Red Hat Developer Hub, you might be wondering how it relates to CNCF Backstage, the open-source project it's based on. Understanding the relationship and differences between these two platforms can help you better understand what Red Hat Developer Hub offers and why your organization might have chosen it.
 
-Choosing the right internal developer portal (IDP) is a critical decision for engineering teams aiming to improve their developer experience, streamline software delivery, and adopt DevOps best practices. CNCF Backstage has become a popular open-source framework for building IDPs, but it often requires significant customization, manual plugin integration, and ongoing maintenance effort.
-
-Red Hat Developer Hub, built on top of Backstage, offers an enterprise-ready alternative. It provides a curated, fully supported, and production-hardened solution out of the box — eliminating many of the complexities associated with a DIY Backstage setup.
+Red Hat Developer Hub is built directly on top of CNCF Backstage, which means you get all the same core features and capabilities. However, RHDH adds enterprise-grade features, support, and production-ready capabilities that make it easier to deploy and maintain in enterprise environments.
 
 !!! tip "Built on Open Source, Enhanced for Enterprise 🚀"
 
@@ -27,7 +25,7 @@ Red Hat Developer Hub, built on top of Backstage, offers an enterprise-ready alt
 
 ## Feature Comparison
 
-The comparison matrix below highlights key differences to help enterprise platform engineering teams determine which solution best aligns with their specific needs.
+The comparison below highlights the key differences between CNCF Backstage and Red Hat Developer Hub. This can help you understand what makes RHDH unique and what additional capabilities it provides beyond the open-source foundation.
 
 ### Core Features
 
@@ -127,9 +125,9 @@ Red Hat Developer Hub is the better choice if you:
 
 ## Learn More
 
-* [What is RHDH and why is it useful?](../getting-started-rhdh/index.md) - Understand the fundamentals
-* [Understanding & Using Templates](../getting-started-rhdh/templates.md) - Explore the free templates library
-* [Understanding & Using TechDocs](../getting-started-rhdh/techdocs.md) - Learn about documentation features
+* [What is RHDH and why is it useful?](index.md) - Understand the fundamentals
+* [Understanding & Using Templates](templates.md) - Explore the free templates library
+* [Understanding & Using TechDocs](techdocs.md) - Learn about documentation features
 * [Official Red Hat Developer Hub Documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/) - Complete product documentation
 * [CNCF Backstage Documentation](https://backstage.io/docs) - Learn about the open-source foundation
 

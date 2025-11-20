@@ -1,5 +1,3 @@
-# Configuration
-
 RHDH Local uses a structured configuration approach with override files:
 
 ```bash

@@ -56,7 +56,7 @@ Now that you understand the key features of Red Hat Developer Hub, explore these
 ### Learn More
 
 * [What is Developer Hub and why is it useful?](index.md) - Understand the fundamentals
-* [Comparing Red Hat Developer Hub to CNCF Backstage](../guides/comparison.md) - See how RHDH compares to open-source Backstage
+* [Comparing Red Hat Developer Hub to CNCF Backstage](comparison.md) - See how RHDH compares to open-source Backstage
 * [Official Red Hat Developer Hub Documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/) - Complete product documentation
 
 *[RHDH]: Red Hat Developer Hub

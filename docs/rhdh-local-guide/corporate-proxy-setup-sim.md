@@ -1,5 +1,3 @@
-# Testing RHDH in a simulated corporate proxy setup
-
 If you want to test how RHDH would behave if deployed in a corporate proxy environment,
 you can run `podman compose` or `docker compose` by merging both the [`compose.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) and [`compose-with-corporate-proxy.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/compose-with-corporate-proxy.yaml) files.
 

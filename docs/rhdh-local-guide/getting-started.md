@@ -1,5 +1,3 @@
-# Getting Started with RHDH Local
-
 This guide walks you through setting up and using RHDH Local effectively, from initial installation to advanced configuration.
 
 ## Prerequisites

@@ -1,29 +1,12 @@
-# References and External Documentation
-
-This page provides links to the official Red Hat Developer Hub documentation and related resources for topics beyond RHDH Local specific workflows.
-
-!!! info "Scope"
-    This documentation focuses on **RHDH Local specific features**. For comprehensive Red Hat Developer Hub documentation covering general usage, administration, and advanced features, use the official resources listed below.
+This page provides links to the official Red Hat Developer Hub documentation and related resources for topics beyond the scope of this getting started guide.
 
 ---
 
 ## Official Red Hat Developer Hub Documentation
 
-### Core Documentation
+### Red Hat Developer Hub Documentation
 
-- **[Red Hat Developer Hub Documentation](http://docs.redhat.com/en/documentation/red_hat_developer_hub/)** - Complete official documentation
-
-### Specific Features
-
-- **[Software Templates](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/configuring-templates)** - Creating and using scaffolder templates
-- **[Software Catalog](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/about-software-catalogs)** - Managing entities and catalogs
-- **[TechDocs](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/techdocs_for_red_hat_developer_hub/about-techdocs_customizing-display)** - TechDocs (Documentation as code) setup
-- **[Dynamic Plugins](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/introduction_to_plugins/con-rhdh-plugins)** - Plugins in RHDH
-- **[Dynamic Plugins reference](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/configuring_dynamic_plugins)** - Dynamic plugins reference
-- **[Authentication](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/authentication_in_red_hat_developer_hub)** - Authentication in RHDH
-- **[Authorization](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/authorization_in_red_hat_developer_hub)** - Authorization in RHDH
-- **[Customizing the RHDH appearance](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/customizing-appearance)** - Customizing the RHDH appearance (header, sidebar, search)
-- **[Customizing the RHDH Homepage](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/customizing-the-home-page)** - Customizing the RHDH homepage (adding cards, reorganizing)
+- **[Red Hat Developer Hub Documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/)** - Complete official documentation for RHDH
 
 ---
 
@@ -48,12 +31,12 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 ## RHDH Local Specific Resources
 
-### Community and Support
+### RHDH Local Code, Community, and Support
 
 - **[RHDH Local Repository](https://github.com/redhat-developer/rhdh-local)** - Source code and community
 - **[JIRA Issues](https://issues.redhat.com/browse/RHIDP)** - Bug reports and feature requests (Component: RHDH Local)
 
-### Development Tools
+### RHDH Local Tools & References
 
 - **[Podman Documentation](https://docs.podman.io/)** - Container runtime (recommended)
 - **[Docker Documentation](https://docs.docker.com/)** - Alternative container runtime
@@ -67,12 +50,13 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 - **[RHDH Plugins](https://github.com/redhat-developer/rhdh-plugins/)** - Red Hat Developer Hub plugins
 - **[RHDH CLI](https://github.com/redhat-developer/rhdh-cli)** - CLI for RHDH plugin developers
+- **[RHDH Dynamic Plugins Factory](https://github.com/redhat-developer/rhdh-dynamic-plugin-factory)** - Tool for converting Backstage plugins to RHDH dynamic plugins
 - **[Backstage Community Plugins](https://github.com/backstage/community-plugins)** - Backstage community plugins
 - **[Backstage CLI](https://www.npmjs.com/package/@backstage/cli)** - Backstage CLI for working with plugins and apps
 
 ### Software Templates
 
-- **[Software Templates from RHDH users](https://github.com/redhat-developer/red-hat-developer-hub-software-templates)** - Software Templates contributed by other users of RHDH
+- **[RHDH Software Templates Library](https://github.com/redhat-developer/red-hat-developer-hub-software-templates)** - Software Templates contributed by other users of RHDH
 - **[Backstage Software Templates](https://github.com/backstage/software-templates)** - Community Backstage Software Templates
 
 ---
@@ -97,8 +81,9 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 ### Software Development
 
-- **[The Twelve-Factor App](https://12factor.net/)** - Methodology for building SaaS applications
-- **[GitOps Principles](https://opengitops.dev/)** - Declarative deployment practices
+- **[Backstage Software Catalog Best Practices](https://backstage.io/docs/features/software-catalog/best-practices)** - Guidelines for organizing and maintaining your software catalog
+- **[Component Development Patterns](https://backstage.io/docs/features/software-catalog/descriptor-format)** - Best practices for defining and structuring catalog entities
+- **[GitOps Principles](https://opengitops.dev/)** - Declarative deployment practices for Backstage-managed infrastructure
 
 ### Documentation
 
@@ -146,7 +131,7 @@ Since RHDH is based on Backstage, these community resources provide additional c
 
 ### RHDH Local Documentation
 
-- See [Help & Contributing](guides/help-and-contrib.md) for guidelines on improving this documentation
+- See [Help & Contributing](../rhdh-local-guide/help-and-contrib.md) for guidelines on improving this documentation
 - All RHDH Local specific docs are maintained in the [GitHub repository](https://github.com/redhat-developer/rhdh-local/tree/main/docs)
 
 ### Upstream Documentation

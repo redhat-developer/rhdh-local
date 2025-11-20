@@ -1,5 +1,3 @@
-# GitHub Authentication Setup
-
 This guide walks you through configuring GitHub authentication in RHDH Local, enabling secure login and full repository integration features like catalog discovery, template publishing, and pull request tracking.
 
 This guide focuses more on RHDH Local, but feel free to refer to the [official RHDH docs](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html-single/integrating_red_hat_developer_hub_with_github/index) for more details about integrating RHDH with GitHub.

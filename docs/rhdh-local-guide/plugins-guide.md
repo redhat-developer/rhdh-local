@@ -1,5 +1,3 @@
-# Local Plugin Development
-
 RHDH Local excels at supporting **local plugin development**, enabling you to build, test, and iterate on dynamic plugins before publishing them to a registry. This guide covers the complete development workflow from scaffolding to testing.
 
 ## Loading dynamic plugins from a local directory

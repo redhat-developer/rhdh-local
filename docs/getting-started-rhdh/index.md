@@ -1,6 +1,4 @@
-## What is RHDH and why is it useful?
-
-Red Hat Developer Hub (RHDH) is an **Internal Developer Portal** that brings together all the tools, services, and information your development teams need in one unified interface. Think of it as your team's central command center for building, deploying, and managing software.
+Red Hat Developer Hub (RHDH) is an **Internal Developer Portal** that brings together all the tools, services, and information your development teams need in one unified interface. Think of it as your team's central command center for building, deploying, and managing software. In this getting started guide, you'll learn the fundamentals of RHDH, understand its key features and benefits, and discover how to navigate and use the platform effectively to improve your daily development workflow.
 
 !!! tip "Built on Open Source Innovation"
     RHDH is based on [CNCF Backstage](https://backstage.io), the open-source Internal Developer Portal created by Spotify. This means you get all the power and flexibility of Backstage, plus enterprise-grade support and additional features from Red Hat.
