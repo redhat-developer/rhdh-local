@@ -38,6 +38,96 @@ app:
         headerColor1: ${HEADER_DARK_COLOR_1}
         headerColor2: ${HEADER_DARK_COLOR_2}
         navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
+  quickstart:
+    # Quickstarts for all users (both new admins and new developers)
+    - title: 'What is Developer Hub?'
+      description: 'Learn what Developer Hub is, its purpose, and how to use it to discover, create, and manage software in your organization.'
+      icon: 'developerHub'
+      roles: ['admin', 'developer'] # Show to all users
+      cta:
+        text: 'Read the Introduction'
+        link: '/docs/default/system/rhdh-local/intro/rhdh/' # Link points to a very custom location that only exists by default in RHDH Local
+    - title: 'Navigate Your Way Around'
+      description: 'The homepage gives links to important features and documentation. The topbar allows you to to search for anything, register new components, view your starred entities, and launch external apps.'
+      icon: 'kind:location'
+      roles: ['admin', 'developer']
+      cta:
+        text: 'Start Exploring'
+        link: '/'
+    - title: 'Browse The Software Catalog'
+      description: 'The software catalog lets you see all the projects and components shared by development teams throughout your organization.'
+      icon: 'catalog'
+      roles: ['admin', 'developer'] # Show to both roles
+      cta:
+        text: 'Open the Catalog'
+        link: '/catalog'
+    - title: 'Browse The ''Golden Path'' Templates'
+      description: 'Golden path templates let you quickly create and customize software projects that follow your organization''s coding standards using simple wizard like forms. You can even develop and share templates of your own!'
+      icon: 'scaffolder'
+      roles: ['admin', 'developer'] # Show to both roles
+      cta:
+        text: 'Browse the Templates'
+        link: '/create'
+    - title: 'Read Some TechDocs'
+      description: 'Discover project documentation, architecture notes, and how-to guides in TechDocs.'
+      icon: 'techdocs'
+      roles: ['admin', 'developer']
+      cta:
+        text: 'View the TechDocs'
+        link: '/docs'
+    - title: 'Explore APIs'
+      description: 'Visit the APIs section to discover the APIs that have been added by our organization.'
+      icon: 'kind:api'
+      roles: ['admin', 'developer'] # Show to both roles
+      cta:
+        text: 'View the APIs'
+        link: '/api-docs'
+    - title: 'Add Software To The Catalog'
+      description: 'You can register existing Backstage components into the catalog using catalog-info.yaml files. Alternatively, you could use our Bulk Import tool to register multiple components at once.'
+      icon: 'add'
+      roles: ['admin', 'developer'] # Show to both roles
+      cta:
+        text: 'Register a Component'
+        link: '/catalog-import'
+    - title: 'Personalize Your Experience'
+      description: 'Customize Developer Hub to match your preferences. Toggle dark mode, adjust your theme, and configure settings to create your ideal workspace.'
+      icon: 'manageAccounts'
+      roles: ['admin', 'developer'] # Show to all users
+      cta:
+        text: 'Open Settings'
+        link: '/settings'
+    - title: 'Learn New Skills'
+      description: 'Discover curated learning paths designed to help you expand your knowledge and skills in various technologies.'
+      icon: 'school'
+      roles: ['admin', 'developer'] # Show to both roles
+      cta:
+        text: 'View Learning Paths'
+        link: '/learning-paths'
+    - title: 'Star Your Favorite Items'
+      description: 'Click the Star icon on any Catalog entity, API, or anywhere else you see a star. Your starred items appear in the top navigation bar for quick access. Try it now by adding the RHDH Local System to your starred items list.'
+      icon: 'star'
+      roles: ['admin', 'developer']
+      cta:
+        text: 'Learn More'
+        link: '/catalog/default/system/rhdh-local'
+
+    # Quickstarts just for admins
+    - title: 'View Your Platform Adoption Metrics'
+      description: 'See how your developers are using Developer Hub''s many tools and features.'
+      icon: 'chart'
+      roles: ['admin']
+      cta:
+        text: 'Open Adoption Insights'
+        link: '/adoption-insights'
+    - title: 'Manage and Install Plugins'
+      description: 'Browse the Extensions Catalog to discover, install, and manage plugins that extend Developer Hub''s functionality.'
+      icon: 'storefront'
+      roles: ['admin'] # Show only to admins
+      cta:
+        text: 'Open Extensions Catalog'
+        link: '/extensions/catalog'
+
+        
 backend:
   listen:
     port: 7007
