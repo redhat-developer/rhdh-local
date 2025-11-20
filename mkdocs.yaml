@@ -10,6 +10,7 @@ nav:
     - "What Is Developer Hub And Why Is It Useful?": getting-started-rhdh/index.md
     - "Key Features & Benefits": getting-started-rhdh/highlights.md
     - "Comparing Red Hat Developer Hub to CNCF Backstage": getting-started-rhdh/comparison.md
+    - "Your First Day (Login, Homepage, Quickstarts, Starred, Profile, etc.)": getting-started-rhdh/your-first-day.md
     - "Navigating Around": getting-started-rhdh/navigation.md
     - "Using Search": getting-started-rhdh/search.md
     - "Understanding & Using the Software Catalog": getting-started-rhdh/software-catalog.md
