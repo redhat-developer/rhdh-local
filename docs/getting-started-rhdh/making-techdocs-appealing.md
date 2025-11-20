@@ -173,7 +173,7 @@ Link with tooltip (using the separate 'reference' syntax).
 
 ## Download Links
 
-[A Download Link](./images/backstage-logo-cncf.svg){: download }
+[A Download Link](../images/backstage-logo-cncf.svg){: download }
 
 
 ## Abbreviations & Acronyms

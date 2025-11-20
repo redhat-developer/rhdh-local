@@ -180,7 +180,7 @@ docs/
 
 #### Formatting Standards
 
-See [Making Your TechDocs More Appealing](making-techdocs-appealing.md) for practical tips on using TechDocs.
+See [Making Your TechDocs More Appealing](../getting-started-rhdh/making-techdocs-appealing.md) for practical tips on using TechDocs.
 
 #### Testing Documentation
 

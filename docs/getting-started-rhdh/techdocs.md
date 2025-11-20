@@ -120,7 +120,7 @@ Write your TechDocs using Markdown, which provides a simple yet powerful way to 
 
 !!! tip "Make It Engaging"
 
-    Use callouts, emojis, and visual elements to make your documentation more engaging. The [Making TechDocs Appealing](../guides/making-techdocs-appealing.md) guide shows you how to use these features effectively.
+    Use callouts, emojis, and visual elements to make your documentation more engaging. The [Making TechDocs Appealing](making-techdocs-appealing.md) guide shows you how to use these features effectively.
 
 When writing, focus on clarity and completeness. Include information about what the component does, how to use it, how to deploy it, and how to troubleshoot common issues. Remember that your audience might be developers who are new to your component, so provide context and examples.
 
@@ -163,7 +163,7 @@ The `dir:.` value tells TechDocs to look for the documentation index (the `mkdoc
 Now that you understand TechDocs, you might want to explore:
 
 * [Understanding & Using the Software Catalog](software-catalog.md) - Learn how components and TechDocs work together
-* [Making TechDocs Appealing](../guides/making-techdocs-appealing.md) - Discover advanced formatting techniques
+* [Making TechDocs Appealing](making-techdocs-appealing.md) - Discover advanced formatting techniques
 * [Official TechDocs Documentation](https://backstage.io/docs/features/techdocs/) - Deep dive into TechDocs configuration and features
 
 *[RHDH]: Red Hat Developer Hub
