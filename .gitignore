@@ -30,4 +30,5 @@ dynamic-plugins-root
 # Generated during local development
 generated/
 
+**/.DS_Store
 .idea
