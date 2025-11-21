@@ -60,13 +60,22 @@ providers:
     provider_id: meta-reference
     provider_type: inline::meta-reference
   inference:
-    - provider_id: ${env.LLM_SERVER_ID}
+    - provider_id: ${env.ENABLE_VLLM:+vllm}
       provider_type: remote::vllm
       config:
-        url: ${env.LLM_SERVER_URL}
-        api_token: ${env.LLM_SERVER_TOKEN}
+        url: ${env.VLLM_URL:=http://localhost/v1}
+        api_token: ${env.VLLM_API_KEY:=token}
         max_tokens: ${env.VLLM_MAX_TOKENS:=4096}
         tls_verify: ${env.VLLM_TLS_VERIFY:=true}
+    - provider_id: ${env.ENABLE_OLLAMA:+ollama}
+      provider_type: remote::vllm
+      config:
+        url: ${env.OLLAMA_URL:=http://localhost:11434/v1}
+        api_token: ${env.OLLAMA_TOKEN:=token}
+    - provider_id: ${env.ENABLE_OPENAI:+openai}
+      provider_type: remote::openai
+      config:
+        api_key: ${env.OPENAI_API_KEY:=token}
     - provider_id: sentence-transformers
       provider_type: inline::sentence-transformers
       config: {}
@@ -86,17 +95,32 @@ providers:
     - provider_id: lightspeed_question_validity
       provider_type: inline::lightspeed_question_validity
       config:
-        model_id: ${env.LLM_SERVER_ID}/${env.VALIDATION_MODEL}
+        model_id: ${env.VALIDATION_PROVIDER}/${env.VALIDATION_MODEL}
         model_prompt: |-
           Instructions:
 
-          You are a question classifying tool
-          You are an expert in Backstage, Red Hat Developer Hub (RHDH), Kubernetes, Openshift, CI/CD and GitOps Pipelines
-          Your job is to determine if a user's question is related to Backstage or Red Hat Developer Hub (RHDH) technologies, \
-          including integrations, plugins, catalog exploration, service creation, or workflow automation.
-          If a question appears to be related to Backstage, RHDH, Kubernetes, Openshift, or any of their features, answer with the word ${allowed}
-          If a question is not related to Backstage, RHDH, Kubernetes, Openshift, or their features, answer with the word ${rejected}
-          Do not explain your answer, just provide the one-word response
+          You area question classification tool. You are an expert in the following categories:
+          - Backstage
+          - Red Hat Developer Hub (RHDH)
+          - Kubernetes
+          - Openshift
+          - CI/CD
+          - GitOps
+          - Pipelines
+          - Developer Portals
+          - Deployments
+          - Software Catalogs
+          - Software Templates
+          - Tech Docs
+          
+          Your job is to determine if a user's question is related to the categories you are an expert in. If the question is related to those categories, \
+          or any features that may be related to those categories, you will answer with ${allowed}.
+
+          If a question is not related to your expert categories, answer with ${rejected}.
+
+          You do not need to explain your answer.
+
+          Below are some example questions:
           Example Question:
           Why is the sky blue?
           Example Response:
@@ -172,7 +196,7 @@ providers:
       kvstore:
         type: sqlite
         namespace: null
-        db_path: /app-root/vector_db/rhdh_product_docs/1.7/faiss_store.db
+        db_path: /app-root/vector_db/rhdh_product_docs/1.8/faiss_store.db
 scoring_fns: []
 server:
   auth: null
@@ -193,7 +217,7 @@ vector_dbs:
 - embedding_dimension: 768
   embedding_model: /app-root/embeddings_model
   provider_id: rhdh-docs
-  vector_db_id: rhdh-product-docs-1_7
+  vector_db_id: rhdh-product-docs-1_8
 models:
 - model_id: sentence-transformers/all-mpnet-base-v2
   metadata:

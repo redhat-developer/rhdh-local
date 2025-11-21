@@ -60,13 +60,22 @@ providers:
     provider_id: meta-reference
     provider_type: inline::meta-reference
   inference:
-    - provider_id: ${env.LLM_SERVER_ID}
+    - provider_id: ${env.ENABLE_VLLM:+vllm}
       provider_type: remote::vllm
       config:
-        url: ${env.LLM_SERVER_URL}
-        api_token: ${env.LLM_SERVER_TOKEN}
+        url: ${env.VLLM_URL:=http://localhost/v1}
+        api_token: ${env.VLLM_API_KEY:=token}
         max_tokens: ${env.VLLM_MAX_TOKENS:=4096}
         tls_verify: ${env.VLLM_TLS_VERIFY:=true}
+    - provider_id: ${env.ENABLE_OLLAMA:+ollama}
+      provider_type: remote::vllm
+      config:
+        url: ${env.OLLAMA_URL:=http://localhost:11434/v1}
+        api_token: ${env.OLLAMA_TOKEN:=token}
+    - provider_id: ${env.ENABLE_OPENAI:+openai}
+      provider_type: remote::openai
+      config:
+        api_key: ${env.OPENAI_API_KEY:=token}
     - provider_id: sentence-transformers
       provider_type: inline::sentence-transformers
       config: {}
@@ -118,7 +127,7 @@ providers:
       kvstore:
         type: sqlite
         namespace: null
-        db_path: /app-root/vector_db/rhdh_product_docs/1.7/faiss_store.db
+        db_path: /app-root/vector_db/rhdh_product_docs/1.8/faiss_store.db
 scoring_fns: []
 server:
   auth: null
@@ -137,7 +146,7 @@ vector_dbs:
 - embedding_dimension: 768
   embedding_model: /app-root/embeddings_model
   provider_id: rhdh-docs
-  vector_db_id: rhdh-product-docs-1_7
+  vector_db_id: rhdh-product-docs-1_8
 models:
 - model_id: sentence-transformers/all-mpnet-base-v2
   metadata:

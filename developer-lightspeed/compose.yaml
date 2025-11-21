@@ -8,7 +8,7 @@ services:
       - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
   
   rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.7-lcs'
+    image: 'quay.io/redhat-ai-dev/rag-content:release-1.8-lcs'
     container_name: rag-init
     user: "root"
     volumes:
