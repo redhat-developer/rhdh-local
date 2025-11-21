@@ -11,7 +11,7 @@ dynamic-plugins-root
 compose.override.yaml*
 
 # Local shell scripts in the root folder
-*.sh 
+*.local.sh 
 
 # Catalog-Entities
 /configs/catalog-entities/users.override.yaml
