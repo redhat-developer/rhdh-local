@@ -173,7 +173,14 @@ Link with tooltip (using the separate 'reference' syntax).
 
 ## Download Links
 
-[A Download Link](../images/backstage-logo-cncf.svg){: download }
+!!! note "Example Download Link"
+    Download links can be created using the `{: download }` attribute. The syntax is:
+    
+    ```markdown
+    [Link Text](../images/homepage.png){: download }
+    ```
+    
+    Note: The file must exist in your repository for the download to work.
 
 
 ## Abbreviations & Acronyms

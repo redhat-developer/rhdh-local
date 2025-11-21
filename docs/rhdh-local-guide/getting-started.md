@@ -59,7 +59,7 @@ Open your browser to: **http://localhost:7007**
 
 You'll see the RHDH homepage once logged in. If GitHub authentication isn't configured, log in as **Guest**.
 
-![Red Hat Developer Hub Homepage](./images/RHDH-Homepage.png){ width="850" }
+![Red Hat Developer Hub Homepage](../images/homepage.png){ width="850" }
 
 ### 6. Explore Built-in TechDocs and test key features
 
