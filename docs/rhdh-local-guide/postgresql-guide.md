@@ -1,5 +1,3 @@
-# PostgreSQL Guide
-
 ## Using a PostgreSQL database
 
 By default, in-memory db is used.

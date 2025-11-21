@@ -1,5 +1,3 @@
-# Dynamic Plugin Management
-
 The dynamic plugin system in RHDH enables you to add, remove, enable, and disable plugins without rebuilding the container. This provides incredible flexibility for testing different plugin combinations and developing custom plugins locally.
 
 ## Configuration File Location
@@ -64,6 +62,60 @@ If you don't create a `.npmrc`, plugin installation will still work using the de
 
 !!! tip "npmrc configuration"
     For more information on configuring `.npmrc`, see the [npm configuration docs](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
+
+## Converting Static Plugins to Dynamic Plugins
+
+If you have existing Backstage plugins (also known as "static" plugins) that you'd like to use with Red Hat Developer Hub, you can try converting them to dynamic plugins using the **RHDH Dynamic Plugins Factory**.
+
+!!! success "Automated Conversion Tool 🔧"
+    The [RHDH Dynamic Plugins Factory](https://github.com/redhat-developer/rhdh-dynamic-plugin-factory) is a containerized tool that automates the process of converting Backstage plugins into RHDH dynamic plugins. It handles:
+    
+    * Cloning plugin source repositories
+    * Applying patches and custom modifications
+    * Building and packaging plugins as dynamic plugins
+    * Batch processing multiple plugins at once
+    * Publishing to container registries (optional)
+
+### Key Features
+
+**Batch Conversion**
+
+* Convert multiple plugins simultaneously by listing them in a configuration file
+* Process entire plugin workspaces or individual plugins
+* Apply consistent patches or overlays across multiple plugins
+
+**Customization Support**
+
+* Apply patches to modify plugin source code before conversion
+* Use overlays to replace or add files during the build process
+* Configure embed packages for plugins that require additional dependencies
+
+**Container-Based Workflow**
+
+* Uses pre-built container images for consistent builds
+* Works with Podman (recommended) or Docker
+* No need to install Node.js or build tools locally
+
+### Getting Started
+
+The factory uses container images published to `quay.io/rhdh-community/dynamic-plugins-factory`. You'll need:
+
+1. **Configuration files**: Define your source repository and list of plugins to convert
+2. **Container runtime**: Podman or Docker
+3. **Volume mounts**: Mount your configuration, workspace (source-code), and output directories
+
+A minimal example to convert the TODO plugin:
+
+```bash
+podman run --rm -it \
+  --device /dev/fuse \
+  -v ./config:/config:z \
+  quay.io/rhdh-community/dynamic-plugins-factory:latest \
+  --workspace-path workspaces/todo
+```
+
+!!! note "For Platform Engineers"
+    The Dynamic Plugins Factory is primarily a tool for platform engineers who need to convert existing Backstage plugins for use in RHDH without having to resort to traditional coding solutions. For detailed usage instructions, configuration options, and examples, see the [official RHDH Dynamic Plugins Factory repository](https://github.com/redhat-developer/rhdh-dynamic-plugin-factory).
 
 ## Plugin Storage and Caching
 

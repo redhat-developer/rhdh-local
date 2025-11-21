@@ -1,5 +1,3 @@
-# Local Plugin Development
-
 RHDH Local excels at supporting **local plugin development**, enabling you to build, test, and iterate on dynamic plugins before publishing them to a registry. This guide covers the complete development workflow from scaffolding to testing.
 
 ## Loading dynamic plugins from a local directory
@@ -19,7 +17,7 @@ To load dynamic plugins from your local machine:
 3. Configure your plugin in one of the supported config files:
     - Prefer `configs/dynamic-plugins/dynamic-plugins.override.yaml` for local user overrides.
     - If no override file is present, `configs/dynamic-plugins/dynamic-plugins.yaml` will be used.
-4. See [Changing Your Configuration](/rhdh-local/additional-config-guides/changing-config.md) for more on updating and reloading configs.
+4. See [Configuration](configuration.md) for more on updating and reloading configs.
 
 ## Developers: Using VSCode to debug backend plugins
 

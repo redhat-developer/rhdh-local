@@ -1,5 +1,3 @@
-# Configuration
-
 RHDH Local uses a structured configuration approach with override files:
 
 ```bash
@@ -58,7 +56,7 @@ Common variables to customize:
 
 - `RHDH_IMAGE`: RHDH container image version
 - `LOG_LEVEL`: RHDH application log level
-- GitHub authentication variables (see the [GitHub auth guide](./github-auth.md))
+- GitHub authentication variables (see the [GitHub auth guide](github-auth.md))
 
 ## Applying Configuration Changes
 

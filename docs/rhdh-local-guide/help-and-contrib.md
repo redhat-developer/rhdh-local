@@ -1,5 +1,3 @@
-# Getting Help & Contributing
-
 RHDH Local is an open-source project maintained by the Red Hat Developer Hub team and the wider community. We welcome feedback, bug reports, and contributions from all engineers using the project.
 
 !!! info "Community-Driven"
@@ -153,18 +151,40 @@ The documentation you're reading now is built into RHDH Local and automatically 
 ### Documentation Structure
 
 ```
+mkdocs.yaml                     # The documentation site index
 docs/
-├── index.md                    # Main introduction
-├── getting-started.md          # Quick start guide
+├── index.md                    # Main introduction (Welcome page)
+├── OWNERS                      # Documentation owners
 ├── images/                     # Embedded images
-├── guides/                     # Specific how-to guides
-│   ├── loading-content.md
-│   ├── dynamic-plugins-management.md
-│   ├── local-plugin-dev.md
-│   ├── operating-rhdh-local.md
-│   └── github-auth.md
-├── help-and-contrib.md         # This file
-└── references.md               # External links
+├── getting-started-rhdh/       # Getting Started Guide for RHDH users
+│   ├── index.md
+│   ├── highlights.md
+│   ├── comparison.md
+│   ├── navigation.md
+│   ├── search.md
+│   ├── software-catalog.md
+│   ├── apis.md
+│   ├── techdocs.md
+│   ├── making-techdocs-appealing.md
+│   ├── templates.md
+│   ├── templates-authoring.md
+│   ├── ten_template_tips.md
+│   ├── extensions.md
+│   ├── developer-lightspeed.md
+│   └── references.md
+└── rhdh-local-guide/           # RHDH Local User Guide
+    ├── index.md
+    ├── getting-started.md
+    ├── configuration.md
+    ├── loading-content.md
+    ├── dynamic-plugins-management.md
+    ├── plugins-guide.md
+    ├── github-auth.md
+    ├── container-image-guide.md
+    ├── corporate-proxy-setup-sim.md
+    ├── postgresql-guide.md
+    ├── operating-rhdh-local.md
+    └── help-and-contrib.md     # This file
 ```
 
 ### Documentation Standards
@@ -180,7 +200,7 @@ docs/
 
 #### Formatting Standards
 
-See [Making Your TechDocs More Appealing](./guides/making-techdocs-appealing.md) for practical tips on using TechDocs.
+See [Making Your TechDocs More Appealing](../getting-started-rhdh/making-techdocs-appealing.md) for practical tips on using TechDocs.
 
 #### Testing Documentation
 

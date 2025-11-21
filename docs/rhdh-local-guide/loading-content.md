@@ -1,5 +1,3 @@
-# Loading Content with `app-config.local.yaml`
-
 The `configs/app-config/app-config.local.yaml` file is your primary tool for automatically loading **catalogs**, **software templates**, and **TechDocs** into RHDH Local on startup.
 
 ## Configuration File Location

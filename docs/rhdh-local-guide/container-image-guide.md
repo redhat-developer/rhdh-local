@@ -1,5 +1,3 @@
-# Container Image Guide
-
 ## Configuring registry credentials
 
 Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
