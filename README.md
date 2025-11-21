@@ -57,10 +57,10 @@ podman compose down --volumes
 
 If you would like to change your RHDH-Local setup, or add additional features or plugins, please check out the guides below.
 
-1. [Plugins Guide](./docs/guides/plugins-guide.md) - how to include your own plugins
-2. [Container Image Guide](docs/guides/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
-3. [Simulated Proxy Setup](docs/guides/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
-4. [PostgreSQL Guide](docs/guides/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
+1. [Plugins Guide](./docs/rhdh-local-guide/plugins-guide.md) - how to include your own plugins
+2. [Container Image Guide](docs/rhdh-local-guide/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
+3. [Simulated Proxy Setup](docs/rhdh-local-guide/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
+4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
 5. [Orchestrator Workflow Guide](./orchestrator/README.md) - using Orchestrator with RHDH to develop workflows.
 6. [Developer Lightspeed Guide](./developer-lightspeed/README.md) - using Developer Lightspeed in RHDH Local.
 
