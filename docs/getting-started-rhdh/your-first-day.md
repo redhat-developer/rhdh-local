@@ -42,6 +42,8 @@ Once you successfully log in, you'll be taken to the **Homepage**—your central
 
 The homepage is your starting point in Red Hat Developer Hub. After logging in, you'll see a personalized dashboard that provides an overview of your organization's software ecosystem and quick access to commonly used features.
 
+![Red Hat Developer Hub Homepage](../images/homepage.png){ width="850" }
+
 ### Welcome Greeting
 
 At the top of the homepage, you'll see a personalized greeting:
