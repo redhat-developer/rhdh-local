@@ -1,5 +1,3 @@
-# Operating RHDH Local
-
 This guide covers all essential operations for managing your RHDH Local environment, from initial startup to advanced maintenance tasks. RHDH Local supports both **Podman** (recommended) and **Docker** with identical commands. Simply replace `podman compose` with `docker compose` throughout this guide if using Docker.
 
 !!! tip "Container Runtime Choice"
@@ -294,4 +292,4 @@ podman volume prune
 
 ---
 
-For questions or contributions, visit [Help & Contributing](../help-and-contrib.md).
+For questions or contributions, visit [Help & Contributing](help-and-contrib.md).

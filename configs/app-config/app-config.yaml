@@ -216,8 +216,8 @@ dynamicPlugins:
     default.main-menu-items:
         menuItems:
           default.help:
-            title: RHDH Local Guide
-            icon: help
+            title: RHDH Guide
+            icon: techdocs
             priority: 5
             to: /catalog/default/system/rhdh-local/docs
             enabled: true

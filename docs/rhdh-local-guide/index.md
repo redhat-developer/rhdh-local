@@ -1,0 +1,109 @@
+RHDH Local is the fastest and simplest way for platform engineers to test their [software catalogs](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/about-software-catalogs), [TechDocs](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/techdocs_for_red_hat_developer_hub/about-techdocs_customizing-display), [plugins](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/introduction_to_plugins/index), [software templates](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/configuring-templates), [homepage customizations](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/customizing-the-home-page), [configurations](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/customizing_red_hat_developer_hub/index) and more with Red Hat Developer Hub!
+
+## What is RHDH Local?
+
+RHDH Local is a containerized, local environment that provides a complete Red Hat Developer Hub instance running on your machine. It's designed specifically for:
+
+- **Testing and Development**: Try out RHDH features, plugins, and configurations locally
+- **Education and Demos**: Learn and showcase RHDH concepts without complex infrastructure setup  
+- **Plugin Development**: Build and test dynamic plugins locally
+- **Configuration Validation**: Test app configurations, catalogs, and templates before deployment
+
+!!! danger "Production Warning"
+
+    **RHDH Local is NOT a substitute for Red Hat Developer Hub**. Do NOT attempt to use RHDH Local as a production system. RHDH Local is designed to help individual developers test various RHDH features. It is not designed to scale and it is not suitable for use by teams (there is no RBAC for example).
+
+!!! warning "Support Notice"
+
+    There is no official, commercial support for RHDH Local from Red Hat. Use at your own risk.
+
+!!! info
+
+    This documentation focuses on **RHDH Local specific workflows and features**. For comprehensive Red Hat Developer Hub documentation, see the [official RHDH documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/).
+
+## Primary Use Cases For RHDH Local
+
+RHDH Local serves multiple purposes for platform engineers, developers, and organizations looking to explore and leverage Red Hat Developer Hub. Whether you're validating configurations before production deployment, learning RHDH concepts in a safe environment, or building custom plugins, RHDH Local provides the flexibility and isolation you need. Below are the primary scenarios where RHDH Local delivers the most value.
+
+### Testing & Configuration
+
+!!! tip "Validate Before You Deploy 🧪"
+
+    Use RHDH Local to test and validate your configurations in a safe, isolated environment:
+
+    * Test software catalogs, templates, and TechDocs locally
+    * Validate dynamic plugin configurations and behavior
+    * Experiment with homepage customizations and branding
+    * Test integrations with Source Control Management (SCM) tools like GitHub or GitLab
+    * Test authentication flows
+
+### Education & Learning
+
+!!! info "Learn RHDH Hands-On 📚"
+
+    RHDH Local is perfect for learning and teaching Red Hat Developer Hub concepts:
+
+    * Learn RHDH concepts hands-on without Kubernetes complexity
+    * Demonstrate RHDH capabilities in workshops or presentations
+    * Explore the RHDH ecosystem safely in an isolated environment
+
+### Local Plugin Development
+
+!!! note "Build and Test Plugins Locally 🔌"
+
+    Develop custom plugins with confidence using RHDH Local:
+
+    * Build and test custom dynamic plugins
+    * Use plugin scaffolding templates
+    * Integrate locally-built plugins for development workflows
+
+## Key Requirements of RHDH Local
+
+To use RHDH Local effectively, you need:
+
+- **Container Runtime**: Podman (preferred) or Docker with Compose support
+- **Basic Knowledge**: Familiarity with containers and YAML configuration
+- **Local Environment**: Laptop, desktop, or homelab with adequate resources
+- **Internet Connection**: For downloading images and accessing external catalogs
+
+!!! tip "Podman Desktop"
+    New to Podman? [**Podman Desktop**](https://podman-desktop.io/downloads) provides a user-friendly graphical interface for managing containers, images, and pods. It's perfect for getting started with container workflows and makes managing RHDH Local much easier!
+
+## Getting Started With RHDH Local
+
+Ready to dive in? Start with our [Getting Started Guide](getting-started.md) for a quick setup, or explore specific topics:
+
+- [Configuration](configuration.md) - Understand RHDH Local configuration
+- [Loading Content](loading-content.md) - Configure catalogs, templates, and TechDocs
+- [Dynamic Plugin Management](dynamic-plugins-management.md) - Add, remove, and configure plugins  
+- [Local Plugin Development](plugins-guide.md) - Build plugins locally
+- [GitHub Authentication](github-auth.md) - Configure GitHub integration
+- [Container Image Guide](container-image-guide.md) - Configure registry credentials for container images
+- [Corporate Proxy Setup](corporate-proxy-setup-sim.md) - Test RHDH in a simulated corporate proxy environment
+- [PostgreSQL Guide](postgresql-guide.md) - Configure and use PostgreSQL database
+- [Operating RHDH Local](operating-rhdh-local.md) - Start, stop, and manage your instance
+- [Help & Contributing](help-and-contrib.md) - Get support and contribute back
+
+## New to Developer Hub or Backstage?
+
+If you're new to Red Hat Developer Hub or Backstage, we've got you covered! Start with our comprehensive getting started guide to understand the core concepts and features:
+
+!!! tip "Start Here 📚"
+
+    Begin with [**What is RHDH and why is it useful?**](../getting-started-rhdh/index.md) to understand the fundamentals, then explore:
+
+    * [**Navigating Around**](../getting-started-rhdh/navigation.md) - Learn your way around the interface
+    * [**Understanding & Using the Software Catalog**](../getting-started-rhdh/software-catalog.md) - Discover and manage your services and components
+    * [**Understanding & Using TechDocs**](../getting-started-rhdh/techdocs.md) - Access and create documentation
+    * [**Understanding & Using Templates**](../getting-started-rhdh/templates.md) - Use templates to create new projects
+    * [**Understanding & Using Developer Lightspeed**](../getting-started-rhdh/developer-lightspeed.md) - Get AI-powered assistance
+
+!!! info "Backstage vs RHDH"
+
+    Red Hat Developer Hub is based on [CNCF Backstage](https://backstage.io), the open-source Internal Developer Portal. If you're familiar with Backstage, you'll find RHDH very similar, with additional enterprise features and support from Red Hat. If you're new to both, our guides will help you understand the concepts regardless of which platform you're using.
+    
+    Want to understand the differences in detail? See our [**Comparing Red Hat Developer Hub to CNCF Backstage**](../getting-started-rhdh/comparison.md) guide for a comprehensive feature comparison.
+
+!!! success "Learn by Doing 🚀"
+
+    The best way to learn is hands-on! Use RHDH Local to experiment with features, test configurations, and explore the platform in a safe, local environment. Start with our [Getting Started Guide](getting-started.md) to set up your local instance.

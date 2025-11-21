@@ -5,26 +5,35 @@ docs_dir: docs
 plugins:
   - techdocs-core
 nav:
-  - "Intro To RHDH Local": index.md
-  - "RHDH":
-    - "What Is Red Hat Developer Hub (RHDH)?": intro/rhdh.md
-    - "Highlights Of Red Hat Developer Hub": intro/features.md
-    - "Comparing Red Hat Developer Hub to CNCF Backstage": intro/comparison.md
-  - "Getting Started With RHDH Local": getting-started.md
-  - "How-To Guides":
-    - "Configuration": guides/configuration.md
-    - "Loading Content": guides/loading-content.md
-    - "Dynamic Plugin Management": guides/dynamic-plugins-management.md
-    - "Local Plugin Development": guides/plugins-guide.md
-    - "GitHub Authentication": guides/github-auth.md
-    - "Container Image Guide": guides/container-image-guide.md
-    - "Corporate Proxy Setup": guides/corporate-proxy-setup-sim.md
-    - "PostgreSQL Guide": guides/postgresql-guide.md
-    - "Making Your TechDocs More Appealing": guides/making-techdocs-appealing.md
-    - "Top 10 Tips For Better Software Templates": guides/ten_template_tips.md
-    # - "Orchestrator": guides/index.md
-    # - "LightSpeed": guides/index.md
+  - "Welcome": index.md
+  - "Getting Started With Red Hat Developer Hub (RHDH)":
+    - "What Is Developer Hub And Why Is It Useful?": getting-started-rhdh/index.md
+    - "Key Features & Benefits": getting-started-rhdh/highlights.md
+    - "Comparing Red Hat Developer Hub to CNCF Backstage": getting-started-rhdh/comparison.md
+    - "Your First Day (Login, Homepage, Quickstarts, Starred, Profile, etc.)": getting-started-rhdh/your-first-day.md
+    - "Navigating Around": getting-started-rhdh/navigation.md
+    - "Using Search": getting-started-rhdh/search.md
+    - "Understanding & Using the Software Catalog": getting-started-rhdh/software-catalog.md
+    - "Understanding & Using The API Browser": getting-started-rhdh/apis.md
+    - "Understanding & Using TechDocs": getting-started-rhdh/techdocs.md
+    - "Making Your TechDocs More Appealing": getting-started-rhdh/making-techdocs-appealing.md
+    - "Understanding & Using Templates": getting-started-rhdh/templates.md
+    - "Writing Your Own Templates": getting-started-rhdh/templates-authoring.md
+    - "Top 10 Tips For Better Software Templates": getting-started-rhdh/ten_template_tips.md
+    - "Understanding & Using Extensions (Plugins)": getting-started-rhdh/extensions.md
+    - "Understanding & Using Developer Lightspeed": getting-started-rhdh/developer-lightspeed.md
+    - "References": getting-started-rhdh/references.md
+  - "RHDH Local User Guide":
+    - "What is RHDH Local And Why Use It?": rhdh-local-guide/index.md
+    - "Getting Started With RHDH Local": rhdh-local-guide/getting-started.md
+    - "Configuration": rhdh-local-guide/configuration.md
+    - "Loading Content": rhdh-local-guide/loading-content.md
+    - "Dynamic Plugin Management": rhdh-local-guide/dynamic-plugins-management.md
+    - "Local Plugin Development": rhdh-local-guide/plugins-guide.md
+    - "GitHub Authentication": rhdh-local-guide/github-auth.md
+    - "Container Image Guide": rhdh-local-guide/container-image-guide.md
+    - "Corporate Proxy Setup": rhdh-local-guide/corporate-proxy-setup-sim.md
+    - "PostgreSQL Guide": rhdh-local-guide/postgresql-guide.md
     #- "Orchestrator": ../orchestrator/README.md
-    - "Operating RHDH Local": guides/operating-rhdh-local.md
-  - "Getting Help & Contributing": help-and-contrib.md
-  - "References": references.md
+    - "Operating RHDH Local": rhdh-local-guide/operating-rhdh-local.md
+    - "Getting Help & Contributing": rhdh-local-guide/help-and-contrib.md
