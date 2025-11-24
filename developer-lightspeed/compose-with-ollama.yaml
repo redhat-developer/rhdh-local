@@ -84,7 +84,7 @@ services:
       llama-stack:
         condition: service_healthy
     volumes:
-      - ./developer-lightspeed/configs/extra-files/lightspeed-core-service-config.yaml:/app-root/lightspeed-stack.yaml:Z
+      - ./developer-lightspeed/configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
     env_file:
       - path: "./default.env"
         required: true
