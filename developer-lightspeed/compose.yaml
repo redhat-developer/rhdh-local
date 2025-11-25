@@ -36,6 +36,10 @@ services:
       - ./developer-lightspeed/configs/extra-files/run-no-validation.yaml:/app-root/run.yaml:Z
       - rag_embeddings:/app-root/embeddings_model
       - rag_vector_db:/app-root/vector_db
+      # Set VERTEX_AI_CREDENTIALS_PATH in your .env file to your Google Cloud credentials JSON file path
+      - ${VERTEX_AI_CREDENTIALS_PATH:-/dev/null}:/app-root/credentials.json:Z
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
     env_file:
       - path: "./default.env"
         required: true
