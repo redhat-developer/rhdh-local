@@ -71,6 +71,28 @@ Follow these steps to configure and launch Developer Lightspeed.
     OPENAI_API_KEY=<your-api-key>
     ```
 
+    **Enabling Vertex AI (Gemini)** ⚠️ *Experimental*
+    
+    > [!WARNING]
+    > **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Lightspeed (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
+    
+    ```env
+    ENABLE_VERTEX_AI=true
+    VERTEX_AI_CREDENTIALS_PATH=/absolute/path/to/your/google-cloud-credentials.json
+    VERTEX_AI_PROJECT=<your-gcp-project-id>
+    VERTEX_AI_LOCATION=<your-gcp-location> # Optional
+    ```
+    
+    > [!NOTE]
+    > To use Vertex AI, you need:
+    > 1. A Google Cloud Platform (GCP) project with Vertex AI API enabled
+    > 2. A service account with appropriate permissions
+    > 3. A service account key file (JSON) downloaded from GCP
+    > 4. Set `VERTEX_AI_PROJECT` to the project id
+    > 5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
+    > 
+    > **Read more about configuration and available models:** [Vertex AI Provider Documentation](https://llamastack.github.io/v0.2.18/providers/inference/remote_vertexai.html)
+
     **Preparing For External Provider Question Validation**
     ```env
     ## Ensure VALIDATION_PROVIDER is one of your enabled Inference Providers
