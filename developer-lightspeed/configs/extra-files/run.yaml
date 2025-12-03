@@ -1,6 +1,21 @@
+# ==============================================================================
+# Llama Stack Configuration - With Question Validation
+# ==============================================================================
+# This configuration file is used when question validation is enabled
+# (selected "With validation" in step 2 of start-lightspeed.sh)
+# It configures Llama Stack to provide LLM inference and RAG capabilities
+# with question validation to filter user questions for RHDH/Backstage relevance
+#
+# File location: developer-lightspeed/configs/extra-files/run.yaml
+# Mounted to: /app-root/run.yaml in the llama-stack container
+
 version: '2'
 image_name: llama-stack
 
+# ==============================================================================
+# API Configuration
+# ==============================================================================
+# Defines which Llama Stack APIs are enabled
 apis:
   - agents
   - datasetio
@@ -92,11 +107,17 @@ providers:
       dpo_output_dir: "."
     provider_id: huggingface
     provider_type: inline::huggingface
+  # ============================================================================
+  # Safety Providers
+  # ============================================================================
+  # Safety providers for content filtering and question validation
   safety:
+    # Llama Guard: Content safety filtering
     - config:
         excluded_categories: []
       provider_id: llama-guard
       provider_type: inline::llama-guard
+    # Question Validity: Filters questions to ensure they're RHDH/Backstage related
     - provider_id: lightspeed_question_validity
       provider_type: inline::lightspeed_question_validity
       config:
@@ -181,9 +202,13 @@ providers:
     provider_id: meta-reference
     provider_type: inline::meta-reference
   tool_runtime:
+  # Model Context Protocol (MCP) Provider
+  # Enables Developer Lightspeed to interact with external tools and data sources
   - provider_id: model-context-protocol
     provider_type: remote::model-context-protocol
     config: {}
+  # RAG Runtime Provider
+  # Handles retrieval-augmented generation for RHDH documentation search
   - provider_id: rag-runtime 
     provider_type: inline::rag-runtime
     config: {}
@@ -211,9 +236,19 @@ server:
   tls_cafile: null
   tls_certfile: null
   tls_keyfile: null
+# ==============================================================================
+# Safety Shields
+# ==============================================================================
+# Safety shields that apply validation rules to user questions
 shields:
+  # Question Validity Shield: Rejects questions not related to RHDH/Backstage
   - shield_id: lightspeed_question_validity-shield
     provider_id: lightspeed_question_validity
+
+# ==============================================================================
+# Tool Groups
+# ==============================================================================
+# Defines groups of tools available to the LLM
 tool_groups:
 - provider_id: rag-runtime
   toolgroup_id: builtin::rag

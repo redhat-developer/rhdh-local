@@ -52,56 +52,149 @@ Follow these steps to configure and launch Developer Lightspeed.
    cp developer-lightspeed/configs/app-config/app-config.lightspeed.local.example.yaml developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
    ```
 
-3. **Set Environment Variables**
+3. **Understanding the Setup Process**
 
-    In the root of this repository there is a `default.env` file, you can copy the contents to `.env` and fill in the required values.
+   The setup script (`start-lightspeed.sh`) uses a simple 2-step process to configure Developer Lightspeed:
 
-    If you intend on using the provided `Ollama` provider and model, you **do not** need to touch these variables.
+   **Step 1: Choose Your LLM Provider**
+   - **Ollama** (recommended for beginners): Uses the built-in Ollama container that runs locally. No additional configuration needed - the script handles everything automatically.
+   - **Bring Your Own Model**: Use your own external LLM provider (vLLM, OpenAI, or Vertex AI). You must configure the environment variables for your chosen provider before starting.
 
-    **Enabling vLLM**
+   **Step 2: Choose Question Validation**
+   - **No validation**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant.
+   - **With validation**: Filters questions to RHDH/Backstage topics only - ensures all questions are relevant to Red Hat Developer Hub.
+
+   > [!NOTE]
+   > **What does "Bring Your Own Model" mean?**
+   >
+   > This option allows you to use an external LLM service instead of the local Ollama container. You can use:
+   > - **vLLM**: A high-performance inference server (self-hosted or cloud)
+   > - **OpenAI**: OpenAI's API (GPT-3.5, GPT-4, etc.)
+   > - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+   >
+   > If you select "Bring Your Own Model" in step 1, you **must** configure at least one of these providers in step 4 below.
+
+4. **Set Environment Variables**
+
+    In the root of this repository there is a `default.env` file. Copy its contents to `.env` and fill in the required values:
+
+    ```bash
+    cp default.env .env
+    ```
+
+    > [!IMPORTANT]
+    > **Configuration Requirements:**
+    > - **If you selected Ollama in step 1**: You don't need to modify any environment variables. The defaults work out of the box.
+    > - **If you selected "Bring Your Own Model" in step 1**: You **must** configure at least one external LLM provider below before starting the application.
+    > - **If you selected "With validation" in step 2**: You **must** configure `VALIDATION_PROVIDER` and `VALIDATION_MODEL` (see section below).
+
+    ### Quick Reference: Setup Combinations → Required Configuration
+
+    | Provider | Validation | Required Env Vars | Compose Files Used |
+    |----------|------------|-------------------|-------------------|
+    | **Ollama** | No validation | None (defaults work) | `compose.yaml` + `compose-with-ollama.yaml` |
+    | **Ollama** | With validation | `VALIDATION_PROVIDER`, `VALIDATION_MODEL` | `compose.yaml` + `compose-with-ollama.yaml` + `compose-with-validation.yaml` |
+    | **Bring your own model** | No validation | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` |
+    | **Bring your own model** | With validation | At least one provider + validation vars | `compose.yaml` + `compose-with-validation.yaml` |
+
+    ---
+
+    ### Configure External LLM Providers (Required if you selected "Bring Your Own Model")
+
+    If you selected "Bring Your Own Model" in step 1, configure **at least one** of the following providers in your `.env` file:
+
+    #### **Option A: vLLM Provider**
+
+    Use vLLM for high-performance inference with self-hosted or cloud-based vLLM servers.
+
     ```env
+    # Enable vLLM provider
     ENABLE_VLLM=true
-    VLLM_URL=<your-url>/v1
-    VLLM_API_KEY=<your-api-key>
-    ```
-
-    **Enabling OpenAI**
-    ```env
-    ENABLE_OPENAI=true
-    OPENAI_API_KEY=<your-api-key>
-    ```
-
-    **Enabling Vertex AI (Gemini)** ⚠️ *Experimental*
     
+    # REQUIRED: URL to your vLLM server (must end with /v1)
+    VLLM_URL=https://your-vllm-server.com/v1
+    
+    # REQUIRED: API key for authentication (if your server requires it)
+    VLLM_API_KEY=your-api-key-here
+    
+    # OPTIONAL: Maximum tokens per request (default: 4096)
+    # VLLM_MAX_TOKENS=4096
+    
+    # OPTIONAL: TLS verification (default: true)
+    # VLLM_TLS_VERIFY=true
+    ```
+
+    #### **Option B: OpenAI Provider**
+
+    Use OpenAI's API to access GPT models (GPT-3.5, GPT-4, etc.).
+
+    ```env
+    # Enable OpenAI provider
+    ENABLE_OPENAI=true
+    
+    # REQUIRED: Your OpenAI API key
+    OPENAI_API_KEY=sk-your-openai-api-key-here
+    ```
+
+    #### **Option C: Vertex AI Provider (Experimental)**
+
+    Use Google Cloud's Vertex AI service to run Gemini models.
+
     > [!WARNING]
     > **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Lightspeed (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
-    
+
     ```env
+    # Enable Vertex AI provider
     ENABLE_VERTEX_AI=true
-    VERTEX_AI_CREDENTIALS_PATH=/absolute/path/to/your/google-cloud-credentials.json
-    VERTEX_AI_PROJECT=<your-gcp-project-id>
-    VERTEX_AI_LOCATION=<your-gcp-location> # Optional
-    ```
     
+    # REQUIRED: Absolute path to your Google Cloud credentials JSON file
+    VERTEX_AI_CREDENTIALS_PATH=/absolute/path/to/your/google-cloud-credentials.json
+    
+    # REQUIRED: Your GCP project ID
+    VERTEX_AI_PROJECT=your-gcp-project-id
+    
+    # OPTIONAL: GCP location/region (default: us-central1)
+    # VERTEX_AI_LOCATION=us-central1
+    ```
+
     > [!NOTE]
-    > To use Vertex AI, you need:
+    > **To use Vertex AI, you need:**
     > 1. A Google Cloud Platform (GCP) project with Vertex AI API enabled
     > 2. A service account with appropriate permissions
     > 3. A service account key file (JSON) downloaded from GCP
-    > 4. Set `VERTEX_AI_PROJECT` to the project id
+    > 4. Set `VERTEX_AI_PROJECT` to your project ID
     > 5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
     > 
-    > **Read more about configuration and available models:** [Vertex AI Provider Documentation](https://llamastack.github.io/v0.2.18/providers/inference/remote_vertexai.html)
+    > **Read more:** [Vertex AI Provider Documentation](https://llamastack.github.io/v0.2.18/providers/inference/remote_vertexai.html)
 
-    **Preparing For External Provider Question Validation**
+    ---
+
+    ### Configure Question Validation (Required if you selected "With validation")
+
+    If you selected "With validation" in step 2, configure the validation provider:
+
     ```env
-    ## Ensure VALIDATION_PROVIDER is one of your enabled Inference Providers
-    ## E.g. VALIDATION_PROVIDER=vllm if ENABLE_VLLM=true
+    # REQUIRED: Provider to use for question validation
+    # Must be one of: ollama, vllm, openai, vertexai
+    # Must match an enabled provider (e.g., if ENABLE_VLLM=true, use VALIDATION_PROVIDER=vllm)
     VALIDATION_PROVIDER=ollama
+    
+    # REQUIRED: Model identifier for validation
+    # Format depends on provider:
+    #   - Ollama: model-name (e.g., llama3.2:1b)
+    #   - vLLM: model-name (e.g., meta-llama/Llama-2-7b-chat-hf)
+    #   - OpenAI: model-name (e.g., gpt-3.5-turbo)
+    #   - Vertex AI: model-name (e.g., gemini-pro)
     VALIDATION_MODEL=llama3.2:1b
     ```
 
-1. **Start the application**
+    > [!IMPORTANT]
+    > **Validation Model Requirements:**
+    > - The validation model must support larger context windows to handle question validation
+    > - For Ollama: `llama3.2:1b` is recommended
+    > - Ensure `VALIDATION_PROVIDER` matches one of your enabled providers
+
+5. **Start the application**
 
    To start the Developer Lightspeed interactive setup script, run the following from the root of the repository:
 
@@ -109,19 +202,22 @@ Follow these steps to configure and launch Developer Lightspeed.
    bash ./developer-lightspeed/scripts/start-lightspeed.sh
    ```
 
+   The script will guide you through a simple 3-step process:
+   1. **Choose your LLM provider** (Ollama or Bring your own model)
+   2. **Choose question validation** (No validation or With validation)
+   3. **Container runtime detection** (auto-detects podman or docker, prompts only if detection fails or to override)
+
    > [!IMPORTANT]
-   >
-   > For question validation you **must** ensure the provided model is capable of handling larger context windows.
-   >
-   > For Ollama based setups, you can try `llama3.2:1b`.
-   >
-   > You will need to make sure you set `VALIDATION_MODEL` and `VALIDATION_PROVIDER` in your environment variables file to enable question validation.
+   > **Before starting:**
+   > - If you selected "Bring Your Own Model" in step 1, ensure you've configured at least one external LLM provider in your `.env` file (see step 4 above)
+   > - If you selected "With validation" in step 2, ensure `VALIDATION_PROVIDER` and `VALIDATION_MODEL` are set correctly in your `.env` file
+   > - For question validation, the model must support larger context windows (e.g., `llama3.2:1b` for Ollama)
 
 
 ---
 
 
-1. **Verify that all services are running**
+6. **Verify that all services are running**
 
    After starting the application, make sure all services are running:
 
@@ -165,7 +261,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    podman logs <container-name>
    ```
 
-2. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
+7. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
 
    ![Developer Lightspeed](images/Developer-Lightspeed.png)
 
@@ -173,11 +269,32 @@ Follow these steps to configure and launch Developer Lightspeed.
 
 ## Cleanup
 
-> [!NOTE]
-> Replace `podman` with `docker` if that is your chosen container engine.
+### Quick Cleanup (Recommended)
+
+The easiest way to stop Developer Lightspeed is using the interactive stop script:
+
+```bash
+bash ./developer-lightspeed/scripts/stop-lightspeed.sh
+```
+
+**With volumes removal (non-interactive):**
+```bash
+bash ./developer-lightspeed/scripts/stop-lightspeed.sh -v
+# or
+bash ./developer-lightspeed/scripts/stop-lightspeed.sh --volumes
+```
+
+The script will:
+- Auto-detect your container runtime (podman or docker)
+- Detect which configuration is running
+- **Without `-v` flag**: Stops containers only (preserves volumes for faster restart)
+- **With `-v` flag**: Stops containers and removes volumes (complete cleanup)
+
+### Manual Cleanup
+
+If you prefer to stop containers manually, use the commands below based on your setup:
 
 
-To stop and remove the running containers:
 
 #### **A. Default setup (with Ollama)**
 
@@ -255,7 +372,22 @@ If you encounter issues while setting up or running Developer Lightspeed, try th
 - Double-check that your `.env` or `default.env` files are present and correctly configured.
 - Restart the containers after making changes to environment files.
 
-### 6. Still Stuck?
+### 6. "Bring Your Own Model" Not Working
+
+If you selected "Bring Your Own Model" in step 1 but the external LLM provider isn't working:
+
+- **Verify provider is enabled**: Check that `ENABLE_VLLM=true`, `ENABLE_OPENAI=true`, or `ENABLE_VERTEX_AI=true` is set in your `.env` file
+- **Check required variables**: Ensure all required variables for your chosen provider are set (see step 4 above)
+- **Verify connectivity**: For vLLM, ensure the `VLLM_URL` is accessible from the container
+- **Check logs**: Review `llama-stack` container logs for provider connection errors:
+  ```bash
+  podman logs llama-stack
+  # OR
+  docker logs llama-stack
+  ```
+- **Validate API keys**: Ensure API keys are correct and have proper permissions
+
+### 7. Still Stuck?
 
 - Try stopping and removing all containers, then starting again, see [cleanup](#cleanup).
 
@@ -390,8 +522,7 @@ Ollama will use the models from the mounted directory, so you don’t need to re
 
 ---
 
-**This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you’ve created locally.**
-
+**This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you've created locally.**
 
 ---
 
