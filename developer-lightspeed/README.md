@@ -75,6 +75,8 @@ Follow these steps to configure and launch Developer Lightspeed.
    >
    > **Tested Providers**: Red Hat has tested and verified the following providers: vllm, ollama, openai, and vertex_ai. For other services, compatibility testing is the responsibility of the user. Red Hat has not performed testing on all OpenAI API compatible services.
    >
+   > **Using Other OpenAI API Compatible Services**: If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, etc.), you can use the **vLLM provider configuration** (see Option A in step 4 below). Simply set `ENABLE_VLLM=true` and configure `VLLM_URL` to point to your service's endpoint.
+   >
    > If you select "Bring Your Own Model" in step 1, you **must** configure at least one provider in step 4 below.
 
 4. **Set Environment Variables**
@@ -106,26 +108,44 @@ Follow these steps to configure and launch Developer Lightspeed.
 
     If you selected "Bring Your Own Model" in step 1, configure **at least one** of the following providers in your `.env` file:
 
-    #### **Option A: vLLM Provider**
+    #### **Option A: vLLM Provider (or Any OpenAI API Compatible Endpoint)**
 
-    Use vLLM for high-performance inference with self-hosted or cloud-based vLLM servers.
+    Use vLLM for high-performance inference with self-hosted or cloud-based vLLM servers. **This provider configuration also works with any OpenAI API compatible service** (Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.) that provides an OpenAI-compatible endpoint.
 
     ```env
-    # Enable vLLM provider
+    # Enable vLLM provider (or generic OpenAI API compatible endpoint)
     ENABLE_VLLM=true
     
-    # REQUIRED: URL to your vLLM server (must end with /v1)
-    VLLM_URL=https://your-vllm-server.com/v1
+    # REQUIRED: URL to your server (must end with /v1)
+    # Examples:
+    #   - vLLM server: https://your-vllm-server.com/v1
+    #   - Azure OpenAI: https://your-resource.openai.azure.com/v1
+    #   - LM Studio: http://localhost:1234/v1
+    #   - Any OpenAI-compatible endpoint
+    VLLM_URL=https://your-server.com/v1
     
     # REQUIRED: API key for authentication (if your server requires it)
+    # For Azure OpenAI, use your Azure API key
+    # For LM Studio or local servers, you can use any value or leave as default
     VLLM_API_KEY=your-api-key-here
     
     # OPTIONAL: Maximum tokens per request (default: 4096)
     # VLLM_MAX_TOKENS=4096
     
     # OPTIONAL: TLS verification (default: true)
+    # Set to false for local servers with self-signed certificates
     # VLLM_TLS_VERIFY=true
     ```
+
+    > [!TIP]
+    > **Using Other OpenAI API Compatible Services:**
+    > 
+    > If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.), you can use the **vLLM provider configuration** above. Simply:
+    > 1. Set `ENABLE_VLLM=true`
+    > 2. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
+    > 3. Set `VLLM_API_KEY` to your service's API key (if required)
+    > 
+    > The `remote::vllm` provider type accepts any OpenAI API compatible endpoint, not just vLLM servers.
 
     #### **Option B: OpenAI Provider**
 
