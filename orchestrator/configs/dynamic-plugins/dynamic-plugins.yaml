@@ -3,8 +3,8 @@ includes:
   - dynamic-plugins.default.yaml
 
 plugins:
-  - package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-1.6.0.tgz
-    integrity: sha512-fOSJv2PgtD2urKwBM7p9W6gV/0UIHSf4pkZ9V/wQO0eg0Zi5Mys/CL1ba3nO9x9l84MX11UBZ2r7PPVJPrmOtw==
+  - package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-orchestrator/-/backstage-plugin-orchestrator-1.8.2.tgz"
+    integrity: sha512-rnUA6iZ2JVAyASfwS4P9HeFmpqCgH6FQouzzg4s6lCPAsYUFvu6tifJ3df5lThXPUTJ2cDvvQgamU+4DiHP2jw==
     disabled: false
     pluginConfig:
       dynamicPlugins:
@@ -20,22 +20,22 @@ plugins:
                   text: Orchestrator
                 path: /orchestrator
   - disabled: false
-    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-backend-dynamic-1.6.0.tgz
-    integrity: sha512-Kr55YbuVwEADwGef9o9wyimcgHmiwehPeAtVHa9g2RQYoSPEa6BeOlaPzB6W5Ke3M2bN/0j0XXtpLuvrlXQogA==
+    package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-orchestrator-backend-dynamic/-/backstage-plugin-orchestrator-backend-dynamic-1.8.2.tgz"
+    integrity: sha512-6G0YguzCM5nCDpOrIGJpLTXVMr6EBdIVqSXtsLH9RvBH25RTuFpfJ7q6eEp26DqveaiqUCfBpJ51smdjcsEzFQ==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - disabled: false
-    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic-1.6.0.tgz
-    integrity: sha512-Bueeix4661fXEnfJ9y31Yw91LXJgw6hJUG7lPVdESCi9VwBCjDB9Rm8u2yPqP8sriwr0OMtKtqD+Odn3LOPyVw==
+    package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic/-/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic-1.8.2.tgz"
+    integrity: sha512-N2hCn9RI/QVEoK56FAkGkSDbvfQCOIzVsJTwDX0kf//npO++2crRSJpB1Lr/m2UtYxfaXZX53p8sPcK3g8yWkQ==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - disabled: false
-    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-form-widgets-1.6.0.tgz
-    integrity: sha512-Tqn6HO21Q1TQ7TFUoRhwBVCtSBzbQYz+OaanzzIB0R24O6YtVx3wR7Chtr5TzC05Vz5GkBO1+FZid8BKpqljgA==
+    package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-orchestrator-form-widgets/-/backstage-plugin-orchestrator-form-widgets-1.8.2.tgz"
+    integrity: sha512-Pe0dn3g+YTK3jbl36E8nt4zdyH/3w+MWgRyFWPc2B0eV4/L/aRfRC4KxcktmHPdamRGXTIaXL6cFae8TZl8Htw==
     pluginConfig:
       dynamicPlugins:
         frontend:
