@@ -31,6 +31,11 @@ benchmarks: []
 container_image: null
 datasets: []
 external_providers_dir: "/app-root/config/providers.d"
+
+# ==============================================================================
+# Inference Store Configuration
+# ==============================================================================
+# SQLite database for storing inference metadata and model information
 inference_store:
   db_path: .llama/distributions/ollama/inference_store.db
   type: sqlite
@@ -39,6 +44,12 @@ metadata_store:
   db_path: .llama/distributions/ollama/registry.db
   namespace: null
   type: sqlite
+
+# ==============================================================================
+# Provider Configuration
+# ==============================================================================
+# Defines inference, safety, and tool providers available to Llama Stack
+# Providers are conditionally enabled based on environment variables
 providers:
   agents:
   - config:
@@ -74,6 +85,12 @@ providers:
         type: sqlite
     provider_id: meta-reference
     provider_type: inline::meta-reference
+
+  # ============================================================================
+  # Inference Providers
+  # ============================================================================
+  # LLM inference providers - at least one must be enabled via environment variables
+  # Providers are conditionally loaded based on ENABLE_* environment variables
   inference:
     - provider_id: ${env.ENABLE_VLLM:+vllm}
       provider_type: remote::vllm
@@ -227,6 +244,11 @@ providers:
         type: sqlite
         namespace: null
         db_path: /app-root/vector_db/rhdh_product_docs/1.8/faiss_store.db
+
+# ==============================================================================
+# Server Configuration
+# ==============================================================================
+# Llama Stack API server settings
 scoring_fns: []
 server:
   auth: null
@@ -253,11 +275,21 @@ tool_groups:
 - provider_id: rag-runtime
   toolgroup_id: builtin::rag
   description: "Only use for questions specifically about Red Hat Developer Hub (RHDH). Searches technical documentation for RHDH installation, discovery, configuration, release, upgrade, control access, integration, observability, and extending with plugins. Do not use for any other topic outside RHDH."
+
+# ==============================================================================
+# Vector Database Configuration
+# ==============================================================================
+# Vector databases for semantic search and RAG
 vector_dbs:
 - embedding_dimension: 768
   embedding_model: /app-root/embeddings_model
   provider_id: rhdh-docs
   vector_db_id: rhdh-product-docs-1_8
+
+# ==============================================================================
+# Model Configuration
+# ==============================================================================
+# Embedding models for vector search
 models:
 - model_id: sentence-transformers/all-mpnet-base-v2
   metadata:

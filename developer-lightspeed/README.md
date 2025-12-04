@@ -58,7 +58,7 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    **Step 1: Choose Your LLM Provider**
    - **Ollama** (recommended for beginners): Uses the built-in Ollama container that runs locally. No additional configuration needed - the script handles everything automatically.
-   - **Bring Your Own Model**: Use your own external LLM provider (vLLM, OpenAI, or Vertex AI). You must configure the environment variables for your chosen provider before starting.
+   - **Bring Your Own Model**: Use your own external LLM provider (any OpenAI API compatible service). You must configure the environment variables for your chosen provider before starting.
 
    **Step 2: Choose Question Validation**
    - **No validation**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant.
@@ -67,12 +67,15 @@ Follow these steps to configure and launch Developer Lightspeed.
    > [!NOTE]
    > **What does "Bring Your Own Model" mean?**
    >
-   > This option allows you to use an external LLM service instead of the local Ollama container. You can use:
+   > This option allows you to use an external LLM service instead of the local Ollama container. Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
    > - **vLLM**: A high-performance inference server (self-hosted or cloud)
    > - **OpenAI**: OpenAI's API (GPT-3.5, GPT-4, etc.)
    > - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+   > - **Other compatible services**: Azure OpenAI, WatsonX, Amazon Bedrock, Mistral, Nvidia NIM, LM Studio, and other OpenAI API compatible services
    >
-   > If you select "Bring Your Own Model" in step 1, you **must** configure at least one of these providers in step 4 below.
+   > **Tested Providers**: Red Hat has tested and verified the following providers: vllm, ollama, openai, and vertex_ai. For other services, compatibility testing is the responsibility of the user. Red Hat has not performed testing on all OpenAI API compatible services.
+   >
+   > If you select "Bring Your Own Model" in step 1, you **must** configure at least one provider in step 4 below.
 
 4. **Set Environment Variables**
 
