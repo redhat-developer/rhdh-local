@@ -195,7 +195,8 @@ main() {
                 runtime="$override_runtime"
                 echo "✅ Using runtime: $runtime"
             else
-                echo "⚠️  Invalid runtime. Using detected: $runtime"
+                echo "❌ Invalid choice. Exiting."
+                exit 1
             fi
         fi
     fi
