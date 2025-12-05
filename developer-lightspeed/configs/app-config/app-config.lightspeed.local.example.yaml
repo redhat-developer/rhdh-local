@@ -1,4 +1,17 @@
+# ==============================================================================
+# Developer Lightspeed App Configuration
+# ==============================================================================
+# This file configures the Developer Lightspeed plugin in RHDH
+# Copy this file to app-config.lightspeed.local.yaml and customize as needed
+#
+# Documentation:
+# - Lightspeed on rhdh-local: https://github.com/redhat-developer/rhdh-local/blob/main/developer-lightspeed/README.md
+# - Lightspeed frontend plugin: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
+# - Lightspeed backend plugin: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
+
 backend:
+  # Content Security Policy (CSP) configuration
+  # Allows external resources needed by the Lightspeed UI
   csp:
    upgrade-insecure-requests: false
    img-src:
@@ -6,26 +19,31 @@ backend:
     - "data:"
     - https://img.freepik.com
     - https://cdn.dribbble.com
-    - https://avatars.githubusercontent.com # This is to load GitHub avatars in the UI
+    - https://avatars.githubusercontent.com # Required to load GitHub avatars in the UI
 
    script-src:
      - "'self'"
-     - "'unsafe-eval'" # this is required for scaffolder usage, and ajv validation.
+     - "'unsafe-eval'" # Required for scaffolder usage and ajv validation
      - https://cdn.jsdelivr.net
-# Check out the below guide for more information.
-# Lightspeed on rhdh-local: https://github.com/redhat-developer/rhdh-local/blob/main/developer-lightspeed/README.md
-# For additional plugin configurations, see
-# Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
-# Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
+
+# ==============================================================================
+# Developer Lightspeed Plugin Configuration
+# ==============================================================================
 lightspeed:
-  # OPTIONAL: Custom users prompts displayed to users
+  # OPTIONAL: Custom user prompts displayed in the Lightspeed UI
+  # These appear as suggested questions/prompts to help users get started
   # If not provided, the plugin uses built-in default prompts
+  # You can add multiple prompts - each should have a title and message
   prompts:
   - title: 'Getting Started with Red Hat Developer Hub'
     message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
 
-  # OPTIONAL: Port for lightspeed service (default: 8080)
+  # OPTIONAL: Port for the Lightspeed backend service
+  # Default: 8080
+  # Only change if you've configured a different port in lightspeed-stack.yaml
   # servicePort: 8080
 
-  # OPTIONAL: Override default RHDH system prompt
+  # OPTIONAL: Custom system prompt to override the default RHDH system prompt
+  # The system prompt defines the assistant's behavior and knowledge scope
+  # Default: Built-in RHDH-focused system prompt
   # systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
