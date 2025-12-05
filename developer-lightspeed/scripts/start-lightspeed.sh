@@ -183,7 +183,8 @@ main() {
         elif [[ "$runtime_choice" == "2" ]]; then
             runtime="docker"
         else
-            echo "⚠️  Invalid runtime. Using detected: $runtime"
+            echo "❌ Invalid choice. Exiting."
+            exit 1
         fi
     else
         echo "✅ Detected runtime: $runtime"
