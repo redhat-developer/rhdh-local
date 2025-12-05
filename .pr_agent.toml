@@ -31,7 +31,7 @@ add_original_user_description = false
 commitable_code_suggestions = false
 
 [config]
-ignore_pr_authors = ["renovate","openshift-cherrypick-robot","rhdh-bot"]
+ignore_pr_authors = ["renovate"]
 
 [rag_arguments]
 enable_rag=true
