@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Lint
       # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
       run: |
@@ -57,7 +57,7 @@ jobs:
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Install tool
       if: ${{ matrix.tool == 'podman' }}
