@@ -111,11 +111,13 @@ jobs:
     - name: Setup Podman container environment
       id: setup-podman
       if: ${{ matrix.tool == 'podman' }}
-      uses: ./.github/actions/setup-containerized-podman
+      uses: rm3l/setup-containerized-podman@9d660ce477edb95b5ac6e27694ac43abaee18953 # v1
       with:
         podman-image: ${{ env.PODMAN_IMAGE }}
         compose-provider: docker-compose
         docker-compose-version: ${{ env.DOCKER_COMPOSE_VERSION }}
+        env: |
+          CORPORATE_PROXY_IMAGE=${{ env.CORPORATE_PROXY_IMAGE }}
 
     - name: Display container engine version
       run: |
