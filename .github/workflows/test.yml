@@ -72,15 +72,6 @@ jobs:
             containerd \
             crun \
             runc \
-            docker-ce \
-            docker-ce-cli \
-            containerd.io \
-            docker-buildx-plugin \
-            docker-compose-plugin \
-            podman \
-            containers-common \
-            crun \
-            runc \
             buildah \
           ; do
           sudo apt-get remove --purge -y $pkg || true
