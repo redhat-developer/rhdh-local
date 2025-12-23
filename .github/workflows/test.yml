@@ -53,24 +53,73 @@ jobs:
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ubuntu-latest
     env:
+      DOCKER_COMPOSE_VERSION: v5.0.1
+      PODMAN_IMAGE: quay.io/podman/stable:v5
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
 
     steps:
     - uses: actions/checkout@v6
 
-    - name: Install tool
-      if: ${{ matrix.tool == 'podman' }}
+    - name: Remove conflicting packages
       run: |
-        sudo apt update
-        sudo apt install -y podman podman-docker
-        curl -LO https://github.com/docker/compose/releases/download/v2.40.0/docker-compose-linux-x86_64
-        chmod +x docker-compose-linux-x86_64
-        sudo mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose
-        sudo systemctl enable --now podman.socket
-        systemctl --user enable --now podman.socket
+        # Remove any previous installations of Podman and Docker
+        for pkg in docker.io \
+            docker-doc \
+            docker-compose \
+            docker-compose-v2 \
+            podman-docker \
+            containerd \
+            crun \
+            runc \
+            buildah \
+          ; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
 
-    - name: Display versions
+    - name: Update Docker version
+      # https://docs.docker.com/engine/install/ubuntu#install-using-the-repository
+      # Docker is also needed for Podman tests (to run the Podman container)
+      run: |
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        # Add the repository to Apt sources:
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce \
+          docker-ce-cli \
+          containerd.io \
+          docker-buildx-plugin
+
+        # Install standalone docker-compose for consistent version across docker/podman tests
+        echo "Installing docker-compose $DOCKER_COMPOSE_VERSION..."
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" \
+          -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        # Also install as Docker CLI plugin
+        sudo mkdir -p /usr/local/lib/docker/cli-plugins
+        sudo ln -sf /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
+
+    - name: Setup Podman container environment
+      id: setup-podman
+      if: ${{ matrix.tool == 'podman' }}
+      uses: rm3l/setup-containerized-podman@9d660ce477edb95b5ac6e27694ac43abaee18953 # v1
+      with:
+        podman-image: ${{ env.PODMAN_IMAGE }}
+        compose-provider: docker-compose
+        docker-compose-version: ${{ env.DOCKER_COMPOSE_VERSION }}
+        env: |
+          CORPORATE_PROXY_IMAGE=${{ env.CORPORATE_PROXY_IMAGE }}
+
+    - name: Display container engine version
       run: |
         echo "*** ${{ matrix.tool }} version ***"
         ${{ matrix.tool }} version
@@ -78,9 +127,8 @@ jobs:
         echo "*** ${{ matrix.tool }} compose version ***"
         ${{ matrix.tool }} compose version
 
-    - name: Configure DOCKER_HOST for Podman
-      if: ${{ matrix.tool == 'podman' }}
-      run: echo "DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')" >> $GITHUB_ENV
+    - name: ${{ matrix.tool }} info
+      run: ${{ matrix.tool }} info
 
     - name: Compose config
       run: ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} config
@@ -174,3 +222,9 @@ jobs:
       run: |
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps || true
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} down --volumes || true
+
+    - name: Cleanup Podman container environment
+      if: ${{ always() && matrix.tool == 'podman' }}
+      run: |
+        docker container stop ${{ steps.setup-podman.outputs.container-name }} || true
+        docker container rm ${{ steps.setup-podman.outputs.container-name }} || true
