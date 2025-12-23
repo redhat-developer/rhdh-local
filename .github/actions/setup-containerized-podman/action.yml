@@ -1,0 +1,128 @@
+name: 'Setup Containerized Podman'
+description: 'Sets up Podman 5.x using a containerized environment with Docker as the backend'
+author: 'Red Hat Developer Hub'
+
+branding:
+  icon: 'box'
+  color: 'red'
+
+inputs:
+  podman-image:
+    description: 'Podman container image to use'
+    required: false
+    default: 'quay.io/podman/stable:v5'
+  compose-provider:
+    description: 'Compose provider to install: docker-compose, podman-compose, or empty to skip'
+    required: false
+    default: ''
+  docker-compose-version:
+    description: 'Version of docker-compose to install (if compose-provider is docker-compose)'
+    required: false
+    default: 'v5.0.1'
+  podman-compose-version:
+    description: 'Version of podman-compose to install (if compose-provider is podman-compose)'
+    required: false
+    default: 'v1.5.0'
+  env:
+    description: 'Additional environment variables to pass to the Podman container (one per line, KEY=VALUE format)'
+    required: false
+    default: ''
+  print-version:
+    description: 'Print Podman and Compose versions after setup'
+    required: false
+    default: 'false'
+
+outputs:
+  container-name:
+    description: 'The name of the Podman container (use this for cleanup)'
+    value: ${{ steps.setup.outputs.container-name }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        COMPOSE_PROVIDER: ${{ inputs.compose-provider }}
+      run: |
+        if [[ -n "$COMPOSE_PROVIDER" && "$COMPOSE_PROVIDER" != "docker-compose" && "$COMPOSE_PROVIDER" != "podman-compose" ]]; then
+          echo "::error::Invalid compose-provider '$COMPOSE_PROVIDER'. Must be 'docker-compose', 'podman-compose', or empty."
+          exit 1
+        fi
+
+    - name: Setup Podman container environment
+      id: setup
+      shell: bash
+      env:
+        PODMAN_IMAGE: ${{ inputs.podman-image }}
+        COMPOSE_PROVIDER: ${{ inputs.compose-provider }}
+        DOCKER_COMPOSE_VERSION: ${{ inputs.docker-compose-version }}
+        PODMAN_COMPOSE_VERSION: ${{ inputs.podman-compose-version }}
+        EXTRA_ENV_VARS: ${{ inputs.env }}
+      run: |
+        # Build extra environment variable arguments
+        EXTRA_ENV_ARGS=()
+        if [[ -n "$EXTRA_ENV_VARS" ]]; then
+          while IFS= read -r line; do
+            # Skip empty lines and comments
+            [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+            EXTRA_ENV_ARGS+=("-e" "$line")
+          done <<< "$EXTRA_ENV_VARS"
+        fi
+
+        # Add PODMAN_COMPOSE_PROVIDER env var only if compose-provider is set
+        if [[ -n "$COMPOSE_PROVIDER" ]]; then
+          EXTRA_ENV_ARGS+=("-e" "PODMAN_COMPOSE_PROVIDER=$COMPOSE_PROVIDER")
+        fi
+
+        CONTAINER_NAME="podman-env"
+        echo "Pulling Podman container image: $PODMAN_IMAGE"
+        docker image pull "$PODMAN_IMAGE"
+
+        # Start a persistent Podman container that we'll exec into for all commands
+        # Using --network=host ensures ports are accessible from the host
+        # Mount the host's Docker socket so docker-compose can use the host's Docker daemon
+        docker container run -d \
+          --name "$CONTAINER_NAME" \
+          --privileged \
+          --network=host \
+          --pid=host \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v "${{ github.workspace }}":"${{ github.workspace }}":z \
+          -w "${{ github.workspace }}" \
+          -e DOCKER_HOST=unix:///var/run/docker.sock \
+          "${EXTRA_ENV_ARGS[@]}" \
+          "$PODMAN_IMAGE" \
+          sleep infinity
+
+        # Install the selected compose provider inside the container (if specified)
+        if [ "$COMPOSE_PROVIDER" = "podman-compose" ]; then
+          echo "Installing podman-compose $PODMAN_COMPOSE_VERSION inside the container..."
+          docker container exec "$CONTAINER_NAME" pip install "podman-compose==${PODMAN_COMPOSE_VERSION#v}"
+        elif [ "$COMPOSE_PROVIDER" = "docker-compose" ]; then
+          echo "Installing docker-compose $DOCKER_COMPOSE_VERSION inside the container..."
+          docker container exec "$CONTAINER_NAME" sh -c "curl -fsSL https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+        fi
+
+        # Create a wrapper script that runs commands inside the persistent container
+        WORKSPACE="${{ github.workspace }}"
+        cat > /tmp/podman-wrapper.sh << WRAPPER
+        #!/bin/bash
+        exec docker container exec -w "$WORKSPACE" "$CONTAINER_NAME" podman "\$@"
+        WRAPPER
+        chmod +x /tmp/podman-wrapper.sh
+        sudo mv /tmp/podman-wrapper.sh /usr/local/bin/podman
+
+        echo "Podman wrapper installed at /usr/local/bin/podman"
+
+        echo "container-name=$CONTAINER_NAME" >> $GITHUB_OUTPUT
+
+    - name: Display Podman version
+      if: ${{ inputs.print-version == 'true' }}
+      shell: bash
+      run: |
+        echo "*** podman version ***"
+        podman version
+        echo
+        echo "*** podman compose version ***"
+        podman compose version

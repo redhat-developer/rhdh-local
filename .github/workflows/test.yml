@@ -109,41 +109,13 @@ jobs:
         sudo ln -sf /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
 
     - name: Setup Podman container environment
+      id: setup-podman
       if: ${{ matrix.tool == 'podman' }}
-      run: |
-        echo "Pulling Podman container image: $PODMAN_IMAGE"
-        docker image pull "$PODMAN_IMAGE"
-
-        # Start a persistent Podman container that we'll exec into for all commands
-        # Using --network=host ensures port 7007 is accessible from the host
-        # Mount the host's Docker socket so docker-compose can use the host's Docker daemon
-        docker container run -d \
-          --name podman-env \
-          --privileged \
-          --network=host \
-          --pid=host \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          -v "${{ github.workspace }}":"${{ github.workspace }}":z \
-          -w "${{ github.workspace }}" \
-          -e CORPORATE_PROXY_IMAGE="${CORPORATE_PROXY_IMAGE:-}" \
-          -e DOCKER_HOST=unix:///var/run/docker.sock \
-          "$PODMAN_IMAGE" \
-          sleep infinity
-
-        # Install docker-compose inside the container as the compose provider
-        echo "Installing docker-compose $DOCKER_COMPOSE_VERSION inside the container..."
-        docker container exec podman-env sh -c "curl -fsSL https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
-
-        # Create a wrapper script that runs commands inside the persistent container
-        WORKSPACE="${{ github.workspace }}"
-        cat > /tmp/podman-wrapper.sh << WRAPPER
-        #!/bin/bash
-        exec docker container exec -w "$WORKSPACE" podman-env podman "\$@"
-        WRAPPER
-        chmod +x /tmp/podman-wrapper.sh
-        sudo mv /tmp/podman-wrapper.sh /usr/local/bin/podman
-
-        echo "Podman wrapper installed"
+      uses: ./.github/actions/setup-containerized-podman
+      with:
+        podman-image: ${{ env.PODMAN_IMAGE }}
+        compose-provider: docker-compose
+        docker-compose-version: ${{ env.DOCKER_COMPOSE_VERSION }}
 
     - name: Display container engine version
       run: |
@@ -252,5 +224,5 @@ jobs:
     - name: Cleanup Podman container environment
       if: ${{ always() && matrix.tool == 'podman' }}
       run: |
-        docker stop podman-env || true
-        docker rm podman-env || true
+        docker container stop ${{ steps.setup-podman.outputs.container-name }} || true
+        docker container rm ${{ steps.setup-podman.outputs.container-name }} || true
