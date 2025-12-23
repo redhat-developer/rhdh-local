@@ -53,6 +53,8 @@ jobs:
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ubuntu-latest
     env:
+      DOCKER_COMPOSE_VERSION: v5.0.1
+      PODMAN_IMAGE: quay.io/podman/stable:v5
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
 
@@ -86,7 +88,7 @@ jobs:
 
     - name: Update Docker version
       # https://docs.docker.com/engine/install/ubuntu#install-using-the-repository
-      if: ${{ matrix.tool == 'docker' }}
+      # Docker is also needed for Podman tests (to run the Podman container)
       run: |
         # Add Docker's official GPG key:
         sudo apt-get update
@@ -104,80 +106,53 @@ jobs:
         sudo apt-get install -y docker-ce \
           docker-ce-cli \
           containerd.io \
-          docker-buildx-plugin \
-          docker-compose-plugin
+          docker-buildx-plugin
 
-    - name: Update Podman version
-      # https://github.com/containers/podman/discussions/25582
-      if: ${{ matrix.tool == 'podman' }}
-      run: |
-        ### Podman ###
-        # Define file paths
-        PINNING_FILE="/etc/apt/preferences.d/podman-plucky.pref"
-        SOURCE_LIST="/etc/apt/sources.list.d/plucky.list"
-
-        # Write plucky APT source list
-        echo "Adding plucky repo to $SOURCE_LIST..."
-        echo "deb http://archive.ubuntu.com/ubuntu plucky main universe" | \
-          sudo tee "$SOURCE_LIST"
-
-        # Write APT pinning rules
-        echo "Writing APT pinning rules to $PINNING_FILE..."
-        cat <<EOF > /tmp/pinning_file
-        Package: podman buildah golang-github-containers-common crun libgpgme11t64 libgpg-error0 golang-github-containers-image catatonit conmon containers-storage
-        Pin: release n=plucky
-        Pin-Priority: 991
-
-        Package: libsubid4 netavark passt aardvark-dns containernetworking-plugins libslirp0 slirp4netns
-        Pin: release n=plucky
-        Pin-Priority: 991
-
-        Package: *
-        Pin: release n=plucky
-        Pin-Priority: 400
-        EOF
-        sudo mv -f /tmp/pinning_file "$PINNING_FILE"
-
-        # Update APT cache
-        echo "Updating APT package list..."
-        sudo apt-get update
-
-        echo "plucky pinning setup complete."
-        sudo apt-get install -y podman podman-docker
-
-        # Remove the Docker compose plugin so Podman doesn't try to use it
-        # (the GitHub runner comes with Docker pre-installed)
-        sudo rm -f /usr/libexec/docker/cli-plugins/docker-compose
-        sudo rm -f /usr/lib/docker/cli-plugins/docker-compose
-        sudo rm -f /usr/local/lib/docker/cli-plugins/docker-compose
-        sudo rm -f ~/.docker/cli-plugins/docker-compose
-
-        # Install standalone docker-compose binary for Podman to use
-        COMPOSE_VERSION="v5.0.1"
-        echo "Installing standalone docker-compose $COMPOSE_VERSION..."
-        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64" \
+        # Install standalone docker-compose for consistent version across docker/podman tests
+        echo "Installing docker-compose $DOCKER_COMPOSE_VERSION..."
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" \
           -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
+        # Also install as Docker CLI plugin
+        sudo mkdir -p /usr/local/lib/docker/cli-plugins
+        sudo ln -sf /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
 
-    - name: Configure Podman socket
+    - name: Setup Podman container environment
       if: ${{ matrix.tool == 'podman' }}
       run: |
-        sudo systemctl enable --now podman.socket
-        systemctl --user enable --now podman.socket
+        echo "Pulling Podman container image: $PODMAN_IMAGE"
+        docker image pull "$PODMAN_IMAGE"
 
-        # Wait for the user socket to be ready
-        SOCKET_PATH="$(podman info --format '{{.Host.RemoteSocket.Path}}')"
-        echo "Waiting for Podman socket at $SOCKET_PATH..."
-        for i in {1..30}; do
-          if curl --unix-socket "$SOCKET_PATH" http://localhost/_ping 2>/dev/null | grep -q OK; then
-            echo "Podman socket is ready"
-            break
-          fi
-          echo "Attempt $i: Socket not ready yet, waiting..."
-          sleep 1
-        done
+        # Start a persistent Podman container that we'll exec into for all commands
+        # Using --network=host ensures port 7007 is accessible from the host
+        # Mount the host's Docker socket so docker-compose can use the host's Docker daemon
+        docker container run -d \
+          --name podman-env \
+          --privileged \
+          --network=host \
+          --pid=host \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v "${{ github.workspace }}":"${{ github.workspace }}":z \
+          -w "${{ github.workspace }}" \
+          -e CORPORATE_PROXY_IMAGE="${CORPORATE_PROXY_IMAGE:-}" \
+          -e DOCKER_HOST=unix:///var/run/docker.sock \
+          "$PODMAN_IMAGE" \
+          sleep infinity
 
-        echo "DOCKER_HOST=unix://$SOCKET_PATH" >> $GITHUB_ENV
+        # Install docker-compose inside the container as the compose provider
+        echo "Installing docker-compose $DOCKER_COMPOSE_VERSION inside the container..."
+        docker container exec podman-env sh -c "curl -fsSL https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+
+        # Create a wrapper script that runs commands inside the persistent container
+        WORKSPACE="${{ github.workspace }}"
+        cat > /tmp/podman-wrapper.sh << WRAPPER
+        #!/bin/bash
+        exec docker container exec -w "$WORKSPACE" podman-env podman "\$@"
+        WRAPPER
+        chmod +x /tmp/podman-wrapper.sh
+        sudo mv /tmp/podman-wrapper.sh /usr/local/bin/podman
+
+        echo "Podman wrapper installed"
 
     - name: Display container engine version
       run: |
@@ -282,3 +257,9 @@ jobs:
       run: |
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} ps || true
         ${{ matrix.tool }} compose ${{ matrix.composeConfig.cliArgs }} down --volumes || true
+
+    - name: Cleanup Podman container environment
+      if: ${{ always() && matrix.tool == 'podman' }}
+      run: |
+        docker stop podman-env || true
+        docker rm podman-env || true
