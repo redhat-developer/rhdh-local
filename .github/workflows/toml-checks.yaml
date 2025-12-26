@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
-      - uses: tombi-toml/setup-tombi@2119ac80a557c9fb2e7012858e63c22d8bf26cdb # v1
+      - uses: tombi-toml/setup-tombi@f7cb38e77d9a62bc27a8445bf50e660e9496b893 # v1
         with:
           version: 'v0.6.3'
           checksum: '85fbd6ab07c6faf2cc6d5c826c8a16255e10b5bc391621d391a76e9323124a4c'
