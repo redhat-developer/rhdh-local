@@ -1,6 +1,8 @@
 # This is the default dynamic plugins config, and any user configuration should be added dynamic-plugins.override.yaml instead
 includes:
   - dynamic-plugins.default.yaml
+  # Writable path for extensions plugin configuration
+  - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 plugins:
   # Tech Radar frontend plugin
@@ -52,3 +54,41 @@ plugins:
                   toolTip: "RHDH Documentation"
                   to: "https://docs.redhat.com/en/documentation/red_hat_developer_hub/"
                   visibleOnPaths: ["/"]
+
+  #########################################################
+  # Enable dynamic plugins installation by using Extensions
+  #########################################################
+  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-marketplace
+    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-marketplace:
+            translationResources:
+              - importName: marketplaceTranslations
+                ref: marketplaceTranslationRef
+                module: Alpha
+            appIcons:
+              - name: pluginsIcon
+                importName: PluginsIcon
+            dynamicRoutes:
+              - path: /extensions
+                importName: DynamicMarketplacePluginRouter
+                menuItem:
+                  icon: pluginsIcon
+                  text: Extensions
+                  textKey: menuItem.extensions
+            menuItems:
+              extensions:
+                parent: default.admin
+
+  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-marketplace-backend-dynamic
+    disabled: false
+    pluginConfig:
+      extensions:
+        installation:
+          enabled: true
+          saveToSingleFile:
+            # NOTE: the path needs to be writable by the main RHDH container user
+            file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
+  ########## End Extensions #################################
