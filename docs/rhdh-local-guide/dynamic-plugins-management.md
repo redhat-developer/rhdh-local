@@ -24,7 +24,7 @@ After making plugin changes through the UI, restart your local instance with the
 ```bash
 # Reinstall plugins and restart RHDH
 podman compose run install-dynamic-plugins
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 ```
 
 This process typically may take a few minutes. You can monitor the startup progress in the container logs:
@@ -182,7 +182,7 @@ podman compose up -d
 
 # Reinstall plugins without clearing other data
 podman compose run install-dynamic-plugins
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 ```
 
 ## Applying Plugin Changes
@@ -194,7 +194,7 @@ After modifying the plugin configuration, for example after configuring plugins 
 ```bash
 # Reinstall plugins and restart RHDH
 podman compose run install-dynamic-plugins
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 ```
 
 ### Quick Restart (No Plugin Changes)
@@ -203,5 +203,5 @@ For configuration-only changes:
 
 ```bash
 # Just restart RHDH (if plugins haven't changed)
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 ```

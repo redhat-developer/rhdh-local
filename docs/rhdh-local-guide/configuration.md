@@ -64,9 +64,9 @@ After making configuration changes:
 
 ```bash
 # For app-config changes
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 
 # For plugin changes  
 podman compose run install-dynamic-plugins
-podman compose stop rhdh && podman compose start rhdh
+podman compose restart rhdh
 ```
