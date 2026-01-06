@@ -141,7 +141,7 @@ podman compose stop rhdh && podman compose start rhdh
 
 ### Standard Plugin Changes
 
-After modifying the plugin configuration:
+After modifying the plugin configuration, for example after configuring plugins using the Extensions in the RHDH UI:
 
 ```bash
 # Reinstall plugins and restart RHDH
