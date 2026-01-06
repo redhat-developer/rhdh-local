@@ -1,5 +1,53 @@
 The dynamic plugin system in RHDH enables you to add, remove, enable, and disable plugins without rebuilding the container. This provides incredible flexibility for testing different plugin combinations and developing custom plugins locally.
 
+## Managing Plugins from the UI
+
+RHDH Local comes with a built-in **Extensions** feature that lets you browse, install, and configure plugins directly from the web interface, without any need to manually edit YAML files for basic plugin management.
+
+!!! warning "Local Development Only"
+    The UI-based plugin management feature is enabled by default in RHDH Local for development and testing purposes. **This functionality is not supported in production environments.** In production, plugin management should be handled through proper configuration management and deployment pipelines.
+
+### Why a Restart is Required
+
+When you install or uninstall a plugin through the UI, you're changing which code RHDH needs to load. The restart ensures that:
+
+- New plugin code is eventually downloaded and made available
+- The backend services can load the new functionality
+- Configuration changes are properly applied across all services
+
+Without a restart, your changes won't take effect because the running instance is still using the previous set of loaded plugins.
+
+### How to Restart RHDH Local
+
+After making plugin changes through the UI, restart your local instance with these commands:
+
+```bash
+# Reinstall plugins and restart RHDH
+podman compose run install-dynamic-plugins
+podman compose stop rhdh && podman compose start rhdh
+```
+
+This process typically may take a few minutes. You can monitor the startup progress in the container logs:
+
+```bash
+podman compose logs -f rhdh
+```
+
+### Example: Installing the TODO Plugin
+
+Let's walk through installing a simple plugin to try out the UI-based management feature.
+
+**[TODO](https://github.com/backstage/community-plugins/tree/main/workspaces/todo)** is a plugin that scans your repository code and displays all TODO, FIXME, and similar comments in one place. It's a great plugin to test with because it requires minimal configuration and provides immediate, practical value.
+
+1. **Open the Extensions page**: Navigate to **Administration** → **Extensions** in the RHDH sidebar
+2. **Find the TODO plugin**: Use the search bar to find "TODO" or browse the available plugins
+3. **Install the plugin**: Click on the TODO plugin and follow the installation prompts. The UI will then warn that a backend restart is required, like so:
+   ![Extensions](../images/dynamic-plugins-extensions-restart-required.png)
+4. **Restart RHDH Local**: Run the restart commands shown above
+5. **Verify the installation**: After restart, navigate to a component entity page and you should see a new "TODO" section in the entity Overview that lists any TODO comments found in the related repository, if any.
+
+To uninstall, simply return to the Extensions page, find the installed plugin, and remove it; then restart again.
+
 ## Configuration File Location
 
 Plugin configuration is managed through `configs/dynamic-plugins/dynamic-plugins.override.yaml` or `configs/dynamic-plugins/dynamic-plugins.yaml` if the former does not exist.
