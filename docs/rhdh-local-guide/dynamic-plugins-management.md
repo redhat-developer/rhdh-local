@@ -11,7 +11,7 @@ RHDH Local comes with a built-in **Extensions** feature that lets you browse, in
 
 When you install or uninstall a plugin through the UI, you're changing which code RHDH needs to load. The restart ensures that:
 
-- New plugin code is eventually downloaded and made available
+- New plugin code is downloaded and made available
 - The backend services can load the new functionality
 - Configuration changes are properly applied across all services
 
@@ -42,7 +42,7 @@ Let's walk through installing a simple plugin to try out the UI-based management
 1. **Open the Extensions page**: Navigate to **Administration** → **Extensions** in the RHDH sidebar
 2. **Find the TODO plugin**: Use the search bar to find "TODO" or browse the available plugins
 3. **Install the plugin**: Click on the TODO plugin and follow the installation prompts. The UI will then warn that a backend restart is required, like so:
-   ![Extensions](../images/dynamic-plugins-extensions-restart-required.png)
+   ![Extensions page showing "Backend restart required" warning after installing the TODO plugin](../images/dynamic-plugins-extensions-restart-required.png)
 4. **Restart RHDH Local**: Run the restart commands shown above
 5. **Verify the installation**: After restart, navigate to a component entity page and you should see a new "TODO" section in the entity Overview that lists any TODO comments found in the related repository, if any.
 
