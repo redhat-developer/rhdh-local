@@ -61,7 +61,7 @@ includes:
 plugins: []
 EOF
     # The file needs to be writable by the main RHDH container user.
-    # Otherwise, the marketplace backend plugin will not be able to save the dynamic plugins configuration
+    # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration
     chown 1001 "$DYNAMIC_PLUGINS_EXTENSIONS_FILE"
     echo '... file '$DYNAMIC_PLUGINS_EXTENSIONS_FILE' created!'
 fi
