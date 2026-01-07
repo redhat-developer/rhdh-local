@@ -1,7 +1,7 @@
 # This is the default dynamic plugins config, and any user configuration should be added dynamic-plugins.override.yaml instead
 includes:
   - dynamic-plugins.default.yaml
-  # Writable path for extensions plugin configuration
+  # Writable path in the init container for extensions plugin configuration.
   - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 plugins:
