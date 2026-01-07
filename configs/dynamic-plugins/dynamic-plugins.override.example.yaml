@@ -3,6 +3,9 @@
 
 includes:
   - dynamic-plugins.default.yaml
+  # Uncomment the following line (and the corresponding 'red-hat-developer-hub-backstage-plugin-marketplace*' plugins)
+  # to enable dynamic plugins installation using the Extensions UI.
+  # - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 # # Below you can add custom dynamic plugins, including local ones.
 
@@ -126,5 +129,6 @@ includes:
 #         enabled: true
 #         saveToSingleFile:
 #           # NOTE: Default path. If you want to change this path, make sure to choose a path that is writable by the main RHDH container user.
-#           # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration
+#           # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration.
+#           # Also add the path in the 'includes' section of this file, so the plugins installed via the Extensions UI can be loaded at runtime.
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
