@@ -21,17 +21,31 @@ Without a restart, your changes won't take effect because the running instance i
 
 After making plugin changes through the UI, restart your local instance with these commands:
 
-```bash
-# Reinstall plugins and restart RHDH
-podman compose run install-dynamic-plugins
-podman compose restart rhdh
-```
+=== "Podman (Recommended)"
+    ```bash
+    # Reinstall plugins and restart RHDH
+    podman compose run install-dynamic-plugins
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Reinstall plugins and restart RHDH
+    docker compose run install-dynamic-plugins
+    docker compose restart rhdh
+    ```
 
 This process typically may take a few minutes. You can monitor the startup progress in the container logs:
 
-```bash
-podman compose logs -f rhdh
-```
+=== "Podman (Recommended)"
+    ```bash
+    podman compose logs -f rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose logs -f rhdh
+    ```
 
 ### Example: Installing the TODO Plugin
 
@@ -191,17 +205,32 @@ podman compose restart rhdh
 
 After modifying the plugin configuration, for example after configuring plugins using the Extensions in the RHDH UI:
 
-```bash
-# Reinstall plugins and restart RHDH
-podman compose run install-dynamic-plugins
-podman compose restart rhdh
-```
+=== "Podman (Recommended)"
+    ```bash
+    # Reinstall plugins and restart RHDH
+    podman compose run install-dynamic-plugins
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Reinstall plugins and restart RHDH
+    docker compose run install-dynamic-plugins
+    docker compose restart rhdh
+    ```
 
 ### Quick Restart (No Plugin Changes)
 
 For configuration-only changes:
 
-```bash
-# Just restart RHDH (if plugins haven't changed)
-podman compose restart rhdh
-```
+=== "Podman (Recommended)"
+    ```bash
+    # Just restart RHDH (if plugins haven't changed)
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Just restart RHDH (if plugins haven't changed)
+    docker compose restart rhdh
+    ```
