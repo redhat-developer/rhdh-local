@@ -2,10 +2,10 @@ The dynamic plugin system in RHDH enables you to add, remove, enable, and disabl
 
 ## Managing Plugins from the UI
 
-RHDH Local comes with a built-in **Extensions** feature that lets you browse, install, and configure plugins directly from the web interface, without any need to manually edit YAML files for basic plugin management.
+By default, RHDH Local enables the built-in **Extensions** feature that lets you browse, install, and configure plugins directly from the RHDH web interface, without any need to manually edit YAML files for basic plugin management.
 
 !!! warning "Local Development Only"
-    The UI-based plugin management feature is enabled by default in RHDH Local for development and testing purposes. **This functionality is not supported in production environments.** In production, plugin management should be handled through proper configuration management and deployment pipelines.
+    The UI-based plugin management feature is enabled by default with RHDH Local for development and testing purposes. **This functionality is not recommended in production environments.** In production, plugin management should be handled through proper configuration management and deployment pipelines.
 
 ### Why a Restart is Required
 
