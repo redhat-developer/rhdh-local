@@ -126,5 +126,5 @@ includes:
 #         enabled: true
 #         saveToSingleFile:
 #           # NOTE: Default path. If you want to change this path, make sure to choose a path that is writable by the main RHDH container user.
-#           # Otherwise, the marketplace backend plugin will not be able to save the dynamic plugins configuration
+#           # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
