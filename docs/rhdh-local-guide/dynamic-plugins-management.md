@@ -20,6 +20,18 @@ Plugin configuration is managed through `configs/dynamic-plugins/dynamic-plugins
 
 Refer to the [official RHDH documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.7/html/introduction_to_plugins/con-rhdh-plugins) for more details about dynamic plugins.
 
+## Catalog Index Configuration
+
+RHDH Local supports loading default plugin configurations from an OCI container image called the **catalog index**. This feature allows you to use centralized plugin configurations that can be updated independently of the RHDH container image. For general information about how the catalog index works, see [Using a Catalog Index Image for Default Plugin Configurations](https://github.com/redhat-developer/rhdh/blob/main/docs/dynamic-plugins/installing-plugins.md#using-a-catalog-index-image-for-default-plugin-configurations).
+
+### Default Configuration
+
+The `CATALOG_INDEX_IMAGE` environment variable is defined in `default.env`. When `docker compose up` runs, the `env_file` directive in `compose.yaml` injects this variable into the `install-dynamic-plugins` container. The container's `install-dynamic-plugins.py` script detects the environment variable and uses `skopeo` to download the OCI image. To use a different catalog index version or a mirrored image, update the value in `default.env` or override it in a `.env` file:
+
+```bash
+CATALOG_INDEX_IMAGE=quay.io/rhdh/plugin-catalog-index:1.9
+```
+
 ### Configuration Structure
 
 Your override file must start with:
