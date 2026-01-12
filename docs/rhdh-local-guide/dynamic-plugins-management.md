@@ -84,14 +84,14 @@ Refer to the [official RHDH documentation](https://docs.redhat.com/en/documentat
 
 ## Catalog Index Configuration
 
-RHDH Local supports loading default plugin configurations from an OCI container image called the **catalog index**. This feature allows you to use centralized plugin configurations that can be updated independently of the RHDH container image. For general information about how the catalog index works, see [Using a Catalog Index Image for Default Plugin Configurations](https://github.com/redhat-developer/rhdh/blob/main/docs/dynamic-plugins/installing-plugins.md#using-a-catalog-index-image-for-default-plugin-configurations).
+Starting in 1.9, RHDH supports loading default plugin configurations from an OCI container image called the **catalog index**. This feature allows you to use centralized plugin configurations that can be updated independently of the RHDH container image. For general information about how the catalog index works, see [Using a Catalog Index Image for Default Plugin Configurations](https://github.com/redhat-developer/rhdh/blob/main/docs/dynamic-plugins/installing-plugins.md#using-a-catalog-index-image-for-default-plugin-configurations).
 
 ### Default Configuration
 
-The `CATALOG_INDEX_IMAGE` environment variable is defined in `default.env`. When `docker compose up` runs, the `env_file` directive in `compose.yaml` injects this variable into the `install-dynamic-plugins` container. The container's `install-dynamic-plugins.py` script detects the environment variable and uses `skopeo` to download the OCI image. To use a different catalog index version or a mirrored image, update the value in `default.env` or override it in a `.env` file:
+The default value of the `CATALOG_INDEX_IMAGE` environment variable is defined in `default.env`. When `[docker|podman] compose up` runs, the `env_file` directive in `compose.yaml` injects this variable into the `install-dynamic-plugins` container. The container's `install-dynamic-plugins.py` script detects the environment variable and uses `skopeo` to download the OCI image. To use a different catalog index version or a mirrored image, [override it in your local `.env` file](./configuration.md#environment-variables):
 
 ```bash
-CATALOG_INDEX_IMAGE=quay.io/rhdh/plugin-catalog-index:1.9
+CATALOG_INDEX_IMAGE=my-registry.example.com/org/my-rhdh-plugin-catalog-index:1.2-3
 ```
 
 ### Configuration Structure
