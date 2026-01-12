@@ -41,16 +41,31 @@ The built-in documentation provides step-by-step technical instructions with exa
 
 ## Quick Commands
 
-**Restart after config changes:**
+> **Note**: Replace `podman` with `docker` if using Docker.
+
+### After Plugin changes
+
+After modifying the plugins configuration, for example after configuring plugins using the Extensions in the RHDH UI:
 
 ```sh
-podman compose stop rhdh && podman compose start rhdh
+# Reinstall plugins and restart RHDH
+podman compose run install-dynamic-plugins  # or: docker compose run install-dynamic-plugins
+podman compose restart rhdh                  # or: docker compose restart rhdh
 ```
 
-**Clean up:**
+### Quick restart (No Plugin changes)
+
+For configuration-only changes:
 
 ```sh
-podman compose down --volumes
+# Just restart RHDH (if plugins haven't changed)
+podman compose restart rhdh  # or: docker compose restart rhdh
+```
+
+### Clean up
+
+```sh
+podman compose down --volumes  # or: docker compose down --volumes
 ```
 
 ## Additional Configuration Guides
