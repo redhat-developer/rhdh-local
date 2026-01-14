@@ -69,7 +69,7 @@ services:
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
-      - extensions-catalog:/extensions
+      - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
 volumes:
   dynamic-plugins-root:
