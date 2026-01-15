@@ -44,6 +44,7 @@ services:
       - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
+      - extensions-catalog:/extensions
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
@@ -68,6 +69,8 @@ services:
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:Z
       - dynamic-plugins-root:/dynamic-plugins-root
+      - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
 volumes:
   dynamic-plugins-root:
+  extensions-catalog:
