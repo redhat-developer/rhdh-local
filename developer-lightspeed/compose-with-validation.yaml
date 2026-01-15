@@ -5,4 +5,4 @@ services:
       - rag_embeddings:/app-root/embeddings_model
       - rag_vector_db:/app-root/vector_db
       # Set VERTEX_AI_CREDENTIALS_PATH in your .env file to your Google Cloud credentials JSON file path
-      - ${VERTEX_AI_CREDENTIALS_PATH:-/dev/null}:/app-root/credentials.json:Z
+      - ${VERTEX_AI_CREDENTIALS_PATH:-./developer-lightspeed/configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
