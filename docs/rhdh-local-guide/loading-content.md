@@ -34,7 +34,7 @@ As long as you create those files, they will be automatically registered in the 
 After modifying `app-config.local.yaml`:
 
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     # Restart RHDH to load new configuration
     podman compose restart rhdh

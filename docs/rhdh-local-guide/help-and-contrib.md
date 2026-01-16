@@ -46,7 +46,7 @@ Use [JIRA (Component: RHDH Local)](https://issues.redhat.com/browse/RHIDP) for:
 4. [Expected Result]
 
 **Logs and Configuration:**
-[Relevant logs from `podman compose logs`]
+[Relevant logs from `podman compose logs` or `docker compose logs`]
 [Configuration snippets (remove sensitive data)]
 [Screenshots if applicable]
 

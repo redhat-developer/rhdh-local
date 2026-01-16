@@ -25,10 +25,17 @@ You can use RHDH-local with a debugger to debug your backend plugins in VSCode. 
 
 1. Start RHDH-local
 
-   ```sh
-   # in rhdh-local directory
-   podman compose up -d
-   ```
+=== "Podman"
+    ```sh
+    # in rhdh-local directory
+    podman compose up -d
+    ```
+
+=== "Docker"
+    ```sh
+    # in rhdh-local directory
+    docker compose up -d
+    ```
 
 2. Open your plugin source code in VSCode
 3. Export plugin an RHDH "dynamic" plugin
@@ -40,20 +47,33 @@ You can use RHDH-local with a debugger to debug your backend plugins in VSCode. 
 
 4. Copy exported derived plugin package to `dynamic-plugins-root` directory in the `rhdh` container.
 
-   ```sh
-   # in plugin source code directory
-   podman cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>
-   ```
+=== "Podman"
+    ```sh
+    # in plugin source code directory
+    podman cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>
+    ```
+
+=== "Docker"
+    ```sh
+    # in plugin source code directory
+    docker cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<your-plugin-name>
+    ```
 
 5. If your plugin requires configuration, add it to the `app-config.local.yaml` file in your cloned `rhdh-local` directory.
 
 6. Restart the `rhdh` container
 
-   ```sh
-   # in rhdh-local directory
-   podman compose stop rhdh
-   podman compose start rhdh
-   ```
+=== "Podman"
+    ```sh
+    # in rhdh-local directory
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```sh
+    # in rhdh-local directory
+    docker compose restart rhdh
+    ```
 
 7. Configure VSCode debugger to attach to the `rhdh` container.
 
@@ -87,9 +107,15 @@ Follow these steps to preview and test development changes for your frontend plu
 
 1. Ensure a clean start by running the following command:
 
-   ```shell
-   podman compose down -v
-   ```
+=== "Podman"
+    ```shell
+    podman compose down -v
+    ```
+
+=== "Docker"
+    ```shell
+    docker compose down -v
+    ```
 
 2. Create the dynamic plugins root directory where you will place your exported plugins:
 
@@ -108,9 +134,15 @@ Follow these steps to preview and test development changes for your frontend plu
 
 5. Use the `compose-dynamic-plugins-root.yaml` override file to start RHDH Local:
 
-   ```shell
-   podman compose -f compose.yaml -f compose-dynamic-plugins-root.yaml up
-   ```
+=== "Podman"
+    ```shell
+    podman compose -f compose.yaml -f compose-dynamic-plugins-root.yaml up
+    ```
+
+=== "Docker"
+    ```shell
+    docker compose -f compose.yaml -f compose-dynamic-plugins-root.yaml up
+    ```
 
 6. Verify that your plugin appears in RHDH.
 
