@@ -43,7 +43,7 @@ You can optionally customize the application configuration and dynamic plugins t
 
 Pick your container engine and run:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     podman compose up -d
     ```
@@ -85,6 +85,6 @@ Now that RHDH Local is running, explore these areas:
 
 If you encounter issues:
 
-1. Review container logs: `podman compose logs`
+1. Review container logs: `podman compose logs` (or `docker compose logs`)
 2. Verify prerequisites and configuration syntax
 3. Visit [Help & Contributing](help-and-contrib.md) for support options

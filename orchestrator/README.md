@@ -1,5 +1,8 @@
 # Setup Orchestrator and Workflow Examples
 
+> **Note:** All instructions in this guide apply to both Podman and Docker.
+> Replace `podman compose` with `docker compose` if you are using Docker.
+
 Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to the
 list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
 Example:
@@ -24,44 +27,29 @@ point to your local workflow development directory before running the command.
 podman compose -f compose.yaml -f orchestrator/compose.yaml up -d
 ```
 
-To make custom changes/configuration, it is recommended to use a `compose-orchestrator.local.yaml` by merging
-`compose.yaml` and `orchestrator/compose.yaml` to prevent conflicts with version controlled files.
+To make custom changes/configuration to the compose configuration, it is recommended to use a `compose-orchestrator.local.yaml` by merging the default `compose.yaml` and `orchestrator/compose.yaml` to prevent conflicts with version-controlled files.
 
 Run this command to merge compose files:
 
 ```shell
-podman compose -f compose.yaml -f orchestrator/compose.yaml config >> compose-orchestrator.local.yaml
+# NOTE: this will overwrite your existing compose-orchestrator.local.yaml file, if any
+podman compose -f compose.yaml -f orchestrator/compose.yaml config > compose-orchestrator.local.yaml
 ```
 
 And this command to spin up the containers:
 
 ```sh
-podman compose \
-   -f compose-orchestrator.local.yaml \
-   up -d
+podman compose -f compose-orchestrator.local.yaml up -d
 ```
 
 There are three workflow examples to get you started on testing Orchestrator workflow with RHDH Local.
 
-1. The [`orchestrator/workflow-examples`](./workflow-examples/) folder contains example workflows and by default, it is already
-   mounted
-   to
-   `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in your
-   `compose-orchestrator.local.yaml`. The
-   directory contains three workflows; greeting, slack and github. For more information about the workflow and setup,
-   refer to this
-   [link](./workflow-examples/README.md).
+1. The [`orchestrator/workflow-examples`](./workflow-examples/) folder contains example workflows and by default, it is already mounted to `/home/kogito/serverless-workflow-project/src/main/resources` for SonataFlow configuration in the `orchestrator/compose.yaml`. The directory contains three workflows: greeting, slack and github. For more information about the workflow and setup, refer to this [README](./workflow-examples/README.md).
 
-2. A suite of workflows exists in
-   this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows).
-   Clone the repository to your local and override the mount directory `RHDH_ORCHESTRATOR_WORKFLOWS` in your
-   `.env` file
-   file to point to your local `backstage-orchestrator-workflows` directory.
-   Note: While developing workflow and after making changes to your resources, the pages might error out. Reloading the
-   page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` pod by running:
+2. A suite of workflows exists in this [backstage-orchestrator-workflows](https://github.com/rhdhorchestrator/backstage-orchestrator-workflows/tree/main/workflows). Feel free to clone the repository to your local and override the mount directory `RHDH_ORCHESTRATOR_WORKFLOWS` in your `.env` file to point to your local `backstage-orchestrator-workflows` directory.
+   **Note**: While developing workflows and after making changes to your resources, the pages might error out. Reloading the
+   page (a couple of times) may fix it. Otherwise, you may have to restart the `sonataflow` pod by running the command below. This is a **known issue**.
 
-```shell
-   podman compose stop sonataflow && podman compose start sonataflow. 
-```
-
-This is a known issue.
+   ```shell
+      podman compose -f compose.yaml -f orchestrator/compose.yaml restart sonataflow
+   ```

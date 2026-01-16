@@ -20,7 +20,7 @@ Before operating RHDH Local, ensure you have:
 
 Navigate to your RHDH Local repository root and start the services:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     podman compose up -d
     ```
@@ -33,10 +33,17 @@ Navigate to your RHDH Local repository root and start the services:
 On Podman, this will block until the dynamic plugins installer container finishes.
 But you can open a new terminal and stream the logs with:
 
-```bash
-# Stream all service logs
-podman compose logs -f
-```
+=== "Podman"
+    ```bash
+    # Stream all service logs
+    podman compose logs -f
+    ```
+
+=== "Docker"
+    ```bash
+    # Stream all service logs
+    docker compose logs -f
+    ```
 
 **Access the application:**
 ```
@@ -49,19 +56,35 @@ Expected startup time: 2-5 minutes depending on system resources and plugins ena
 
 Monitor application logs in real-time:
 
-```bash
-# Stream all service logs
-podman compose logs -f
+=== "Podman"
+    ```bash
+    # Stream all service logs
+    podman compose logs -f
 
-# View logs for specific service.
-podman compose logs -f rhdh
+    # View logs for specific service.
+    podman compose logs -f rhdh
 
-# Check running services
-podman compose ps
+    # Check running services
+    podman compose ps
 
-# View resource usage
-podman stats
-```
+    # View resource usage
+    podman stats
+    ```
+
+=== "Docker"
+    ```bash
+    # Stream all service logs
+    docker compose logs -f
+
+    # View logs for specific service.
+    docker compose logs -f rhdh
+
+    # Check running services
+    docker compose ps
+
+    # View resource usage
+    docker stats
+    ```
 
 Exit log streaming with `Ctrl+C`.
 
@@ -69,9 +92,15 @@ Exit log streaming with `Ctrl+C`.
 
 Stop all services while preserving data:
 
-```bash
-podman compose down
-```
+=== "Podman"
+    ```bash
+    podman compose down
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose down
+    ```
 
 This preserves:
 
@@ -82,17 +111,31 @@ This preserves:
 
 For a clean restart without data loss:
 
-```bash
-podman compose stop rhdh
-podman compose run install-dynamic-plugins
-podman compose start rhdh
-```
+=== "Podman"
+    ```bash
+    podman compose stop rhdh
+    podman compose run install-dynamic-plugins
+    podman compose start rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose stop rhdh
+    docker compose run install-dynamic-plugins
+    docker compose start rhdh
+    ```
 
 Or to force-recreate the running containers:
 
-```bash
-podman compose up -d --force-recreate
-```
+=== "Podman"
+    ```bash
+    podman compose up -d --force-recreate
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose up -d --force-recreate
+    ```
 
 ---
 
@@ -104,37 +147,63 @@ After modifying configuration files, restart to apply changes:
 
 **For app-config changes** (`configs/app-config/app-config.local.yaml`):
 
-```bash
-podman compose stop rhdh
-podman compose start rhdh
-```
+=== "Podman"
+    ```bash
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose restart rhdh
+    ```
 
 **For plugin changes** (`configs/dynamic-plugins/dynamic-plugins.override.yaml`):
 
-```bash
-# Reinstall plugins with new configuration
-podman compose run install-dynamic-plugins
+=== "Podman"
+    ```bash
+    # Reinstall plugins with new configuration
+    podman compose run install-dynamic-plugins
 
-# Restart RHDH service
-podman compose stop rhdh
-podman compose start rhdh
-```
+    # Restart RHDH service
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Reinstall plugins with new configuration
+    docker compose run install-dynamic-plugins
+
+    # Restart RHDH service
+    docker compose restart rhdh
+    ```
 
 **For catalog entities** (`configs/catalog-entities/*.yaml`):
 
-```bash
-podman compose stop rhdh
-podman compose start rhdh
-```
+=== "Podman"
+    ```bash
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose restart rhdh
+    ```
 
 ### Validating Configuration
 
 Check configuration syntax before restarting:
 
-```bash
-# Check for common configuration issues
-podman compose config
-```
+=== "Podman"
+    ```bash
+    # Check for common configuration issues
+    podman compose config
+    ```
+
+=== "Docker"
+    ```bash
+    # Check for common configuration issues
+    docker compose config
+    ```
 
 ---
 
@@ -150,21 +219,39 @@ By default, RHDH Local stores data in named volumes:
 
 **Remove containers only** (keep data):
 
-```bash
-podman compose down
-```
+=== "Podman"
+    ```bash
+    podman compose down
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose down
+    ```
 
 **Remove containers and cached plugins**:
 
-```bash
-podman compose down -v
-```
+=== "Podman"
+    ```bash
+    podman compose down -v
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose down -v
+    ```
 
 **Complete cleanup** (⚠️ **destroys all data**):
 
-```bash
-podman compose down -v --rmi all
-```
+=== "Podman"
+    ```bash
+    podman compose down -v --rmi all
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose down -v --rmi all
+    ```
 
 This removes:
 
@@ -174,9 +261,15 @@ This removes:
 
 **Fresh start after cleanup:**
 
-```bash
-podman compose up -d
-```
+=== "Podman"
+    ```bash
+    podman compose up -d
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose up -d
+    ```
 
 ---
 
@@ -186,63 +279,113 @@ podman compose up -d
 
 **Monitor resource usage:**
 
-```bash
-# Container resource usage
-podman stats
+=== "Podman"
+    ```bash
+    # Container resource usage
+    podman stats
 
-# System resource usage  
-top
-htop
-```
+    # System resource usage  
+    top
+    htop
+    ```
+
+=== "Docker"
+    ```bash
+    # Container resource usage
+    docker stats
+
+    # System resource usage  
+    top
+    htop
+    ```
 
 ### Troubleshooting Operations
 
 **Container won't start:**
 
-```bash
-# Check for port conflicts
-sudo lsof -i :7007
+=== "Podman"
+    ```bash
+    # Check for port conflicts
+    sudo lsof -i :7007
 
-# Verify container runtime
-podman --version
-systemctl status podman
+    # Verify container runtime
+    podman --version
+    systemctl status podman
 
-# Check logs for errors
-podman compose logs
-```
+    # Check logs for errors
+    podman compose logs
+    ```
+
+=== "Docker"
+    ```bash
+    # Check for port conflicts
+    sudo lsof -i :7007
+
+    # Verify container runtime
+    docker --version
+    systemctl status docker
+
+    # Check logs for errors
+    docker compose logs
+    ```
 
 **Performance issues:**
 
-```bash
-# Rebuild containers from scratch
-podman compose up -d --force-recreate
+=== "Podman"
+    ```bash
+    # Rebuild containers from scratch
+    podman compose up -d --force-recreate
 
-# Clear system cache (Podman)
-podman system prune --all --volumes
+    # Clear system cache
+    podman system prune --all --volumes
+    ```
 
-# Clear system cache (Docker)
-docker system prune --all --volumes
-```
+=== "Docker"
+    ```bash
+    # Rebuild containers from scratch
+    docker compose up -d --force-recreate
+
+    # Clear system cache
+    docker system prune --all --volumes
+    ```
 
 **Network connectivity issues:**
 
-```bash
-# Verify container networking
-podman network ls
-podman compose ps
+=== "Podman"
+    ```bash
+    # Verify container networking
+    podman network ls
+    podman compose ps
 
-# Test internal connectivity
-podman exec rhdh curl -f http://localhost:7007/api/catalog/entities
-```
+    # Test internal connectivity
+    podman exec rhdh curl -f http://localhost:7007/api/catalog/entities
+    ```
+
+=== "Docker"
+    ```bash
+    # Verify container networking
+    docker network ls
+    docker compose ps
+
+    # Test internal connectivity
+    docker exec rhdh curl -f http://localhost:7007/api/catalog/entities
+    ```
 
 ### Development and Debugging
 
 **Access container shell:**
 
-```bash
-# RHDH application container
-podman exec -it rhdh bash
-```
+=== "Podman"
+    ```bash
+    # RHDH application container
+    podman exec -it rhdh bash
+    ```
+
+=== "Docker"
+    ```bash
+    # RHDH application container
+    docker exec -it rhdh bash
+    ```
 
 ---
 
@@ -252,16 +395,29 @@ podman exec -it rhdh bash
 
 **Maintenance commands:**
 
-```bash
-# Update to latest RHDH Local
-git pull origin main
-podman compose pull
-podman compose up -d
+=== "Podman"
+    ```bash
+    # Update to latest RHDH Local
+    git pull origin main
+    podman compose pull
+    podman compose up -d
 
-# Clean unused resources
-podman system prune
-podman volume prune
-```
+    # Clean unused resources
+    podman system prune
+    podman volume prune
+    ```
+
+=== "Docker"
+    ```bash
+    # Update to latest RHDH Local
+    git pull origin main
+    docker compose pull
+    docker compose up -d
+
+    # Clean unused resources
+    docker system prune
+    docker volume prune
+    ```
 
 ### Security Considerations
 
@@ -280,7 +436,7 @@ podman volume prune
 |-----------|--------|--------|
 | Start | `podman compose up -d` | `docker compose up -d` |
 | Stop | `podman compose down` | `docker compose down` |
-| Restart RHDH | `podman compose stop rhdh; podman compose run install-dynamic-plugins; podman compose start rhdh` | `docker compose stop; docker compose run install-dynamic-plugins; docker compose start rhdh` |
+| Restart RHDH | `podman compose restart rhdh` | `docker compose restart rhdh` |
 | Logs | `podman compose logs -f` | `docker compose logs -f` |
 | Status | `podman compose ps` | `docker compose ps` |
 | Clean up | `podman compose down -v --rmi all` | `docker compose down -v --rmi all` |
