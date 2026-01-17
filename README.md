@@ -68,6 +68,28 @@ podman compose restart rhdh  # or: docker compose restart rhdh
 podman compose down --volumes  # or: docker compose down --volumes
 ```
 
+## Accessing Plugins from Private OCI Registries
+
+If you need to install dynamic plugins from private OCI registries, you can mount your local container credentials into the `install-dynamic-plugins` service. This allows the plugin installer to authenticate with private registries using the credentials you already have configured on your system.
+
+Add the following volume to the `install-dynamic-plugins` service in `compose.yaml`:
+
+```yaml
+install-dynamic-plugins:
+  volumes:
+    # ... existing volumes ...
+    - ~/.config/containers/auth.json:/opt/app-root/src/.config/containers/auth.json:Z
+```
+
+This mounts your local `auth.json` file (which contains credentials for container registries like `registry.redhat.io`, `quay.io`, etc.) into the container. The credentials are typically created when you run `podman login` or `docker login`.
+
+> **NOTE**: The location of `auth.json` may vary depending on your system configuration. Common locations include:
+>
+> - `~/.config/containers/auth.json` (Podman default)
+> - `~/.docker/config.json` (Docker default)
+>
+> Adjust the source path accordingly based on your container runtime.
+
 ## Additional Configuration Guides
 
 If you would like to change your RHDH-Local setup, or add additional features or plugins, please check out the guides below.
