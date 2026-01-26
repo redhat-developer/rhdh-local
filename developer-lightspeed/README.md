@@ -81,6 +81,15 @@ Follow these steps to configure and launch Developer Lightspeed.
 
 4. **Set Environment Variables**
 
+    > [!NOTE]
+    > If you intend to use any environment variables in the Lightspeed Core configuration file, [lightspeed-stack.yaml](./configs/extra-files/lightspeed-stack.yaml), it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
+    >
+    > `${env.VAR}`
+    >
+    > `${env.VAR:=default-value}`
+    >
+    > `${env.VAR:+value}`
+
     In the root of this repository there is a `default.env` file. Copy its contents to `.env` and fill in the required values:
 
     ```bash
