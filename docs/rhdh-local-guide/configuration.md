@@ -62,7 +62,7 @@ Common variables to customize:
 
 After making configuration changes:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     # For app-config changes
     podman compose restart rhdh

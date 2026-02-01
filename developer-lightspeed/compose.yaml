@@ -49,7 +49,7 @@ services:
       - rag_vector_db:/app-root/vector_db
       # Vertex AI credentials (only used if ENABLE_VERTEX_AI=true)
       # Set VERTEX_AI_CREDENTIALS_PATH in your .env file to your Google Cloud credentials JSON file path
-      - ${VERTEX_AI_CREDENTIALS_PATH:-/dev/null}:/app-root/credentials.json:Z
+      - ${VERTEX_AI_CREDENTIALS_PATH:-./developer-lightspeed/configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
     env_file:
