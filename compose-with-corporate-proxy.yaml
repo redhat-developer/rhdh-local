@@ -22,6 +22,11 @@ services:
     networks:
       - internal_net
       - default
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/3128'"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   rhdh:
     environment:
@@ -36,6 +41,9 @@ services:
       # As a workaround, we are adding it to the default network,
       # but note that there is as such nothing preventing requests from bypassing the proxy to reach the outside.
       - default
+    depends_on:
+      proxy:
+        condition: service_healthy
 
   install-dynamic-plugins:
     environment:
@@ -44,3 +52,6 @@ services:
       # NO_PROXY configured in the .env file, but can be overridden here
     networks:
       - internal_net
+    depends_on:
+      proxy:
+        condition: service_healthy
