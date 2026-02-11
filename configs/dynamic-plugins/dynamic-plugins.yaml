@@ -58,22 +58,22 @@ plugins:
   #########################################################
   # Enable dynamic plugins installation by using Extensions
   #########################################################
-  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-marketplace
+  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
     disabled: false
     pluginConfig:
       dynamicPlugins:
         frontend:
-          red-hat-developer-hub.backstage-plugin-marketplace:
+          red-hat-developer-hub.backstage-plugin-extensions:
             translationResources:
-              - importName: marketplaceTranslations
-                ref: marketplaceTranslationRef
+              - importName: extensionsTranslations
+                ref: extensionsTranslationRef
                 module: Alpha
             appIcons:
               - name: pluginsIcon
                 importName: PluginsIcon
             dynamicRoutes:
               - path: /extensions
-                importName: DynamicMarketplacePluginRouter
+                importName: DynamicExtensionsPluginRouter
                 menuItem:
                   icon: pluginsIcon
                   text: Extensions
@@ -82,7 +82,7 @@ plugins:
               extensions:
                 parent: default.admin
 
-  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-marketplace-backend-dynamic
+  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
     disabled: false
     pluginConfig:
       extensions:
