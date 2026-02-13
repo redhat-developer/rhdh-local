@@ -26,10 +26,10 @@ Looking for the bleeding edge? To use the most recent nightly community build of
 RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
-Or, for builds from a given `release-1.y` branch (for example, 1.7), set the variable as follows.
+Or, for builds from a given `release-1.y` branch (for example, 1.8), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.7
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.8
 ```
 
 ### Using unsupported pre-release CI builds
@@ -46,12 +46,12 @@ RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.8
 
 ### Using commercially supported official images
 
-To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.6), which includes only `linux-amd64`, set the variable as follows.
+To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.8), which includes only `linux-amd64`, set the variable as follows.
 
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
 ```sh
-RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.7.1
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.8.3
 ```
 
 #### Using image digests
