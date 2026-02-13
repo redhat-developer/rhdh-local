@@ -3,7 +3,7 @@
 
 includes:
   - dynamic-plugins.default.yaml
-  # Uncomment the following line (and the corresponding 'red-hat-developer-hub-backstage-plugin-marketplace*' plugins)
+  # Uncomment the following line (and the corresponding 'red-hat-developer-hub-backstage-plugin-extensions*' plugins)
   # to enable dynamic plugins installation using the Extensions UI.
   # - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
@@ -98,11 +98,12 @@ includes:
 #                 importName: RbacPage
 
 # # Uncomment the following two plugins to enable dynamic plugins installation via the Extensions UI
+# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
 # # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:{{inherit}}'
 # - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
 #   disabled: false
 
-# # TODO: Uncomment the OCI reference once it is uncommented in the DPDY in the catalog index image
+# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
 # # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:{{inherit}}'
 # - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
 #   disabled: false
