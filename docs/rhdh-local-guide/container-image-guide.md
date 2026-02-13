@@ -46,7 +46,7 @@ RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.8
 
 ### Using commercially supported official images
 
-To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.7), which includes only `linux-amd64`, set the variable as follows.
+To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.8), which includes only `linux-amd64`, set the variable as follows.
 
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
