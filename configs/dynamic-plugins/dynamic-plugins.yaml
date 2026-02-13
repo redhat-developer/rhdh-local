@@ -6,12 +6,13 @@ includes:
 
 plugins:
   # Tech Radar frontend plugin
-  # TODO: Uncomment the OCI reference once it is uncommented in the DPDY in the catalog index image
+# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
     disabled: false
 
   # Quay plugin
+# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
   #   disabled: false
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:{{inherit}}'
@@ -22,7 +23,7 @@ plugins:
     disabled: false
 
   # Floating Action Button plugin with submenu actions
-  # TODO: Uncomment the OCI reference once it is uncommented in the DPDY in the catalog index image
+  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-global-floating-action-button:{{inherit}}'
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
     disabled: false
@@ -65,12 +66,12 @@ plugins:
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # TODO: Uncomment the OCI reference once it is uncommented in the DPDY in the catalog index image
+  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:{{inherit}}'
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
     disabled: false
 
-  # TODO: Uncomment the OCI reference once it is uncommented in the DPDY in the catalog index image
+  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:{{inherit}}'
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
     disabled: false
