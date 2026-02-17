@@ -8,7 +8,7 @@ services:
       - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
 
   rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.8-lcs'
+    image: 'quay.io/redhat-ai-dev/rag-content:release-1.9-lcs'
     container_name: rag-init
     user: "root"
     volumes:
@@ -55,10 +55,10 @@ services:
 
   # Llama Stack Service
   # Provides the LLM inference and RAG capabilities for Developer Lightspeed
-  # Default image: quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc
+  # Default image: quay.io/redhat-ai-dev/llama-stack:0.1.4
   # To override: Set LLAMA_STACK_IMAGE in your .env file
   llama-stack:
-    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc} # dclint disable-line service-image-require-explicit-tag
+    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:0.1.4} # dclint disable-line service-image-require-explicit-tag
     container_name: llama-stack
     network_mode: "service:rhdh"
     depends_on:
@@ -67,12 +67,12 @@ services:
       ollama:
         condition: service_healthy
     volumes:
-      # Llama Stack configuration file (no question validation mode)
-      - ./developer-lightspeed/configs/extra-files/run-no-validation.yaml:/app-root/run.yaml:Z
+      # Llama Stack configuration file (no safety guard mode)
+      - ./developer-lightspeed/configs/extra-files/run-no-guard.yaml:/app-root/run.yaml:Z
       # RAG embeddings model for vector search
-      - rag_embeddings:/app-root/embeddings_model
+      - rag_embeddings:/rag-content/embeddings_model
       # RAG vector database for document search
-      - rag_vector_db:/app-root/vector_db
+      - rag_vector_db:/rag-content/vector_db
     env_file:
       - path: "./default.env"
         required: true
@@ -89,10 +89,10 @@ services:
 
   # Lightspeed Core Service
   # Main service that handles conversation management and coordinates with Llama Stack
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.4.0
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.4.0} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     depends_on:
       rhdh:
