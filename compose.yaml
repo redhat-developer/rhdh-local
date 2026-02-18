@@ -23,7 +23,7 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.8}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:next-1.9}
     env_file:
       - path: "./default.env"
         required: true
@@ -42,7 +42,7 @@ services:
       - ./docs:/opt/app-root/src/docs:Z
       - ./catalog-info.yaml:/opt/app-root/src/catalog-info.yaml:Z
       - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./configs:/opt/app-root/src/configs:z
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
       - extensions-catalog:/extensions
     depends_on:
@@ -53,7 +53,7 @@ services:
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.8}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:next-1.9}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
@@ -67,7 +67,7 @@ services:
     volumes:
       - ./prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./configs:/opt/app-root/src/configs:z
       - dynamic-plugins-root:/dynamic-plugins-root
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
