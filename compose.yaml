@@ -42,7 +42,7 @@ services:
       - ./docs:/opt/app-root/src/docs:Z
       - ./catalog-info.yaml:/opt/app-root/src/catalog-info.yaml:Z
       - ./wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./configs:/opt/app-root/src/configs:z
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
       - extensions-catalog:/extensions
     depends_on:
@@ -67,7 +67,7 @@ services:
     volumes:
       - ./prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
-      - ./configs:/opt/app-root/src/configs:Z
+      - ./configs:/opt/app-root/src/configs:z
       - dynamic-plugins-root:/dynamic-plugins-root
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
