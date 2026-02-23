@@ -98,7 +98,7 @@ If you switch your `RHDH_IMAGE` to 1.9+ (default value in this branch), you may 
 
 Some plugins are no longer bundled in the RHDH image, but have been moved to OCI references.
 
-The official RHDH 1.9 documentation is still being updated to provide clear migration instructions. In the meantime, please refer to https://redhat-developer.github.io/red-hat-developers-documentation-rhdh/pr-1782/plugins-rhdh-reference/#community-plugins-migration-table
+See [Community plugins migration table](https://redhat-developer.github.io/red-hat-developers-documentation-rhdh/release-1.9/plugins-rhdh-reference/#community-plugins-migration-table) and [Plugins remaining bundled in RHDH 1.9](https://redhat-developer.github.io/red-hat-developers-documentation-rhdh/release-1.9/plugins-rhdh-reference/#plugins-remaining-bundled-in-rhdh-1-9) for migration instructions.
 
 Also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for an example.
 
