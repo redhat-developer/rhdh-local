@@ -12,7 +12,7 @@ This allows RHDH-local to pull OCI artifacts from registries like registry.redha
 
 ## Changing the container image
 
-By default, the [compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.7](https://quay.io/rhdh-community/rhdh:1.7), which includes both `linux-amd64` and `linux-arm64` images.
+By default, the [compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:1.8](https://quay.io/rhdh-community/rhdh:1.8), which includes both `linux-amd64` and `linux-arm64` images.
 
 Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml), using the same sources as the commercially supported builds.
 
@@ -28,10 +28,10 @@ Looking for the bleeding edge? To use the most recent nightly community build of
 RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
 ```
 
-Or, for builds from a given `release-1.y` branch (for example, 1.7), set the variable as follows.
+Or, for builds from a given `release-1.y` branch (for example, 1.8), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.7
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.8
 ```
 
 ### Using unsupported pre-release CI builds
@@ -40,20 +40,20 @@ Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https:/
 
 NOTE: Only `linux-amd64` builds are currently commercially supported.
 
-To use the most recent nightly CI build of RHDH 1.y (for example, 1.8), set the variable as follows.
+To use the most recent nightly CI build of RHDH 1.y (for example, 1.9), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.8
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.9
 ```
 
 ### Using commercially supported official images
 
-To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.6), which includes only `linux-amd64`, set the variable as follows.
+To use the [official release of RHDH](https://catalog.redhat.com/software/containers/rhdh/rhdh-hub-rhel9/645bd4c15c00598369c31aba?gs&q=developer%20hub) 1.y (for example, 1.8), which includes only `linux-amd64`, set the variable as follows.
 
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
 ```sh
-RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.7.1
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.8.4
 ```
 
 #### Using image digests
