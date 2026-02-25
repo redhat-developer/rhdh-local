@@ -66,10 +66,10 @@ services:
   
   # Lightspeed Core Service
   # Main service that handles conversation management and coordinates with Llama Stack
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.4.0
+  # Default image: quay.io/redhat-ai-dev/lightspeed-stack:0.4.0.1
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.4.0} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/redhat-ai-dev/lightspeed-stack:0.4.0.1} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     network_mode: "service:rhdh"
     depends_on:

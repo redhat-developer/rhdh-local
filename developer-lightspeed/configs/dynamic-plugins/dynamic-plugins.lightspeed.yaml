@@ -22,16 +22,20 @@ plugins:
               - importName: lightspeedTranslations
                 module: Alpha
                 ref: lightspeedTranslationRef
-            appIcons:
-              - name: LightspeedIcon
-                module: LightspeedPlugin
-                importName: LightspeedIcon
             dynamicRoutes:
               - path: /lightspeed
                 importName: LightspeedPage
-                module: LightspeedPlugin
-                menuItem:
-                  icon: LightspeedIcon
-                  text: Lightspeed
+            mountPoints:
+              - mountPoint: application/listener
+                importName: LightspeedFAB
+              - mountPoint: application/provider
+                importName: LightspeedDrawerProvider
+              - mountPoint: application/internal/drawer-state
+                importName: LightspeedDrawerStateExposer
+              - mountPoint: application/internal/drawer-content
+                importName: LightspeedChatContainer
+                config:
+                  id: lightspeed
+                  priority: 100
   - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.3!red-hat-developer-hub-backstage-plugin-lightspeed-backend
     disabled: false
