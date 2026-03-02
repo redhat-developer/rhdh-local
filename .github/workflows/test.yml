@@ -30,6 +30,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
         tool:
           - docker
           - podman
@@ -50,8 +53,8 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
-    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
-    runs-on: ubuntu-latest
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && ' - ${{ matrix.os }}' || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
+    runs-on: ${{ matrix.os }}
     env:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
