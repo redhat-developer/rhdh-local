@@ -104,7 +104,7 @@ jobs:
 
         # Install standalone docker-compose for consistent version across docker/podman tests
         echo "Installing docker-compose $DOCKER_COMPOSE_VERSION..."
-        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" \
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$(uname -m)" \
           -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
         # Also install as Docker CLI plugin
