@@ -30,6 +30,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
         tool:
           - docker
           - podman
@@ -50,8 +53,8 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
-    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
-    runs-on: ubuntu-latest
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
+    runs-on: ${{ matrix.os }}
     env:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
@@ -101,7 +104,7 @@ jobs:
 
         # Install standalone docker-compose for consistent version across docker/podman tests
         echo "Installing docker-compose $DOCKER_COMPOSE_VERSION..."
-        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" \
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$(uname -m)" \
           -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
         # Also install as Docker CLI plugin
@@ -111,7 +114,7 @@ jobs:
     - name: Setup Podman container environment
       id: setup-podman
       if: ${{ matrix.tool == 'podman' }}
-      uses: rm3l/setup-containerized-podman@9d660ce477edb95b5ac6e27694ac43abaee18953 # v1
+      uses: rm3l/setup-containerized-podman@7e2e9a2ddc2da87cbe754c0ed8975b7368388f56 # v2.0.0
       with:
         podman-image: ${{ env.PODMAN_IMAGE }}
         compose-provider: docker-compose
