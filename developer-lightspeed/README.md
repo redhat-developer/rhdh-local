@@ -19,7 +19,7 @@ Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all 
 ## Getting Started
 
 > [!IMPORTANT]
-> Developer Lightspeed can be resource intensive on the model side because of the use of RAG and in some cases question validation. If using the provided Ollama server locally you may encounter unforeseen responses if the model cannot handle the context. 
+> Developer Lightspeed can be resource intensive on the model side because of the use of RAG and in some cases safety guard. If using the provided Ollama server locally you may encounter unforeseen responses if the model cannot handle the context. 
 >
 > For best results it is recommended to provide your own external LLM provider.
 
@@ -60,9 +60,9 @@ Follow these steps to configure and launch Developer Lightspeed.
    - **Ollama** (recommended for beginners): Uses the built-in Ollama container that runs locally. No additional configuration needed - the script handles everything automatically.
    - **Bring Your Own Model**: Use your own external LLM provider (any OpenAI API compatible service). You must configure the environment variables for your chosen provider before starting.
 
-   **Step 2: Choose Question Validation**
-   - **No validation**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant.
-   - **With validation**: Filters questions to RHDH/Backstage topics only - ensures all questions are relevant to Red Hat Developer Hub.
+   **Step 2: Choose Safety Guard**
+   - **No safety guard**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant with no safety content filtering.
+   - **With safety guard**: Enables Llama Guard for content safety filtering - filters questions for safety content. Defaults to `llama-guard3:8b` with Ollama if no `SAFETY_MODEL` is configured.
 
    > [!NOTE]
    > **What does "Bring Your Own Model" mean?**
@@ -99,17 +99,18 @@ Follow these steps to configure and launch Developer Lightspeed.
     > [!IMPORTANT]
     > **Configuration Requirements:**
     > - **If you selected Ollama in step 1**: You don't need to modify any environment variables. The defaults work out of the box.
+    > - **If you selected Ollama + "With safety guard"**: No configuration needed! The setup automatically pulls `llama-guard3:8b` and configures the safety URL.
     > - **If you selected "Bring Your Own Model" in step 1**: You **must** configure at least one external LLM provider below before starting the application.
-    > - **If you selected "With validation" in step 2**: You **must** configure `VALIDATION_PROVIDER` and `VALIDATION_MODEL` (see section below).
+    > - **If you selected "Bring Your Own Model" + "With safety guard"**: Optionally configure `SAFETY_MODEL`, `SAFETY_URL`, and `SAFETY_API_KEY`. Defaults to `llama-guard3:8b` via Ollama on host at `http://host.docker.internal:11434/v1`.
 
     ### Quick Reference: Setup Combinations → Required Configuration
 
-    | Provider | Validation | Required Env Vars | Compose Files Used |
-    |----------|------------|-------------------|-------------------|
-    | **Ollama** | No validation | None (defaults work) | `compose.yaml` + `compose-with-ollama.yaml` |
-    | **Ollama** | With validation | `VALIDATION_PROVIDER`, `VALIDATION_MODEL` | `compose.yaml` + `compose-with-ollama.yaml` + `compose-with-validation.yaml` |
-    | **Bring your own model** | No validation | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` |
-    | **Bring your own model** | With validation | At least one provider + validation vars | `compose.yaml` + `compose-with-validation.yaml` |
+    | Provider | Safety Guard | Required Env Vars | Compose Files Used |
+    |----------|--------------|-------------------|-------------------|
+    | **Ollama** | No safety guard | None (defaults work) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` |
+    | **Ollama** | With safety guard | None (auto-configured) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` + `developer-lightspeed/compose-with-safety-guard-ollama.yaml` |
+    | **Bring your own model** | No safety guard | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` + `developer-lightspeed/compose.yaml` |
+    | **Bring your own model** | With safety guard | At least one provider + optional `SAFETY_*` vars | `compose.yaml` + `developer-lightspeed/compose.yaml` + `developer-lightspeed/compose-with-safety-guard.yaml` |
 
     ---
 
@@ -201,30 +202,35 @@ Follow these steps to configure and launch Developer Lightspeed.
 
     ---
 
-    ### Configure Question Validation (Required if you selected "With validation")
+    ### Configure Safety Guard (Only for "Bring Your Own Model")
 
-    If you selected "With validation" in step 2, configure the validation provider:
+    > [!TIP]
+    > **If you selected Ollama provider + "With safety guard"**: No configuration needed! The setup automatically:
+    > - Pulls the `llama-guard3:8b` model into the containerized Ollama
+    > - Configures the safety URL to point to the containerized Ollama
+    > - Just works out of the box!
+
+    **If you selected "Bring Your Own Model" + "With safety guard"**, you can optionally configure the safety guard model. If not configured, it defaults to `llama-guard3:8b` via Ollama on your host machine.
 
     ```env
-    # REQUIRED: Provider to use for question validation
-    # Must be one of: ollama, vllm, openai, vertexai
-    # Must match an enabled provider (e.g., if ENABLE_VLLM=true, use VALIDATION_PROVIDER=vllm)
-    VALIDATION_PROVIDER=ollama
+    # OPTIONAL: Safety guard model (default: llama-guard3:8b)
+    # This model is used by Llama Guard for content safety filtering
+    SAFETY_MODEL=llama-guard3:8b
     
-    # REQUIRED: Model identifier for validation
-    # Format depends on provider:
-    #   - Ollama: model-name (e.g., llama3.2:1b)
-    #   - vLLM: model-name (e.g., meta-llama/Llama-2-7b-chat-hf)
-    #   - OpenAI: model-name (e.g., gpt-3.5-turbo)
-    #   - Vertex AI: model-name (e.g., gemini-pro)
-    VALIDATION_MODEL=llama3.2:1b
+    # OPTIONAL: URL for the safety guard model endpoint (default: http://host.docker.internal:11434/v1)
+    # Points to Ollama on the host machine by default
+    # For external providers, set to your provider's OpenAI-compatible endpoint
+    SAFETY_URL=http://host.docker.internal:11434/v1
+    
+    # OPTIONAL: API key for safety guard endpoint (only needed for non-local providers)
+    SAFETY_API_KEY=
     ```
 
-    > [!IMPORTANT]
-    > **Validation Model Requirements:**
-    > - The validation model must support larger context windows to handle question validation
-    > - For Ollama: `llama3.2:1b` is recommended
-    > - Ensure `VALIDATION_PROVIDER` matches one of your enabled providers
+    > [!NOTE]
+    > **Safety Guard for External Providers:**
+    > - If no `SAFETY_MODEL` is configured, it defaults to `llama-guard3:8b`
+    > - If no `SAFETY_URL` is configured, it defaults to `http://host.docker.internal:11434/v1` (Ollama on host)
+    > - Ensure Ollama is running on your host machine with the llama-guard model, or configure an external safety endpoint
 
 5. **Start the application**
 
@@ -236,14 +242,14 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    The script will guide you through a simple 3-step process:
    1. **Choose your LLM provider** (Ollama or Bring your own model)
-   2. **Choose question validation** (No validation or With validation)
+   2. **Choose safety guard** (No safety guard or With safety guard)
    3. **Container runtime detection** (auto-detects podman or docker, prompts only if detection fails or to override)
 
    > [!IMPORTANT]
    > **Before starting:**
-   > - If you selected "Bring Your Own Model" in step 1, ensure you've configured at least one external LLM provider in your `.env` file (see step 4 above)
-   > - If you selected "With validation" in step 2, ensure `VALIDATION_PROVIDER` and `VALIDATION_MODEL` are set correctly in your `.env` file
-   > - For question validation, the model must support larger context windows (e.g., `llama3.2:1b` for Ollama)
+   > - **Ollama provider**: No configuration needed - works out of the box (including with safety guard)
+   > - **Bring Your Own Model**: Ensure you've configured at least one external LLM provider in your `.env` file (see step 4 above)
+   > - **Bring Your Own Model + Safety Guard**: Optionally configure `SAFETY_MODEL`, `SAFETY_URL`, and `SAFETY_API_KEY`, or ensure Ollama is running on your host machine
 
 
 ---
@@ -270,8 +276,8 @@ Follow these steps to configure and launch Developer Lightspeed.
    | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
    | 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 11434/tcp             | ollama                 |
-   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
-   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
+   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.4.0  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:0.1.4 | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -282,8 +288,8 @@ Follow these steps to configure and launch Developer Lightspeed.
    |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
    | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
    | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
-   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-20251021-ee9f08f  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
-   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:6b98aa4ac2178e35d33ef0078bb948202e7dfabc | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
+   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.4.0  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
+   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:0.1.4 | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
 
    ---
 
@@ -330,26 +336,26 @@ If you prefer to stop containers manually, use the commands below based on your 
 
 #### **A. Default setup (with Ollama)**
 
-##### **Without Question Validation**
+##### **Without Safety Guard**
 ```bash
 podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
 ```
 
-##### **With Question Validation**
+##### **With Safety Guard**
 ```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml -f developer-lightspeed/compose-with-validation.yaml down -v
+podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml -f developer-lightspeed/compose-with-safety-guard-ollama.yaml down -v
 ```
 
 #### **B. Minimal setup (own model server, no ollama)**
 
-##### **Without Question Validation**
+##### **Without Safety Guard**
 ```bash
 podman compose -f compose.yaml -f developer-lightspeed/compose.yaml down -v
 ```
 
-##### **With Question Validation**
+##### **With Safety Guard**
 ```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose.yaml -f developer-lightspeed/compose-with-validation.yaml down -v
+podman compose -f compose.yaml -f developer-lightspeed/compose.yaml -f developer-lightspeed/compose-with-safety-guard.yaml down -v
 ```
 
 ---

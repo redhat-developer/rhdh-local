@@ -29,8 +29,8 @@ is_container_running() {
 }
 
 # Check which run.yaml file is mounted in llama-stack container
-# This is the most reliable way to detect validation mode
-check_validation_mode() {
+# This is the most reliable way to detect safety guard mode
+check_safety_guard_mode() {
     local runtime=$1
     
     # Check if llama-stack container is running
@@ -48,10 +48,10 @@ check_validation_mode() {
     fi
     
     # Check which file is mounted
-    if echo "$source_path" | grep -q "run-no-validation.yaml"; then
-        echo "no-validation"
+    if echo "$source_path" | grep -q "run-no-guard.yaml"; then
+        echo "no-guard"
     elif echo "$source_path" | grep -q "run.yaml"; then
-        echo "validation"
+        echo "guard"
     else
         echo ""
     fi
@@ -87,19 +87,19 @@ detect_compose_config() {
         provider="external"
     fi
     
-    # Check validation mode by inspecting the mounted run.yaml file
-    local validation_mode
-    validation_mode=$(check_validation_mode "$runtime")
+    # Check safety guard mode by inspecting the mounted run.yaml file
+    local safety_guard_mode
+    safety_guard_mode=$(check_safety_guard_mode "$runtime")
     
-    # Combine provider and validation mode
-    if [[ -n "$validation_mode" ]]; then
-        if [[ "$validation_mode" == "validation" ]]; then
-            echo "${provider}-validation"
+    # Combine provider and safety guard mode
+    if [[ -n "$safety_guard_mode" ]]; then
+        if [[ "$safety_guard_mode" == "guard" ]]; then
+            echo "${provider}-guard"
         else
             echo "${provider}"
         fi
     else
-        # Fallback: just return provider if we can't detect validation mode
+        # Fallback: just return provider if we can't detect safety guard mode
         echo "$provider"
     fi
 }
@@ -131,19 +131,19 @@ execute_cleanup() {
     case "$config" in
         "ollama")
             compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml"
-            echo "📋 Configuration detected: Ollama (no validation)"
+            echo "📋 Configuration detected: Ollama (no safety guard)"
             ;;
-        "ollama-validation")
-            compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-validation.yaml"
-            echo "📋 Configuration detected: Ollama (with question validation)"
+        "ollama-guard")
+            compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-safety-guard-ollama.yaml"
+            echo "📋 Configuration detected: Ollama (with safety guard)"
             ;;
         "external")
             compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml"
-            echo "📋 Configuration detected: External model (no validation)"
+            echo "📋 Configuration detected: External model (no safety guard)"
             ;;
-        "external-validation")
-            compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-validation.yaml"
-            echo "📋 Configuration detected: External model (with question validation)"
+        "external-guard")
+            compose_files="-f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-safety-guard.yaml"
+            echo "📋 Configuration detected: External model (with safety guard)"
             ;;
         *)
             echo "❌ Could not detect running configuration."
@@ -153,9 +153,9 @@ execute_cleanup() {
             # Try all combinations
             local configs=(
                 "ollama: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml"
-                "ollama-validation: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-validation.yaml"
+                "ollama-guard: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-safety-guard-ollama.yaml"
                 "external: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml"
-                "external-validation: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-validation.yaml"
+                "external-guard: -f $ROOT_DIR/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose.yaml -f $ROOT_DIR/developer-lightspeed/compose-with-safety-guard.yaml"
             )
             
             for config_line in "${configs[@]}"; do
