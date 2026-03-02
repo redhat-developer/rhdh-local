@@ -87,6 +87,26 @@ To browse the existing issues, you can use this [Query](https://issues.redhat.co
 
 Contributions are welcome!
 
+
+## Breaking changes and known issues
+
+### Upgrading to RHDH 1.9
+
+If you switch your `RHDH_IMAGE` to 1.9+ (default value in this branch), you may need to:
+
+1. **Update your `dynamic-plugins.override.yaml`**
+
+Some plugins are no longer bundled in the RHDH image, but have been moved to OCI references.
+
+See [Community plugins migration table](https://redhat-developer.github.io/red-hat-developers-documentation-rhdh/release-1.9/plugins-rhdh-reference/#community-plugins-migration-table) and [Plugins remaining bundled in RHDH 1.9](https://redhat-developer.github.io/red-hat-developers-documentation-rhdh/release-1.9/plugins-rhdh-reference/#plugins-remaining-bundled-in-rhdh-1-9) for migration instructions.
+
+Also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for an example.
+
+2. **Update any scaffolder modules**
+
+Ensure they are built for the Backstage version used in RHDH 1.9. Otherwise the backend may fail to start (e.g. `TypeError: Cannot read properties of undefined (reading 'id')`). See [RHDHBUGS-2497](https://issues.redhat.com/browse/RHDHBUGS-2497) as a known issue.
+
+
 ## License
 
 ```txt
