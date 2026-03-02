@@ -30,7 +30,7 @@ services:
   # Default image: docker.io/ollama/ollama:0.10.0
   # Automatically pulls and serves the model specified by OLLAMA_MODEL environment variable
   ollama:
-    image: docker.io/ollama/ollama:0.10.0
+    image: docker.io/ollama/ollama:0.17.5
     container_name: ollama
     volumes:
       # Ollama models storage: Uses OLLAMA_MODELS_PATH from .env if set, otherwise uses named volume
