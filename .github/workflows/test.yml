@@ -53,7 +53,7 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
-    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && ' - ${{ matrix.os }}' || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
+    name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ${{ matrix.os }}
     env:
       DOCKER_COMPOSE_VERSION: v5.0.1
