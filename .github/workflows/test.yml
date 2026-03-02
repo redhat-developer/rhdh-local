@@ -114,7 +114,7 @@ jobs:
     - name: Setup Podman container environment
       id: setup-podman
       if: ${{ matrix.tool == 'podman' }}
-      uses: rm3l/setup-containerized-podman@9d660ce477edb95b5ac6e27694ac43abaee18953 # v1
+      uses: rm3l/setup-containerized-podman@7e2e9a2ddc2da87cbe754c0ed8975b7368388f56 # v2.0.0
       with:
         podman-image: ${{ env.PODMAN_IMAGE }}
         compose-provider: docker-compose
