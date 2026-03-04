@@ -41,7 +41,7 @@ NOTE: Only `linux-amd64` builds are currently commercially supported.
 To use the most recent nightly CI build of RHDH 1.y (for example, 1.8), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.8
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.10
 ```
 
 ### Using commercially supported official images
