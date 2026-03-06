@@ -92,6 +92,8 @@ Contributions are welcome!
 
 ### Upgrading to RHDH 1.9
 
+More details in the [RHDH 1.9 Release Notes](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.9/html/red_hat_developer_hub_release_notes/index).
+
 If you switch your `RHDH_IMAGE` to 1.9+ (default value in this branch), you may need to:
 
 1. **Update your `dynamic-plugins.override.yaml`**
