@@ -14,11 +14,11 @@ Developer Lightspeed for Red Hat Developer Hub (often shortened to "Developer Li
 
 !!! success "General-Purpose 🛠️"
 
-    Developer Lightspeed isn't limited to Red Hat Developer Hub questions (assuming your administrator has turned off 'question validation' mode). It can help with coding challenges, technology explanations, debugging assistance, architecture decisions, best practices, and any other development-related questions you might have throughout your day. 
+    Developer Lightspeed isn't limited to Red Hat Developer Hub questions (assuming your administrator has turned off 'safety guard' mode). It can help with coding challenges, technology explanations, debugging assistance, architecture decisions, best practices, and any other development-related questions you might have throughout your day. 
 
-!!! note "Question Validation Mode 🚫"
+!!! note "Safety Guard Mode 🛡️"
 
-    Developer Lightspeed can operate in different modes. When in **"Question Validation" mode**, it limits its responses to ensure they're appropriate and relevant. In standard mode, it provides broader assistance across a wide range of topics. This mode is generally set by default and managed by your RHDH administrator.
+    Developer Lightspeed can operate in different modes. When in **"Safety Guard" mode**, it uses Llama Guard to filter content for safety, ensuring responses are appropriate. In standard mode without safety guard, it provides broader assistance across a wide range of topics. This mode is generally managed by your RHDH administrator.
 
 ### Why Developer Lightspeed Matters
 

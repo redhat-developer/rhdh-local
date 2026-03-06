@@ -1,16 +1,16 @@
 # ==============================================================================
-# Llama Stack Configuration - With Safety Guard
+# Llama Stack Configuration - Without Safety Guard
 # ==============================================================================
-# This configuration file is used when safety guard is enabled
-# (selected "With safety guard" in step 2 of start-lightspeed.sh)
+# This configuration file is used when safety guard is diasbeld
+# (selected "No safety guard" in step 2 of start-lightspeed.sh)
 # It configures Llama Stack to provide LLM inference and RAG capabilities
-# with safety guard to filter user questions for safety content
+# without safety guard to filter user questions for safety content
 #
-# File location: developer-lightspeed/configs/extra-files/run.yaml
+# File location: developer-lightspeed/configs/extra-files/run-no-guard.yaml
 # Mounted to: /app-root/run.yaml in the llama-stack container
 
 version: '2'
-image_name: llama-stack
+image_name: llama-stack-no-guard
 
 # ==============================================================================
 # API Configuration
@@ -78,26 +78,9 @@ providers:
       config:
         project: ${env.VERTEX_AI_PROJECT:=}
         location: ${env.VERTEX_AI_LOCATION:=us-central1}
-    - provider_id: safety-guard
-      provider_type: remote::vllm
-      config:
-        url: ${env.SAFETY_URL:=http://host.docker.internal:11434/v1}
-        api_token: ${env.SAFETY_API_KEY:=token}
     - provider_id: sentence-transformers
       provider_type: inline::sentence-transformers
-      config: {}
-      
-  # ============================================================================
-  # Safety Providers
-  # ============================================================================
-  # Safety providers for content filtering
-  safety:
-    # Llama Guard: Content safety filtering
-    - config:
-        excluded_categories: []
-      provider_id: llama-guard
-      provider_type: inline::llama-guard
-  
+      config: {}  
   tool_runtime:
     # Model Context Protocol (MCP) Provider
     # Enables Developer Lightspeed to interact with external tools and data sources
@@ -125,16 +108,6 @@ registered_resources:
       model_type: embedding
       provider_id: sentence-transformers
       provider_model_id: /rag-content/embeddings_model
-    - model_id: ${env.SAFETY_MODEL:=llama-guard3:8b}
-      provider_id: safety-guard
-      provider_model_id: ${env.SAFETY_MODEL:=llama-guard3:8b}
-      model_type: llm
-      metadata: {}
-  # Safety shields that apply safety shields to user questions
-  shields:
-    - shield_id: llama-guard-shield
-      provider_id: llama-guard
-      provider_shield_id: safety-guard/${env.SAFETY_MODEL:=llama-guard3:8b}
   # Defines groups of tools available to the LLM
   tool_groups:
     - provider_id: rag-runtime

@@ -1,0 +1,30 @@
+# Safety Guard configuration for Ollama provider
+# This file overrides the safety guard URL to use the containerized Ollama service
+# Used when: Ollama provider + With safety guard is selected in start-lightspeed.sh
+services:
+  # Override Ollama to also pull the safety guard model
+  ollama:
+    command: >
+      "ollama serve & sleep 5 && 
+      ollama pull ${OLLAMA_MODEL:-llama3.2:1b} && 
+      ollama pull ${SAFETY_MODEL:-llama-guard3:8b} && 
+      touch /tmp/ollama-model-ready && wait"
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list | grep -q $$OLLAMA_MODEL && ollama list | grep -q $${SAFETY_MODEL:-llama-guard3} && [ -f /tmp/ollama-model-ready ]"]
+      interval: 10s
+      timeout: 10s
+      retries: 40
+      start_period: 90s
+
+  llama-stack:
+    volumes:
+      - ./developer-lightspeed/configs/extra-files/run.yaml:/app-root/run.yaml:Z
+      - rag_embeddings:/rag-content/embeddings_model
+      - rag_vector_db:/rag-content/vector_db
+    environment:
+      # Enable Ollama provider for inference
+      ENABLE_OLLAMA: 'true'
+      # Point to containerized Ollama service for inference
+      OLLAMA_URL: http://ollama:11434
+      # Point safety guard to the containerized Ollama service
+      SAFETY_URL: http://ollama:11434/v1
