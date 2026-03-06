@@ -4,7 +4,7 @@
 includes:
   - dynamic-plugins.default.yaml
 plugins:
-  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.45.3__1.2.3!red-hat-developer-hub-backstage-plugin-lightspeed
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.45.3__1.2.3'
     disabled: false
     pluginConfig:
       lightspeed:
@@ -37,5 +37,5 @@ plugins:
                 config:
                   id: lightspeed
                   priority: 100
-  - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.3!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.3'
     disabled: false

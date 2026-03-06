@@ -45,10 +45,10 @@ Integrating these entity plugins means you don't have to leave Developer Hub to 
 
 How do you know what plugins are available?
 
-Red Hat Developer Hub includes a built-in [**Extensions**](/extensions) marketplace (sometimes called the "Extensions Plugin") that lists available plugins.
+Red Hat Developer Hub includes a built-in [**Extensions**](/extensions) catalog (sometimes called the "Extensions Plugin") that lists available plugins.
 
 !!! note "For Administrators Only 🔒"
-    The Extensions marketplace is primarily a tool for **Administrators** and **Platform Engineers**. It allows them to see which plugins are installed, which are available, and to manage their configuration.
+    The Extensions catalog is primarily a tool for **Administrators** and **Platform Engineers**. It allows them to see which plugins are installed, which are available, and to manage their configuration.
     
     As a user, you typically won't use this page to "install" plugins yourself. Instead, you'll work with your administrator to request the plugins your team needs.
 

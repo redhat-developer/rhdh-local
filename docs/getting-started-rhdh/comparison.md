@@ -78,7 +78,7 @@ Both platforms share the same foundational features:
 |---------|----------------|------------------------|
 | **Dynamic Plug-Ins** (no need to recompile) | ❌ | ✅ |
 | **Verified Plugin Compatibility** | ⚠️ (self-verify) | ✅ |
-| **Extensions Catalog Plugin** (marketplace) | ❌ | ✅ |
+| **Extensions Catalog Plugin** (catalog) | ❌ | ✅ |
 | **Adoption Insights Plugin** (user metrics) | ❌ | ✅ |
 | **20+ Red Hat Plugins** (e.g., Tekton, ArgoCD, Kiali, 3scale, ACS, Ansible) | ❌ | ✅ |
 | **[Free Software Templates Library](https://github.com/redhat-developer/red-hat-developer-hub-software-templates)** | ❌ | ✅ |
