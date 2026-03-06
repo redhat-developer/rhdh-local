@@ -34,7 +34,7 @@ show_provider_menu() {
     echo ""
 }
 
-show_validation_menu() {
+show_safety_guard_menu() {
     local provider=$1
     local provider_name=""
     
@@ -48,17 +48,17 @@ show_validation_menu() {
     echo "=========================================="
     echo "Developer Lightspeed Setup - Step 2/3"
     echo "=========================================="
-    echo "Choose question validation for $provider_name:"
+    echo "Choose safety guard for $provider_name:"
     echo ""
-    echo "1) No question validation"
+    echo "1) No safety guard"
     echo "   - Allows any type of questions"
-    echo "   - General-purpose assistant"
-    echo "   - Recommended for most users"
+    echo "   - General-purpose response with no safety content filtering"
+    echo "   - Recommended for users who know what they are doing"
     echo ""
-    echo "2) With question validation"
-    echo "   - Filters questions to RHDH/Backstage topics only"
-    echo "   - Requires model with larger context window"
-    echo "   - Recommended for focused RHDH assistance"
+    echo "2) With safety guard"
+    echo "   - Filters questions for safety content only"
+    echo "   - Defaults to llama-guard3:8b with Ollama"
+    echo "   - Recommended for users who want to be safe"
     echo ""
 }
 
@@ -72,7 +72,7 @@ validate_provider_choice() {
     return 0
 }
 
-validate_validation_choice() {
+validate_safety_guard_choice() {
     local choice=$1
     if [[ ! "$choice" =~ ^[1-2]$ ]]; then
         echo "❌ Invalid choice. Please enter 1 or 2."
@@ -94,7 +94,7 @@ validate_runtime() {
 
 execute_setup() {
     local provider=$1
-    local validation=$2
+    local safety_guard=$2
     local runtime=$3
     
     echo ""
@@ -104,25 +104,25 @@ execute_setup() {
     # Determine provider type
     if [[ "$provider" == "1" ]]; then
         # Ollama provider
-        if [[ "$validation" == "1" ]]; then
-            # No validation
-            echo "📋 Configuration: Ollama (no validation)"
+        if [[ "$safety_guard" == "1" ]]; then
+            # No safety guard
+            echo "📋 Configuration: Ollama (no safety guard)"
             $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml" up -d
         else
-            # With validation
-            echo "📋 Configuration: Ollama (with question validation)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-validation.yaml" up -d
+            # With safety guard (uses containerized Ollama for safety)
+            echo "📋 Configuration: Ollama (with safety guard)"
+            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-safety-guard-ollama.yaml" up -d
         fi
     else
         # Bring your own model
-        if [[ "$validation" == "1" ]]; then
-            # No validation
-            echo "📋 Configuration: External model (no validation)"
+        if [[ "$safety_guard" == "1" ]]; then
+            # No safety guard
+            echo "📋 Configuration: External model (no safety guard)"
             $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" up -d
         else
-            # With validation
-            echo "📋 Configuration: External model (with question validation)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-validation.yaml" up -d
+            # With safety guard
+            echo "📋 Configuration: External model (with safety guard)"
+            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-safety-guard.yaml" up -d
         fi
     fi
     
@@ -137,7 +137,7 @@ execute_setup() {
 
 main() {
     local provider=""
-    local validation=""
+    local safety_guard=""
     local runtime=""
     
     # Step 1: Choose provider
@@ -150,12 +150,12 @@ main() {
         fi
     done
     
-    # Step 2: Choose validation
+    # Step 2: Choose safety_guard
     while true; do
-        show_validation_menu "$provider"
-        read -p "Enter your choice (1-2): " -r validation
+        show_safety_guard_menu "$provider"
+        read -p "Enter your choice (1-2): " -r safety_guard
         
-        if validate_validation_choice "$validation"; then
+        if validate_safety_guard_choice "$safety_guard"; then
             break
         fi
     done
@@ -202,7 +202,7 @@ main() {
         fi
     fi
     
-    execute_setup "$provider" "$validation" "$runtime"
+    execute_setup "$provider" "$safety_guard" "$runtime"
 }
 
 main "$@"

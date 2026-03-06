@@ -2,7 +2,7 @@ services:
   llama-stack:
     volumes:
       - ./developer-lightspeed/configs/extra-files/run.yaml:/app-root/run.yaml:Z
-      - rag_embeddings:/app-root/embeddings_model
-      - rag_vector_db:/app-root/vector_db
+      - rag_embeddings:/rag-content/embeddings_model
+      - rag_vector_db:/rag-content/vector_db
       # Set VERTEX_AI_CREDENTIALS_PATH in your .env file to your Google Cloud credentials JSON file path
       - ${VERTEX_AI_CREDENTIALS_PATH:-./developer-lightspeed/configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z

@@ -32,12 +32,10 @@ plugins:
                 importName: LightspeedDrawerProvider
               - mountPoint: application/internal/drawer-state
                 importName: LightspeedDrawerStateExposer
-                config:
-                  id: lightspeed
               - mountPoint: application/internal/drawer-content
                 importName: LightspeedChatContainer
                 config:
                   id: lightspeed
                   priority: 100
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.2'
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.3'
     disabled: false
