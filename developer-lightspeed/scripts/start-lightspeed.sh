@@ -56,9 +56,9 @@ show_safety_guard_menu() {
     echo "   - Recommended for users who know what they are doing"
     echo ""
     echo "2) With safety guard"
-    echo "   - Filters questions for safety content only"
-    echo "   - Defaults to llama-guard3:8b with Ollama"
-    echo "   - Recommended for users who want to be safe"
+    echo "   - Filters questions for safety content using Llama Guard"
+    echo "   - Automatically provisions llama-guard3:8b locally via Ollama"
+    echo "   - No additional configuration needed"
     echo ""
 }
 
