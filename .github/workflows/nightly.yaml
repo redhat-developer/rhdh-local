@@ -67,7 +67,7 @@ jobs:
     env:
       # Using the next tag from the release branch
       RHDH_TAG: ${{ github.event.inputs.rhdh_tag || vars.NEXT_RHDH_TAG }}
-      RHDH_IMAGE: quay.io/rhdh-community/rhdh:${{ github.event.inputs.rhdh_tag || vars.NEXT_RHDH_TAG }}
+      RHDH_IMAGE: quay.io/rhdh-community/rhdh:next
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
