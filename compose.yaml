@@ -23,7 +23,7 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE:-registry.redhat.io/rhdh/rhdh-hub-rhel9:1.9.1}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.9}
     env_file:
       - path: "./default.env"
         required: true
