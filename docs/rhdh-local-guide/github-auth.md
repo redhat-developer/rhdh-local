@@ -107,7 +107,7 @@ catalog:
 
 Apply your authentication changes:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     podman compose up -d --force-recreate
     ```
@@ -121,10 +121,17 @@ Apply your authentication changes:
 
 Check that RHDH Local starts successfully with GitHub authentication:
 
-```bash
-# Monitor startup logs
-podman compose logs -f rhdh
-```
+=== "Podman"
+    ```bash
+    # Monitor startup logs
+    podman compose logs -f rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Monitor startup logs
+    docker compose logs -f rhdh
+    ```
 
 Then try to login using GitHub.
 

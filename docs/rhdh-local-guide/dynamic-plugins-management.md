@@ -21,7 +21,7 @@ Without a restart, your changes won't take effect because the running instance i
 
 After making plugin changes through the UI, restart your local instance with these commands:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     # Reinstall plugins and restart RHDH
     podman compose run install-dynamic-plugins
@@ -37,7 +37,7 @@ After making plugin changes through the UI, restart your local instance with the
 
 This process typically may take a few minutes. You can monitor the startup progress in the container logs:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     podman compose logs -f rhdh
     ```
@@ -201,15 +201,27 @@ podman run --rm -it \
 
 ### Managing Plugin Cache
 
-```bash
-# Clear plugin cache (rebuilds all plugins)
-podman compose down --volumes
-podman compose up -d
+=== "Podman"
+    ```bash
+    # Clear plugin cache (rebuilds all plugins)
+    podman compose down --volumes
+    podman compose up -d
 
-# Reinstall plugins without clearing other data
-podman compose run install-dynamic-plugins
-podman compose restart rhdh
-```
+    # Reinstall plugins without clearing other data
+    podman compose run install-dynamic-plugins
+    podman compose restart rhdh
+    ```
+
+=== "Docker"
+    ```bash
+    # Clear plugin cache (rebuilds all plugins)
+    docker compose down --volumes
+    docker compose up -d
+
+    # Reinstall plugins without clearing other data
+    docker compose run install-dynamic-plugins
+    docker compose restart rhdh
+    ```
 
 ## Applying Plugin Changes
 
@@ -217,7 +229,7 @@ podman compose restart rhdh
 
 After modifying the plugin configuration, for example after configuring plugins using the Extensions in the RHDH UI:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     # Reinstall plugins and restart RHDH
     podman compose run install-dynamic-plugins
@@ -235,7 +247,7 @@ After modifying the plugin configuration, for example after configuring plugins 
 
 For configuration-only changes:
 
-=== "Podman (Recommended)"
+=== "Podman"
     ```bash
     # Just restart RHDH (if plugins haven't changed)
     podman compose restart rhdh
