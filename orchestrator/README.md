@@ -4,7 +4,7 @@
 > Replace `podman compose` with `docker compose` if you are using Docker.
 
 Before you begin, ensure to add the orchestrator plugins to your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable them within RHDH.
-Copy the [plugins](https://github.com/redhat-developer/rhdh-local/blob/main/orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml#L5-L21)
+Copy the [plugins](./configs/dynamic-plugins/dynamic-plugins.yaml#L5-L21)
 from `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` directly into your override file. Example:
 
 ```yaml
