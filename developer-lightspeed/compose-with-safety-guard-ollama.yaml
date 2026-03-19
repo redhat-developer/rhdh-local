@@ -7,10 +7,10 @@ services:
     command: >
       "ollama serve & sleep 5 && 
       ollama pull ${OLLAMA_MODEL:-llama3.2:1b} && 
-      ollama pull ${SAFETY_MODEL:-llama-guard3:8b} && 
+      ollama pull ${SAFETY_MODEL:-llama-guard3:1b} && 
       touch /tmp/ollama-model-ready && wait"
     healthcheck:
-      test: ollama list | grep -q $$OLLAMA_MODEL && ollama list | grep -q $${SAFETY_MODEL:-llama-guard3:8b} && [ -f /tmp/ollama-model-ready ]
+      test: ollama list | grep -q $$OLLAMA_MODEL && ollama list | grep -q $${SAFETY_MODEL:-llama-guard3:1b} && [ -f /tmp/ollama-model-ready ]
       interval: 10s
       timeout: 10s
       retries: 40
