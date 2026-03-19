@@ -6,6 +6,7 @@ configs/
 ├── .npmrc                             # npmrc configuration file
 ├── app-config/
 │   ├── app-config.local.yaml          # Your app configuration overrides
+│   ├── app-config.plugin-division-mode-schema.example.yaml  # PG schema-per-plugin example
 ├── dynamic-plugins/
 │   ├── dynamic-plugins.override.yaml  # Your plugin overrides
 ├── catalog-entities/

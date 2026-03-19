@@ -1,7 +1,11 @@
 services:
-  # Uncomment the following block to use a PostgreSQL database
-  # don't forget to also uncomment 'depends_on' 'db' section in the rhdh service
-  # and comment out or delete 'database' section in app-config.yaml or app-config.local.yaml
+  # Optional PostgreSQL — see docs/rhdh-local-guide/postgresql-guide.md
+  # For pluginDivisionMode: schema (single DB, one schema per plugin), see
+  # docs/rhdh-local-guide/plugin-division-mode-schema.md and
+  # configs/app-config/app-config.plugin-division-mode-schema.example.yaml
+  #
+  # Uncomment db + rhdh depends_on.db below, then override backend.database in
+  # configs/app-config/app-config.local.yaml (comment out SQLite from defaults).
 
   # db:
   #   container_name: db

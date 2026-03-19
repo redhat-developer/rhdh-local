@@ -48,22 +48,18 @@ If you want to use PostgreSQL with RHDH, here are the steps:
        condition: service_healthy
    ```
 
-4. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
+4. Configure PostgreSQL in [`configs/app-config/app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml) (create it from `app-config.local.example.yaml` if needed). A `backend.database` block here **overrides** the default in-memory SQLite in `app-config.yaml`:
 
    ```yaml
-   # database:
-   #   client: better-sqlite3
-   #   connection: ':memory:'
+   backend:
+     database:
+       client: pg
+       connection:
+         host: ${POSTGRES_HOST}
+         port: ${POSTGRES_PORT}
+         user: ${POSTGRES_USER}
+         password: ${POSTGRES_PASSWORD}
+         database: ${POSTGRES_DB}
    ```
 
-5. Add Postgres configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
-
-   ```yaml
-   database:
-    client: pg
-    connection:
-      host: ${POSTGRES_HOST}
-      port: ${POSTGRES_PORT}
-      user: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
-   ```
+   > **Single database / schema-per-plugin** (`pluginDivisionMode: schema`): If the DB user cannot create multiple databases (`CREATEDB`), use the dedicated guide [Plugin division mode: schema](plugin-division-mode-schema.md) and example [`app-config.plugin-division-mode-schema.example.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.plugin-division-mode-schema.example.yaml).
