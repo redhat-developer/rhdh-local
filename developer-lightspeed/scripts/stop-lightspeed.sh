@@ -62,11 +62,16 @@ detect_compose_config() {
     local runtime=$1
     
     local has_ollama=false
+    local has_safety_ollama=false
     local has_lightspeed=false
     
     # Check for Lightspeed-specific containers
     if is_container_running "$runtime" "ollama"; then
         has_ollama=true
+    fi
+    
+    if is_container_running "$runtime" "safety-ollama"; then
+        has_safety_ollama=true
     fi
     
     if is_container_running "$runtime" "lightspeed-core-service"; then
@@ -79,12 +84,21 @@ detect_compose_config() {
         return
     fi
     
-    # Determine provider type (Ollama vs external)
+    # Determine provider type:
+    # - ollama container (inference) running → Ollama provider
+    # - safety-ollama container (no ollama) → BYO provider with local safety guard
+    # - neither → BYO provider without safety guard
     local provider=""
     if [[ "$has_ollama" == true ]]; then
         provider="ollama"
     else
         provider="external"
+    fi
+    
+    # safety-ollama is the dedicated safety container used in BYO + Safety Guard mode
+    if [[ "$has_safety_ollama" == true && "$has_ollama" == false ]]; then
+        echo "external-guard"
+        return
     fi
     
     # Check safety guard mode by inspecting the mounted run.yaml file
