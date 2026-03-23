@@ -62,7 +62,7 @@ Follow these steps to configure and launch Developer Lightspeed.
 
    **Step 2: Choose Safety Guard**
    - **No safety guard**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant with no safety content filtering.
-   - **With safety guard**: Enables Llama Guard for content safety filtering - filters questions for safety content. Defaults to `llama-guard3:8b` with Ollama if no `SAFETY_MODEL` is configured.
+   - **With safety guard**: Enables Llama Guard for content safety filtering. A local Ollama container is automatically provisioned to run the safety model (`llama-guard3:1b` by default). No additional configuration is needed - the safety guard only supports llama-guard model variants.
 
    > [!NOTE]
    > **What does "Bring Your Own Model" mean?**
@@ -99,9 +99,9 @@ Follow these steps to configure and launch Developer Lightspeed.
     > [!IMPORTANT]
     > **Configuration Requirements:**
     > - **If you selected Ollama in step 1**: You don't need to modify any environment variables. The defaults work out of the box.
-    > - **If you selected Ollama + "With safety guard"**: No configuration needed! The setup automatically pulls `llama-guard3:8b` and configures the safety URL.
+    > - **If you selected Ollama + "With safety guard"**: No configuration needed! The setup automatically pulls `llama-guard3:1b` and configures the safety URL.
     > - **If you selected "Bring Your Own Model" in step 1**: You **must** configure at least one external LLM provider below before starting the application.
-    > - **If you selected "Bring Your Own Model" + "With safety guard"**: Optionally configure `SAFETY_MODEL`, `SAFETY_URL`, and `SAFETY_API_KEY`. Defaults to `llama-guard3:8b` via Ollama on host at `http://host.docker.internal:11434/v1`.
+    > - **If you selected "Bring Your Own Model" + "With safety guard"**: No safety configuration needed! A dedicated local Ollama container (`safety-ollama`) is automatically provisioned to run `llama-guard3:1b`. You only need to configure your external LLM provider.
 
     ### Quick Reference: Setup Combinations → Required Configuration
 
@@ -110,7 +110,7 @@ Follow these steps to configure and launch Developer Lightspeed.
     | **Ollama** | No safety guard | None (defaults work) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` |
     | **Ollama** | With safety guard | None (auto-configured) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` + `developer-lightspeed/compose-with-safety-guard-ollama.yaml` |
     | **Bring your own model** | No safety guard | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` + `developer-lightspeed/compose.yaml` |
-    | **Bring your own model** | With safety guard | At least one provider + optional `SAFETY_*` vars | `compose.yaml` + `developer-lightspeed/compose.yaml` + `developer-lightspeed/compose-with-safety-guard.yaml` |
+    | **Bring your own model** | With safety guard | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` + `developer-lightspeed/compose.yaml` + `developer-lightspeed/compose-with-safety-guard.yaml` |
 
     ---
 
@@ -202,35 +202,30 @@ Follow these steps to configure and launch Developer Lightspeed.
 
     ---
 
-    ### Configure Safety Guard (Only for "Bring Your Own Model")
+    ### Safety Guard Configuration
 
     > [!TIP]
-    > **If you selected Ollama provider + "With safety guard"**: No configuration needed! The setup automatically:
-    > - Pulls the `llama-guard3:8b` model into the containerized Ollama
-    > - Configures the safety URL to point to the containerized Ollama
-    > - Just works out of the box!
+    > **Safety guard is auto-configured for all provider combinations.** No manual safety configuration is needed regardless of whether you use Ollama or an external provider.
 
-    **If you selected "Bring Your Own Model" + "With safety guard"**, you can optionally configure the safety guard model. If not configured, it defaults to `llama-guard3:8b` via Ollama on your host machine.
+    When you select "With safety guard", the setup automatically provisions a local Ollama container to run the safety model:
 
-    ```env
-    # OPTIONAL: Safety guard model (default: llama-guard3:8b)
-    # This model is used by Llama Guard for content safety filtering
-    SAFETY_MODEL=llama-guard3:8b
-    
-    # OPTIONAL: URL for the safety guard model endpoint (default: http://host.docker.internal:11434/v1)
-    # Points to Ollama on the host machine by default
-    # For external providers, set to your provider's OpenAI-compatible endpoint
-    SAFETY_URL=http://host.docker.internal:11434/v1
-    
-    # OPTIONAL: API key for safety guard endpoint (only needed for non-local providers)
-    SAFETY_API_KEY=
-    ```
+    - **Ollama provider**: The safety model (`llama-guard3:1b`) is pulled into the same Ollama container used for inference.
+    - **Bring Your Own Model**: A dedicated `safety-ollama` container is spun up solely for the safety model. Your external provider handles inference while the local Ollama handles safety filtering.
+
+    > [!IMPORTANT]
+    > **The safety provider uses `inline::llama-guard`**, which means `SAFETY_MODEL` **must** be a llama-guard variant (e.g. `llama-guard3:1b`). Other model families will not work for safety filtering.
 
     > [!NOTE]
-    > **Safety Guard for External Providers:**
-    > - If no `SAFETY_MODEL` is configured, it defaults to `llama-guard3:8b`
-    > - If no `SAFETY_URL` is configured, it defaults to `http://host.docker.internal:11434/v1` (Ollama on host)
-    > - Ensure Ollama is running on your host machine with the llama-guard model, or configure an external safety endpoint
+    > **Safety model latency:** The default safety model is now `llama-guard3:1b`. Depending on your local CPU/GPU setup and container runtime, safety checks may still add noticeable latency, and in some environments may be slower than expected.
+
+    ```env
+    # OPTIONAL: Override the default safety guard model (default: llama-guard3:1b)
+    # Must be a llama-guard variant
+    SAFETY_MODEL=llama-guard3:1b
+    ```
+
+    > [!WARNING]
+    > **Performance impact:** Running the llama-guard model locally can increase response latency, especially on machines with limited CPU, memory, or GPU resources. Every user message is evaluated by the safety model before being forwarded to the inference model, so constrained environments may experience noticeably slower responses. If you encounter this, consider increasing the memory allocated to your container runtime (see [Running Larger Models with Ollama](#running-larger-models-with-ollama)) or running without the guard.
 
 5. **Start the application**
 
@@ -249,7 +244,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    > **Before starting:**
    > - **Ollama provider**: No configuration needed - works out of the box (including with safety guard)
    > - **Bring Your Own Model**: Ensure you've configured at least one external LLM provider in your `.env` file (see step 4 above)
-   > - **Bring Your Own Model + Safety Guard**: Optionally configure `SAFETY_MODEL`, `SAFETY_URL`, and `SAFETY_API_KEY`, or ensure Ollama is running on your host machine
+   > - **Bring Your Own Model + Safety Guard**: Only your external LLM provider needs configuration. The safety guard model is automatically provisioned locally via a dedicated `safety-ollama` container
 
 
 ---

@@ -125,16 +125,16 @@ registered_resources:
       model_type: embedding
       provider_id: sentence-transformers
       provider_model_id: /rag-content/embeddings_model
-    - model_id: ${env.SAFETY_MODEL:=llama-guard3:8b}
+    - model_id: ${env.SAFETY_MODEL:=llama-guard3:1b}
       provider_id: safety-guard
-      provider_model_id: ${env.SAFETY_MODEL:=llama-guard3:8b}
+      provider_model_id: ${env.SAFETY_MODEL:=llama-guard3:1b}
       model_type: llm
       metadata: {}
   # Safety shields that apply safety shields to user questions
   shields:
     - shield_id: llama-guard-shield
       provider_id: llama-guard
-      provider_shield_id: safety-guard/${env.SAFETY_MODEL:=llama-guard3:8b}
+      provider_shield_id: safety-guard/${env.SAFETY_MODEL:=llama-guard3:1b}
   # Defines groups of tools available to the LLM
   tool_groups:
     - provider_id: rag-runtime

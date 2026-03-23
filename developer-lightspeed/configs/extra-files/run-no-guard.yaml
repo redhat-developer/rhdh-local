@@ -1,7 +1,7 @@
 # ==============================================================================
 # Llama Stack Configuration - Without Safety Guard
 # ==============================================================================
-# This configuration file is used when safety guard is diasbeld
+# This configuration file is used when safety guard is disabled
 # (selected "No safety guard" in step 2 of start-lightspeed.sh)
 # It configures Llama Stack to provide LLM inference and RAG capabilities
 # without safety guard to filter user questions for safety content
