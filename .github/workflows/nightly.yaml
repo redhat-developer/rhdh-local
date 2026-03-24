@@ -28,10 +28,18 @@ jobs:
         id: set-branches
         with:
           script: |
-            const { data } = await github.rest.repos.listBranches({ owner: context.repo.owner, repo: context.repo.repo, per_page: 100 });
-            const names = data.map(b => b.name).filter(n => n === 'main' || /^release-\d+\.\d+$/.test(n));
-            const sorted = names.length ? names.sort((a, b) => (a === 'main' ? -1 : b === 'main' ? 1 : b.localeCompare(a, undefined, { numeric: true }))) : ['main'];
-            core.setOutput('branches', JSON.stringify(sorted));
+            const branches = await github.paginate(github.rest.repos.listBranches, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const topReleaseBranches = branches
+              .map(b => b.name)
+              .filter(name => /^release-\d+\.\d+$/.test(name))
+              .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+              .slice(0, 2);
+
+            core.setOutput('branches', JSON.stringify(['main', ...topReleaseBranches]));
 
   test:
     needs: discover-branches
@@ -65,14 +73,23 @@ jobs:
     name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"        
     runs-on: ${{ matrix.os }}
     env:
-      # Using the next tag from the release branch
-      RHDH_TAG: ${{ github.event.inputs.rhdh_tag || vars.NEXT_RHDH_TAG }}
-      RHDH_IMAGE: quay.io/rhdh-community/rhdh:next
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
 
     steps:
+      # Set RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection
+        - name: Set RHDH tag and image
+          env:
+            INPUT_TAG: ${{ github.event.inputs.rhdh_tag }}
+            BRANCH: ${{ matrix.branch }}
+          run: |
+            if [ "$BRANCH" = "main" ]; then TAG="next"
+            else TAG="next-${BRANCH#release-}"; fi
+
+            echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
+            echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
+
         - uses: actions/checkout@v6
           with:
             ref: ${{ matrix.branch }}
