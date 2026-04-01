@@ -75,7 +75,6 @@ If you want to use PostgreSQL with RHDH, here are the steps:
      database:
        client: pg
        pluginDivisionMode: schema
-       ensureSchemaExists: true
        connection:
          host: ${POSTGRES_HOST}
          port: ${POSTGRES_PORT}
