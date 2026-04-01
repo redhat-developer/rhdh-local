@@ -34,7 +34,6 @@ nav:
     - "Container Image Guide": rhdh-local-guide/container-image-guide.md
     - "Corporate Proxy Setup": rhdh-local-guide/corporate-proxy-setup-sim.md
     - "PostgreSQL Guide": rhdh-local-guide/postgresql-guide.md
-    - "PostgreSQL: pluginDivisionMode schema": rhdh-local-guide/plugin-division-mode-schema.md
     #- "Orchestrator": ../orchestrator/README.md
     - "Operating RHDH Local": rhdh-local-guide/operating-rhdh-local.md
     - "Getting Help & Contributing": rhdh-local-guide/help-and-contrib.md

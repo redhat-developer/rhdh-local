@@ -62,4 +62,19 @@ If you want to use PostgreSQL with RHDH, here are the steps:
          database: ${POSTGRES_DB}
    ```
 
-   > **Single database / schema-per-plugin** (`pluginDivisionMode: schema`): If the DB user cannot create multiple databases (`CREATEDB`), use the dedicated guide [Plugin division mode: schema](plugin-division-mode-schema.md) and example [`app-config.plugin-division-mode-schema.example.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.plugin-division-mode-schema.example.yaml).
+   If you need **`pluginDivisionMode: schema`** (one database, one schema per plugin—useful when the DB user cannot create multiple databases), use this **`backend.database`** block in `app-config.local.yaml` **instead** of the snippet above:
+
+   ```yaml
+   backend:
+     database:
+       client: pg
+       pluginDivisionMode: schema
+       ensureSchemaExists: true
+       connection:
+         host: ${POSTGRES_HOST}
+         port: ${POSTGRES_PORT}
+         user: ${POSTGRES_USER}
+         password: ${POSTGRES_PASSWORD}
+         database: ${POSTGRES_DB}
+   ```
+
