@@ -68,7 +68,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
       password: ${POSTGRES_PASSWORD}
    ```
 
-   If you need **`pluginDivisionMode: schema`** (one database, one schema per plugin—useful when the DB user cannot create multiple databases), use this **`backend.database`** block in `app-config.local.yaml` **instead** of the snippet above:
+   If you need **`pluginDivisionMode: schema`** (one database, one schema per plugin — useful when the DB user cannot create multiple databases), use this **`backend.database`** block in `app-config.local.yaml` **instead** of the snippet above:
 
    ```yaml
    backend:
