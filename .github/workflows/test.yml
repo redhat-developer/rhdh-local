@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions
+      - uses: ./.github/actions/rhdh-local-compose-test
         with:
           git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
           container_tool: ${{ matrix.tool }}
