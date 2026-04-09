@@ -79,7 +79,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions
+      - uses: ./.github/actions/rhdh-local-compose-test
         with:
           git_ref: ${{ matrix.branch }}
           container_tool: ${{ matrix.tool }}
