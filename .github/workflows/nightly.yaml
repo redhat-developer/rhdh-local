@@ -39,10 +39,13 @@ jobs:
               .filter(tag => /^\d+\.\d+\.\d+$/.test(tag))
               .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
 
-            const tagToBranch = tag => `release-${tag.replace(/\.\d+$/, '')}`;
+            const tagToBranch = tag => {
+              if (!tag) return null;
+              return `release-${tag.replace(/\.\d+$/, '')}`;
+            };
 
-            const currentBranch = tagToBranch(versionTags[0]);
-            const previousBranch = tagToBranch(versionTags[1]);
+            const currentBranch = tagToBranch(versionTags[0] ? tagToBranch(versionTags[0]) : null);
+            const previousBranch = tagToBranch(versionTags[1] ? tagToBranch(versionTags[1]) : null);
 
             const allBranches = await github.paginate(github.rest.repos.listBranches, {
               owner: context.repo.owner,
@@ -54,14 +57,17 @@ jobs:
               .filter(name => /^release-\d+\.\d+$/.test(name))
               .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
 
-            const currentVersion = currentBranch.replace('release-', '');
-
-            const upcomingBranch = releaseBranches.find(branch => {
-              const branchVersion = branch.replace('release-', '');
-              const hasTag = versionTags.some(tag => tag.startsWith(branchVersion + '.'));
-
-              return !hasTag && branchVersion.localeCompare(currentVersion, undefined, { numeric: true }) > 0;
-            });
+            let upcomingBranch = null;
+            if (currentBranch) {
+              const currentVersion = currentBranch.replace('release-', '');
+              
+              upcomingBranch = releaseBranches.find(branch => {
+                const branchVersion = branch.replace('release-', '');
+                const hasTag = versionTags.some(tag => tag.startsWith(branchVersion + '.'));
+                
+                return !hasTag && branchVersion.localeCompare(currentVersion, undefined, { numeric: true }) > 0;
+              });
+            }
 
             const testBranches = ['main'];
             if (currentBranch) testBranches.push(currentBranch);
