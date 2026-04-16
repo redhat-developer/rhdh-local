@@ -36,7 +36,7 @@ jobs:
 
             const versionTags = tags.data
               .map(tag => tag.ref.replace('refs/tags/', ''))
-              .filter(tag => /^\d+\.\d+\.\d+$.test(tag));
+              .filter(tag => /^\d+\.\d+\.\d+$/.test(tag))
               .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
 
             const tagToBranch = tag => `release-${tag.replace(/\.\d+$/, '')}`;
@@ -44,7 +44,16 @@ jobs:
             const currentBranch = tagToBranch(versionTags[0]);
             const previousBranch = tagToBranch(versionTags[1]);
 
-            const releaseBranches = /* get all release branches */;
+            const allBranches = await github.paginate(github.rest.repos.listBranches, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const releaseBranches = allBranches
+              .map(branch => branch.name)
+              .filter(name => /^release-\d+\.\d+$/.test(name))
+              .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
             const currentVersion = currentBranch.replace('release-', '');
 
             const upcomingBranch = releaseBranches.find(branch => {
@@ -53,6 +62,13 @@ jobs:
 
               return !hasTag && branchVersion.localeCompare(currentVersion, undefined, { numeric: true }) > 0;
             });
+
+            const testBranches = ['main'];
+            if (currentBranch) testBranches.push(currentBranch);
+            if (previousBranch) testBranches.push(previousBranch);
+            if (upcomingBranch) testBranches.push(upcomingBranch);
+
+            core.setOutput('branches', JSON.stringify(testBranches));
 
   test:
     needs: discover-branches
