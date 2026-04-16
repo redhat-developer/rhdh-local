@@ -6,8 +6,8 @@ on:
     - cron: "34 23 * * *"
 
 concurrency:
-    group: ${{ github.workflow}}
-    cancel-in-progress: true
+  group: ${{ github.workflow}}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -28,18 +28,31 @@ jobs:
         id: set-branches
         with:
           script: |
-            const branches = await github.paginate(github.rest.repos.listBranches, {
+            const tags = await github.rest.git.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              ref: 'tags/'
             });
 
-            const topReleaseBranches = branches
-              .map(b => b.name)
-              .filter(name => /^release-\d+\.\d+$/.test(name))
-              .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
-              .slice(0, 2);
+            const versionTags = tags.data
+              .map(tag => tag.ref.replace('refs/tags/', ''))
+              .filter(tag => /^\d+\.\d+\.\d+$.test(tag));
+              .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
 
-            core.setOutput('branches', JSON.stringify(['main', ...topReleaseBranches]));
+            const tagToBranch = tag => `release-${tag.replace(/\.\d+$/, '')}`;
+
+            const currentBranch = tagToBranch(versionTags[0]);
+            const previousBranch = tagToBranch(versionTags[1]);
+
+            const releaseBranches = /* get all release branches */;
+            const currentVersion = currentBranch.replace('release-', '');
+
+            const upcomingBranch = releaseBranches.find(branch => {
+              const branchVersion = branch.replace('release-', '');
+              const hasTag = versionTags.some(tag => tag.startsWith(branchVersion + '.'));
+
+              return !hasTag && branchVersion.localeCompare(currentVersion, undefined, { numeric: true }) > 0;
+            });
 
   test:
     needs: discover-branches
@@ -70,7 +83,7 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
-    name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"        
+    name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ${{ matrix.os }}
     env:
       DOCKER_COMPOSE_VERSION: v5.0.1
