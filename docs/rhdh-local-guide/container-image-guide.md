@@ -51,7 +51,7 @@ To use the [official release of RHDH](https://catalog.redhat.com/software/contai
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
 ```sh
-RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.9.2
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.9.3
 ```
 
 #### Using image digests
