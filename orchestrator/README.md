@@ -3,19 +3,37 @@
 > **Note:** All instructions in this guide apply to both Podman and Docker.
 > Replace `podman compose` with `docker compose` if you are using Docker.
 
-Before you begin, ensure to add the `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` file to the
-list of `includes` in your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable orchestrator plugins within RHDH.
-Example:
+Before you begin, ensure to add the orchestrator plugins to your `configs/dynamic-plugins/dynamic-plugins.override.yaml` to enable them within RHDH.
+Copy the [plugins](./configs/dynamic-plugins/dynamic-plugins.yaml#L5-L21)
+from `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml` directly into your override file. Example:
 
 ```yaml
-
 includes:
   - dynamic-plugins.default.yaml
-  - orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml # <-- to add to enable the Orchestrator plugins
 
-# Below you can add your own custom dynamic plugins, including local ones.
-plugins: []
+# Add the Orchestrator plugins directly, and add any other plugins you want to install, including local ones.
+plugins:
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:{{inherit}}'
+    disabled: false
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:{{inherit}}'
+    disabled: false
+    pluginConfig:
+      orchestrator:
+        dataIndexService:
+          url: http://sonataflow:8899
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:{{inherit}}'
+    disabled: false
+    pluginConfig:
+      orchestrator:
+        dataIndexService:
+          url: http://sonataflow:8899
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:{{inherit}}'
+    disabled: false
 ```
+
+> **Warning:** Do **not** use the `includes` directive to reference `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml`.
+> Due to a [known issue (RHDHBUGS-2779)](https://redhat.atlassian.net/browse/RHDHBUGS-2779), using `includes` for the orchestrator
+> dynamic plugins file prevents the Orchestrator profile from starting correctly.
 
 To set up the infrastructure for developing workflow with Orchestrator, you must merge and run these two compose files:
 [`compose.yaml`](../compose.yaml) and [`orchestrator/compose.yaml`](./compose.yaml) configs.
