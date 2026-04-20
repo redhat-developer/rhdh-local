@@ -149,12 +149,14 @@ After modifying configuration files, restart to apply changes:
 
 === "Podman"
     ```bash
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 **For plugin changes** (`configs/dynamic-plugins/dynamic-plugins.override.yaml`):
@@ -165,7 +167,8 @@ After modifying configuration files, restart to apply changes:
     podman compose run install-dynamic-plugins
 
     # Restart RHDH service
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
@@ -174,19 +177,22 @@ After modifying configuration files, restart to apply changes:
     docker compose run install-dynamic-plugins
 
     # Restart RHDH service
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 **For catalog entities** (`configs/catalog-entities/*.yaml`):
 
 === "Podman"
     ```bash
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 ### Validating Configuration
@@ -436,7 +442,7 @@ This removes:
 |-----------|--------|--------|
 | Start | `podman compose up -d` | `docker compose up -d` |
 | Stop | `podman compose down` | `docker compose down` |
-| Restart RHDH | `podman compose restart rhdh` | `docker compose restart rhdh` |
+| Restart RHDH | `podman compose stop rhdh`<br>`podman compose start rhdh` | `docker compose stop rhdh`<br>`docker compose start rhdh` |
 | Logs | `podman compose logs -f` | `docker compose logs -f` |
 | Status | `podman compose ps` | `docker compose ps` |
 | Clean up | `podman compose down -v --rmi all` | `docker compose down -v --rmi all` |

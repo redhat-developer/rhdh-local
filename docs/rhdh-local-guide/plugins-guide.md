@@ -66,13 +66,15 @@ You can use RHDH-local with a debugger to debug your backend plugins in VSCode. 
 === "Podman"
     ```sh
     # in rhdh-local directory
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```sh
     # in rhdh-local directory
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 7. Configure VSCode debugger to attach to the `rhdh` container.
