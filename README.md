@@ -50,7 +50,8 @@ After modifying the plugins configuration, for example after configuring plugins
 ```sh
 # Reinstall plugins and restart RHDH
 podman compose run install-dynamic-plugins  # or: docker compose run install-dynamic-plugins
-podman compose restart rhdh                  # or: docker compose restart rhdh
+podman compose stop rhdh                    # or: docker compose stop rhdh
+podman compose start rhdh                   # or: docker compose start rhdh
 ```
 
 ### Quick restart (No Plugin changes)
@@ -59,7 +60,8 @@ For configuration-only changes:
 
 ```sh
 # Just restart RHDH (if plugins haven't changed)
-podman compose restart rhdh  # or: docker compose restart rhdh
+podman compose stop rhdh   # or: docker compose stop rhdh
+podman compose start rhdh  # or: docker compose start rhdh
 ```
 
 ### Clean up
