@@ -65,19 +65,23 @@ After making configuration changes:
 === "Podman"
     ```bash
     # For app-config changes
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
 
     # For plugin changes
     podman compose run install-dynamic-plugins
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
     # For app-config changes
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
 
     # For plugin changes
     docker compose run install-dynamic-plugins
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```

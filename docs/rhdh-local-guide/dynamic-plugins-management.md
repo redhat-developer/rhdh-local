@@ -25,14 +25,16 @@ After making plugin changes through the UI, restart your local instance with the
     ```bash
     # Reinstall plugins and restart RHDH
     podman compose run install-dynamic-plugins
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
     # Reinstall plugins and restart RHDH
     docker compose run install-dynamic-plugins
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 This process typically may take a few minutes. You can monitor the startup progress in the container logs:
@@ -209,7 +211,8 @@ podman run --rm -it \
 
     # Reinstall plugins without clearing other data
     podman compose run install-dynamic-plugins
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
@@ -220,7 +223,8 @@ podman run --rm -it \
 
     # Reinstall plugins without clearing other data
     docker compose run install-dynamic-plugins
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 ## Applying Plugin Changes
@@ -233,14 +237,16 @@ After modifying the plugin configuration, for example after configuring plugins 
     ```bash
     # Reinstall plugins and restart RHDH
     podman compose run install-dynamic-plugins
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
     # Reinstall plugins and restart RHDH
     docker compose run install-dynamic-plugins
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 ### Quick Restart (No Plugin Changes)
@@ -250,11 +256,13 @@ For configuration-only changes:
 === "Podman"
     ```bash
     # Just restart RHDH (if plugins haven't changed)
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
     # Just restart RHDH (if plugins haven't changed)
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```

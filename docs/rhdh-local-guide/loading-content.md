@@ -37,13 +37,15 @@ After modifying `app-config.local.yaml`:
 === "Podman"
     ```bash
     # Restart RHDH to load new configuration
-    podman compose restart rhdh
+    podman compose stop rhdh
+    podman compose start rhdh
     ```
 
 === "Docker"
     ```bash
     # Restart RHDH to load new configuration
-    docker compose restart rhdh
+    docker compose stop rhdh
+    docker compose start rhdh
     ```
 
 ## Troubleshooting
