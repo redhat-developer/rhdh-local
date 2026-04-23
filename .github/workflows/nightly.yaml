@@ -33,6 +33,7 @@ jobs:
               repo: context.repo.repo,
             });
 
+            # Keep main and the latest 3 release branches (e.g. release-1.2, release-1.1, release-1.0) - to cover EOL branches and period between FF and GA of new releases
             const topReleaseBranches = branches
               .map(b => b.name)
               .filter(name => /^release-\d+\.\d+$/.test(name))
