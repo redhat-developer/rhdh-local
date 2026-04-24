@@ -218,7 +218,7 @@ For Output Constraints:
 Examples:
 - "AI Capabilities Summary" (Correct)
 - "Machine Learning Applications" (Correct)
-- "AI CAPABILITIES SUMMARY" (Incorrect---should not be fully uppercase)
+- "AI CAPABILITIES SUMMARY" (Incorrect—should not be fully uppercase)
 
 Processing Steps
 1. Analyze semantic structure
