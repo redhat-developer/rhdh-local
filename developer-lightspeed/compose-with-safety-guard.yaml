@@ -5,7 +5,7 @@ services:
   # Dedicated Ollama instance for the llama-guard safety model only
   # Uses a separate container name to avoid collision with the inference Ollama service
   safety-ollama:
-    image: docker.io/ollama/ollama:0.10.0
+    image: docker.io/ollama/ollama:0.21.2
     container_name: safety-ollama
     volumes:
       - safety_ollama_data:/root/.ollama
