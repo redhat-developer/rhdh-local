@@ -168,7 +168,7 @@ Follow these steps to configure and launch Developer Lightspeed.
     ENABLE_VERTEX_AI=true
     
     # REQUIRED: Absolute path to your Google Cloud credentials JSON file
-    GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/your/google-cloud-credentials.json
+    VERTEX_AI_CREDENTIALS_PATH=/absolute/path/to/your/google-cloud-credentials.json
     
     # REQUIRED: Your GCP project ID
     VERTEX_AI_PROJECT=your-gcp-project-id
@@ -183,7 +183,7 @@ Follow these steps to configure and launch Developer Lightspeed.
     > 2. A service account with appropriate permissions
     > 3. A service account key file (JSON) downloaded from GCP
     > 4. Set `VERTEX_AI_PROJECT` to your project ID
-    > 5. Set `GOOGLE_APPLICATION_CREDENTIALS` to the absolute path of your credentials JSON file
+    > 5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
 
     ---
 
