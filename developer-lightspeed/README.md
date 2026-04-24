@@ -146,11 +146,11 @@ Follow these steps to configure and launch Developer Lightspeed.
     # Enable Ollama provider
     ENABLE_OLLAMA=true
     
-    # REQUIRED: URL to your Ollama server
+    # REQUIRED: URL to your Ollama server (must end with /v1)
     # Examples:
-    #   - Local Ollama: http://host.docker.internal:11434
-    #   - Remote Ollama: https://your-ollama-server.com:11434
-    OLLAMA_URL=http://host.docker.internal:11434
+    #   - Local Ollama: http://host.docker.internal:11434/v1
+    #   - Remote Ollama: https://your-ollama-server.com:11434/v1
+    OLLAMA_URL=http://host.docker.internal:11434/v1
     ```
 
     > [!NOTE]

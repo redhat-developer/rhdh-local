@@ -46,6 +46,7 @@ services:
       - ./developer-lightspeed/configs/extra-files/config.yaml:/app-root/config.yaml:Z
       - rag_embeddings:/rag-content/embeddings_model
       - rag_vector_db:/rag-content/vector_db
+      - ${GOOGLE_APPLICATION_CREDENTIALS:-./developer-lightspeed/configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     env_file:
       - path: "./default.env"
         required: true

@@ -24,6 +24,7 @@ compose.override.yaml*
 !/developer-lightspeed/configs/extra-files/lightspeed-stack.yaml
 !/developer-lightspeed/configs/extra-files/config.yaml
 !/developer-lightspeed/configs/extra-files/rhdh-profile.py
+!/developer-lightspeed/configs/extra-files/templates
 
 
 # Kept for backward compatibility, but now Git-ignored
