@@ -69,7 +69,7 @@ services:
   # Default image: quay.io/lightspeed-core/lightspeed-stack:0.4.0
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.4.0} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.5.1} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core-service
     network_mode: "service:rhdh"
     depends_on:
