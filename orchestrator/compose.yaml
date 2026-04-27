@@ -9,8 +9,6 @@
 
 services:
   install-dynamic-plugins:
-    environment:
-      MAX_ENTRY_SIZE: "30000000"
     volumes:
       # Appended to the volumes of the 'install-dynamic-plugins' service defined in the main compose.yaml file
       - ./orchestrator/configs:/opt/app-root/src/orchestrator/configs:Z

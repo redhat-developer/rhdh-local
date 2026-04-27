@@ -5,7 +5,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-# Detect container runtime (podman or docker)
 detect_runtime() {
     if command -v podman &> /dev/null && podman ps &> /dev/null; then
         echo "podman"
@@ -16,76 +15,10 @@ detect_runtime() {
     fi
 }
 
-show_provider_menu() {
-    echo "=========================================="
-    echo "Developer Lightspeed Setup - Step 1/3"
-    echo "=========================================="
-    echo "Choose your LLM provider:"
-    echo ""
-    echo "1) Ollama (recommended for beginners)"
-    echo "   - Runs locally in a container"
-    echo "   - No additional configuration needed"
-    echo "   - Good for getting started quickly"
-    echo ""
-    echo "2) Bring your own model"
-    echo "   - Use external LLM provider (vLLM, OpenAI, or Vertex AI)"
-    echo "   - Requires configuration in .env file"
-    echo "   - Better performance and model options"
-    echo ""
-}
-
-show_safety_guard_menu() {
-    local provider=$1
-    local provider_name=""
-    
-    if [[ "$provider" == "1" ]]; then
-        provider_name="Ollama"
-    else
-        provider_name="your external model"
-    fi
-    
-    echo ""
-    echo "=========================================="
-    echo "Developer Lightspeed Setup - Step 2/3"
-    echo "=========================================="
-    echo "Choose safety guard for $provider_name:"
-    echo ""
-    echo "1) No safety guard"
-    echo "   - Allows any type of questions"
-    echo "   - General-purpose response with no safety content filtering"
-    echo "   - Recommended for users who know what they are doing"
-    echo ""
-    echo "2) With safety guard"
-    echo "   - Filters questions for safety content using Llama Guard"
-    echo "   - Automatically provisions llama-guard3:1b locally via Ollama"
-    echo "   - No additional configuration needed"
-    echo ""
-}
-
-validate_provider_choice() {
-    local choice=$1
-    if [[ ! "$choice" =~ ^[1-2]$ ]]; then
-        echo "❌ Invalid choice. Please enter 1 or 2."
-        echo ""
-        return 1
-    fi
-    return 0
-}
-
-validate_safety_guard_choice() {
-    local choice=$1
-    if [[ ! "$choice" =~ ^[1-2]$ ]]; then
-        echo "❌ Invalid choice. Please enter 1 or 2."
-        echo ""
-        return 1
-    fi
-    return 0
-}
-
 validate_runtime() {
     local runtime=$1
     if [[ "$runtime" != "podman" && "$runtime" != "docker" ]]; then
-        echo "❌ Invalid runtime. Please enter 'podman' or 'docker'."
+        echo "Invalid runtime. Please enter 'podman' or 'docker'."
         echo ""
         return 1
     fi
@@ -93,84 +26,35 @@ validate_runtime() {
 }
 
 execute_setup() {
-    local provider=$1
-    local safety_guard=$2
-    local runtime=$3
-    
+    local runtime=$1
+
     echo ""
-    echo "🚀 Starting Developer Lightspeed..."
+    echo "Starting Developer Lightspeed..."
     echo ""
-    
-    # Determine provider type
-    if [[ "$provider" == "1" ]]; then
-        # Ollama provider
-        if [[ "$safety_guard" == "1" ]]; then
-            # No safety guard
-            echo "📋 Configuration: Ollama (no safety guard)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml" up -d
-        else
-            # With safety guard (uses containerized Ollama for safety)
-            echo "📋 Configuration: Ollama (with safety guard)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-ollama.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-safety-guard-ollama.yaml" up -d
-        fi
-    else
-        # Bring your own model
-        if [[ "$safety_guard" == "1" ]]; then
-            # No safety guard
-            echo "📋 Configuration: External model (no safety guard)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" up -d
-        else
-            # With safety guard
-            echo "📋 Configuration: External model (with safety guard)"
-            $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose-with-safety-guard.yaml" up -d
-        fi
-    fi
-    
+
+    $runtime compose -f "$ROOT_DIR/compose.yaml" -f "$ROOT_DIR/developer-lightspeed/compose.yaml" up -d
+
     echo ""
-    echo "✅ Setup complete!"
+    echo "Setup complete!"
     echo ""
-    echo "🌐 Access Developer Lightspeed at: http://localhost:7007/lightspeed"
+    echo "Access Developer Lightspeed at: http://localhost:7007/lightspeed"
     echo ""
-    echo "📊 Check service status with: $runtime compose ps"
-    echo "📝 View logs with: $runtime logs <container-name>"
+    echo "Check service status with: $runtime compose ps"
+    echo "View logs with: $runtime logs <container-name>"
 }
 
 main() {
-    local provider=""
-    local safety_guard=""
     local runtime=""
-    
-    # Step 1: Choose provider
-    while true; do
-        show_provider_menu
-        read -p "Enter your choice (1-2): " -r provider
-        
-        if validate_provider_choice "$provider"; then
-            break
-        fi
-    done
-    
-    # Step 2: Choose safety_guard
-    while true; do
-        show_safety_guard_menu "$provider"
-        read -p "Enter your choice (1-2): " -r safety_guard
-        
-        if validate_safety_guard_choice "$safety_guard"; then
-            break
-        fi
-    done
-    
-    # Step 3: Detect or choose runtime
-    echo ""
+
     echo "=========================================="
-    echo "Developer Lightspeed Setup - Step 3/3"
+    echo "Developer Lightspeed Setup"
     echo "=========================================="
     echo "Detecting container runtime..."
-    
+
     runtime=$(detect_runtime)
-    
+
     if [[ -z "$runtime" ]]; then
-        echo "⚠️  Could not auto-detect runtime."
+        echo "Could not auto-detect runtime."
         echo "Container runtime detection failed."
         echo "Please choose manually:"
         echo ""
@@ -183,26 +67,26 @@ main() {
         elif [[ "$runtime_choice" == "2" ]]; then
             runtime="docker"
         else
-            echo "❌ Invalid choice. Exiting."
+            echo "Invalid choice. Exiting."
             exit 1
         fi
     else
-        echo "✅ Detected runtime: $runtime"
+        echo "Detected runtime: $runtime"
         echo ""
-        read -p "Press Enter to use $runtime, or type 'podman' or 'docker' to override:" -r override_runtime
-        
+        read -p "Press Enter to use $runtime, or type 'podman' or 'docker' to override: " -r override_runtime
+
         if [[ -n "$override_runtime" ]]; then
             if validate_runtime "$override_runtime"; then
                 runtime="$override_runtime"
-                echo "✅ Using runtime: $runtime"
+                echo "Using runtime: $runtime"
             else
-                echo "❌ Invalid choice. Exiting."
+                echo "Invalid choice. Exiting."
                 exit 1
             fi
         fi
     fi
-    
-    execute_setup "$provider" "$safety_guard" "$runtime"
+
+    execute_setup "$runtime"
 }
 
 main "$@"
