@@ -59,8 +59,6 @@ services:
     user: "root"
     entrypoint:
       - ./prepare-and-install-dynamic-plugins.sh
-    environment:
-      MAX_ENTRY_SIZE: "40000000"
     env_file:
       - path: "./default.env"
         required: true
