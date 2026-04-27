@@ -49,7 +49,8 @@ runs:
       run: |
         if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
         elif [ "$BRANCH" = "main" ]; then TAG="next"
-        else TAG="next-${BRANCH#release-}"; fi
+        elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
+        else TAG="next"; fi
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
@@ -83,7 +84,7 @@ runs:
       run: |
         # Add Docker's official GPG key:
         sudo apt-get update
-        sudo apt-get install ca-certificates curl
+        sudo apt-get install -y ca-certificates curl
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
