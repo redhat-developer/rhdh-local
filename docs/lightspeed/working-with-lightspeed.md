@@ -324,4 +324,4 @@ If you enabled query validation but it isn't filtering queries:
   podman compose up -d
   ```
 
-If your issue persists, please [open an issue on GitHub](https://github.com/redhat-developer/rhdh-local/issues) with details about your problem so we can help you troubleshoot.
+If your issue persists, please reach out on Slack in `#forum-rhdh` with details about your problem so we can help you troubleshoot.
