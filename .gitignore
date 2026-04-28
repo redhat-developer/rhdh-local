@@ -20,11 +20,10 @@ compose.override.yaml*
 # Extra-files
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
-/developer-lightspeed/configs/extra-files/*
-!/developer-lightspeed/configs/extra-files/lightspeed-stack.yaml
-!/developer-lightspeed/configs/extra-files/config.yaml
-!/developer-lightspeed/configs/extra-files/rhdh-profile.py
-!/developer-lightspeed/configs/extra-files/templates
+!/configs/extra-files/lightspeed-stack.yaml
+!/configs/extra-files/config.yaml
+!/configs/extra-files/rhdh-profile.py
+!/configs/extra-files/templates
 
 
 # Kept for backward compatibility, but now Git-ignored
