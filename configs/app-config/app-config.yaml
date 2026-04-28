@@ -141,12 +141,18 @@ backend:
     credentials: true
   csp:
    upgrade-insecure-requests: false
-   # CSP for Quay Images
    img-src:
     - "'self'"
     - "data:"
     - "https://quay.io"
     - "https://*.quay.io"
+    - "https://img.freepik.com"
+    - "https://cdn.dribbble.com"
+    - "https://avatars.githubusercontent.com"
+   script-src:
+     - "'self'"
+     - "'unsafe-eval'"
+     - "https://cdn.jsdelivr.net"
 # comment out the following 'database' section to use the PostgreSQL database
   database:
     client: better-sqlite3
@@ -240,3 +246,27 @@ proxy:
 quay:
   # The UI url for Quay, used to generate the link to Quay
   uiUrl: 'https://quay.io'
+
+# ==============================================================================
+# Developer Lightspeed Plugin Configuration
+# ==============================================================================
+# For detailed documentation, see: docs/lightspeed/working-with-lightspeed.md
+# Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
+# Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
+lightspeed:
+  # OPTIONAL: Custom user prompts displayed in the Lightspeed UI
+  # These appear as suggested questions/prompts to help users get started
+  # If not provided, the plugin uses built-in default prompts
+  prompts:
+    - title: 'Getting Started with Red Hat Developer Hub'
+      message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
+
+  # OPTIONAL: Port for the Lightspeed backend service
+  # Default: 8080
+  # Only change if you've configured a different port in lightspeed-stack.yaml
+  # servicePort: 8080
+
+  # OPTIONAL: Custom system prompt to override the default RHDH system prompt
+  # The system prompt defines the assistant's behavior and knowledge scope
+  # Default: Built-in RHDH-focused system prompt
+  # systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."

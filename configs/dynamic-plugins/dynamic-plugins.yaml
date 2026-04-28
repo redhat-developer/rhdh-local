@@ -26,7 +26,7 @@ plugins:
   # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-global-floating-action-button:{{inherit}}'
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
-    disabled: false
+    disabled: true # disabled as conflicts with Lightspeed FAB
     pluginConfig:
       dynamicPlugins:
         frontend:
@@ -83,3 +83,40 @@ plugins:
             # NOTE: the path needs to be writable by the main RHDH container user
             file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
   ########## End Extensions #################################
+
+  #########################################################
+  # Developer Lightspeed plugins
+  #########################################################
+
+  # Lightspeed frontend plugin
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.49.4__2.5.0'
+    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-lightspeed:
+            translationResources:
+              - importName: lightspeedTranslations
+                module: Alpha
+                ref: lightspeedTranslationRef
+            dynamicRoutes:
+              - path: /lightspeed
+                importName: LightspeedPage
+            mountPoints:
+              - mountPoint: application/listener
+                importName: LightspeedFAB
+              - mountPoint: application/provider
+                importName: LightspeedDrawerProvider
+              - mountPoint: application/internal/drawer-state
+                importName: LightspeedDrawerStateExposer
+                config:
+                  id: lightspeed
+              - mountPoint: application/internal/drawer-content
+                importName: LightspeedChatContainer
+                config:
+                  id: lightspeed
+                  priority: 100
+
+  # Lightspeed backend plugin
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.49.4__2.5.0'
+    disabled: false
