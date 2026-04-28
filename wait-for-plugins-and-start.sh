@@ -16,7 +16,6 @@ DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
 
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
-LIGHTSPEED_APP_CONFIG="developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml"
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
 
 USERS_OVERRIDE="configs/catalog-entities/users.override.yaml"
@@ -44,11 +43,6 @@ if [ -f "$USER_APP_CONFIG" ]; then
 elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
   echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to $USER_APP_CONFIG."
   EXTRA_CONFIGS="$LEGACY_USER_APP_CONFIG"
-fi
-
-if [ -f "$LIGHTSPEED_APP_CONFIG" ]; then
-  echo "Using lightspeed config: $LIGHTSPEED_APP_CONFIG"
-  EXTRA_CONFIGS="$EXTRA_CONFIGS $LIGHTSPEED_APP_CONFIG"
 fi
 
 EXTRA_CLI_ARGS=""
