@@ -1,0 +1,101 @@
+name: Nightly tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "34 23 * * *"
+
+concurrency:
+  group: ${{ github.workflow}}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Lint
+        run: |
+          npx --yes dclint .
+
+  # Finds new release branches at runtime; no workflow edit when new releases are created
+  discover-branches:
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.set-branches.outputs.branches }}
+    steps:
+      - uses: actions/github-script@v8
+        id: set-branches
+        with:
+          script: |
+            const branches = await github.paginate(github.rest.repos.listBranches, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            // Keep main and the latest 3 release branches (e.g. release-1.2, release-1.1, release-1.0) - to cover EOL branches and period between FF and GA of new releases
+            const topReleaseBranches = branches
+              .map(b => b.name)
+              .filter(name => /^release-\d+\.\d+$/.test(name))
+              .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+              .slice(0, 3);
+
+            core.setOutput('branches', JSON.stringify(['main', ...topReleaseBranches]));
+  test:
+    needs: discover-branches
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ fromJson(needs.discover-branches.outputs.branches) }}
+        os:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+        tool:
+          - docker
+          - podman
+        userConfig:
+          - "false"
+          - "true"
+        composeConfig:
+          - name: "default"
+            cliArgs: ""
+          - name: "corporate-proxy"
+            cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+          - name: "dynamic-plugins-root"
+            cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          - name: "orchestrator-workflow"
+            cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+          - name: "developer-lightspeed-minimal"
+            cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+          - name: "developer-lightspeed"
+            cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
+
+    name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{
+      matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' -
+      {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user
+      config' || '' }}"
+    runs-on: ${{ matrix.os }}
+    env:
+      DOCKER_COMPOSE_VERSION: v5.0.1
+      PODMAN_IMAGE: quay.io/podman/stable:v5
+      CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+
+    steps:
+      # Checkout a ref that contains .github/actions/*. schedule: github.ref_name is always the default branch.
+      # workflow_dispatch: use default_branch (trigger ref may be release-* without the composite on that branch).
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'schedule' && github.ref_name || format('{0}',
+            github.event.repository.default_branch || 'main') }}
+          fetch-depth: 1
+      - uses: ./.github/actions/rhdh-local-compose-test
+        with:
+          git_ref: ${{ matrix.branch }}
+          container_tool: ${{ matrix.tool }}
+          compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
+          compose_config_name: ${{ matrix.composeConfig.name }}
+          user_config_enabled: ${{ matrix.userConfig }}
+          docker_compose_version: ${{ env.DOCKER_COMPOSE_VERSION }}
+          podman_image: ${{ env.PODMAN_IMAGE }}
+          corporate_proxy_image: ${{ env.CORPORATE_PROXY_IMAGE }}
+          log_level: ${{ vars.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
