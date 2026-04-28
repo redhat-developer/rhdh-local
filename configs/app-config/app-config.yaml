@@ -258,8 +258,8 @@ lightspeed:
   # These appear as suggested questions/prompts to help users get started
   # If not provided, the plugin uses built-in default prompts
   prompts:
-  - title: 'Getting Started with Red Hat Developer Hub'
-    message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
+    - title: 'Getting Started with Red Hat Developer Hub'
+      message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
 
   # OPTIONAL: Port for the Lightspeed backend service
   # Default: 8080
