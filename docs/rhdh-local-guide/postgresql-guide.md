@@ -80,5 +80,4 @@ If you want to use PostgreSQL with RHDH, here are the steps:
          port: ${POSTGRES_PORT}
          user: ${POSTGRES_USER}
          password: ${POSTGRES_PASSWORD}
-         database: ${POSTGRES_DB}
    ```

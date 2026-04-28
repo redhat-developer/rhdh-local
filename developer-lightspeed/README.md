@@ -6,23 +6,23 @@ Developer Lightspeed provides a natural language interface within the RHDH conso
 
 
 ## Supported Architecture
-Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed-Core Service (LCS) and Llama Stack as sidecar containers.
+Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed Core.
+
+Developer Lightspeed uses a **Bring Your Own Model (BYOM)** architecture. No inference provider is bundled by default — you must configure at least one external LLM provider. The application starts in an unconfigured state and the UI will reflect this until a provider is set up.
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
 2. [Cleanup](#cleanup)
 3. [Troubleshooting](#troubleshooting)
 4. [Advanced Configuration Guides](#advanced-configuration-guides)
+5. [Maintainers](#maintainers)
 
 ---
 
 ## Getting Started
 
 > [!IMPORTANT]
-> Developer Lightspeed can be resource intensive on the model side because of the use of RAG and in some cases safety guard. If using the provided Ollama server locally you may encounter unforeseen responses if the model cannot handle the context. 
->
-> For best results it is recommended to provide your own external LLM provider.
-
+> Developer Lightspeed starts in an **unconfigured state** with no inference provider. You must configure at least one external LLM provider before you can use the chatbot. The UI will reflect the unconfigured state until a provider is set up.
 
 Follow these steps to configure and launch Developer Lightspeed.
 
@@ -52,34 +52,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    cp developer-lightspeed/configs/app-config/app-config.lightspeed.local.example.yaml developer-lightspeed/configs/app-config/app-config.lightspeed.local.yaml
    ```
 
-3. **Understanding the Setup Process**
-
-   The setup script (`start-lightspeed.sh`) uses a simple 2-step process to configure Developer Lightspeed:
-
-   **Step 1: Choose Your LLM Provider**
-   - **Ollama** (recommended for beginners): Uses the built-in Ollama container that runs locally. No additional configuration needed - the script handles everything automatically.
-   - **Bring Your Own Model**: Use your own external LLM provider (any OpenAI API compatible service). You must configure the environment variables for your chosen provider before starting.
-
-   **Step 2: Choose Safety Guard**
-   - **No safety guard**: Allows any type of questions - Developer Lightspeed acts as a general-purpose assistant with no safety content filtering.
-   - **With safety guard**: Enables Llama Guard for content safety filtering. A local Ollama container is automatically provisioned to run the safety model (`llama-guard3:1b` by default). No additional configuration is needed - the safety guard only supports llama-guard model variants.
-
-   > [!NOTE]
-   > **What does "Bring Your Own Model" mean?**
-   >
-   > This option allows you to use an external LLM service instead of the local Ollama container. Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
-   > - **vLLM**: A high-performance inference server (self-hosted or cloud)
-   > - **OpenAI**: OpenAI's API (GPT-3.5, GPT-4, etc.)
-   > - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
-   > - **Other compatible services**: Azure OpenAI, WatsonX, Amazon Bedrock, Mistral, Nvidia NIM, LM Studio, and other OpenAI API compatible services
-   >
-   > **Tested Providers**: Red Hat has tested and verified the following providers: vllm, ollama, openai, and vertex_ai. For other services, compatibility testing is the responsibility of the user. Red Hat has not performed testing on all OpenAI API compatible services.
-   >
-   > **Using Other OpenAI API Compatible Services**: If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, etc.), you can use the **vLLM provider configuration** (see Option A in step 4 below). Simply set `ENABLE_VLLM=true` and configure `VLLM_URL` to point to your service's endpoint.
-   >
-   > If you select "Bring Your Own Model" in step 1, you **must** configure at least one provider in step 4 below.
-
-4. **Set Environment Variables**
+3. **Set Environment Variables**
 
     > [!NOTE]
     > If you intend to use any environment variables in the Lightspeed Core configuration file, [lightspeed-stack.yaml](./configs/extra-files/lightspeed-stack.yaml), it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
@@ -97,26 +70,22 @@ Follow these steps to configure and launch Developer Lightspeed.
     ```
 
     > [!IMPORTANT]
-    > **Configuration Requirements:**
-    > - **If you selected Ollama in step 1**: You don't need to modify any environment variables. The defaults work out of the box.
-    > - **If you selected Ollama + "With safety guard"**: No configuration needed! The setup automatically pulls `llama-guard3:1b` and configures the safety URL.
-    > - **If you selected "Bring Your Own Model" in step 1**: You **must** configure at least one external LLM provider below before starting the application.
-    > - **If you selected "Bring Your Own Model" + "With safety guard"**: No safety configuration needed! A dedicated local Ollama container (`safety-ollama`) is automatically provisioned to run `llama-guard3:1b`. You only need to configure your external LLM provider.
-
-    ### Quick Reference: Setup Combinations → Required Configuration
-
-    | Provider | Safety Guard | Required Env Vars | Compose Files Used |
-    |----------|--------------|-------------------|-------------------|
-    | **Ollama** | No safety guard | None (defaults work) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` |
-    | **Ollama** | With safety guard | None (auto-configured) | `compose.yaml` + `developer-lightspeed/compose-with-ollama.yaml` + `developer-lightspeed/compose-with-safety-guard-ollama.yaml` |
-    | **Bring your own model** | No safety guard | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` + `developer-lightspeed/compose.yaml` |
-    | **Bring your own model** | With safety guard | At least one: vLLM, OpenAI, or Vertex AI | `compose.yaml` + `developer-lightspeed/compose.yaml` + `developer-lightspeed/compose-with-safety-guard.yaml` |
+    > You **must** configure at least one inference provider in your `.env` file before starting the application. Without a configured provider, Lightspeed will start in an unconfigured state and the chatbot will not be functional.
 
     ---
 
-    ### Configure External LLM Providers (Required if you selected "Bring Your Own Model")
+    ### Configure an Inference Provider
 
-    If you selected "Bring Your Own Model" in step 1, configure **at least one** of the following providers in your `.env` file:
+    Developer Lightspeed supports any service that is **OpenAI API compatible**. Configure **at least one** of the following providers in your `.env` file. You can enable multiple providers simultaneously.
+
+    > [!NOTE]
+    > **Supported Providers:**
+    > Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
+    > - **vLLM**: A high-performance inference server (self-hosted or cloud)
+    > - **OpenAI**: OpenAI's API (GPT-4, etc.)
+    > - **Ollama**: A locally or remotely hosted Ollama instance
+    > - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+    >
 
     #### **Option A: vLLM Provider (or Any OpenAI API Compatible Endpoint)**
 
@@ -159,7 +128,7 @@ Follow these steps to configure and launch Developer Lightspeed.
 
     #### **Option B: OpenAI Provider**
 
-    Use OpenAI's API to access GPT models (GPT-3.5, GPT-4, etc.).
+    Use OpenAI's API to access GPT models (GPT-4, etc.).
 
     ```env
     # Enable OpenAI provider
@@ -169,7 +138,25 @@ Follow these steps to configure and launch Developer Lightspeed.
     OPENAI_API_KEY=sk-your-openai-api-key-here
     ```
 
-    #### **Option C: Vertex AI Provider (Experimental)**
+    #### **Option C: Ollama Provider**
+
+    Use an externally hosted Ollama instance to serve models. You must run your own Ollama server separately — it is not bundled in the compose setup.
+
+    ```env
+    # Enable Ollama provider
+    ENABLE_OLLAMA=true
+    
+    # REQUIRED: URL to your Ollama server (must end with /v1)
+    # Examples:
+    #   - Local Ollama: http://host.docker.internal:11434/v1
+    #   - Remote Ollama: https://your-ollama-server.com:11434/v1
+    OLLAMA_URL=http://host.docker.internal:11434/v1
+    ```
+
+    > [!NOTE]
+    > Since Ollama runs outside the compose stack, you need to ensure the URL is accessible from within the containers. For a locally running Ollama, use `host.docker.internal` (Docker) or `host.containers.internal` (Podman) instead of `localhost`.
+
+    #### **Option D: Vertex AI Provider (Experimental)**
 
     Use Google Cloud's Vertex AI service to run Gemini models.
 
@@ -197,60 +184,47 @@ Follow these steps to configure and launch Developer Lightspeed.
     > 3. A service account key file (JSON) downloaded from GCP
     > 4. Set `VERTEX_AI_PROJECT` to your project ID
     > 5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
-    > 
-    > **Read more:** [Vertex AI Provider Documentation](https://llamastack.github.io/v0.2.18/providers/inference/remote_vertexai.html)
 
     ---
 
-    ### Safety Guard Configuration
+    ### Query Validation Configuration (Optional)
 
-    > [!TIP]
-    > **Safety guard is auto-configured for all provider combinations.** No manual safety configuration is needed regardless of whether you use Ollama or an external provider.
-
-    When you select "With safety guard", the setup automatically provisions a local Ollama container to run the safety model:
-
-    - **Ollama provider**: The safety model (`llama-guard3:1b`) is pulled into the same Ollama container used for inference.
-    - **Bring Your Own Model**: A dedicated `safety-ollama` container is spun up solely for the safety model. Your external provider handles inference while the local Ollama handles safety filtering.
-
-    > [!IMPORTANT]
-    > **The safety provider uses `inline::llama-guard`**, which means `SAFETY_MODEL` **must** be a llama-guard variant (e.g. `llama-guard3:1b`). Other model families will not work for safety filtering.
-
-    > [!NOTE]
-    > **Safety model latency:** The default safety model is now `llama-guard3:1b`. Depending on your local CPU/GPU setup and container runtime, safety checks may still add noticeable latency, and in some environments may be slower than expected.
+    Developer Lightspeed supports query validation, which restricts the chatbot to RHDH-related questions. When enabled, off-topic queries (e.g., asking about the weather) will be rejected while development-related questions are allowed.
 
     ```env
-    # OPTIONAL: Override the default safety guard model (default: llama-guard3:1b)
-    # Must be a llama-guard variant
-    SAFETY_MODEL=llama-guard3:1b
+    # Enable query validation
+    ENABLE_VALIDATION=true
+    
+    # REQUIRED if validation is enabled: Must be one of your enabled providers
+    # Example: if ENABLE_OPENAI=true, then set VALIDATION_PROVIDER=openai
+    VALIDATION_PROVIDER=openai
+    
+    # REQUIRED if validation is enabled: Must be an available model for the chosen provider
+    # Example: VALIDATION_MODEL_NAME=gpt-4o-mini
+    VALIDATION_MODEL_NAME=gpt-4o-mini
     ```
 
-    > [!WARNING]
-    > **Performance impact:** Running the llama-guard model locally can increase response latency, especially on machines with limited CPU, memory, or GPU resources. Every user message is evaluated by the safety model before being forwarded to the inference model, so constrained environments may experience noticeably slower responses. If you encounter this, consider increasing the memory allocated to your container runtime (see [Running Larger Models with Ollama](#running-larger-models-with-ollama)) or running without the guard.
+    > [!NOTE]
+    > The validation provider must be one of your enabled inference providers, and the model must be available on that provider.
 
-5. **Start the application**
+4. **Start the application**
 
-   To start the Developer Lightspeed interactive setup script, run the following from the root of the repository:
+   To start Developer Lightspeed, run the following from the root of the repository:
 
    ```bash
    bash ./developer-lightspeed/scripts/start-lightspeed.sh
    ```
 
-   The script will guide you through a simple 3-step process:
-   1. **Choose your LLM provider** (Ollama or Bring your own model)
-   2. **Choose safety guard** (No safety guard or With safety guard)
-   3. **Container runtime detection** (auto-detects podman or docker, prompts only if detection fails or to override)
+   The script will auto-detect your container runtime (podman or docker) and start the services. If auto-detection fails, it will prompt you to choose manually.
 
    > [!IMPORTANT]
-   > **Before starting:**
-   > - **Ollama provider**: No configuration needed - works out of the box (including with safety guard)
-   > - **Bring Your Own Model**: Ensure you've configured at least one external LLM provider in your `.env` file (see step 4 above)
-   > - **Bring Your Own Model + Safety Guard**: Only your external LLM provider needs configuration. The safety guard model is automatically provisioned locally via a dedicated `safety-ollama` container
+   > Ensure you have configured at least one inference provider in your `.env` file (see step 3 above) before starting. Without a provider, the chatbot will not be functional.
 
 
 ---
 
 
-6. **Verify that all services are running**
+5. **Verify that all services are running**
 
    After starting the application, make sure all services are running:
 
@@ -260,33 +234,17 @@ Follow these steps to configure and launch Developer Lightspeed.
    docker compose ps
    ```
 
-   Look for all services to show `running` or `Up (starting)` in the Status column, like:
+   Look for all services to show `running` or `Up` in the Status column. You should see output similar to:
 
+   | CONTAINER ID | IMAGE | CREATED | STATUS | NAMES |
+   |--------------|-------|---------|--------|-------|
+   | 31c3c681b742 | quay.io/rhdh-community/rhdh:next | 16 seconds ago | Exited (0) 5 seconds ago | rhdh-plugins-installer |
+   | f7b74b9f241e | quay.io/rhdh-community/rhdh:next | 4 seconds ago | Up 5 seconds (starting) | rhdh |
+   | a4e2b1f38d90 | quay.io/redhat-ai-dev/rag-content:release-1.9-... | 16 seconds ago | Exited (0) 10 seconds ago | rag-init |
+   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.5.1 | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
 
-   #### **A. Default setup (with Ollama):**
-   You should see output similar to:
-
-   | CONTAINER ID | IMAGE                                                          | COMMAND                | CREATED         | STATUS                    | PORTS                                                                                                         | NAMES                  |
-   |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
-   | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
-   | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
-   | 818ddf7fd045 | docker.io/ollama/ollama:latest                                 | ollama serve & ...     | 16 seconds ago  | Up 16 seconds (healthy)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 11434/tcp             | ollama                 |
-   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.4.0  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
-   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:0.1.4 | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
-
-   ---
-
-   #### **B. Minimal setup (own model server, no ollama):**
-   You should see output similar to:
-
-   | CONTAINER ID | IMAGE                                                          | COMMAND                | CREATED         | STATUS                    | PORTS                                                                                                         | NAMES                  |
-   |--------------|----------------------------------------------------------------|------------------------|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
-   | 31c3c681b742 | quay.io/rhdh-community/rhdh:next                               |                        | 16 seconds ago  | Exited (0) 5 seconds ago  | 8080/tcp                                                                                                      | rhdh-plugins-installer |
-   | f7b74b9f241e | quay.io/rhdh-community/rhdh:next                               |                        | 4 seconds ago   | Up 5 seconds (starting)   |  0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp              | rhdh                   |                                        |
-   | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.4.0  | python3.11 runner...   | 15 seconds ago  | Up 5 seconds (starting)   | 0.0.0.0:7007->7007/tcp, 127.0.0.1:9229->9229/tcp, 8080/tcp, 8443/tcp  | lightspeed-core-service      |
-   | 1572ghe259c0 | quay.io/redhat-ai-dev/llama-stack:0.1.4 | | 3 minutes ago  |  Up 3 minutes (healthy) |  7007/tcp, 127.0.0.1:9229->9229/tcp | llama-stack |
-
-   ---
+   - `rhdh-plugins-installer` and `rag-init` are init containers — they run once and exit with status `0`.
+   - `rhdh` and `lightspeed-core` should show `Up` or `running`.
 
    _Note: If any service is not running, you can inspect the logs:_
 
@@ -294,7 +252,7 @@ Follow these steps to configure and launch Developer Lightspeed.
    podman logs <container-name>
    ```
 
-7. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
+6. **Open** http://localhost:7007/lightspeed **in your browser to access Developer Lightspeed.**
 
    ![Developer Lightspeed](images/Developer-Lightspeed.png)
 
@@ -304,13 +262,13 @@ Follow these steps to configure and launch Developer Lightspeed.
 
 ### Quick Cleanup (Recommended)
 
-The easiest way to stop Developer Lightspeed is using the interactive stop script:
+The easiest way to stop Developer Lightspeed is using the stop script:
 
 ```bash
 bash ./developer-lightspeed/scripts/stop-lightspeed.sh
 ```
 
-**With volumes removal (non-interactive):**
+**With volumes removal:**
 ```bash
 bash ./developer-lightspeed/scripts/stop-lightspeed.sh -v
 # or
@@ -319,41 +277,22 @@ bash ./developer-lightspeed/scripts/stop-lightspeed.sh --volumes
 
 The script will:
 - Auto-detect your container runtime (podman or docker)
-- Detect which configuration is running
-- **Without `-v` flag**: Stops containers only (preserves volumes for faster restart)
-- **With `-v` flag**: Stops containers and removes volumes (complete cleanup)
+- **Without `-v` flag**: Stop containers only (preserves volumes for faster restart)
+- **With `-v` flag**: Stop containers and remove volumes (complete cleanup)
 
 ### Manual Cleanup
 
-If you prefer to stop containers manually, use the commands below based on your setup:
+If you prefer to stop containers manually:
 
-
-
-#### **A. Default setup (with Ollama)**
-
-##### **Without Safety Guard**
+**Stop containers only (preserves volumes):**
 ```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml down -v
+podman compose -f compose.yaml -f developer-lightspeed/compose.yaml down
 ```
 
-##### **With Safety Guard**
-```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml -f developer-lightspeed/compose-with-safety-guard-ollama.yaml down -v
-```
-
-#### **B. Minimal setup (own model server, no ollama)**
-
-##### **Without Safety Guard**
+**Stop containers and remove volumes:**
 ```bash
 podman compose -f compose.yaml -f developer-lightspeed/compose.yaml down -v
 ```
-
-##### **With Safety Guard**
-```bash
-podman compose -f compose.yaml -f developer-lightspeed/compose.yaml -f developer-lightspeed/compose-with-safety-guard.yaml down -v
-```
-
----
 
 > **Note:** All instructions in this guide apply to both Podman and Docker.  
 > Replace `podman compose` with `docker compose` if you are using Docker.
@@ -379,18 +318,14 @@ If you encounter issues while setting up or running Developer Lightspeed, try th
   - Port conflicts (another service is using the same port)
   - Insufficient memory or CPU resources
   - Incorrect environment variables
+  - Missing synced config files (run `sync-lightspeed-configs.sh` — see [Syncing Lightspeed Configuration Files](#syncing-lightspeed-configuration-files))
 
-### 2. "model requires more system memory than is available" Error
-
-- Increase the memory allocated to your Podman or Docker virtual machine.  
-  See the [Running Larger Models with Ollama](#running-larger-models-with-ollama) section for instructions.
-
-### 3. "Permission Denied" or File Access Errors
+### 2. "Permission Denied" or File Access Errors
 
 - Ensure you have the necessary permissions to access files and directories, especially when mounting volumes.
 - On Linux/macOS, you may need to adjust permissions with `chmod` or run commands with `sudo`.
 
-### 4. Web UI Not Accessible at http://localhost:7007/lightspeed
+### 3. Web UI Not Accessible at http://localhost:7007/lightspeed
 
 - Make sure all containers are running:
   ```bash
@@ -400,78 +335,96 @@ If you encounter issues while setting up or running Developer Lightspeed, try th
   ```
 - Check for firewall or VPN issues that may block access to localhost ports.
 
+### 4. Chatbot Shows Unconfigured State
+
+- Developer Lightspeed starts unconfigured by default. You must configure at least one inference provider in your `.env` file (see step 3).
+- **Verify provider is enabled**: Check that at least one of `ENABLE_VLLM=true`, `ENABLE_OPENAI=true`, `ENABLE_OLLAMA=true`, or `ENABLE_VERTEX_AI=true` is set in your `.env` file.
+- **Check required variables**: Ensure all required variables for your chosen provider are set.
+- **Verify connectivity**: Ensure the provider URL is accessible from within the container.
+- **Check logs**: Review `lightspeed-core` container logs for provider connection errors:
+  ```bash
+  podman logs lightspeed-core
+  # OR
+  docker logs lightspeed-core
+  ```
+- **Validate API keys**: Ensure API keys are correct and have proper permissions.
+
 ### 5. Environment Variables Not Set
 
-- Double-check that your `.env` or `default.env` files are present and correctly configured.
+- Double-check that your `.env` file is present and correctly configured.
 - Restart the containers after making changes to environment files.
 
-### 6. "Bring Your Own Model" Not Working
+### 6. Query Validation Not Working
 
-If you selected "Bring Your Own Model" in step 1 but the external LLM provider isn't working:
+If you enabled query validation but it isn't filtering queries:
 
-- **Verify provider is enabled**: Check that `ENABLE_VLLM=true`, `ENABLE_OPENAI=true`, or `ENABLE_VERTEX_AI=true` is set in your `.env` file
-- **Check required variables**: Ensure all required variables for your chosen provider are set (see step 4 above)
-- **Verify connectivity**: For vLLM, ensure the `VLLM_URL` is accessible from the container
-- **Check logs**: Review `llama-stack` container logs for provider connection errors:
-  ```bash
-  podman logs llama-stack
-  # OR
-  docker logs llama-stack
-  ```
-- **Validate API keys**: Ensure API keys are correct and have proper permissions
+- **Verify validation is enabled**: Check that `ENABLE_VALIDATION=true` is set in your `.env` file.
+- **Check provider**: Ensure `VALIDATION_PROVIDER` is set to one of your enabled inference providers.
+- **Check model**: Ensure `VALIDATION_MODEL_NAME` is set to a model available on the validation provider.
 
 ### 7. Still Stuck?
 
-- Try stopping and removing all containers, then starting again, see [cleanup](#cleanup).
+- Try stopping and removing all containers, then starting again — see [Cleanup](#cleanup).
 
-If your issue persists, please [open an issue on GitHub](https://github.com/your-org/your-repo/issues) with details about your problem so we can help you troubleshoot.
+If your issue persists, please [open an issue on GitHub](https://github.com/redhat-developer/rhdh-local/issues) with details about your problem so we can help you troubleshoot.
 
 
 
 ## Advanced Configuration Guides
 
-  ### Plugin Configuration Reference
+### Plugin Configuration Reference
 
-  Available configuration options:
+Available configuration options:
 
-  ```yaml
-  lightspeed:
-    # OPTIONAL: Custom users prompts displayed to users
-    # If not provided, the plugin uses built-in default prompts
-    prompts:
-      - title: <prompt_title>              # REQUIRED: Display title for the prompt
-        message: <prompt_message>          # REQUIRED: The actual prompt text/question
-    
-    # OPTIONAL: Backend-only configurations
-    servicePort: 8080                      # OPTIONAL: Port for lightspeed service (default: 8080)
-    systemPrompt: <custom_system_prompt>   # OPTIONAL: Override default RHDH system prompt
-  ```
+```yaml
+lightspeed:
+  # OPTIONAL: Custom users prompts displayed to users
+  # If not provided, the plugin uses built-in default prompts
+  prompts:
+    - title: <prompt_title>              # REQUIRED: Display title for the prompt
+      message: <prompt_message>          # REQUIRED: The actual prompt text/question
+  
+  # OPTIONAL: Backend-only configurations
+  servicePort: 8080                      # OPTIONAL: Port for lightspeed service (default: 8080)
+  systemPrompt: <custom_system_prompt>   # OPTIONAL: Override default RHDH system prompt
+```
 
-  #### Configuration Fields
+#### Configuration Fields
 
-  | Field | Type | Required | Default | Description |
-  |-------|------|----------|---------|-------------|
-  | `prompts` | Array | ❌ No | Built-in prompts | Custom welcome prompts for users |
-  | `prompts[].title` | String | ✅ Yes* | - | Display title for the prompt (*required if prompts array is provided) |
-  | `prompts[].message` | String | ✅ Yes* | - | The actual prompt text/question (*required if prompts array is provided) |
-  | `servicePort` | Number | ❌ No | `8080` | Port for lightspeed backend service |
-  | `systemPrompt` | String | ❌ No | RHDH default | Custom system prompt to override default behavior |
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `prompts` | Array | No | Built-in prompts | Custom welcome prompts for users |
+| `prompts[].title` | String | Yes* | - | Display title for the prompt (*required if prompts array is provided) |
+| `prompts[].message` | String | Yes* | - | The actual prompt text/question (*required if prompts array is provided) |
+| `servicePort` | Number | No | `8080` | Port for lightspeed backend service |
+| `systemPrompt` | String | No | RHDH default | Custom system prompt to override default behavior |
 
-  ### Example Configuration
+### Example Configuration
 
-  ```yaml
-  lightspeed:
-    prompts:
-      - title: "Quick Start"
-        message: "How do I enable a dynamic plugin?"
-    servicePort: 8080
-    systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
-  ```
+```yaml
+lightspeed:
+  prompts:
+    - title: "Quick Start"
+      message: "How do I enable a dynamic plugin?"
+  servicePort: 8080
+  systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
+```
 
+---
 
-### Running Larger Models with Ollama
+### Overriding the Lightspeed Core Image
 
-Some AI models require more memory than the default Podman machine allocation. If you encounter errors such as “model requires more system memory than is available,” you can increase the memory available to your Podman virtual machine:
+By default, the compose setup uses `quay.io/lightspeed-core/lightspeed-stack:0.5.1`. To use a different image (e.g., a newer version or a custom build), set the `LIGHTSPEED_CORE_IMAGE` environment variable in your `.env` file:
+
+```env
+LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:0.6.0
+```
+
+---
+
+### Increasing Container Runtime Memory
+
+If you encounter out-of-memory issues with the Lightspeed Core container, you can increase the memory available to your Podman or Docker virtual machine:
 
 ```bash
 podman machine stop
@@ -487,75 +440,30 @@ After increasing the memory, restart your containers to use the new limits.
 
 ---
 
-### How do I change the Ollama model?
+## Maintainers
 
-By default, the Ollama service pulls and loads the `llama3.2:1b` model.  
-To use a larger or different model, you can now specify the model name using the `OLLAMA_MODEL` environment variable. The Compose file supports a default value using the `${OLLAMA_MODEL:-llama3.2:1b}` syntax.
+### Syncing Lightspeed Configuration Files
 
-**Example in your Compose file:**
+The Lightspeed Core configuration files (`config.yaml`, `rhdh-profile.py`, `lightspeed-stack.yaml`) are maintained upstream in the [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs) repository. The sync script downloads them into `developer-lightspeed/configs/extra-files/`.
 
-```yaml
-command: >
-  "ollama serve &
-  sleep 5 &&
-  ollama pull ${OLLAMA_MODEL:-llama3.2:1b} &&
-  touch /tmp/ready &&
-  wait"
+**Sync from default (main branch):**
+```bash
+bash ./developer-lightspeed/scripts/sync-lightspeed-configs.sh
 ```
 
-- If you set `OLLAMA_MODEL` in your `.env` file or environment, that model will be used.
-- If not set, it will default to `llama3.2:1b`.
-- Example `.env` entry:
-  ```env
-  OLLAMA_MODEL=llama2:13b
-  ```
-- Make sure the model you choose fits within your available memory.
-
-> **Tip:** You can find available models and their memory requirements in the [Ollama model library](https://ollama.com/library).
-
----
-
-### Using Your Own Ollama Models from Your System
-
-If you have custom or pre-downloaded Ollama models on your local system, you can make them available to the Ollama container by mounting your host’s model directory into the container.
-
-#### **Step 1: Locate Your Ollama Model Directory**
-
-By default, Ollama stores models in:
-- **Linux/macOS:** `~/.ollama`
-- **Windows:** `%USERPROFILE%\.ollama`
-
-#### **Step 2: Mount the Directory in Your Compose File**
-
-You can set the path to your local `.ollama` directory using an environment variable in your `.env` file:
-
-**In your `.env` file:**
-```env
-OLLAMA_MODELS_PATH=/absolute/path/to/your/.ollama
+**Sync from a specific ref:**
+```bash
+bash ./developer-lightspeed/scripts/sync-lightspeed-configs.sh --ref v1.0.0
 ```
 
-**In your Compose file (already set up):**
-```yaml
-volumes:
-  - ${OLLAMA_MODELS_PATH:-ollama_data}:/root/.ollama
+**Sync from a different repository:**
+```bash
+bash ./developer-lightspeed/scripts/sync-lightspeed-configs.sh --repo your-org/your-fork
 ```
 
-- If you set `OLLAMA_MODELS_PATH` in your `.env` file, that directory will be mounted.
-- If not set, it will default to using the `ollama_data` volume.
+**Check if local files are up to date (dry run):**
+```bash
+bash ./developer-lightspeed/scripts/sync-lightspeed-configs.sh --check
+```
 
 ---
-
-#### **Step 3: Use Your Models in the Container**
-
-Once mounted, you can reference your model in the `ollama pull` command in the `developer-lightspeed/compose-with-ollama.yaml`. 
-
-Ollama will use the models from the mounted directory, so you don’t need to re-download them inside the container.
-
-> **Tip:** If you add new models to your local `.ollama` directory, they will automatically be available in the container after a restart.
-
----
-
-**This approach saves bandwidth, speeds up startup, and lets you use custom or fine-tuned models you've created locally.**
-
----
-

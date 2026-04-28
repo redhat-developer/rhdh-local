@@ -1,18 +1,16 @@
 services:
-  # Dynamic plugins installer: Mounts Lightspeed configs for plugin installation
   install-dynamic-plugins:
     volumes:
       - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
-  
-  # RHDH main service: Mounts Lightspeed configs for runtime access
+
   rhdh:
     volumes:
       - ./developer-lightspeed/configs:/opt/app-root/src/developer-lightspeed/configs:Z
-  
+
   # RAG initialization service: Copies RAG embeddings and vector database to shared volumes
-  # This runs once at startup to prepare the RAG data for Llama Stack
+  # This runs once at startup to prepare the RAG data for the lightspeed-core container
   rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.9-lcs'
+    image: 'quay.io/redhat-ai-dev/rag-content:release-1.9-lls-0.5.0-642c567fe10a62b5ff711654306b72912f341e05'
     container_name: rag-init
     user: "root"
     volumes:
@@ -28,27 +26,26 @@ services:
       chmod -R a+rwX /data/vector_db /data/embeddings_model && \
       echo 'Copy complete.'"
     restart: "no"
-  
-  # Llama Stack Service
-  # Provides the LLM inference and RAG capabilities for Developer Lightspeed
-  # Default image: quay.io/redhat-ai-dev/llama-stack:0.1.4
-  # To override: Set LLAMA_STACK_IMAGE in your .env file
-  llama-stack:
-    image: ${LLAMA_STACK_IMAGE:-quay.io/redhat-ai-dev/llama-stack:0.1.4} # dclint disable-line service-image-require-explicit-tag
-    container_name: llama-stack
+
+  # Lightspeed Core Service (Library Mode)
+  # Runs both Lightspeed Core and Llama Stack in a single container
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.5.1
+  # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
+  lightspeed-core:
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.5.1} # dclint disable-line service-image-require-explicit-tag
+    container_name: lightspeed-core
     network_mode: "service:rhdh"
     depends_on:
       rhdh:
         condition: service_started
+      rag-init:
+        condition: service_completed_successfully
     volumes:
-      # Llama Stack configuration file (no safety guard mode)
-      - ./developer-lightspeed/configs/extra-files/run-no-guard.yaml:/app-root/run.yaml:Z
-      # RAG embeddings model for vector search
+      - ./developer-lightspeed/configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
+      - ./developer-lightspeed/configs/extra-files/rhdh-profile.py:/app-root/rhdh-profile.py:Z
+      - ./developer-lightspeed/configs/extra-files/config.yaml:/app-root/config.yaml:Z
       - rag_embeddings:/rag-content/embeddings_model
-      # RAG vector database for document search
       - rag_vector_db:/rag-content/vector_db
-      # Vertex AI credentials (only used if ENABLE_VERTEX_AI=true)
-      # Set VERTEX_AI_CREDENTIALS_PATH in your .env file to your Google Cloud credentials JSON file path
       - ${VERTEX_AI_CREDENTIALS_PATH:-./developer-lightspeed/configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
@@ -58,35 +55,12 @@ services:
       - path: "./.env"
         required: false
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8321/v1/models || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/readiness"]
       interval: 5s
-      timeout: 5s
-      retries: 5
+      timeout: 3s
+      retries: 20
       start_period: 10s
-  
-  # Lightspeed Core Service
-  # Main service that handles conversation management and coordinates with Llama Stack
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.4.0
-  # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
-  lightspeed-core-service:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.4.0} # dclint disable-line service-image-require-explicit-tag
-    container_name: lightspeed-core-service
-    network_mode: "service:rhdh"
-    depends_on:
-      rhdh:
-        condition: service_started
-      llama-stack:
-        condition: service_healthy
-    volumes:
-      # Lightspeed Core Service configuration file
-      - ./developer-lightspeed/configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
-    env_file:
-      - path: "./default.env"
-        required: true
-      - path: "./.env"
-        required: false
 
 volumes:
-  user-data:
   rag_embeddings:
   rag_vector_db:

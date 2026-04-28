@@ -1,0 +1,226 @@
+#
+#
+# Copyright Red Hat
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+version: 3
+distro_name: developer-lightspeed-lls-0.5.x
+apis:
+  - agents
+  - inference
+  - safety
+  - tool_runtime
+  - vector_io
+  - files
+container_image:
+external_providers_dir: '/app-root/providers.d' #built into lcore image
+providers:
+  agents:
+    - config:
+        persistence:
+          agent_state:
+            namespace: agents
+            backend: kv_default
+          responses:
+            table_name: responses
+            backend: sql_default
+      provider_id: meta-reference
+      provider_type: inline::meta-reference
+  inference:
+    - provider_id: ${env.ENABLE_VLLM:+vllm}
+      provider_type: remote::vllm
+      config:
+        base_url: ${env.VLLM_URL:=}
+        api_token: ${env.VLLM_API_KEY:=}
+        max_tokens: ${env.VLLM_MAX_TOKENS:=4096}
+        network:
+          tls:
+            verify: ${env.VLLM_TLS_VERIFY:=true}
+    - provider_id: ${env.ENABLE_OLLAMA:+ollama}
+      provider_type: remote::ollama
+      config:
+        base_url: ${env.OLLAMA_URL:=http://localhost:11434/v1}
+    - provider_id: ${env.ENABLE_OPENAI:+openai}
+      provider_type: remote::openai
+      config:
+        api_key: ${env.OPENAI_API_KEY:=}
+    - provider_id: ${env.ENABLE_VERTEX_AI:+vertexai}
+      provider_type: remote::vertexai
+      config:
+        project: ${env.VERTEX_AI_PROJECT:=}
+        location: ${env.VERTEX_AI_LOCATION:=global}
+    - provider_id: sentence-transformers
+      provider_type: inline::sentence-transformers
+      config: {}
+  tool_runtime:
+    - provider_id: model-context-protocol
+      provider_type: remote::model-context-protocol
+      config: {}
+    - provider_id: rag-runtime
+      provider_type: inline::rag-runtime
+      config: {}
+  vector_io:
+    - provider_id: rhdh-docs
+      provider_type: inline::faiss
+      config:
+        persistence:
+          namespace: vector_io::faiss
+          backend: kv_rag
+    - provider_id: notebooks
+      provider_type: inline::faiss
+      config:
+        persistence:
+          namespace: vector_io::faiss
+          backend: kv_notebooks
+  files:
+    - provider_id: localfs
+      provider_type: inline::localfs
+      config:
+        storage_dir: /tmp/llama-stack-files
+        metadata_store:
+          table_name: files_metadata
+          backend: sql_default
+  safety:
+    - provider_id: ${env.ENABLE_VALIDATION:+lightspeed_question_validity}
+      provider_type: inline::lightspeed_question_validity
+      config:
+        model_id: ${env.VALIDATION_PROVIDER:=}/${env.VALIDATION_MODEL_NAME:=}
+        model_prompt: |-
+          Instructions:
+
+          You area question classification tool. You are an expert in the following categories:
+          - Backstage
+          - Red Hat Developer Hub (RHDH)
+          - Developer Lightspeed
+          - Lightspeed
+          - Artificial Intelligence (AI) Models
+          - Large Language Models (LLMs)
+          - Kubernetes
+          - Openshift
+          - CI/CD
+          - GitOps
+          - Pipelines
+          - Developer Portals
+          - Deployments
+          - Software Catalogs
+          - Software Templates
+          - Tech Docs
+
+          Your job is to determine if a user's question is related to the categories you are an expert in. If the question is related to those categories, \
+          or any features that may be related to those categories, you will answer with ${allowed}.
+
+          If a question is not related to your expert categories, answer with ${rejected}.
+
+          You do not need to explain your answer.
+
+          Below are some example questions:
+          Example Question:
+          Why is the sky blue?
+          Example Response:
+          ${rejected}
+
+          Example Question:
+          Can you help configure my cluster to automatically scale?
+          Example Response:
+          ${allowed}
+
+          Example Question:
+          How do I create import an existing software template in Backstage?
+          Example Response:
+          ${allowed}
+
+          Example Question:
+          How do I accomplish a task in RHDH?
+          Example Response:
+          ${allowed}
+
+          Example Question:
+          How do I explore a component in RHDH catalog?
+          Example Response:
+          ${allowed}
+
+          Example Question:
+          How can I integrate GitOps into my pipeline?
+          Example Response:
+          ${allowed}
+
+          Question:
+          ${message}
+          Response:
+        invalid_question_response: |-
+          Hi, I'm the Red Hat Developer Hub Lightspeed assistant, I can help you with questions about Red Hat Developer Hub or Backstage.
+          Please ensure your question is about these topics, and feel free to ask again!
+storage:
+  backends:
+    kv_default:
+      type: kv_sqlite
+      db_path: /tmp/kvstore.db
+    sql_default:
+      type: sql_sqlite
+      db_path: /tmp/sql_store.db
+    kv_rag:
+      type: kv_sqlite
+      db_path: /rag-content/vector_db/rhdh_product_docs/1.9/faiss_store.db
+    kv_notebooks:
+      type: kv_sqlite
+      db_path: /rag-content/vector_db/notebooks/faiss_store.db
+  stores:
+    metadata:
+      namespace: registry
+      backend: kv_default
+    inference:
+      table_name: inference_store
+      backend: sql_default
+      max_write_queue_size: 10000
+      num_writers: 4
+    conversations:
+      table_name: openai_conversations
+      backend: sql_default
+registered_resources:
+  models:
+    - model_id: sentence-transformers/all-mpnet-base-v2
+      metadata:
+        embedding_dimension: 768
+      model_type: embedding
+      provider_id: sentence-transformers
+      provider_model_id: /rag-content/embeddings_model
+  tool_groups:
+    - provider_id: rag-runtime
+      toolgroup_id: builtin::rag
+  vector_stores:
+    - vector_store_id: vs_cda156a6-64fe-436d-bc51-566fb1b09702 # see readme for this value
+      embedding_model: sentence-transformers//rag-content/embeddings_model
+      embedding_dimension: 768
+      provider_id: rhdh-docs
+  shields:
+    - shield_id: lightspeed_question_validity-shield
+      provider_id: ${env.ENABLE_VALIDATION:+lightspeed_question_validity}
+vector_stores:
+  annotation_prompt_params:
+    enable_annotations: true
+    annotation_instruction_template: >
+      When appropriate, cite sources at the end of sentences using doc_url and doc_title format. 
+      Citing sources is not always required because citations are handled externally. 
+      Never include any citation that is in the form '<| file-id |>'.
+  default_provider_id: rhdh-docs
+  default_embedding_model:
+    provider_id: sentence-transformers
+    model_id: /rag-content/embeddings_model
+server:
+  auth:
+  host:
+  port: 8321
+  quota:
+  tls_cafile:
+  tls_certfile:
+  tls_keyfile:
