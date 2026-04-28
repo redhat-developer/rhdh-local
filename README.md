@@ -79,7 +79,8 @@ If you would like to change your RHDH-Local setup, or add additional features or
 3. [Simulated Proxy Setup](docs/rhdh-local-guide/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
 4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
 5. [Orchestrator Workflow Guide](./orchestrator/README.md) - using Orchestrator with RHDH to develop workflows.
-6. [Developer Lightspeed Guide](./developer-lightspeed/README.md) - using Developer Lightspeed in RHDH Local.
+6. [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md) - configuring an LLM provider for the built-in Developer Lightspeed assistant.
+7. [Developer Lightspeed Maintainer Guide](./docs/lightspeed/maintaining-lightspeed.md) - maintaining and syncing Lightspeed configuration files.
 
 ## Contributing and reporting issues
 
