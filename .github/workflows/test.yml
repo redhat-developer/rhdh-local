@@ -68,7 +68,3 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
-          docker_compose_version: ${{ env.DOCKER_COMPOSE_VERSION }}
-          podman_image: ${{ env.PODMAN_IMAGE }}
-          corporate_proxy_image: ${{ env.CORPORATE_PROXY_IMAGE }}
-          log_level: ${{ vars.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
