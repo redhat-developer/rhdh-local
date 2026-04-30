@@ -31,6 +31,10 @@ inputs:
     description: If set, override the RHDH tag with the value of this input
     required: false
     default: ""
+  actions_runner_debug:
+    description: Adding actions_runner_debug variable value
+    required: false
+    default: "false"
   log_level:
     description: Log level to use
     required: false
@@ -54,11 +58,6 @@ runs:
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
-
-    - uses: actions/checkout@v6
-      with:
-        ref: ${{ inputs.git_ref }}
-        fetch-depth: 0
         
     - name: Remove Conflicting Packages
       shell: bash
@@ -80,7 +79,7 @@ runs:
     - name: Update Docker version
       shell: bash
       env:
-        DOCKER_COMPOSE_VERSION: ${{ inputs.docker_compose_version }}
+        DOCKER_COMPOSE_VERSION: v5.0.1
       run: |
         # Add Docker's official GPG key:
         sudo apt-get update
@@ -114,11 +113,11 @@ runs:
       if: ${{ inputs.container_tool == 'podman' }}
       uses: rm3l/setup-containerized-podman@7e2e9a2ddc2da87cbe754c0ed8975b7368388f56 # v2.0.0
       with:
-        podman-image: ${{ inputs.podman_image }}
+        podman-image: quay.io/podman/stable:v5
         compose-provider: docker-compose
-        docker-compose-version: ${{ inputs.docker_compose_version }}
+        docker-compose-version: v5.0.1
         env: |
-          CORPORATE_PROXY_IMAGE=${{ inputs.corporate_proxy_image }}
+          CORPORATE_PROXY_IMAGE=docker.io/ubuntu/squid:latest
 
     - name: Display container engine version
       shell: bash
@@ -149,7 +148,7 @@ runs:
       shell: bash
       env:
         # https://docs.github.com/en/actions/how-tos/monitor-workflows/enable-debug-logging#enabling-runner-diagnostic-logging
-        LOG_LEVEL: ${{ inputs.log_level }}
+        LOG_LEVEL: ${{ env.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
       run: |
         # Custom .env file
         cat <<EOF > .env
