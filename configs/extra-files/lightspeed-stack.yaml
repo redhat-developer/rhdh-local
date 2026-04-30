@@ -15,7 +15,7 @@
 # limitations under the License.
 name: lightspeed-core-stack
 service:
-  host: 0.0.0.0
+  host: ${env.SERVICE_HOST:=127.0.0.1}
   port: 8080
   auth_enabled: false
   workers: 1

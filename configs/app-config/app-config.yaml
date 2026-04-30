@@ -270,3 +270,8 @@ lightspeed:
   # The system prompt defines the assistant's behavior and knowledge scope
   # Default: Built-in RHDH-focused system prompt
   # systemPrompt: "You are a helpful assistant focused on Red Hat Developer Hub development."
+  notebooks:
+    enabled: false
+    queryDefaults:
+      model: ${NOTEBOOKS_QUERY_MODEL} # Model to use for answering queries. Must map to a model available through the provider set in $NOTEBOOKS_QUERY_PROVIDER_ID
+      provider_id: ${NOTEBOOKS_QUERY_PROVIDER_ID} # AI provider for the query model. Must map to a provider enabled in your Lightspeed config.yaml

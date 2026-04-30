@@ -113,6 +113,7 @@ services:
       - ${VERTEX_AI_CREDENTIALS_PATH:-./configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
+      SERVICE_HOST: 0.0.0.0
     env_file:
       - path: "./default.env"
         required: true
