@@ -67,8 +67,6 @@ jobs:
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
           - name: "developer-lightspeed-minimal"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
-          - name: "developer-lightspeed"
-            cliArgs: "-f compose.yaml -f developer-lightspeed/compose-with-ollama.yaml"
 
     name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{
       matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' -
