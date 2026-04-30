@@ -79,14 +79,14 @@ jobs:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+      ACTIONS_RUNNER_DEBUG: ${{ vars.ACTIONS_RUNNER_DEBUG }}
 
     steps:
       # Checkout a ref that contains .github/actions/*. schedule: github.ref_name is always the default branch.
       # workflow_dispatch: use default_branch (trigger ref may be release-* without the composite on that branch).
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'schedule' && github.ref_name || format('{0}',
-            github.event.repository.default_branch || 'main') }}
+          ref: ${{ matrix.branch }}
           fetch-depth: 1
       - uses: ./.github/actions/rhdh-local-compose-test
         with:
@@ -95,7 +95,3 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
-          docker_compose_version: ${{ env.DOCKER_COMPOSE_VERSION }}
-          podman_image: ${{ env.PODMAN_IMAGE }}
-          corporate_proxy_image: ${{ env.CORPORATE_PROXY_IMAGE }}
-          log_level: ${{ vars.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
