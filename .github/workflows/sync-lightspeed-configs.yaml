@@ -1,0 +1,88 @@
+name: Sync Lightspeed Configs
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  sync-lightspeed:
+    name: Sync Lightspeed Configs
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync Lightspeed config files
+        run: ./scripts/sync-lightspeed-configs.sh
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet configs/extra-files/; then
+            echo "No changes from upstream."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changes detected from upstream."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit changes and open PR
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="chore(lightspeed): sync config files from upstream"
+          BRANCH="chore/sync-lightspeed-configs"
+
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
+
+          git checkout -b "${BRANCH}"
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No staged changes to commit."
+            exit 0
+          fi
+          git commit -m "${TITLE}"
+
+          if [ -n "${EXISTING_PR}" ]; then
+            echo "Updating existing PR #${EXISTING_PR}."
+            git push --force origin "${BRANCH}"
+          else
+            git push origin "${BRANCH}"
+
+            BODY=$(cat <<EOF
+          Automated nightly sync of Lightspeed config files from [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs).
+
+          ### Synced files
+          - \`configs/extra-files/lightspeed-stack.yaml\`
+          - \`configs/extra-files/config.yaml\`
+          - \`configs/extra-files/rhdh-profile.py\`
+
+          > [!CAUTION]
+          > Please review the upstream changes carefully before merging.
+          EOF
+            )
+
+            gh pr create \
+              --title "${TITLE}" \
+              --body "${BODY}" \
+              --base "${{ github.ref_name }}"
+          fi
