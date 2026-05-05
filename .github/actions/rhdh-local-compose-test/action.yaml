@@ -1,5 +1,6 @@
 name: "Test Composite Action"
-description: "Sets RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection for testing purposes"
+description: "Sets RHDH_TAG and RHDH_IMAGE based on the branch name for
+  container image selection for testing purposes"
 
 inputs:
   git_ref:
@@ -16,7 +17,7 @@ inputs:
     description: Compose config name to use (e.g. default, dynamic-plugins-root)
     required: true
   user_config_enabled:
-    description: '"true or false" to enable user-specific configuration'
+    description: "\"true or false\" to enable user-specific configuration"
     required: true
   docker_compose_version:
     description: Version of docker-compose to install
@@ -40,25 +41,34 @@ inputs:
     required: false
     default: "info"
 
-
 runs:
   using: "composite"
   steps:
     # Set RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection
-    - name: Set RHDH tag and image
+    - name: Set RHDH tag, image and catalog index
       shell: bash
       env:
         INPUT_TAG: ${{ inputs.rhdh_tag_override }}
         BRANCH: ${{ inputs.git_ref }}
       run: |
-        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
+        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG" 
         elif [ "$BRANCH" = "main" ]; then TAG="next"
         elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
         else TAG="next"; fi
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
-        
+
+        # Extract CATALOG_INDEX_IMAGE from default.env if it exists, and set as environment variable for use in tests (e.g. for pull-through cache testing)
+        if [ -f "default.env" ] && grep -q "^CATALOG_INDEX_IMAGE=" default.env; then
+          CATALOG_IMAGE=$(grep "^CATALOG_INDEX_IMAGE=" default.env | cut -d '=' -f2-)
+
+          echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
+          echo "Set CATALOG_INDEX_IMAGE from default.env: $CATALOG_IMAGE"
+        else
+          echo "CATALOG_INDEX_IMAGE not found in default.env, skipping"
+        fi
+
     - name: Remove Conflicting Packages
       shell: bash
       run: |
