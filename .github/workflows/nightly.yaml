@@ -65,7 +65,7 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
-          - name: "developer-lightspeed-minimal"
+          - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
 
     name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{
