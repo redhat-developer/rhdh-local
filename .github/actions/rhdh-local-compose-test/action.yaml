@@ -63,7 +63,7 @@ runs:
         if [ -f "default.env" ] && grep -q "^CATALOG_INDEX_IMAGE=" default.env; then
           CATALOG_IMAGE=$(grep "^CATALOG_INDEX_IMAGE=" default.env | cut -d '=' -f2-)
 
-          echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
+          # echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
           echo "Set CATALOG_INDEX_IMAGE from default.env: $CATALOG_IMAGE"
         else
           echo "CATALOG_INDEX_IMAGE not found in default.env, skipping"
