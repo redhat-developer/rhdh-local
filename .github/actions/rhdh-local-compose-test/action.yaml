@@ -59,16 +59,6 @@ runs:
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
 
-        # Extract CATALOG_INDEX_IMAGE from default.env if it exists, and set as environment variable for use in tests (e.g. for pull-through cache testing)
-        if [ -f "default.env" ] && grep -q "^CATALOG_INDEX_IMAGE=" default.env; then
-          CATALOG_IMAGE=$(grep "^CATALOG_INDEX_IMAGE=" default.env | cut -d '=' -f2-)
-
-          # echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
-          echo "Set CATALOG_INDEX_IMAGE from default.env: $CATALOG_IMAGE"
-        else
-          echo "CATALOG_INDEX_IMAGE not found in default.env, skipping"
-        fi
-
     - name: Remove Conflicting Packages
       shell: bash
       run: |
