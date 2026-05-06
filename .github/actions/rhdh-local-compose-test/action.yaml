@@ -1,0 +1,260 @@
+name: "Test Composite Action"
+description: "Sets RHDH_TAG and RHDH_IMAGE based on the branch name for
+  container image selection for testing purposes"
+
+inputs:
+  git_ref:
+    description: Branch to checkout (e.g. main, release-1.0, release-1.1)
+    required: true
+  container_tool:
+    description: Container tool to use (e.g. docker, podman)
+    required: true
+  compose_cli_args:
+    description: Args for `docker compose` or `podman compose` command
+    required: false
+    default: ""
+  compose_config_name:
+    description: Compose config name to use (e.g. default, dynamic-plugins-root)
+    required: true
+  user_config_enabled:
+    description: "\"true or false\" to enable user-specific configuration"
+    required: true
+  docker_compose_version:
+    description: Version of docker-compose to install
+    required: true
+  podman_image:
+    description: Image to use for Podman container
+    required: true
+  corporate_proxy_image:
+    description: Image to use for Corporate Proxy container
+    required: true
+  rhdh_tag_override:
+    description: If set, override the RHDH tag with the value of this input
+    required: false
+    default: ""
+  actions_runner_debug:
+    description: Adding actions_runner_debug variable value
+    required: false
+    default: "false"
+  log_level:
+    description: Log level to use
+    required: false
+    default: "info"
+
+runs:
+  using: "composite"
+  steps:
+    # Set RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection
+    - name: Set RHDH tag, image and catalog index
+      shell: bash
+      env:
+        INPUT_TAG: ${{ inputs.rhdh_tag_override }}
+        BRANCH: ${{ inputs.git_ref }}
+      run: |
+        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG" 
+        elif [ "$BRANCH" = "main" ]; then TAG="next"
+        elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
+        else TAG="next"; fi
+
+        echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
+        echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
+
+    - name: Remove Conflicting Packages
+      shell: bash
+      run: |
+        # Remove any previous installations of Podman and Docker
+        for pkg in docker.io \
+            docker-doc \
+            docker-compose \
+            docker-compose-v2 \
+            podman-docker \
+            containerd \
+            crun \
+            runc \
+            buildah \
+          ; do
+          sudo apt-get remove --purge -y $pkg || true
+        done
+
+    - name: Update Docker version
+      shell: bash
+      env:
+        DOCKER_COMPOSE_VERSION: v5.0.1
+      run: |
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install -y ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        # Add the repository to Apt sources:
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce \
+          docker-ce-cli \
+          containerd.io \
+          docker-buildx-plugin
+
+        # Install standalone docker-compose for consistent version across docker/podman tests
+        echo "Installing docker-compose $DOCKER_COMPOSE_VERSION..."
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$(uname -m)" \
+          -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        # Also install as Docker CLI plugin
+        sudo mkdir -p /usr/local/lib/docker/cli-plugins
+        sudo ln -sf /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
+
+    - name: Setup Podman container environment
+      id: setup-podman
+      if: ${{ inputs.container_tool == 'podman' }}
+      uses: rm3l/setup-containerized-podman@7e2e9a2ddc2da87cbe754c0ed8975b7368388f56 # v2.0.0
+      with:
+        podman-image: quay.io/podman/stable:v5
+        compose-provider: docker-compose
+        docker-compose-version: v5.0.1
+        env: |
+          CORPORATE_PROXY_IMAGE=docker.io/ubuntu/squid:latest
+
+    - name: Display container engine version
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+      run: |
+        echo "*** $TOOL version ***"
+        $TOOL version
+        echo
+        echo "*** $TOOL compose version ***"
+        $TOOL compose version
+
+    - name: ${{ inputs.container_tool }} info
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+      run: $TOOL info
+
+    - name: Compose config
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: $TOOL compose $CLI_ARGS config
+
+    - name: Add user-specific configuration
+      if: ${{ inputs.user_config_enabled == 'true' }}
+      shell: bash
+      env:
+        # https://docs.github.com/en/actions/how-tos/monitor-workflows/enable-debug-logging#enabling-runner-diagnostic-logging
+        LOG_LEVEL: ${{ env.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
+      run: |
+        # Custom .env file
+        cat <<EOF > .env
+        LOG_LEVEL=$LOG_LEVEL
+        ROARR_LOG=true
+        NODE_DEBUG=fetch
+
+        GITHUB_APP_APP_ID=123456
+        GITHUB_APP_CLIENT_ID=MY_GITHUB_APP_CLIENT_ID
+        GITHUB_APP_CLIENT_SECRET=MY_GITHUB_APP_CLIENT_SECRET
+        GITHUB_APP_WEBHOOK_SECRET=MY_GITHUB_APP_WEBHOOK_SECRET
+        GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nxxx\n-----END RSA PRIVATE KEY-----" # notsecret
+
+        EOF
+
+        # Custom dynamic-plugins.override.yaml
+        cat <<EOF > configs/dynamic-plugins/dynamic-plugins.override.yaml
+        includes: [dynamic-plugins.default.yaml]
+        plugins:
+        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
+          disabled: false
+        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
+          disabled: false
+        EOF
+
+        # Custom extra files
+        cp -vr configs/extra-files/github-app-credentials.example.yaml configs/extra-files/github-app-credentials.yaml
+
+        # Custom app-config.local.yaml
+        cp -vr configs/app-config/app-config.local.example.yaml configs/app-config/app-config.local.yaml
+
+        # Custom users.override.yaml
+        cp configs/catalog-entities/users.override.example.yaml configs/catalog-entities/users.override.yaml
+
+        # Custom components.override.yaml
+        cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
+
+    - name: Create dynamic plugins directory
+      if: ${{ inputs.compose_config_name == 'dynamic-plugins-root' }}
+      shell: bash
+      run: |
+        mkdir -p dynamic-plugins-root
+
+    - name: Start app
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        $TOOL compose $CLI_ARGS up --detach --quiet-pull
+        $TOOL compose $CLI_ARGS ps
+
+    - name: Wait for HTTP 200 response from homepage
+      shell: bash
+      run: |
+        max=50
+        i=0
+        echo "Waiting for localhost to respond with status code 200..."
+        until curl -i --head --fail http://localhost:7007; do
+          i=$((i+1))
+          if [ "$i" -ge "$max" ]; then
+            echo "[$(date)] Max retries reached. Exiting. Take a look at the logs in the step below."
+            exit 1
+          fi
+          echo "($i/$max) [$(date)] Waiting for http://localhost:7007 to return HTTP 200..."
+          sleep 10
+        done
+        echo "[$(date)] RHDH is ready"
+        curl -i --insecure http://localhost:7007
+
+    - name: curl from RHDH Container (for troubleshooting)
+      if: failure()
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        $TOOL exec rhdh curl -i --head --fail http://localhost:7007
+
+    - name: Compose logs
+      if: always()
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        for svc in $($TOOL compose $CLI_ARGS config --services | sort); do
+          echo "*** $svc ***"
+          $TOOL compose $CLI_ARGS logs --timestamps "$svc" || true
+          echo "************"
+          echo
+        done
+
+    - name: Tear down
+      if: always()
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        $TOOL compose $CLI_ARGS ps || true
+        $TOOL compose $CLI_ARGS down --volumes || true
+
+    - name: Cleanup Podman container environment
+      if: ${{ always() && inputs.container_tool == 'podman' }}
+      shell: bash
+      run: |
+        docker container stop ${{ steps.setup-podman.outputs.container-name }} || true
+        docker container rm ${{ steps.setup-podman.outputs.container-name }} || true
