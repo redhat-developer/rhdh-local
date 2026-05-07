@@ -207,6 +207,13 @@ runs:
       run: |
         mkdir -p dynamic-plugins-root
 
+    - name: Create .env file to override defaults
+      shell: bash
+      run: |
+        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
+        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
+        cat .env
+
     - name: Start app
       shell: bash
       env:
