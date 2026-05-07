@@ -155,6 +155,7 @@ runs:
       env:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
+        CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
       run: $TOOL compose $CLI_ARGS config
 
     - name: Add user-specific configuration
@@ -211,6 +212,7 @@ runs:
       env:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
+        CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
       run: |
         $TOOL compose $CLI_ARGS up --detach --quiet-pull
         $TOOL compose $CLI_ARGS ps
