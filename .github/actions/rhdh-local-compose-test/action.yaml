@@ -65,8 +65,6 @@ runs:
           CATALOG_IMAGE="quay.io/rhdh/plugin-catalog-index:$CATALOG_TAG"
           echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
           echo "Set CATALOG_INDEX_IMAGE based on branch name: $CATALOG_IMAGE"
-
-
         elif [ -f "default.env" ] && grep -q "^CATALOG_INDEX_IMAGE=" default.env; then
           CATALOG_IMAGE=$(grep "^CATALOG_INDEX_IMAGE=" default.env | cut -d '=' -f2-)
           echo "CATALOG_INDEX_IMAGE=$CATALOG_IMAGE" >> "$GITHUB_ENV"
