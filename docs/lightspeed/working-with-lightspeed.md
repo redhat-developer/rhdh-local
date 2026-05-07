@@ -4,7 +4,7 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Lightspeed is included by default when you start RHDH Local. No additional setup scripts or compose files are required.
+Developer Lightspeed is included in RHDH Local via the `lightspeed` compose profile. Start RHDH Local with `--profile lightspeed` to enable it — no additional setup scripts or compose files are required.
 
 ## Supported Architecture
 
@@ -24,8 +24,9 @@ Developer Lightspeed uses a **Bring Your Own Model (BYOM)** architecture. No inf
 
 ## Configure an Inference Provider
 
-> [!IMPORTANT]
-> You **must** configure at least one inference provider in your `.env` file before the chatbot will be functional. Without a configured provider, Lightspeed will start in an unconfigured state.
+!!! important
+  
+    You **must** configure at least one inference provider in your `.env` file before the chatbot will be functional. Without a configured provider, Lightspeed will start in an unconfigured state.
 
 Developer Lightspeed supports any service that is **OpenAI API compatible**. Configure **at least one** of the following providers in your `.env` file. You can enable multiple providers simultaneously.
 
@@ -35,22 +36,24 @@ If you don't already have a `.env` file, create one from the template:
 cp default.env .env
 ```
 
-> [!NOTE]
-> **Supported Providers:**
-> Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
-> - **vLLM**: A high-performance inference server (self-hosted or cloud)
-> - **OpenAI**: OpenAI's API (GPT-4, etc.)
-> - **Ollama**: A locally or remotely hosted Ollama instance
-> - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+!!! note
 
-> [!NOTE]
-> If you intend to use any environment variables in the Lightspeed Core configuration file, [lightspeed-stack.yaml](../../configs/extra-files/lightspeed-stack.yaml), it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
->
-> `${env.VAR}`
->
-> `${env.VAR:=default-value}`
->
-> `${env.VAR:+value}`
+    **Supported Providers:**
+    Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
+    - **vLLM**: A high-performance inference server (self-hosted or cloud)
+    - **OpenAI**: OpenAI's API (GPT-4, etc.)
+    - **Ollama**: A locally or remotely hosted Ollama instance
+    - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+
+!!! note
+
+    If you intend to use any environment variables in the Lightspeed Core configuration file, `lightspeed-stack.yaml`, it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
+
+    `${env.VAR}`
+
+    `${env.VAR:=default-value}`
+
+    `${env.VAR:+value}`
 
 ---
 
@@ -83,15 +86,16 @@ VLLM_API_KEY=your-api-key-here
 # VLLM_TLS_VERIFY=true
 ```
 
-> [!TIP]
-> **Using Other OpenAI API Compatible Services:**
-> 
-> If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.), you can use the **vLLM provider configuration** above. Simply:
-> 1. Set `ENABLE_VLLM=true`
-> 2. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
-> 3. Set `VLLM_API_KEY` to your service's API key (if required)
-> 
-> The `remote::vllm` provider type accepts any OpenAI API compatible endpoint, not just vLLM servers.
+!!! tip
+
+    **Using Other OpenAI API Compatible Services:**
+
+    If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.), you can use the **vLLM provider configuration** above. Simply:
+    1. Set `ENABLE_VLLM=true`
+    2. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
+    3. Set `VLLM_API_KEY` to your service's API key (if required)
+
+    The `remote::vllm` provider type accepts any OpenAI API compatible endpoint, not just vLLM servers.
 
 ### Option B: OpenAI Provider
 
@@ -120,15 +124,17 @@ ENABLE_OLLAMA=true
 OLLAMA_URL=http://host.docker.internal:11434/v1
 ```
 
-> [!NOTE]
-> Since Ollama runs outside the compose stack, you need to ensure the URL is accessible from within the containers. For a locally running Ollama, use `host.docker.internal` (Docker) or `host.containers.internal` (Podman) instead of `localhost`.
+!!! note
+  
+    Since Ollama runs outside the compose stack, you need to ensure the URL is accessible from within the containers. For a locally running Ollama, use `host.docker.internal` (Docker) or `host.containers.internal` (Podman) instead of `localhost`.
 
 ### Option D: Vertex AI Provider (Experimental)
 
 Use Google Cloud's Vertex AI service to run Gemini models.
 
-> [!WARNING]
-> **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Lightspeed (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
+!!! warning
+  
+    **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Lightspeed (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
 
 ```env
 # Enable Vertex AI provider
@@ -144,13 +150,14 @@ VERTEX_AI_PROJECT=your-gcp-project-id
 # VERTEX_AI_LOCATION=us-central1
 ```
 
-> [!NOTE]
-> **To use Vertex AI, you need:**
-> 1. A Google Cloud Platform (GCP) project with Vertex AI API enabled
-> 2. A service account with appropriate permissions
-> 3. A service account key file (JSON) downloaded from GCP
-> 4. Set `VERTEX_AI_PROJECT` to your project ID
-> 5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
+!!! note
+  
+    **To use Vertex AI, you need:**
+    1. A Google Cloud Platform (GCP) project with Vertex AI API enabled
+    2. A service account with appropriate permissions
+    3. A service account key file (JSON) downloaded from GCP
+    4. Set `VERTEX_AI_PROJECT` to your project ID
+    5. Set `VERTEX_AI_CREDENTIALS_PATH` to the absolute path of your credentials JSON file
 
 ---
 
@@ -171,19 +178,20 @@ VALIDATION_PROVIDER=openai
 VALIDATION_MODEL_NAME=gpt-4o-mini
 ```
 
-> [!NOTE]
-> The validation provider must be one of your enabled inference providers, and the model must be available on that provider.
+!!! note
+  
+    The validation provider must be one of your enabled inference providers, and the model must be available on that provider.
 
 ---
 
 ## Verify Services Are Running
 
-After starting the application with `podman compose up -d` (or `docker compose up -d`), verify all services are running:
+After starting the application with `podman compose --profile lightspeed up -d` (or `docker compose --profile lightspeed up -d`), verify all services are running:
 
 ```bash
-podman compose ps
+podman compose --profile lightspeed ps
 # OR
-docker compose ps
+docker compose --profile lightspeed ps
 ```
 
 You should see output similar to:
@@ -200,7 +208,7 @@ You should see output similar to:
 
 Open http://localhost:7007/lightspeed in your browser to access Developer Lightspeed.
 
-![Developer Lightspeed](images/Developer-Lightspeed.png)
+![Developer Lightspeed](../images/Developer-Lightspeed.png)
 
 ---
 
@@ -246,15 +254,30 @@ lightspeed:
 
 ## Disabling Lightspeed
 
-Developer Lightspeed is included by default. If you don't configure an LLM provider, Lightspeed will remain in an unconfigured/dormant state and not affect your RHDH experience.
+Developer Lightspeed runs via the `lightspeed` compose profile. If you don't configure an LLM provider, Lightspeed will remain in an unconfigured/dormant state and not affect your RHDH experience.
 
-To fully remove Lightspeed from your setup:
+To disable Lightspeed:
 
-1. **Remove the Lightspeed plugins** from `configs/dynamic-plugins/dynamic-plugins.yaml` (or your `dynamic-plugins.override.yaml` if using one). Delete or comment out the two Lightspeed plugin entries (the frontend and backend packages).
+1. **Omit the `--profile lightspeed` flag** when starting RHDH Local. This skips the `rag-init` and `lightspeed-core` services entirely:
 
-2. **Remove the Lightspeed services** from `compose.yaml`. Delete or comment out the `rag-init` and `lightspeed-core` service blocks, and the `rag_embeddings` and `rag_vector_db` volume declarations.
+   ```sh
+   podman compose up -d  # or: docker compose up -d
+   ```
 
-3. **Remove the Lightspeed configuration** from `configs/app-config/app-config.yaml`. Delete or comment out the `lightspeed:` section at the bottom of the file.
+2. **Disable the Lightspeed plugins** in `configs/dynamic-plugins/dynamic-plugins.yaml` (or your `dynamic-plugins.override.yaml` if using one). Set `disabled: true` on both the Lightspeed frontend and backend plugin entries to remove all Lightspeed UI elements:
+
+   ```yaml
+   # Lightspeed frontend plugin
+   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+     disabled: true
+     # ...
+
+   # Lightspeed backend plugin
+   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+     disabled: true
+   ```
+
+Step 1 alone stops the Lightspeed backend services but leaves the plugins installed (the UI may appear in a non-functional state). Step 2 removes the Lightspeed UI elements entirely. Both steps are reversible.
 
 ---
 
@@ -320,8 +343,8 @@ If you enabled query validation but it isn't filtering queries:
 
 - Try stopping and removing all containers, then starting again:
   ```bash
-  podman compose down --volumes
-  podman compose up -d
+  podman compose --profile lightspeed down --volumes
+  podman compose --profile lightspeed up -d
   ```
 
 If your issue persists, please reach out on Slack in `#forum-rhdh` with details about your problem so we can help you troubleshoot.
