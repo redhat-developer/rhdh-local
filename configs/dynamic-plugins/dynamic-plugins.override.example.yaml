@@ -116,3 +116,13 @@ includes:
 #           # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration.
 #           # Also add the path in the 'includes' section of this file, so the plugins installed via the Extensions UI can be loaded at runtime.
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
+
+# # Uncomment the following to disable Developer Lightspeed plugins
+# # (also omit --profile lightspeed when starting RHDH Local)
+#   # Lightspeed frontend plugin
+#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+#     disabled: true
+#
+#   # Lightspeed backend plugin
+#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+#     disabled: true

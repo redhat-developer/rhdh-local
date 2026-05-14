@@ -264,18 +264,28 @@ To disable Lightspeed:
    podman compose up -d  # or: docker compose up -d
    ```
 
-2. **Disable the Lightspeed plugins** in `configs/dynamic-plugins/dynamic-plugins.yaml` (or your `dynamic-plugins.override.yaml` if using one). Set `disabled: true` on both the Lightspeed frontend and backend plugin entries to remove all Lightspeed UI elements:
+2. **Disable the Lightspeed plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
+
+   ```sh
+   cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml \
+      configs/dynamic-plugins/dynamic-plugins.override.yaml
+   ```
+
+   Then add (or uncomment) the following entries in the `plugins` section, setting `disabled: true` on both the Lightspeed frontend and backend plugins to remove all Lightspeed UI elements:
 
    ```yaml
-   # Lightspeed frontend plugin
-   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-     disabled: true
-     # ...
+   plugins:
+     # Disable Lightspeed frontend plugin
+     - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+       disabled: true
 
-   # Lightspeed backend plugin
-   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-     disabled: true
+     # Disable Lightspeed backend plugin
+     - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+       disabled: true
    ```
+
+   !!! note
+       Do **not** edit `configs/dynamic-plugins/dynamic-plugins.yaml` directly. The override file replaces the default configuration at runtime (see [How RHDH Local handles dynamic plugins configuration](../rhdh-local-guide/dynamic-plugins-management.md#how-rhdh-local-handles-dynamic-plugins-configuration)).
 
 Step 1 alone stops the Lightspeed backend services but leaves the plugins installed (the UI may appear in a non-functional state). Step 2 removes the Lightspeed UI elements entirely. Both steps are reversible.
 
