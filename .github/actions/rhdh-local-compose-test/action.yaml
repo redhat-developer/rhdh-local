@@ -17,7 +17,7 @@ inputs:
     description: Compose config name to use (e.g. default, dynamic-plugins-root)
     required: true
   user_config_enabled:
-    description: "\"true or false\" to enable user-specific configuration"
+    description: "\"true\" or \"false\" to enable user-specific configuration"
     required: true
   docker_compose_version:
     description: Version of docker-compose to install
@@ -158,6 +158,13 @@ runs:
         CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
       run: $TOOL compose $CLI_ARGS config
 
+    - name: Create .env file to override defaults
+      shell: bash
+      run: |
+        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
+        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
+        cat .env
+
     - name: Add user-specific configuration
       if: ${{ inputs.user_config_enabled == 'true' }}
       shell: bash
@@ -166,7 +173,7 @@ runs:
         LOG_LEVEL: ${{ env.ACTIONS_RUNNER_DEBUG == 'true' && 'debug' || 'info' }}
       run: |
         # Custom .env file
-        cat <<EOF > .env
+        cat <<EOF >> .env
         LOG_LEVEL=$LOG_LEVEL
         ROARR_LOG=true
         NODE_DEBUG=fetch
@@ -206,13 +213,6 @@ runs:
       shell: bash
       run: |
         mkdir -p dynamic-plugins-root
-
-    - name: Create .env file to override defaults
-      shell: bash
-      run: |
-        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
-        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
-        cat .env
 
     - name: Start app
       shell: bash
