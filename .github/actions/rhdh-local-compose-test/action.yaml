@@ -1,6 +1,6 @@
 name: "Test Composite Action"
-description: "Sets RHDH_TAG and RHDH_IMAGE based on the branch name for
-  container image selection for testing purposes"
+description: "Sets RHDH_TAG based on the branch name. Optionally overrides
+  RHDH_IMAGE and CATALOG_INDEX_IMAGE for container image selection (nightly only)."
 
 inputs:
   git_ref:
@@ -32,6 +32,10 @@ inputs:
     description: If set, override the RHDH tag with the value of this input
     required: false
     default: ""
+  override_images:
+    description: "If 'true', override RHDH_IMAGE and CATALOG_INDEX_IMAGE in .env based on the resolved tag. Only nightly checks should do this."
+    required: false
+    default: "false"
   actions_runner_debug:
     description: Adding actions_runner_debug variable value
     required: false
@@ -44,14 +48,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # Set RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection
+    # Set RHDH_TAG and optionally RHDH_IMAGE/CATALOG_INDEX_IMAGE based on the branch name for container image selection
     - name: Set RHDH tag, image and catalog index
+      if: ${{ inputs.override_images == 'true' }}
       shell: bash
       env:
         INPUT_TAG: ${{ inputs.rhdh_tag_override }}
         BRANCH: ${{ inputs.git_ref }}
       run: |
-        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG" 
+        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
         elif [ "$BRANCH" = "main" ]; then TAG="next"
         elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
         else TAG="next"; fi
@@ -59,7 +64,6 @@ runs:
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
 
-        # Extract CATALOG_INDEX_IMAGE from default.env if it exists, and set as environment variable for use in tests (e.g. for pull-through cache testing)
         if [ "$BRANCH" = "main" ]; then
           CATALOG_TAG="next"
           CATALOG_IMAGE="quay.io/rhdh/plugin-catalog-index:$CATALOG_TAG"
@@ -151,6 +155,7 @@ runs:
       run: $TOOL info
 
     - name: Create .env file to override defaults
+      if: ${{ inputs.override_images == 'true' }}
       shell: bash
       run: |
         echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
