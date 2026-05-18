@@ -15,7 +15,7 @@ plugins:
 # # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
   # - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
   #   disabled: false
-  - package: './dynamic-plugins/dist/backstage-community-plugin-quay'
+  - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
     disabled: false
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
