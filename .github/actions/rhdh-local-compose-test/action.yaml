@@ -56,21 +56,19 @@ runs:
         BRANCH: ${{ inputs.git_ref }}
         OVERRIDE_IMAGES: ${{ inputs.override_images }}
       run: |
+        if [ "$OVERRIDE_IMAGES" != "true" ]; then
+          echo "override_images is not set; skipping RHDH_IMAGE and CATALOG_INDEX_IMAGE overrides"
+          exit 0
+        fi
+
         if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
         elif [ "$BRANCH" = "main" ]; then TAG="next"
         elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
         else TAG="next"; fi
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
-
-        if [ "$OVERRIDE_IMAGES" != "true" ]; then
-          echo "override_images is not set; skipping RHDH_IMAGE and CATALOG_INDEX_IMAGE overrides"
-          return 0
-        fi
-
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
 
-        # Extract CATALOG_INDEX_IMAGE from default.env if it exists, and set as environment variable for use in tests (e.g. for pull-through cache testing)
         if [ "$BRANCH" = "main" ]; then
           CATALOG_TAG="next"
           CATALOG_IMAGE="quay.io/rhdh/plugin-catalog-index:$CATALOG_TAG"
