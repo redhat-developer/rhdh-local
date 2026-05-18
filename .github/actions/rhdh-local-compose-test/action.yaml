@@ -1,6 +1,6 @@
 name: "Test Composite Action"
-description: "Sets RHDH_TAG and RHDH_IMAGE based on the branch name for
-  container image selection for testing purposes"
+description: "Sets RHDH_TAG based on the branch name. Optionally overrides
+  RHDH_IMAGE and CATALOG_INDEX_IMAGE for container image selection (nightly only)."
 
 inputs:
   git_ref:
@@ -48,19 +48,26 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # Set RHDH_TAG and RHDH_IMAGE based on the branch name for container image selection
+    # Set RHDH_TAG and optionally RHDH_IMAGE/CATALOG_INDEX_IMAGE based on the branch name for container image selection
     - name: Set RHDH tag, image and catalog index
       shell: bash
       env:
         INPUT_TAG: ${{ inputs.rhdh_tag_override }}
         BRANCH: ${{ inputs.git_ref }}
+        OVERRIDE_IMAGES: ${{ inputs.override_images }}
       run: |
-        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG" 
+        if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
         elif [ "$BRANCH" = "main" ]; then TAG="next"
         elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
         else TAG="next"; fi
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
+
+        if [ "$OVERRIDE_IMAGES" != "true" ]; then
+          echo "override_images is not set; skipping RHDH_IMAGE and CATALOG_INDEX_IMAGE overrides"
+          return 0
+        fi
+
         echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
 
         # Extract CATALOG_INDEX_IMAGE from default.env if it exists, and set as environment variable for use in tests (e.g. for pull-through cache testing)
