@@ -50,17 +50,12 @@ runs:
   steps:
     # Set RHDH_TAG and optionally RHDH_IMAGE/CATALOG_INDEX_IMAGE based on the branch name for container image selection
     - name: Set RHDH tag, image and catalog index
+      if: ${{ inputs.override_images == 'true' }}
       shell: bash
       env:
         INPUT_TAG: ${{ inputs.rhdh_tag_override }}
         BRANCH: ${{ inputs.git_ref }}
-        OVERRIDE_IMAGES: ${{ inputs.override_images }}
       run: |
-        if [ "$OVERRIDE_IMAGES" != "true" ]; then
-          echo "override_images is not set; skipping RHDH_IMAGE and CATALOG_INDEX_IMAGE overrides"
-          exit 0
-        fi
-
         if [ -n "$INPUT_TAG" ]; then TAG="$INPUT_TAG"
         elif [ "$BRANCH" = "main" ]; then TAG="next"
         elif [[ "$BRANCH" =~ ^release-[0-9]+\.[0-9]+$ ]]; then TAG="next-${BRANCH#release-}"
