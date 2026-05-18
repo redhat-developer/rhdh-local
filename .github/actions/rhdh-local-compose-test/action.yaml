@@ -32,6 +32,10 @@ inputs:
     description: If set, override the RHDH tag with the value of this input
     required: false
     default: ""
+  override_images:
+    description: "If 'true', override RHDH_IMAGE and CATALOG_INDEX_IMAGE in .env based on the resolved tag. Only nightly checks should do this."
+    required: false
+    default: "false"
   actions_runner_debug:
     description: Adding actions_runner_debug variable value
     required: false
@@ -152,9 +156,14 @@ runs:
 
     - name: Create .env file to override defaults
       shell: bash
+      env:
+        OVERRIDE_IMAGES: ${{ inputs.override_images }}
       run: |
-        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
-        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
+        touch .env
+        if [ "$OVERRIDE_IMAGES" = "true" ]; then
+          echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" >> .env
+          echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
+        fi
         cat .env
 
     - name: Compose config
