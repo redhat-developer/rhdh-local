@@ -150,6 +150,13 @@ runs:
         TOOL: ${{ inputs.container_tool }}
       run: $TOOL info
 
+    - name: Create .env file to override defaults
+      shell: bash
+      run: |
+        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
+        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
+        cat .env
+
     - name: Compose config
       shell: bash
       env:
@@ -157,13 +164,6 @@ runs:
         CLI_ARGS: ${{ inputs.compose_cli_args }}
         CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
       run: $TOOL compose $CLI_ARGS config
-
-    - name: Create .env file to override defaults
-      shell: bash
-      run: |
-        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
-        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
-        cat .env
 
     - name: Add user-specific configuration
       if: ${{ inputs.user_config_enabled == 'true' }}
