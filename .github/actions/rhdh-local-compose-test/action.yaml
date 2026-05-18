@@ -155,15 +155,11 @@ runs:
       run: $TOOL info
 
     - name: Create .env file to override defaults
+      if: ${{ inputs.override_images == 'true' }}
       shell: bash
-      env:
-        OVERRIDE_IMAGES: ${{ inputs.override_images }}
       run: |
-        touch .env
-        if [ "$OVERRIDE_IMAGES" = "true" ]; then
-          echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" >> .env
-          echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
-        fi
+        echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
+        echo "RHDH_IMAGE=${{ env.RHDH_IMAGE }}" >> .env
         cat .env
 
     - name: Compose config
