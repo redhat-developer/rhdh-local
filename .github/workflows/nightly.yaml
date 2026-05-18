@@ -24,7 +24,7 @@ jobs:
     outputs:
       branches: ${{ steps.set-branches.outputs.branches }}
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         id: set-branches
         with:
           script: |
