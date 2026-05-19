@@ -151,7 +151,7 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
-
+# static auth provider for development and testing purposes. This is not meant for production use.
   auth:
     externalAccess:
       - type: static
