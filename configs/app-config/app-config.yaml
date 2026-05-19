@@ -151,6 +151,7 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
+<<<<<<< HEAD
   
   auth:
     externalAccess:
@@ -160,6 +161,8 @@ backend:
           subject: "local-dev-user"
 
 
+=======
+>>>>>>> 8c5c2258e6a0ec2c557cfcd950ba425f0bfc81e0
 # You can use local files from catalog-entities directory to load entities into the catalog
 catalog:
   # Processing interval for catalog refresh rates - 30 seconds - uncomment to use
