@@ -38,10 +38,10 @@ Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https:/
 
 NOTE: Only `linux-amd64` builds are currently commercially supported.
 
-To use the most recent nightly CI build of RHDH 1.y (for example, 1.10), set the variable as follows.
+To use the most recent nightly CI build of RHDH 1.y (for example, 1.11), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.10
+RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.11
 ```
 
 ### Using commercially supported official images
