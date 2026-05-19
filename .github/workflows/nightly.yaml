@@ -24,7 +24,7 @@ jobs:
     outputs:
       branches: ${{ steps.set-branches.outputs.branches }}
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         id: set-branches
         with:
           script: |
@@ -93,3 +93,4 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
+          override_images: "true"
