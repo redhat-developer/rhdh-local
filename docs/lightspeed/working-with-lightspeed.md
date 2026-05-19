@@ -4,7 +4,7 @@ Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant power
 
 Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Lightspeed is included in RHDH Local via the `lightspeed` compose profile. Start RHDH Local with `--profile lightspeed` to enable it — no additional setup scripts or compose files are required.
+Developer Lightspeed is included in RHDH Local by default — no additional setup scripts or compose files are required. To disable it, see [Disabling Lightspeed](#disabling-lightspeed).
 
 ## Supported Architecture
 
@@ -186,12 +186,12 @@ VALIDATION_MODEL_NAME=gpt-4o-mini
 
 ## Verify Services Are Running
 
-After starting the application with `podman compose --profile lightspeed up -d` (or `docker compose --profile lightspeed up -d`), verify all services are running:
+After starting the application with `podman compose up -d` (or `docker compose up -d`), verify all services are running:
 
 ```bash
-podman compose --profile lightspeed ps
+podman compose ps
 # OR
-docker compose --profile lightspeed ps
+docker compose ps
 ```
 
 You should see output similar to:
@@ -254,15 +254,17 @@ lightspeed:
 
 ## Disabling Lightspeed
 
-Developer Lightspeed runs via the `lightspeed` compose profile. If you don't configure an LLM provider, Lightspeed will remain in an unconfigured/dormant state and not affect your RHDH experience.
+If you don't configure an LLM provider, Lightspeed will remain in an unconfigured/dormant state and not affect your RHDH experience.
 
-To disable Lightspeed:
+To fully disable Lightspeed:
 
-1. **Omit the `--profile lightspeed` flag** when starting RHDH Local. This skips the `rag-init` and `lightspeed-core` services entirely:
+1. **Stop the Lightspeed services** by copying the provided example override file:
 
    ```sh
-   podman compose up -d  # or: docker compose up -d
+   cp compose.lightspeed-disabled.override.example.yaml compose.override.yaml
    ```
+
+   This prevents `rag-init` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`.
 
 2. **Disable the Lightspeed plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
 
@@ -353,8 +355,8 @@ If you enabled query validation but it isn't filtering queries:
 
 - Try stopping and removing all containers, then starting again:
   ```bash
-  podman compose --profile lightspeed down --volumes
-  podman compose --profile lightspeed up -d
+  podman compose down --volumes
+  podman compose up -d
   ```
 
 If your issue persists, please reach out on Slack in `#forum-rhdh` with details about your problem so we can help you troubleshoot.

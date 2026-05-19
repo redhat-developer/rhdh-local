@@ -118,7 +118,6 @@ includes:
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 # # Uncomment the following to disable Developer Lightspeed plugins
-# # (also omit --profile lightspeed when starting RHDH Local)
 #   # Lightspeed frontend plugin
 #   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
 #     disabled: true
