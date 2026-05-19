@@ -19,10 +19,10 @@ RHDH Local lets you quickly test software catalogs, TechDocs, plugins, templates
 
    ```sh
    git clone https://github.com/redhat-developer/rhdh-local.git && cd rhdh-local
-   podman compose --profile lightspeed up -d  # or: docker compose --profile lightspeed up -d
+   podman compose up -d  # or: docker compose up -d
    ```
 
-   > **Lightspeed profile**: The `--profile lightspeed` flag starts RHDH with [Developer Lightspeed](./docs/lightspeed/working-with-lightspeed.md), an AI assistant for RHDH. To run RHDH without Lightspeed, omit the flag: `podman compose up -d`.
+   > **Developer Lightspeed** is included by default. To configure an LLM provider, see the [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md). To disable Lightspeed, see [Disabling Lightspeed](./docs/lightspeed/working-with-lightspeed.md#disabling-lightspeed).
 
 3. **Access**: Open [http://localhost:7007](http://localhost:7007) and log in as 'Guest'
 
@@ -69,10 +69,8 @@ podman compose start rhdh  # or: docker compose start rhdh
 ### Clean up
 
 ```sh
-podman compose --profile lightspeed down --volumes  # or: docker compose --profile lightspeed down --volumes
+podman compose down --volumes  # or: docker compose down --volumes
 ```
-
-> **Note**: Include `--profile lightspeed` when running `down` to ensure the Lightspeed containers and volumes are also removed.
 
 ## Additional Configuration Guides
 
