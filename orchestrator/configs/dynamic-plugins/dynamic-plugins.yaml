@@ -3,19 +3,40 @@ includes:
   - dynamic-plugins.default.yaml
 
 plugins:
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:{{inherit}}'
+  - package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-orchestrator/-/backstage-plugin-orchestrator-1.8.12.tgz"
+    integrity: sha512-Qvab3B/O6ZuJbTdq4TDlTKIw5cw4Fty+NgkoxDrx8Fs/2oe53VioBMetJ1cMxkGF8+mYVK5y85B8ssvasrSJrA==
     disabled: false
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:{{inherit}}'
-    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-orchestrator:
+            appIcons:
+              - importName: OrchestratorIcon
+                name: orchestratorIcon
+            dynamicRoutes:
+              - importName: OrchestratorPage
+                menuItem:
+                  icon: orchestratorIcon
+                  text: Orchestrator
+                path: /orchestrator
+  - disabled: false
+    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-backend-dynamic-1.6.0.tgz
+    integrity: sha512-Kr55YbuVwEADwGef9o9wyimcgHmiwehPeAtVHa9g2RQYoSPEa6BeOlaPzB6W5Ke3M2bN/0j0XXtpLuvrlXQogA==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:{{inherit}}'
-    disabled: false
+  - disabled: false
+    package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic/-/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic-1.8.12.tgz"
+    integrity: sha512-t1B7zaRvW/LY8LXNegk6Rqn3ezk2f6DQ2BU4ANW2OswE/0waQnbXkHr54cTN1OvMhKs8bNFAdJ4AVpiESTqpOA==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:{{inherit}}'
-    disabled: false
+  - disabled: false
+    package: "https://npm.registry.redhat.com/@redhat/backstage-plugin-orchestrator-form-widgets/-/backstage-plugin-orchestrator-form-widgets-1.8.12.tgz"
+    integrity: sha512-Kw8YCqzxwChfpODU1q8IltAK8+TJ94e8qjBvT5TDQLPdUQBYdj8gLhLQF0rtZMR3b+lYlnsKkf67RMC0xRGJsw==
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-orchestrator-form-widgets: {}
