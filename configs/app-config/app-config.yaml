@@ -37,7 +37,6 @@ app:
         pageTheme:
           default:
             backgroundColor: ${HEADER_LIGHT_COLOR_1}, ${HEADER_LIGHT_COLOR_2}
-
       dark:
         palette:
           primary:
@@ -47,7 +46,7 @@ app:
         pageTheme:
           default:
             backgroundColor: ${HEADER_DARK_COLOR_1}, ${HEADER_DARK_COLOR_2}
-            
+
   quickstart:
     # Quickstarts for all users (both new admins and new developers)
     - title: 'What is Developer Hub?'

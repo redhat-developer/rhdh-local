@@ -29,7 +29,6 @@ app:
         pageTheme:
           default:
             backgroundColor: ${HEADER_LIGHT_COLOR_1}, ${HEADER_LIGHT_COLOR_2}
-
       dark:
         palette:
           primary:
