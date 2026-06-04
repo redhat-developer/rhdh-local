@@ -65,6 +65,8 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+          # TODO: Remove this and the exclude rule below when the minimum supported version is 1.10
+          # (with Lightspeed enabled by default)
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
         exclude:
