@@ -29,15 +29,24 @@ app:
     fullLogoWidth: ${FULL_LOGO_WIDTH}
     theme:
       light:
-        primaryColor: ${PRIMARY_LIGHT_COLOR}
-        headerColor1: ${HEADER_LIGHT_COLOR_1}
-        headerColor2: ${HEADER_LIGHT_COLOR_2}
-        navigationIndicatorColor: ${NAV_INDICATOR_LIGHT_COLOR}
+        palette:
+          primary:
+            main: ${PRIMARY_LIGHT_COLOR}
+          navigation:
+            indicator: ${NAV_INDICATOR_LIGHT_COLOR}
+        pageTheme:
+          default:
+            backgroundColor: ${HEADER_LIGHT_COLOR_1}, ${HEADER_LIGHT_COLOR_2}
       dark:
-        primaryColor: ${PRIMARY_DARK_COLOR}
-        headerColor1: ${HEADER_DARK_COLOR_1}
-        headerColor2: ${HEADER_DARK_COLOR_2}
-        navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
+        palette:
+          primary:
+            main: ${PRIMARY_DARK_COLOR}
+          navigation:
+            indicator: ${NAV_INDICATOR_DARK_COLOR}
+        pageTheme:
+          default:
+            backgroundColor: ${HEADER_DARK_COLOR_1}, ${HEADER_DARK_COLOR_2}
+
   quickstart:
     # Quickstarts for all users (both new admins and new developers)
     - title: 'What is Developer Hub?'
