@@ -74,7 +74,7 @@ services:
   # RAG initialization service: Copies RAG embeddings and vector database to shared volumes
   # This runs once at startup to prepare the RAG data for the lightspeed-core container
   rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.9-lls-0.5.0-642c567fe10a62b5ff711654306b72912f341e05'
+    image: 'quay.io/redhat-ai-dev/rag-content:release-1.10-lls-0.5.0-8c231a3b5177f12fff9db042dfa4091d8f2f26b3'
     container_name: rag-init
     user: "root"
     volumes:
