@@ -12,10 +12,7 @@ plugins:
     disabled: false
 
   # Quay plugin
-# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-  # - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
-  #   disabled: false
-  - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
     disabled: false
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
@@ -23,44 +20,10 @@ plugins:
     disabled: false
 
   # Floating Action Button plugin with submenu actions
-  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
+  # TODO: This plugin will be removed in RHDH 2.1 (https://redhat.atlassian.net/browse/RHDHPLAN-1006)
   # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-global-floating-action-button:{{inherit}}'
   - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
-    disabled: false
-    pluginConfig:
-      dynamicPlugins:
-        frontend:
-          red-hat-developer-hub.backstage-plugin-global-floating-action-button:
-            mountPoints:
-              - mountPoint: application/listener
-                importName: DynamicGlobalFloatingActionButton
-              - mountPoint: global.floatingactionbutton/config
-                importName: NullComponent
-                config:
-                  icon: '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="130.25 118.25 663.00 663.00"><path d="M462.236 131.002c2.404.036 4.769.612 6.919 1.686l303 151.5c2.658 1.329 4.893 3.372 6.455 5.9 1.563 2.527 2.39 5.441 2.39 8.412v303c0 6.06-3.424 11.6-8.845 14.311l-303 151.5c-2.221 1.11-4.671 1.689-7.155 1.689s-4.934-.579-7.155-1.689l-303-151.5a15.99755 15.99755 0 0 1-6.455-5.9c-1.562-2.527-2.39-5.44-2.39-8.411v-303c0-6.06 3.424-11.601 8.845-14.312l303-151.5.425-.205c2.181-1.011 4.563-1.517 6.966-1.481zM271 343c-8.401 0-12.601 0-15.81 1.635-2.822 1.438-5.117 3.733-6.555 6.555C247 354.399 247 358.6 247 367v166c0 8.4 0 12.601 1.635 15.81 1.438 2.822 3.733 5.117 6.555 6.555C258.399 557 262.599 557 271 557h382c8.401 0 12.601 0 15.81-1.635 2.822-1.438 5.117-3.733 6.555-6.555C677 545.601 677 541.4 677 533V367c0-8.4 0-12.601-1.635-15.81-1.438-2.822-3.733-5.117-6.555-6.555C665.601 343 661.401 343 653 343H271zm40 36c2.8 0 4.2 0 5.27.545.94.48 1.706 1.245 2.185 2.185.545 1.07.545 2.47.545 5.27v90c0 2.8 0 4.201-.545 5.271-.48.94-1.245 1.705-2.185 2.184-1.07.545-2.47.545-5.27.545h-20c-2.8 0-4.2 0-5.27-.545-.94-.479-1.705-1.244-2.185-2.184C283 481.201 283 479.8 283 477v-90c0-2.8 0-4.2.545-5.27.479-.94 1.245-1.705 2.185-2.185C286.8 379 288.2 379 291 379h20zm72 0c2.8 0 4.2 0 5.27.545.94.48 1.706 1.245 2.185 2.185.545 1.07.545 2.47.545 5.27v90c0 2.8 0 4.201-.545 5.271-.48.94-1.245 1.705-2.185 2.184-1.07.545-2.47.545-5.27.545h-20c-2.8 0-4.2 0-5.27-.545-.94-.479-1.705-1.244-2.185-2.184C355 481.201 355 479.8 355 477v-90c0-2.8 0-4.2.545-5.27.479-.94 1.245-1.705 2.185-2.185C358.8 379 360.2 379 363 379h20zm72 0c2.8 0 4.2 0 5.27.545.94.48 1.706 1.245 2.185 2.185.545 1.07.545 2.47.545 5.27v90c0 2.8 0 4.201-.545 5.271-.48.94-1.245 1.705-2.185 2.184-1.07.545-2.47.545-5.27.545h-20c-2.8 0-4.2 0-5.27-.545-.94-.479-1.705-1.244-2.185-2.184C427 481.201 427 479.8 427 477v-90c0-2.8 0-4.2.545-5.27.479-.94 1.245-1.705 2.185-2.185C430.8 379 432.2 379 435 379h20zm72 0c2.8 0 4.201 0 5.271.545.94.48 1.705 1.245 2.184 2.185.545 1.07.545 2.47.545 5.27v90c0 2.8 0 4.201-.545 5.271-.479.94-1.244 1.705-2.184 2.184-1.07.545-2.471.545-5.271.545h-20c-2.8 0-4.2 0-5.27-.545-.94-.479-1.705-1.244-2.185-2.184C499 481.201 499 479.8 499 477v-90c0-2.8 0-4.2.545-5.27.479-.94 1.245-1.705 2.185-2.185C502.8 379 504.2 379 507 379h20z"/></svg>'
-                  label: "Podman Desktop"
-                  showLabel: true
-                  toolTip: "Podman Desktop"
-                  to: "https://podman-desktop.io"
-                  visibleOnPaths: ["/"]
-              - mountPoint: global.floatingactionbutton/config
-                importName: NullComponent
-                config:
-                  icon: github
-                  label: "RHDH Local on GitHub"
-                  showLabel: true
-                  toolTip: "RHDH Local on GitHub"
-                  to: "https://github.com/redhat-developer/rhdh-local"
-                  visibleOnPaths: ["/"]
-              - mountPoint: global.floatingactionbutton/config
-                importName: NullComponent
-                config:
-                  icon: docs
-                  label: "RHDH Documentation"
-                  showLabel: true
-                  toolTip: "RHDH Documentation"
-                  to: "https://docs.redhat.com/en/documentation/red_hat_developer_hub/"
-                  visibleOnPaths: ["/"]
+    disabled: true # disabled as conflicts with Lightspeed FAB, will be deprecated / removed.
 
   #########################################################
   # Enable dynamic plugins installation by using Extensions
@@ -83,3 +46,15 @@ plugins:
             # NOTE: the path needs to be writable by the main RHDH container user
             file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
   ########## End Extensions #################################
+
+  #########################################################
+  # Developer Lightspeed plugins
+  #########################################################
+
+  # Lightspeed frontend plugin
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+    disabled: false
+
+  # Lightspeed backend plugin
+  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+    disabled: false
