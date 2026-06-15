@@ -151,10 +151,13 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
-
+# static auth provider for development and testing purposes. This is not meant for production use.
   auth:
-    keys:
-      - secret: "development"
+    externalAccess:
+      - type: static
+        options:
+          token: "${RHDH_STATIC_TOKEN}"
+          subject: "local-dev-user"
 
 # You can use local files from catalog-entities directory to load entities into the catalog
 catalog:
