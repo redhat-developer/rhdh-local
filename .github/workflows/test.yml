@@ -15,16 +15,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
-    - name: Lint
-      # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
-      run: |
-        npx --yes dclint .
+      - uses: actions/checkout@v6
+      - name: Lint
+        # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
+        run: |
+          npx --yes dclint .
 
   test:
     strategy:

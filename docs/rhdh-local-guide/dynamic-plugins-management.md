@@ -96,6 +96,25 @@ The default value of the `CATALOG_INDEX_IMAGE` environment variable is defined i
 CATALOG_INDEX_IMAGE=my-registry.example.com/org/my-rhdh-plugin-catalog-index:1.2-3
 ```
 
+### Extra catalog index images
+
+Starting in 1.10, you can configure additional catalog index images alongside the primary one using the `EXTRA_CATALOG_INDEX_IMAGES` environment variable. Plugins from these extra images appear in the Extensions UI but are not installed by default (they do not contribute `dynamic-plugins.default.yaml` files).
+
+Set `EXTRA_CATALOG_INDEX_IMAGES` in your `.env` file as a comma-separated list of image references. You can optionally prefix each reference with a name for cleaner extraction directory names:
+
+```bash
+# Plain image references (directory names are auto-derived from the image ref)
+EXTRA_CATALOG_INDEX_IMAGES=quay.io/my-org/my-catalog-index:1.0
+
+# Named references (recommended — produces cleaner directory names like /extensions/extra/community/)
+EXTRA_CATALOG_INDEX_IMAGES=community=quay.io/rhdh/plugin-catalog-index:1.10
+
+# Multiple images
+EXTRA_CATALOG_INDEX_IMAGES=community=quay.io/rhdh/plugin-catalog-index:1.10,partner=quay.io/my-org/partner-catalog:2.0
+```
+
+Extra catalog entities are extracted under `<CATALOG_ENTITIES_EXTRACT_DIR>/extra/<name>/`, keeping them separate from the primary catalog index.
+
 ### Configuration Structure
 
 Your override file must start with:
