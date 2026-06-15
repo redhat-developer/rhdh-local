@@ -36,4 +36,6 @@ nav:
     - "PostgreSQL Guide": rhdh-local-guide/postgresql-guide.md
     #- "Orchestrator": ../orchestrator/README.md
     - "Operating RHDH Local": rhdh-local-guide/operating-rhdh-local.md
+    - "Working With Lightspeed": lightspeed/working-with-lightspeed.md
+    - "Maintenance Guide for Lightspeed": lightspeed/maintaining-lightspeed.md
     - "Getting Help & Contributing": rhdh-local-guide/help-and-contrib.md

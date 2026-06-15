@@ -1,0 +1,8 @@
+# Copy this file to compose.override.yaml to disable Lightspeed services.
+# This prevents rag-init and lightspeed-core from starting with `podman compose up -d`.
+# To re-enable, delete compose.override.yaml or run: podman compose --profile lightspeed up -d
+services:
+  rag-init:
+    profiles: [lightspeed]
+  lightspeed-core:
+    profiles: [lightspeed]
