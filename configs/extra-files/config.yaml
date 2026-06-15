@@ -160,7 +160,7 @@ storage:
       db_path: /tmp/sql_store.db
     kv_rag:
       type: kv_sqlite
-      db_path: /rag-content/vector_db/rhdh_product_docs/1.9/faiss_store.db
+      db_path: /rag-content/vector_db/rhdh_product_docs/1.10/faiss_store.db
     kv_notebooks:
       type: kv_sqlite
       db_path: /rag-content/vector_db/notebooks/faiss_store.db
@@ -188,7 +188,7 @@ registered_resources:
     - provider_id: rag-runtime
       toolgroup_id: builtin::rag
   vector_stores:
-    - vector_store_id: vs_cda156a6-64fe-436d-bc51-566fb1b09702 # see readme for this value
+    - vector_store_id: vs_757285d9-b657-4bed-b18c-3359844e8c0d # see readme for this value
       embedding_model: sentence-transformers//rag-content/embeddings_model
       embedding_dimension: 768
       provider_id: rhdh-docs

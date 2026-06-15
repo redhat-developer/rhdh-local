@@ -200,7 +200,7 @@ You should see output similar to:
 |--------------|-------|---------|--------|-------|
 | 31c3c681b742 | quay.io/rhdh-community/rhdh:next | 16 seconds ago | Exited (0) 5 seconds ago | rhdh-plugins-installer |
 | f7b74b9f241e | quay.io/rhdh-community/rhdh:next | 4 seconds ago | Up 5 seconds (starting) | rhdh |
-| a4e2b1f38d90 | quay.io/redhat-ai-dev/rag-content:release-1.9-... | 16 seconds ago | Exited (0) 10 seconds ago | rag-init |
+| a4e2b1f38d90 | quay.io/redhat-ai-dev/rag-content:release-1.10-... | 16 seconds ago | Exited (0) 10 seconds ago | rag-init |
 | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.5.1 | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
 
 - `rhdh-plugins-installer` and `rag-init` are init containers — they run once and exit with status `0`.
