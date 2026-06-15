@@ -24,7 +24,7 @@ jobs:
     outputs:
       branches: ${{ steps.set-branches.outputs.branches }}
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         id: set-branches
         with:
           script: |
@@ -65,8 +65,16 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+          # TODO: Remove this and the exclude rule below when the minimum supported version is 1.10
+          # (with Lightspeed enabled by default)
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+        exclude:
+          # Skip developer-lightspeed on release-1.10 branch
+          - branch: "release-1.10"
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
 
     name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{
       matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' -
@@ -93,3 +101,4 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
+          override_images: "true"
