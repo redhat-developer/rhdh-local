@@ -26,7 +26,7 @@ mkdir -p generated
 # during TechDocs generation
 TECHDOCS_SOURCE="/opt/app-root/src/techdocs-source"
 TECHDOCS_WORKDIR="/opt/app-root/src/techdocs-workdir"
-if [ -d "$TECHDOCS_SOURCE" ]; then
+if [[ -d "$TECHDOCS_SOURCE" ]]; then
   echo "Syncing TechDocs source files to writable workdir"
   mkdir -p "$TECHDOCS_WORKDIR"
   cp -a "$TECHDOCS_SOURCE/"* "$TECHDOCS_WORKDIR/"
