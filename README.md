@@ -22,6 +22,8 @@ RHDH Local lets you quickly test software catalogs, TechDocs, plugins, templates
    podman compose up -d  # or: docker compose up -d
    ```
 
+   > **Developer Lightspeed** is included by default. To configure an LLM provider, see the [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md). To disable Lightspeed, see [Disabling Lightspeed](./docs/lightspeed/working-with-lightspeed.md#disabling-lightspeed).
+
 3. **Access**: Open [http://localhost:7007](http://localhost:7007) and log in as 'Guest'
 
 ![Red Hat Developer Hub Homepage](./docs/images/RHDH-Homepage.png)
@@ -79,7 +81,8 @@ If you would like to change your RHDH-Local setup, or add additional features or
 3. [Simulated Proxy Setup](docs/rhdh-local-guide/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
 4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
 5. [Orchestrator Workflow Guide](./orchestrator/README.md) - using Orchestrator with RHDH to develop workflows.
-6. [Developer Lightspeed Guide](./developer-lightspeed/README.md) - using Developer Lightspeed in RHDH Local.
+6. [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md) - configuring an LLM provider for the built-in Developer Lightspeed assistant.
+7. [Developer Lightspeed Maintainer Guide](./docs/lightspeed/maintaining-lightspeed.md) - maintaining and syncing Lightspeed configuration files.
 
 ## Contributing and reporting issues
 

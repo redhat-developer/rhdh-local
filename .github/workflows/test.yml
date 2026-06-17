@@ -15,16 +15,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
-    - name: Lint
-      # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
-      run: |
-        npx --yes dclint .
+      - uses: actions/checkout@v6
+      - name: Lint
+        # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
+        run: |
+          npx --yes dclint .
 
   test:
     strategy:
@@ -47,8 +46,6 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
-          - name: "developer-lightspeed"
-            cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
 
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ${{ matrix.os }}

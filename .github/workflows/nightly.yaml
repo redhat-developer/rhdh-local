@@ -65,8 +65,16 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+          # TODO: Remove this and the exclude rule below when the minimum supported version is 1.10
+          # (with Lightspeed enabled by default)
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+        exclude:
+          # Skip developer-lightspeed on release-1.10 branch
+          - branch: "release-1.10"
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
 
     name: "${{ matrix.branch }} - ${{ matrix.tool }} compose - ${{
       matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' -
