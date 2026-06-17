@@ -29,8 +29,8 @@ app:
         pageTheme:
           default:
             backgroundColor: 
-            - ${HEADER_LIGHT_COLOR_1}
-            - ${HEADER_LIGHT_COLOR_2}
+             - ${HEADER_LIGHT_COLOR_1}
+             - ${HEADER_LIGHT_COLOR_2}
       dark:
         palette:
           primary:
@@ -40,8 +40,8 @@ app:
         pageTheme:
           default:
             backgroundColor: 
-            - ${HEADER_DARK_COLOR_1}
-            - ${HEADER_DARK_COLOR_2}
+             - ${HEADER_DARK_COLOR_1}
+             - ${HEADER_DARK_COLOR_2}
 
 # Tech Radar Plugin Example - uncomment with plugin override to use
 # Replace URL with your own hosted json to visualize data in Tech Radar
