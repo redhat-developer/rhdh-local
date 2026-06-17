@@ -216,9 +216,8 @@ At container startup, RHDH Local copies `mkdocs.yaml`, `docs/`, and `catalog-inf
 After editing built-in TechDocs on the host, restart the RHDH container to pick up your changes:
 
 ```bash
-podman compose restart rhdh
-# or, if using Docker Compose:
-docker compose restart rhdh
+podman compose stop rhdh   # or: docker compose stop rhdh
+podman compose start rhdh  # or: docker compose start rhdh
 ```
 
 !!! note "Restart required for local preview"
