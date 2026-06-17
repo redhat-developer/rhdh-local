@@ -36,7 +36,9 @@ app:
             indicator: ${NAV_INDICATOR_LIGHT_COLOR}
         pageTheme:
           default:
-            backgroundColor: ${HEADER_LIGHT_COLOR_1}, ${HEADER_LIGHT_COLOR_2}
+            backgroundColor: 
+            - ${HEADER_LIGHT_COLOR_1}
+            - ${HEADER_LIGHT_COLOR_2}
       dark:
         palette:
           primary:
@@ -45,7 +47,9 @@ app:
             indicator: ${NAV_INDICATOR_DARK_COLOR}
         pageTheme:
           default:
-            backgroundColor: ${HEADER_DARK_COLOR_1}, ${HEADER_DARK_COLOR_2}
+            backgroundColor: 
+            - ${HEADER_DARK_COLOR_1}
+            - ${HEADER_DARK_COLOR_2}
 
   quickstart:
     # Quickstarts for all users (both new admins and new developers)
