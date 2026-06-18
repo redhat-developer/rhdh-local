@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Lint
         run: |
           npx --yes dclint .
@@ -90,7 +90,7 @@ jobs:
     steps:
       # Checkout a ref that contains .github/actions/*. schedule: github.ref_name is always the default branch.
       # workflow_dispatch: use default_branch (trigger ref may be release-* without the composite on that branch).
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 1
