@@ -209,6 +209,20 @@ See [Making Your TechDocs More Appealing](../getting-started-rhdh/making-techdoc
 3. **Preview in RHDH Local** to verify formatting and links work
 4. **Have someone else test** your instructions (when possible)
 
+#### Applying local changes
+
+At container startup, RHDH Local copies `mkdocs.yaml`, `docs/`, and `catalog-info.yaml` from a read-only bind mount into a writable in-container workdir. TechDocs generation updates `mkdocs.yaml` in that workdir, so the running instance does not watch your host files directly.
+
+After editing built-in TechDocs on the host, restart the RHDH container to pick up your changes:
+
+```bash
+podman compose stop rhdh   # or: docker compose stop rhdh
+podman compose start rhdh  # or: docker compose start rhdh
+```
+
+!!! note "Restart required for local preview"
+    Previously, editing `docs/` on the host was reflected in the TechDocs UI after a page reload. With the writable workdir copy, a container restart is required to re-sync source files before you can preview updates in RHDH Local.
+
 #### TechDocs Review Process
 
 Note that TechDocs changes may need to be reviewed by a Product Manager and/or Architect to ensure content accuracy, clarity, and alignment with user needs.
