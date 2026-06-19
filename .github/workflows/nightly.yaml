@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Lint
         run: |
           npx --yes dclint .
@@ -65,12 +65,36 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
-          # TODO: Remove this and the exclude rule below when the minimum supported version is 1.10
-          # (with Lightspeed enabled by default)
+          # TODO: Remove this and the exclude rules below once all supported
+          # branches include Lightspeed in the base deployment.
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
         exclude:
-          # Skip developer-lightspeed on release-1.10 branch
+          # ARM tests verify architecture compatibility, not functional differences
+          # that vary by compose config or container tool. A representative subset
+          # (docker + default/orchestrator + no user config) is sufficient per branch.
+          - os: ubuntu-24.04-arm
+            tool: podman
+          - os: ubuntu-24.04-arm
+            userConfig: "true"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "corporate-proxy"
+              cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "dynamic-plugins-root"
+              cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+          # Skip developer-lightspeed on main and release-1.10: Lightspeed is
+          # fully integrated with the base deployment.
+          - branch: "main"
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           - branch: "release-1.10"
             composeConfig:
               name: "developer-lightspeed"
@@ -90,7 +114,7 @@ jobs:
     steps:
       # Checkout a ref that contains .github/actions/*. schedule: github.ref_name is always the default branch.
       # workflow_dispatch: use default_branch (trigger ref may be release-* without the composite on that branch).
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 1
