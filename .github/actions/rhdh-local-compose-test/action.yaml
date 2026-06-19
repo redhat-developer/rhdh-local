@@ -74,6 +74,18 @@ runs:
         fi
         echo "RHDH_IMAGE=$RHDH_IMAGE" >> "$GITHUB_ENV"
 
+        # Verify the resolved image supports this runner's architecture
+        ARCH=$(uname -m)
+        case "$ARCH" in
+          x86_64) DOCKER_ARCH="amd64" ;;
+          aarch64) DOCKER_ARCH="arm64" ;;
+          *) DOCKER_ARCH="$ARCH" ;;
+        esac
+        if ! skopeo inspect --override-arch "$DOCKER_ARCH" "docker://$RHDH_IMAGE" &>/dev/null; then
+          echo "::warning::Image $RHDH_IMAGE does not support $DOCKER_ARCH. Skipping test."
+          echo "SKIP_TEST=true" >> "$GITHUB_ENV"
+        fi
+
         if [ "$BRANCH" = "main" ]; then
           CATALOG_TAG="next"
           CATALOG_IMAGE="quay.io/rhdh/plugin-catalog-index:$CATALOG_TAG"
@@ -88,6 +100,7 @@ runs:
         fi
 
     - name: Remove Conflicting Packages
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       run: |
         # Remove any previous installations of Podman and Docker
@@ -105,6 +118,7 @@ runs:
         done
 
     - name: Update Docker version
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         DOCKER_COMPOSE_VERSION: v5.0.1
@@ -138,7 +152,7 @@ runs:
 
     - name: Setup Podman container environment
       id: setup-podman
-      if: ${{ inputs.container_tool == 'podman' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.container_tool == 'podman' }}
       uses: rm3l/setup-containerized-podman@7e2e9a2ddc2da87cbe754c0ed8975b7368388f56 # v2.0.0
       with:
         podman-image: quay.io/podman/stable:v5
@@ -148,6 +162,7 @@ runs:
           CORPORATE_PROXY_IMAGE=docker.io/ubuntu/squid:latest
 
     - name: Display container engine version
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -159,13 +174,14 @@ runs:
         $TOOL compose version
 
     - name: ${{ inputs.container_tool }} info
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
       run: $TOOL info
 
     - name: Create .env file to override defaults
-      if: ${{ inputs.override_images == 'true' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.override_images == 'true' }}
       shell: bash
       run: |
         echo "CATALOG_INDEX_IMAGE=${{ env.CATALOG_INDEX_IMAGE }}" > .env
@@ -173,6 +189,7 @@ runs:
         cat .env
 
     - name: Compose config
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -181,7 +198,7 @@ runs:
       run: $TOOL compose $CLI_ARGS config
 
     - name: Add user-specific configuration
-      if: ${{ inputs.user_config_enabled == 'true' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.user_config_enabled == 'true' }}
       shell: bash
       env:
         # https://docs.github.com/en/actions/how-tos/monitor-workflows/enable-debug-logging#enabling-runner-diagnostic-logging
@@ -224,12 +241,13 @@ runs:
         cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
 
     - name: Create dynamic plugins directory
-      if: ${{ inputs.compose_config_name == 'dynamic-plugins-root' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'dynamic-plugins-root' }}
       shell: bash
       run: |
         mkdir -p dynamic-plugins-root
 
     - name: Start app
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -240,6 +258,7 @@ runs:
         $TOOL compose $CLI_ARGS ps
 
     - name: Wait for HTTP 200 response from homepage
+      if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
       run: |
         max=50
@@ -258,7 +277,7 @@ runs:
         curl -i --insecure http://localhost:7007
 
     - name: curl from RHDH Container (for troubleshooting)
-      if: failure()
+      if: ${{ failure() && env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -267,7 +286,7 @@ runs:
         $TOOL exec rhdh curl -i --head --fail http://localhost:7007
 
     - name: Compose logs
-      if: always()
+      if: ${{ always() && env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -281,7 +300,7 @@ runs:
         done
 
     - name: Tear down
-      if: always()
+      if: ${{ always() && env.SKIP_TEST != 'true' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -291,7 +310,7 @@ runs:
         $TOOL compose $CLI_ARGS down --volumes || true
 
     - name: Cleanup Podman container environment
-      if: ${{ always() && inputs.container_tool == 'podman' }}
+      if: ${{ always() && env.SKIP_TEST != 'true' && inputs.container_tool == 'podman' }}
       shell: bash
       run: |
         docker container stop ${{ steps.setup-podman.outputs.container-name }} || true
