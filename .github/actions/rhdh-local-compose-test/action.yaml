@@ -62,7 +62,17 @@ runs:
         else TAG="next"; fi
 
         echo "RHDH_TAG=$TAG" >> "$GITHUB_ENV"
-        echo "RHDH_IMAGE=quay.io/rhdh-community/rhdh:$TAG" >> "$GITHUB_ENV"
+
+        RHDH_IMAGE="quay.io/rhdh-community/rhdh:$TAG"
+        if ! skopeo list-tags "docker://quay.io/rhdh-community/rhdh" | grep -q "\"$TAG\""; then
+          if [[ "$TAG" == next-* ]]; then
+            RHDH_IMAGE="quay.io/rhdh/rhdh-hub-rhel9:${TAG#next-}"
+          else
+            RHDH_IMAGE="quay.io/rhdh/rhdh-hub-rhel9:$TAG"
+          fi
+          echo "::warning::Community image tag '$TAG' not found or expired. Falling back to $RHDH_IMAGE"
+        fi
+        echo "RHDH_IMAGE=$RHDH_IMAGE" >> "$GITHUB_ENV"
 
         if [ "$BRANCH" = "main" ]; then
           CATALOG_TAG="next"
