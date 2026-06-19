@@ -70,6 +70,25 @@ jobs:
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
         exclude:
+          # ARM tests verify architecture compatibility, not functional differences
+          # that vary by compose config or container tool. A representative subset
+          # (docker + default/orchestrator + no user config) is sufficient per branch.
+          - os: ubuntu-24.04-arm
+            tool: podman
+          - os: ubuntu-24.04-arm
+            userConfig: "true"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "corporate-proxy"
+              cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "dynamic-plugins-root"
+              cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           # Skip developer-lightspeed on release-1.10 branch
           - branch: "release-1.10"
             composeConfig:
