@@ -65,8 +65,8 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
-          # TODO: Remove this and the exclude rule below when the minimum supported version is 1.10
-          # (with Lightspeed enabled by default)
+          # TODO: Remove this and the exclude rules below once all supported
+          # branches include Lightspeed in the base deployment.
           - name: "developer-lightspeed"
             cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
         exclude:
@@ -89,7 +89,12 @@ jobs:
             composeConfig:
               name: "developer-lightspeed"
               cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
-          # Skip developer-lightspeed on release-1.10 branch
+          # Skip developer-lightspeed on main and release-1.10: Lightspeed is
+          # fully integrated with the base deployment.
+          - branch: "main"
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           - branch: "release-1.10"
             composeConfig:
               name: "developer-lightspeed"
