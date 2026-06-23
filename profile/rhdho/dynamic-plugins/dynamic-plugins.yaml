@@ -1,0 +1,42 @@
+
+includes:
+  - dynamic-plugins.default.yaml
+
+plugins:
+  - package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-1.6.0.tgz
+    integrity: sha512-fOSJv2PgtD2urKwBM7p9W6gV/0UIHSf4pkZ9V/wQO0eg0Zi5Mys/CL1ba3nO9x9l84MX11UBZ2r7PPVJPrmOtw==
+    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-orchestrator:
+            appIcons:
+              - importName: OrchestratorIcon
+                name: orchestratorIcon
+            dynamicRoutes:
+              - importName: OrchestratorPage
+                menuItem:
+                  icon: orchestratorIcon
+                  text: Orchestrator
+                path: /orchestrator
+  - disabled: false
+    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-backend-dynamic-1.6.0.tgz
+    integrity: sha512-Kr55YbuVwEADwGef9o9wyimcgHmiwehPeAtVHa9g2RQYoSPEa6BeOlaPzB6W5Ke3M2bN/0j0XXtpLuvrlXQogA==
+    pluginConfig:
+      orchestrator:
+        dataIndexService:
+          url: http://sonataflow:8899
+  - disabled: false
+    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic-1.6.0.tgz
+    integrity: sha512-Bueeix4661fXEnfJ9y31Yw91LXJgw6hJUG7lPVdESCi9VwBCjDB9Rm8u2yPqP8sriwr0OMtKtqD+Odn3LOPyVw==
+    pluginConfig:
+      orchestrator:
+        dataIndexService:
+          url: http://sonataflow:8899
+  - disabled: false
+    package: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/v1.6.0/backstage-plugin-orchestrator-form-widgets-1.6.0.tgz
+    integrity: sha512-Tqn6HO21Q1TQ7TFUoRhwBVCtSBzbQYz+OaanzzIB0R24O6YtVx3wR7Chtr5TzC05Vz5GkBO1+FZid8BKpqljgA==
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          red-hat-developer-hub.backstage-plugin-orchestrator-form-widgets: {}
