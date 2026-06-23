@@ -22,112 +22,124 @@ app:
     # If using a different logo, replace these lines with your own image(s)
     # fullLogo: data:image/svg+xml;base64,your-image-goes-here==
     # - or -
-    # fullLogo: 
+    # fullLogo:
     #   dark: data:image/svg+xml;base64,your-image-in-dark-mode-goes-here==
     #   light: data:image/svg+xml;base64,your-image-in-light-mode-goes-here==
     # iconLogo: data:image/svg+xml;base64,your-image-goes-here==
     fullLogoWidth: ${FULL_LOGO_WIDTH}
     theme:
       light:
-        primaryColor: ${PRIMARY_LIGHT_COLOR}
-        headerColor1: ${HEADER_LIGHT_COLOR_1}
-        headerColor2: ${HEADER_LIGHT_COLOR_2}
-        navigationIndicatorColor: ${NAV_INDICATOR_LIGHT_COLOR}
+        palette:
+          primary:
+            main: ${PRIMARY_LIGHT_COLOR}
+          navigation:
+            indicator: ${NAV_INDICATOR_LIGHT_COLOR}
+        pageTheme:
+          default:
+            backgroundColor:
+              - ${HEADER_LIGHT_COLOR_1}
+              - ${HEADER_LIGHT_COLOR_2}
       dark:
-        primaryColor: ${PRIMARY_DARK_COLOR}
-        headerColor1: ${HEADER_DARK_COLOR_1}
-        headerColor2: ${HEADER_DARK_COLOR_2}
-        navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
+        palette:
+          primary:
+            main: ${PRIMARY_DARK_COLOR}
+          navigation:
+            indicator: ${NAV_INDICATOR_DARK_COLOR}
+        pageTheme:
+          default:
+            backgroundColor:
+              - ${HEADER_DARK_COLOR_1}
+              - ${HEADER_DARK_COLOR_2}
+
   quickstart:
     # Quickstarts for all users (both new admins and new developers)
-    - title: 'What is Developer Hub?'
-      description: 'Learn what Developer Hub is, its purpose, and how to use it to discover, create, and manage software in your organization.'
-      icon: 'developerHub'
-      roles: ['admin', 'developer'] # Show to all users
+    - title: "What is Developer Hub?"
+      description: "Learn what Developer Hub is, its purpose, and how to use it to discover, create, and manage software in your organization."
+      icon: "developerHub"
+      roles: ["admin", "developer"] # Show to all users
       cta:
-        text: 'Read the Introduction'
-        link: '/docs/default/system/rhdh-local/intro/rhdh/' # Link points to a very custom location that only exists by default in RHDH Local
-    - title: 'Navigate Your Way Around'
-      description: 'The homepage gives links to important features and documentation. The topbar allows you to to search for anything, register new components, view your starred entities, and launch external apps.'
-      icon: 'kind:location'
-      roles: ['admin', 'developer']
+        text: "Read the Introduction"
+        link: "/docs/default/system/rhdh-local/intro/rhdh/" # Link points to a very custom location that only exists by default in RHDH Local
+    - title: "Navigate Your Way Around"
+      description: "The homepage gives links to important features and documentation. The topbar allows you to to search for anything, register new components, view your starred entities, and launch external apps."
+      icon: "kind:location"
+      roles: ["admin", "developer"]
       cta:
-        text: 'Start Exploring'
-        link: '/'
-    - title: 'Browse The Software Catalog'
-      description: 'The software catalog lets you see all the projects and components shared by development teams throughout your organization.'
-      icon: 'catalog'
-      roles: ['admin', 'developer'] # Show to both roles
+        text: "Start Exploring"
+        link: "/"
+    - title: "Browse The Software Catalog"
+      description: "The software catalog lets you see all the projects and components shared by development teams throughout your organization."
+      icon: "catalog"
+      roles: ["admin", "developer"] # Show to both roles
       cta:
-        text: 'Open the Catalog'
-        link: '/catalog'
-    - title: 'Browse The ''Golden Path'' Templates'
-      description: 'Golden path templates let you quickly create and customize software projects that follow your organization''s coding standards using simple wizard like forms. You can even develop and share templates of your own!'
-      icon: 'scaffolder'
-      roles: ['admin', 'developer'] # Show to both roles
+        text: "Open the Catalog"
+        link: "/catalog"
+    - title: "Browse The 'Golden Path' Templates"
+      description: "Golden path templates let you quickly create and customize software projects that follow your organization's coding standards using simple wizard like forms. You can even develop and share templates of your own!"
+      icon: "scaffolder"
+      roles: ["admin", "developer"] # Show to both roles
       cta:
-        text: 'Browse the Templates'
-        link: '/create'
-    - title: 'Read Some TechDocs'
-      description: 'Discover project documentation, architecture notes, and how-to guides in TechDocs.'
-      icon: 'techdocs'
-      roles: ['admin', 'developer']
+        text: "Browse the Templates"
+        link: "/create"
+    - title: "Read Some TechDocs"
+      description: "Discover project documentation, architecture notes, and how-to guides in TechDocs."
+      icon: "techdocs"
+      roles: ["admin", "developer"]
       cta:
-        text: 'View the TechDocs'
-        link: '/docs'
-    - title: 'Explore APIs'
-      description: 'Visit the APIs section to discover the APIs that have been added by our organization.'
-      icon: 'kind:api'
-      roles: ['admin', 'developer'] # Show to both roles
+        text: "View the TechDocs"
+        link: "/docs"
+    - title: "Explore APIs"
+      description: "Visit the APIs section to discover the APIs that have been added by our organization."
+      icon: "kind:api"
+      roles: ["admin", "developer"] # Show to both roles
       cta:
-        text: 'View the APIs'
-        link: '/api-docs'
-    - title: 'Add Software To The Catalog'
-      description: 'You can register existing Backstage components into the catalog using catalog-info.yaml files. Alternatively, you could use our Bulk Import tool to register multiple components at once.'
-      icon: 'add'
-      roles: ['admin', 'developer'] # Show to both roles
+        text: "View the APIs"
+        link: "/api-docs"
+    - title: "Add Software To The Catalog"
+      description: "You can register existing Backstage components into the catalog using catalog-info.yaml files. Alternatively, you could use our Bulk Import tool to register multiple components at once."
+      icon: "add"
+      roles: ["admin", "developer"] # Show to both roles
       cta:
-        text: 'Register a Component'
-        link: '/catalog-import'
-    - title: 'Personalize Your Experience'
-      description: 'Customize Developer Hub to match your preferences. Toggle dark mode, adjust your theme, and configure settings to create your ideal workspace.'
-      icon: 'manageAccounts'
-      roles: ['admin', 'developer'] # Show to all users
+        text: "Register a Component"
+        link: "/catalog-import"
+    - title: "Personalize Your Experience"
+      description: "Customize Developer Hub to match your preferences. Toggle dark mode, adjust your theme, and configure settings to create your ideal workspace."
+      icon: "manageAccounts"
+      roles: ["admin", "developer"] # Show to all users
       cta:
-        text: 'Open Settings'
-        link: '/settings'
-    - title: 'Learn New Skills'
-      description: 'Discover curated learning paths designed to help you expand your knowledge and skills in various technologies.'
-      icon: 'school'
-      roles: ['admin', 'developer'] # Show to both roles
+        text: "Open Settings"
+        link: "/settings"
+    - title: "Learn New Skills"
+      description: "Discover curated learning paths designed to help you expand your knowledge and skills in various technologies."
+      icon: "school"
+      roles: ["admin", "developer"] # Show to both roles
       cta:
-        text: 'View Learning Paths'
-        link: '/learning-paths'
-    - title: 'Star Your Favorite Items'
-      description: 'Click the Star icon on any Catalog entity, API, or anywhere else you see a star. Your starred items appear in the top navigation bar for quick access. Try it now by adding the RHDH Local System to your starred items list.'
-      icon: 'star'
-      roles: ['admin', 'developer']
+        text: "View Learning Paths"
+        link: "/learning-paths"
+    - title: "Star Your Favorite Items"
+      description: "Click the Star icon on any Catalog entity, API, or anywhere else you see a star. Your starred items appear in the top navigation bar for quick access. Try it now by adding the RHDH Local System to your starred items list."
+      icon: "star"
+      roles: ["admin", "developer"]
       cta:
-        text: 'Learn More'
-        link: '/catalog/default/system/rhdh-local'
+        text: "Learn More"
+        link: "/catalog/default/system/rhdh-local"
 
     # Quickstarts just for admins
-    - title: 'View Your Platform Adoption Metrics'
-      description: 'See how your developers are using Developer Hub''s many tools and features.'
-      icon: 'chart'
-      roles: ['admin']
+    - title: "View Your Platform Adoption Metrics"
+      description: "See how your developers are using Developer Hub's many tools and features."
+      icon: "chart"
+      roles: ["admin"]
       cta:
-        text: 'Open Adoption Insights'
-        link: '/adoption-insights'
-    - title: 'Manage and Install Plugins'
-      description: 'Browse the Extensions Catalog to discover, install, and manage plugins that extend Developer Hub''s functionality.'
-      icon: 'storefront'
-      roles: ['admin'] # Show only to admins
+        text: "Open Adoption Insights"
+        link: "/adoption-insights"
+    - title: "Manage and Install Plugins"
+      description: "Browse the Extensions Catalog to discover, install, and manage plugins that extend Developer Hub's functionality."
+      icon: "storefront"
+      roles: ["admin"] # Show only to admins
       cta:
-        text: 'Open Extensions Catalog'
-        link: '/extensions/catalog'
+        text: "Open Extensions Catalog"
+        link: "/extensions/catalog"
 
-        
 backend:
   listen:
     port: 7007
@@ -140,24 +152,24 @@ backend:
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   csp:
-   upgrade-insecure-requests: false
-   img-src:
-    - "'self'"
-    - "data:"
-    - "https://quay.io"
-    - "https://*.quay.io"
-    - "https://img.freepik.com"
-    - "https://cdn.dribbble.com"
-    - "https://avatars.githubusercontent.com"
-   script-src:
-     - "'self'"
-     - "'unsafe-eval'"
-     - "https://cdn.jsdelivr.net"
-# comment out the following 'database' section to use the PostgreSQL database
+    upgrade-insecure-requests: false
+    img-src:
+      - "'self'"
+      - "data:"
+      - "https://quay.io"
+      - "https://*.quay.io"
+      - "https://img.freepik.com"
+      - "https://cdn.dribbble.com"
+      - "https://avatars.githubusercontent.com"
+    script-src:
+      - "'self'"
+      - "'unsafe-eval'"
+      - "https://cdn.jsdelivr.net"
+  # comment out the following 'database' section to use the PostgreSQL database
   database:
     client: better-sqlite3
-    connection: ':memory:'
-# static auth provider for development and testing purposes. This is not meant for production use.
+    connection: ":memory:"
+  # static auth provider for development and testing purposes. This is not meant for production use.
   auth:
     externalAccess:
       - type: static
@@ -171,7 +183,18 @@ catalog:
   # processingInterval: { seconds: 30 }
 
   rules:
-    - allow: [Component, API, Location, Template, Domain, User, Group, System, Resource]
+    - allow:
+        [
+          Component,
+          API,
+          Location,
+          Template,
+          Domain,
+          User,
+          Group,
+          System,
+          Resource,
+        ]
 
   locations:
     - type: file
@@ -223,21 +246,21 @@ techdocs:
 dynamicPlugins:
   frontend:
     default.main-menu-items:
-        menuItems:
-          default.help:
-            title: RHDH Guide
-            icon: techdocs
-            priority: 5
-            to: /catalog/default/system/rhdh-local/docs
-            enabled: true
+      menuItems:
+        default.help:
+          title: RHDH Guide
+          icon: techdocs
+          priority: 5
+          to: /catalog/default/system/rhdh-local/docs
+          enabled: true
 
 proxy:
   endpoints:
-    '/quay/api':
-      target: 'https://quay.io'
+    "/quay/api":
+      target: "https://quay.io"
       credentials: require
       headers:
-        X-Requested-With: 'XMLHttpRequest'
+        X-Requested-With: "XMLHttpRequest"
         # Uncomment and use the Authorization header below to access a private Quay
         # Repository using a token. Refer to the "Applications and Tokens" section
         # at https://docs.quay.io/api/ to find the instructions to generate a token
@@ -248,7 +271,7 @@ proxy:
 
 quay:
   # The UI url for Quay, used to generate the link to Quay
-  uiUrl: 'https://quay.io'
+  uiUrl: "https://quay.io"
 
 # ==============================================================================
 # Developer Lightspeed Plugin Configuration
@@ -261,7 +284,7 @@ lightspeed:
   # These appear as suggested questions/prompts to help users get started
   # If not provided, the plugin uses built-in default prompts
   prompts:
-    - title: 'Getting Started with Red Hat Developer Hub'
+    - title: "Getting Started with Red Hat Developer Hub"
       message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
 
   # OPTIONAL: Port for the Lightspeed backend service
