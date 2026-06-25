@@ -14,21 +14,21 @@ includes:
 # Add the Orchestrator plugins directly, and add any other plugins you want to install, including local ones.
 plugins:
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:{{inherit}}'
-    disabled: false
+    enabled: true
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:{{inherit}}'
-    disabled: false
+    enabled: true
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:{{inherit}}'
-    disabled: false
+    enabled: true
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:{{inherit}}'
-    disabled: false
+    enabled: true
 ```
 
 > **Warning:** Do **not** use the `includes` directive to reference `orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml`.
