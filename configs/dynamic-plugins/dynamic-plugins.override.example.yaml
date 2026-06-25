@@ -14,16 +14,16 @@ includes:
 # Functioning example using Tech Radar, uncomment to use
   #Tech Radar frontend plugin
   # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
-  #   disabled: false
+  #   enabled: true
 
   # Tech Radar backend plugin. Required if you want to customize the tech radar URL 
   # (see the `techRadar.url` app-config property).
   # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
-  #   disabled: false
+  #   enabled: true
 
 # # loading plugin from host directory
 #   - package: ./local-plugins/todo
-#     disabled: false
+#     enabled: true
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -38,7 +38,7 @@ includes:
 
 # # loading image from container image
 #   - package: oci://docker.io/tomaskral/simple-chat:v0.0.1!internal-backstage-plugin-simple-chat
-#     disabled: false
+#     enabled: true
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -54,7 +54,7 @@ includes:
 #                     icon: chatIcon
 
 # # loading image from tarball URL
-#   - disabled: false
+#   - enabled: true
 #     package: >-
 #         https://github.com/redhat-developer/rhdh-plugin-export-backstage-community-plugins/releases/download/v1.2.0/backstage-community-plugin-tech-insights-dynamic-0.3.28.tgz
 #     integrity: sha512-cNHXSwPa5fOi2BcNVSe7tfdLyM0JY988CE5t+P9p/XlboP1QpQbMcLBmqPrlXZdpedAyp81Zz3yPQYGnPuy9ww==
@@ -77,7 +77,7 @@ includes:
 
 # # loading plugin from directory inside the RHDH container
 #   - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
-#     disabled: true
+#     enabled: false
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -101,12 +101,12 @@ includes:
 # # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
 # # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:{{inherit}}'
 # - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
-#   disabled: false
+#   enabled: true
 
 # # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
 # # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:{{inherit}}'
 # - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
-#   disabled: false
+#   enabled: true
 #   pluginConfig:
 #     extensions:
 #       installation:
@@ -120,8 +120,8 @@ includes:
 # # Uncomment the following to disable Developer Lightspeed plugins
 #   # Lightspeed frontend plugin
 #   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-#     disabled: true
+#     enabled: false
 #
 #   # Lightspeed backend plugin
 #   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-#     disabled: true
+#     enabled: false
