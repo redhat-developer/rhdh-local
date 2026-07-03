@@ -18,7 +18,7 @@ set -euo pipefail
 RHDH_URL="${RHDH_URL:-http://localhost:7007}"
 DYN_PLUGINS_DIR="configs/dynamic-plugins"
 
-if [ -f "$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml" ]; then
+if [[ -f "$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml" ]]; then
     primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml"
 else
     primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.yaml"
@@ -26,7 +26,7 @@ fi
 
 config_files=("$primary_config")
 for extra in "$@"; do
-    if [ -f "$extra" ]; then
+    if [[ -f "$extra" ]]; then
         config_files+=("$extra")
     else
         echo "WARNING: Extra config file not found, skipping: $extra"
@@ -66,7 +66,7 @@ normalize_plugin_name() {
 expected_plugins=()
 for cfg in "${config_files[@]}"; do
     while IFS= read -r raw_pkg; do
-        [ -z "$raw_pkg" ] && continue
+        [[ -z "$raw_pkg" ]] && continue
         raw_pkg="${raw_pkg//\'/}"
         raw_pkg="${raw_pkg//\"/}"
         expected_plugins+=("$(extract_plugin_name "$raw_pkg")")
@@ -77,14 +77,14 @@ done
 disabled_plugins=()
 for cfg in "${config_files[@]}"; do
     while IFS= read -r raw_pkg; do
-        [ -z "$raw_pkg" ] && continue
+        [[ -z "$raw_pkg" ]] && continue
         raw_pkg="${raw_pkg//\'/}"
         raw_pkg="${raw_pkg//\"/}"
         disabled_plugins+=("$(extract_plugin_name "$raw_pkg")")
     done < <(yq '.plugins[] | select(.disabled == true or .enabled == false) | .package' "$cfg" 2>/dev/null)
 done
 
-if [ ${#expected_plugins[@]} -eq 0 ] && [ ${#disabled_plugins[@]} -eq 0 ]; then
+if [[ ${#expected_plugins[@]} -eq 0 ]] && [[ ${#disabled_plugins[@]} -eq 0 ]]; then
     echo "WARNING: No plugins found in config files. Nothing to validate."
     exit 0
 fi
@@ -94,7 +94,7 @@ echo "Obtaining guest auth token from ${RHDH_URL}/api/auth/guest/refresh ..."
 guest_response=$(curl -sS -f "${RHDH_URL}/api/auth/guest/refresh" \
     -H "Accept: application/json" 2>/dev/null) || true
 RHDH_TOKEN=$(echo "$guest_response" | jq -r '.backstageIdentity.token // empty' 2>/dev/null)
-if [ -z "$RHDH_TOKEN" ]; then
+if [[ -z "$RHDH_TOKEN" ]]; then
     echo "WARNING: Could not obtain guest auth token. Skipping validation."
     echo "Response: $guest_response"
     exit 0
@@ -107,7 +107,7 @@ http_code=$(curl -sS -o /tmp/loaded-plugins.json -w "%{http_code}" \
     -H "Authorization: Bearer ${RHDH_TOKEN}" \
     "${RHDH_URL}/api/extensions/loaded-plugins") || true
 
-if [ "$http_code" != "200" ]; then
+if [[ "$http_code" != "200" ]]; then
     echo "WARNING: Could not reach loaded-plugins endpoint (HTTP $http_code). Skipping validation."
     echo "Response body:"
     cat /tmp/loaded-plugins.json 2>/dev/null || true
@@ -115,7 +115,7 @@ if [ "$http_code" != "200" ]; then
 fi
 
 loaded_names=$(jq -r '.[].name' /tmp/loaded-plugins.json 2>/dev/null)
-if [ -z "$loaded_names" ]; then
+if [[ -z "$loaded_names" ]]; then
     echo "WARNING: Loaded plugins response was empty or could not be parsed."
     echo "Response body:"
     cat /tmp/loaded-plugins.json 2>/dev/null || true
@@ -130,14 +130,14 @@ done <<< "$loaded_names"
 
 failed=0
 
-if [ ${#expected_plugins[@]} -gt 0 ]; then
+if [[ ${#expected_plugins[@]} -gt 0 ]]; then
     echo ""
     echo "Validating ${#expected_plugins[@]} expected plugin(s) are loaded:"
     for name in "${expected_plugins[@]}"; do
         norm_expected=$(normalize_plugin_name "$name")
         found=false
         for norm_loaded in "${normalized_loaded[@]}"; do
-            if [ "$norm_expected" = "$norm_loaded" ]; then
+            if [[ "$norm_expected" = "$norm_loaded" ]]; then
                 found=true
                 break
             fi
@@ -151,14 +151,14 @@ if [ ${#expected_plugins[@]} -gt 0 ]; then
     done
 fi
 
-if [ ${#disabled_plugins[@]} -gt 0 ]; then
+if [[ ${#disabled_plugins[@]} -gt 0 ]]; then
     echo ""
     echo "Validating ${#disabled_plugins[@]} disabled plugin(s) are NOT loaded:"
     for name in "${disabled_plugins[@]}"; do
         norm_disabled=$(normalize_plugin_name "$name")
         found=false
         for norm_loaded in "${normalized_loaded[@]}"; do
-            if [ "$norm_disabled" = "$norm_loaded" ]; then
+            if [[ "$norm_disabled" = "$norm_loaded" ]]; then
                 found=true
                 break
             fi
@@ -173,7 +173,7 @@ if [ ${#disabled_plugins[@]} -gt 0 ]; then
 fi
 
 echo ""
-if [ $failed -gt 0 ]; then
+if [[ $failed -gt 0 ]]; then
     echo "FAILED: $failed plugin validation(s) failed."
     echo ""
     echo "Loaded plugins:"
