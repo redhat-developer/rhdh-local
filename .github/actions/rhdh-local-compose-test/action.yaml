@@ -276,6 +276,16 @@ runs:
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
 
+    - name: Validate loaded plugins
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      run: |
+        extra_configs=()
+        if [[ "${{ inputs.compose_config_name }}" == *orchestrator* ]]; then
+          extra_configs+=("orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml")
+        fi
+        ./tests/validate-loaded-plugins.sh "${extra_configs[@]}"
+
     - name: curl from RHDH Container (for troubleshooting)
       if: ${{ failure() && env.SKIP_TEST != 'true' }}
       shell: bash
