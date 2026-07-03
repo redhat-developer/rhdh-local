@@ -240,6 +240,16 @@ runs:
         # Custom components.override.yaml
         cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
 
+    - name: Add orchestrator plugins to dynamic-plugins override
+      if: ${{ env.SKIP_TEST != 'true' && contains(inputs.compose_config_name, 'orchestrator') }}
+      shell: bash
+      run: |
+        OVERRIDE="configs/dynamic-plugins/dynamic-plugins.override.yaml"
+        if [ ! -f "$OVERRIDE" ]; then
+          cp configs/dynamic-plugins/dynamic-plugins.yaml "$OVERRIDE"
+        fi
+        yq -i '.plugins += load("orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml").plugins' "$OVERRIDE"
+
     - name: Create dynamic plugins directory
       if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'dynamic-plugins-root' }}
       shell: bash
@@ -279,12 +289,7 @@ runs:
     - name: Validate loaded plugins
       if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
-      run: |
-        extra_configs=()
-        if [[ "${{ inputs.compose_config_name }}" == *orchestrator* ]]; then
-          extra_configs+=("orchestrator/configs/dynamic-plugins/dynamic-plugins.yaml")
-        fi
-        ./tests/validate-loaded-plugins.sh "${extra_configs[@]}"
+      run: ./tests/validate-loaded-plugins.sh
 
     - name: curl from RHDH Container (for troubleshooting)
       if: ${{ failure() && env.SKIP_TEST != 'true' }}
