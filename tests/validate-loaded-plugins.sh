@@ -15,6 +15,9 @@
 
 set -euo pipefail
 
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
 for cmd in yq jq curl; do
     if ! command -v "$cmd" &>/dev/null; then
         echo "ERROR: Required command '$cmd' not found." >&2
@@ -114,22 +117,22 @@ echo "Guest auth token obtained."
 
 echo ""
 echo "Fetching loaded plugins from ${RHDH_URL}/api/extensions/loaded-plugins ..."
-http_code=$(curl -sS -o /tmp/loaded-plugins.json -w "%{http_code}" \
+http_code=$(curl -sS -o $tmpfile -w "%{http_code}" \
     -H "Authorization: Bearer ${RHDH_TOKEN}" \
     "${RHDH_URL}/api/extensions/loaded-plugins") || true
 
 if [[ "$http_code" != "200" ]]; then
     echo "ERROR: Could not reach loaded-plugins endpoint (HTTP $http_code)." >&2
     echo "Response body:" >&2
-    cat /tmp/loaded-plugins.json >&2 2>/dev/null || true
+    cat $tmpfile >&2 2>/dev/null || true
     exit 1
 fi
 
-loaded_names=$(jq -r '.[].name' /tmp/loaded-plugins.json 2>/dev/null)
+loaded_names=$(jq -r '.[].name' $tmpfile 2>/dev/null)
 if [[ -z "$loaded_names" ]]; then
     echo "ERROR: Loaded plugins response was empty or could not be parsed." >&2
     echo "Response body:" >&2
-    cat /tmp/loaded-plugins.json >&2 2>/dev/null || true
+    cat $tmpfile >&2 2>/dev/null || true
     exit 1
 fi
 
@@ -188,7 +191,7 @@ if [[ $failed -gt 0 ]]; then
     echo "FAILED: $failed plugin validation(s) failed." >&2
     echo ""
     echo "Loaded plugins:"
-    jq -r '.[].name' /tmp/loaded-plugins.json | sort
+    jq -r '.[].name' $tmpfile | sort
     exit 1
 fi
 
