@@ -37,7 +37,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync Lightspeed config files
-        run: ./scripts/sync-lightspeed-configs.sh
+        run: ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
 
       - name: Check for changes
         id: changes
