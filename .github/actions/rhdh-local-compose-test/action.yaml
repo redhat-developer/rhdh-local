@@ -231,9 +231,9 @@ runs:
               installation:
                 enabled: false
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
-          disabled: false
+          enabled: true
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
-          disabled: false
+          enabled: true
         EOF
 
         # Custom extra files
