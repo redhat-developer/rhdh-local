@@ -95,9 +95,9 @@ guest_response=$(curl -sS -f "${RHDH_URL}/api/auth/guest/refresh" \
     -H "Accept: application/json" 2>/dev/null) || true
 RHDH_TOKEN=$(echo "$guest_response" | jq -r '.backstageIdentity.token // empty' 2>/dev/null)
 if [[ -z "$RHDH_TOKEN" ]]; then
-    echo "WARNING: Could not obtain guest auth token. Skipping validation."
+    echo "ERROR: Could not obtain guest auth token."
     echo "Response: $guest_response"
-    exit 0
+    exit 1
 fi
 echo "Guest auth token obtained."
 
@@ -108,18 +108,18 @@ http_code=$(curl -sS -o /tmp/loaded-plugins.json -w "%{http_code}" \
     "${RHDH_URL}/api/extensions/loaded-plugins") || true
 
 if [[ "$http_code" != "200" ]]; then
-    echo "WARNING: Could not reach loaded-plugins endpoint (HTTP $http_code). Skipping validation."
+    echo "ERROR: Could not reach loaded-plugins endpoint (HTTP $http_code)."
     echo "Response body:"
     cat /tmp/loaded-plugins.json 2>/dev/null || true
-    exit 0
+    exit 1
 fi
 
 loaded_names=$(jq -r '.[].name' /tmp/loaded-plugins.json 2>/dev/null)
 if [[ -z "$loaded_names" ]]; then
-    echo "WARNING: Loaded plugins response was empty or could not be parsed."
+    echo "ERROR: Loaded plugins response was empty or could not be parsed."
     echo "Response body:"
     cat /tmp/loaded-plugins.json 2>/dev/null || true
-    exit 0
+    exit 1
 fi
 
 # Build a list of normalized loaded plugin names for matching.
