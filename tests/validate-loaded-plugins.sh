@@ -15,6 +15,13 @@
 
 set -euo pipefail
 
+for cmd in yq jq curl; do
+    if ! command -v "$cmd" &>/dev/null; then
+        echo "ERROR: Required command '$cmd' not found." >&2
+        exit 1
+    fi
+done
+
 RHDH_URL="${RHDH_URL:-http://localhost:7007}"
 DYN_PLUGINS_DIR="configs/dynamic-plugins"
 
@@ -61,26 +68,31 @@ normalize_plugin_name() {
     echo "$name"
 }
 
-# Extract plugin names that should be enabled (not explicitly disabled).
 expected_plugins=()
-for cfg in "${config_files[@]}"; do
-    while IFS= read -r raw_pkg; do
-        [[ -z "$raw_pkg" ]] && continue
-        raw_pkg="${raw_pkg//\'/}"
-        raw_pkg="${raw_pkg//\"/}"
-        expected_plugins+=("$(extract_plugin_name "$raw_pkg")")
-    done < <(yq '.plugins[] | select(.disabled != true and .enabled != false) | .package' "$cfg" 2>/dev/null)
-done
-
-# Extract plugin names that should NOT be loaded (explicitly disabled).
 disabled_plugins=()
 for cfg in "${config_files[@]}"; do
+    if ! yq -e '.plugins' "$cfg" > /dev/null 2>&1; then
+        echo "Config $cfg has no .plugins array, skipping."
+        continue
+    fi
+
+    enabled_output=$(yq -r '.plugins[] | select(.disabled != true and .enabled != false) | .package' "$cfg") || {
+        echo "ERROR: Failed to extract enabled plugins from $cfg" >&2
+        exit 1
+    }
     while IFS= read -r raw_pkg; do
         [[ -z "$raw_pkg" ]] && continue
-        raw_pkg="${raw_pkg//\'/}"
-        raw_pkg="${raw_pkg//\"/}"
+        expected_plugins+=("$(extract_plugin_name "$raw_pkg")")
+    done <<< "$enabled_output"
+
+    disabled_output=$(yq -r '.plugins[] | select(.disabled == true or .enabled == false) | .package' "$cfg") || {
+        echo "ERROR: Failed to extract disabled plugins from $cfg" >&2
+        exit 1
+    }
+    while IFS= read -r raw_pkg; do
+        [[ -z "$raw_pkg" ]] && continue
         disabled_plugins+=("$(extract_plugin_name "$raw_pkg")")
-    done < <(yq '.plugins[] | select(.disabled == true or .enabled == false) | .package' "$cfg" 2>/dev/null)
+    done <<< "$disabled_output"
 done
 
 if [[ ${#expected_plugins[@]} -eq 0 ]] && [[ ${#disabled_plugins[@]} -eq 0 ]]; then
