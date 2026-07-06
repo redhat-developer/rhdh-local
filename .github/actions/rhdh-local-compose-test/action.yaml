@@ -240,6 +240,8 @@ runs:
         # Custom components.override.yaml
         cp configs/catalog-entities/components.override.example.yaml configs/catalog-entities/components.override.yaml
 
+    # Orchestrator plugins must be added directly to the override file.
+    # See orchestrator/README.md#setup-orchestrator-and-workflow-examples
     - name: Add orchestrator plugins to dynamic-plugins override
       if: ${{ env.SKIP_TEST != 'true' && contains(inputs.compose_config_name, 'orchestrator') }}
       shell: bash
