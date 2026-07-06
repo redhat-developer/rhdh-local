@@ -18,10 +18,9 @@ set -euo pipefail
 RHDH_URL="${RHDH_URL:-http://localhost:7007}"
 DYN_PLUGINS_DIR="configs/dynamic-plugins"
 
+primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.yaml"
 if [[ -f "$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml" ]]; then
     primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml"
-else
-    primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.yaml"
 fi
 
 config_files=("$primary_config")
@@ -46,7 +45,7 @@ extract_plugin_name() {
         return
     fi
     local name="${pkg##*/}"
-    name="${name%%:*}"
+    name="${name%%:*}" # strip tag (e.g. :v1.2.3 or :{{inherit}})
     echo "$name"
 }
 
