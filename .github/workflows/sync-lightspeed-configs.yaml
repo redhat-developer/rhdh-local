@@ -5,14 +5,20 @@ on:
     - cron: '0 4 * * *'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   sync-lightspeed:
-    name: Sync Lightspeed Configs
+    name: Sync Lightspeed Configs (${{ matrix.branch }})
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - release-1.10
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.branch }}
+      cancel-in-progress: true
 
     permissions:
       contents: write
@@ -22,6 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
+          ref: ${{ matrix.branch }}
           fetch-depth: 0
 
       - name: Configure Git
@@ -30,7 +37,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync Lightspeed config files
-        run: ./scripts/sync-lightspeed-configs.sh
+        run: ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
 
       - name: Check for changes
         id: changes
@@ -47,11 +54,12 @@ jobs:
         if: steps.changes.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_BRANCH: ${{ matrix.branch }}
         run: |
           TITLE="chore(lightspeed): sync config files from upstream"
-          BRANCH="chore/sync-lightspeed-configs"
+          BRANCH="chore/sync-lightspeed-configs-${TARGET_BRANCH}"
 
-          EXISTING_PR=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "${TARGET_BRANCH}" --state open --json number --jq '.[0].number // empty')
 
           git checkout -b "${BRANCH}"
 
@@ -84,5 +92,5 @@ jobs:
             gh pr create \
               --title "${TITLE}" \
               --body "${BODY}" \
-              --base "${{ github.ref_name }}"
+              --base "${TARGET_BRANCH}"
           fi
