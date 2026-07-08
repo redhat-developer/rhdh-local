@@ -12,6 +12,7 @@
 # The script determines the effective dynamic-plugins config
 # (override if it exists, else default) and parses it using yq.
 # Any extra config files (e.g., orchestrator) can be passed as arguments.
+# Assumes CWD is the repository root.
 
 set -euo pipefail
 
@@ -106,7 +107,7 @@ fi
 echo ""
 echo "Obtaining guest auth token from ${RHDH_URL}/api/auth/guest/refresh ..."
 guest_response=$(curl -sS -f "${RHDH_URL}/api/auth/guest/refresh" \
-    -H "Accept: application/json" 2>/dev/null) || true
+    -H "Accept: application/json")
 RHDH_TOKEN=$(echo "$guest_response" | jq -r '.backstageIdentity.token // empty' 2>/dev/null)
 if [[ -z "$RHDH_TOKEN" ]]; then
     echo "ERROR: Could not obtain guest auth token." >&2
@@ -119,7 +120,7 @@ echo ""
 echo "Fetching loaded plugins from ${RHDH_URL}/api/extensions/loaded-plugins ..."
 http_code=$(curl -sS -o "$tmpfile" -w "%{http_code}" \
     -H "Authorization: Bearer ${RHDH_TOKEN}" \
-    "${RHDH_URL}/api/extensions/loaded-plugins") || true
+    "${RHDH_URL}/api/extensions/loaded-plugins")
 
 if [[ "$http_code" != "200" ]]; then
     echo "ERROR: Could not reach loaded-plugins endpoint (HTTP $http_code)." >&2
