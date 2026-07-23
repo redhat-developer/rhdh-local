@@ -17,7 +17,7 @@ warn() { echo "[sonataflow] WARN: $*"; }
 # to the Quarkus JVM process started later in this script.
 # Use safe parsing (only KEY=VALUE lines, skip comments) to prevent arbitrary code execution.
 _env_file="${PROJECTS_DIR}/rhdh-local/.env"
-if [ -f "$_env_file" ]; then
+if [[ -f "$_env_file" ]]; then
   set -a
   while IFS='=' read -r key value; do
     # Skip empty lines and comments
@@ -26,7 +26,7 @@ if [ -f "$_env_file" ]; then
     [[ "$key" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && export "$key"="$value"
   done < "$_env_file"
   set +a
-  log "Loaded env from $_env_file (CLDCTL_GITHUB_TOKEN set=$([ -n "${CLDCTL_GITHUB_TOKEN:-}" ] && echo yes || echo NO))"
+  log "Loaded env from $_env_file (CLDCTL_GITHUB_TOKEN set=$( [[ -n "${CLDCTL_GITHUB_TOKEN:-}" ]] && echo yes || echo NO))"
 else
   warn ".env not found at $_env_file — CLDCTL_GITHUB_TOKEN will be empty; check WORKFLOW_REPO_DIR"
 fi
@@ -37,7 +37,7 @@ if [[ -n "${WF_ROOTS:-}" ]]; then
   IFS=':' read -ra _wf_roots <<< "$WF_ROOTS"
 else
   for d in "$PROJECTS_DIR"/*/workflows; do
-    [ -d "$d" ] && _wf_roots+=("$d")
+    [[ -d "$d" ]] && _wf_roots+=("$d")
   done
 fi
 log "Workflow roots: ${_wf_roots[*]:-<none>}"
@@ -53,7 +53,7 @@ for _w in $(seq 1 30); do
     log "Old process terminated after ${_w}s"
     break
   fi
-  if [ "$_w" -eq 15 ]; then
+  if [[ "$_w" -eq 15 ]]; then
     warn "Process still alive after 15s — sending SIGKILL"
     pkill -9 -f 'java.*quarkus' 2>/dev/null || true
   fi
@@ -143,7 +143,7 @@ ${_proxy_block}
   </activeProfiles>
 </settings>
 EOF
-log "Wrote clean settings.xml (Red Hat GA + EarlyAccess repos, proxy=$([ -n "${_proxy_block:-}" ] && echo enabled || echo none))"
+log "Wrote clean settings.xml (Red Hat GA + EarlyAccess repos, proxy=$( [[ -n "${_proxy_block:-}" ]] && echo enabled || echo none))"
 
 # Clear cached Maven resolution failures left over from previous bad-proxy runs.
 # Maven caches "not found" markers as *.lastUpdated files; stale ones block
@@ -154,17 +154,17 @@ find /home/kogito/.m2/repository -name "*.lastUpdated" -delete 2>/dev/null || tr
 # --- Merge resources + Java from all workflow roots ---
 _any_found=false
 for _root in "${_wf_roots[@]}"; do
-  [ -d "$_root" ] || { warn "$_root not found — skipping"; continue; }
+  [[ -d "$_root" ]] || { warn "$_root not found — skipping"; continue; }
   _any_found=true
   log "Scanning workflow root: $_root"
   for wf_dir in "$_root"/*/; do
-    [ -d "$wf_dir" ] || continue
+    [[ -d "$wf_dir" ]] || continue
     wf=$(basename "$wf_dir")
-    if [ -d "$wf_dir/src/main/resources" ]; then
+    if [[ -d "$wf_dir/src/main/resources" ]]; then
       log "Loading resources from $wf ($_root)"
       cp -rf "$wf_dir/src/main/resources/"* "$WF_DIR/src/main/resources/" 2>/dev/null || true
     fi
-    if [ -d "$wf_dir/src/main/java" ]; then
+    if [[ -d "$wf_dir/src/main/java" ]]; then
       log "Loading Java sources from $wf ($_root)"
       mkdir -p "$WF_DIR/src/main/java"
       cp -rf "$wf_dir/src/main/java/"* "$WF_DIR/src/main/java/" 2>/dev/null || true
@@ -172,7 +172,7 @@ for _root in "${_wf_roots[@]}"; do
   done
 done
 
-if [ "$_any_found" = false ]; then
+if [[ "$_any_found" == false ]]; then
   warn "No workflow roots found — seeding from examples"
   cp -rf /projects/rhdh-local/orchestrator/workflow-examples/* "$WF_DIR/src/main/resources/" 2>/dev/null || true
 fi
@@ -181,7 +181,7 @@ fi
 log "Starting SonataFlow devmode on port 8899..."
 
 # Check if launch script exists
-if [ ! -f "/home/kogito/launch/run-app-devmode.sh" ]; then
+if [[ ! -f "/home/kogito/launch/run-app-devmode.sh" ]]; then
   warn "Launch script not found: /home/kogito/launch/run-app-devmode.sh"
   find /home/kogito/launch -mindepth 1 -maxdepth 1 -print 2>&1 | head -20
   exit 1
@@ -196,7 +196,7 @@ fi
 
 cd "$WF_DIR"
 log "Working directory: $(pwd)"
-log "Maven settings: $HOME/.m2/settings.xml exists? $(test -f "$HOME/.m2/settings.xml" && echo YES || echo NO)"
+log "Maven settings: $HOME/.m2/settings.xml exists? $( [[ -f "$HOME/.m2/settings.xml" ]] && echo YES || echo NO)"
 
 # Activate the local-dev Quarkus profile so %local-dev.* properties in
 # application.properties are resolved (e.g. dev.github.token.override used

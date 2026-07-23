@@ -191,7 +191,7 @@ fi
 # Symlink configs into RHDH app dir
 rm -rf "$APP/configs" 2>/dev/null || true
 ln -sfn "$WCFG" "$APP/configs"
-log "configs → $WCFG | .npmrc: $(test -f "$WCFG/.npmrc" && echo present || echo MISSING)"
+log "configs → $WCFG | .npmrc: $( [[ -f "$WCFG/.npmrc" ]] && echo present || echo MISSING)"
 
 # Homepage data.json
 if [[ -f "$ROOT_DIR/configs/extra-files/data.json" ]]; then
@@ -338,10 +338,10 @@ _dynamic_plugins_cfg_hash() {
   {
     [[ -d "$CFG/dynamic-plugins" ]] && \
       find -L "$CFG/dynamic-plugins" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 2>/dev/null | \
-        sort -z | xargs -0 md5sum 2>/dev/null
+        sort -z | xargs -0 sha256sum 2>/dev/null
     find -L "$ROOT_DIR" -maxdepth 1 -type f -name 'dynamic-plugins*.yaml' -print0 2>/dev/null | \
-      sort -z | xargs -0 md5sum 2>/dev/null
-  } | md5sum 2>/dev/null | cut -d' ' -f1 || echo "none"
+      sort -z | xargs -0 sha256sum 2>/dev/null
+  } | sha256sum 2>/dev/null | cut -d' ' -f1 || echo "none"
 }
 
 _dynamic_cfg_hash=$(_dynamic_plugins_cfg_hash)
