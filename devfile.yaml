@@ -92,12 +92,10 @@ components:
           value: "apps.example.com"
         - name: NODE_ENV
           value: development
-        - name: NODE_TLS_REJECT_UNAUTHORIZED
-          value: "0"
         - name: NODE_OPTIONS
           value: --inspect=0.0.0.0:9229 --no-node-snapshot
         - name: CATALOG_INDEX_IMAGE
-          value: quay.io/rhdh/plugin-catalog-index:1.9
+          value: quay.io/rhdh/plugin-catalog-index:1.10
         - name: WAIT_FOR_PLUGINS_TIMEOUT
           value: "180"
         - name: CATALOG_ENTITIES_EXTRACT_DIR
@@ -121,6 +119,8 @@ components:
       volumeMounts:
         - name: dynamic-plugins-root
           path: /opt/app-root/src/dynamic-plugins-root
+        - name: dynamic-plugins-root
+          path: /dynamic-plugins-root
         - name: extensions-catalog
           path: /opt/app-root/src/extensions
         - name: rhdh-generated
@@ -241,7 +241,8 @@ commands:
             link=$(readlink "$fd" 2>/dev/null) || continue
             case "$link" in socket:*)
               inode=${link#socket:[}; inode=${inode%]}
-              if grep ':1B5F ' /proc/net/tcp6 2>/dev/null | grep -q "$inode"; then
+              if grep ':1B5F ' /proc/net/tcp6 2>/dev/null | grep -q "$inode" || \
+                 grep ':1B5F ' /proc/net/tcp 2>/dev/null | grep -q "$inode"; then
                 pid=$(echo "$fd" | cut -d/ -f3)
                 echo "  killing PID $pid (port 7007)"
                 kill "$1" "$pid" 2>/dev/null || true
@@ -251,8 +252,8 @@ commands:
           done
           return 1
         }
-        # Graceful kill
-        kill_port_7007 "" && sleep 2
+        # Graceful kill (SIGTERM)
+        kill_port_7007 "-15" && sleep 2
         # Force kill if still there
         kill_port_7007 "-9" && sleep 1
         # Also kill any remaining node processes
@@ -401,8 +402,8 @@ commands:
       component: sonataflow
       workingDir: /home/kogito/serverless-workflow-project
       commandLine: |
-        chmod +x "/projects/rhdh-devspaces/start-sonataflow.sh" 2>/dev/null
-        "/projects/rhdh-devspaces/start-sonataflow.sh"
+        chmod +x "/projects/rhdh-local/scripts/start-orchestrator.sh" 2>/dev/null
+        "/projects/rhdh-local/scripts/start-orchestrator.sh"
       group:
         kind: run
 
@@ -437,8 +438,8 @@ commands:
         fi
 
         echo "[sonataflow] Starting sonataflow server..."
-        chmod +x "/projects/rhdh-devspaces/start-sonataflow.sh" 2>/dev/null
-        "/projects/rhdh-devspaces//start-sonataflow.sh"
+        chmod +x "/projects/rhdh-local/scripts/start-orchestrator.sh" 2>/dev/null
+        "/projects/rhdh-local/scripts/start-orchestrator.sh"
       group:
         kind: run
 events:

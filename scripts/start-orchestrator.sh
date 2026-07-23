@@ -13,15 +13,20 @@ LOG="/tmp/sonataflow-start.log"
 log()  { echo "[sonataflow] $*"; }
 warn() { echo "[sonataflow] WARN: $*"; }
 
-# Source the dev .env file so secrets like CLDCTL_GITHUB_TOKEN are available
+# Load the dev .env file so secrets like CLDCTL_GITHUB_TOKEN are available
 # to the Quarkus JVM process started later in this script.
+# Use safe parsing (only KEY=VALUE lines, skip comments) to prevent arbitrary code execution.
 _env_file="${PROJECTS_DIR}/rhdh-local/.env"
 if [ -f "$_env_file" ]; then
   set -a
-  # shellcheck source=/dev/null
-  source "$_env_file"
+  while IFS='=' read -r key value; do
+    # Skip empty lines and comments
+    [[ -z "$key" || "$key" =~ ^[[:space:]]*# ]] && continue
+    # Validate key format (alphanumeric and underscore only)
+    [[ "$key" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && export "$key"="$value"
+  done < "$_env_file"
   set +a
-  log "Sourced env from $_env_file (CLDCTL_GITHUB_TOKEN set=$([ -n "${CLDCTL_GITHUB_TOKEN:-}" ] && echo yes || echo NO))"
+  log "Loaded env from $_env_file (CLDCTL_GITHUB_TOKEN set=$([ -n "${CLDCTL_GITHUB_TOKEN:-}" ] && echo yes || echo NO))"
 else
   warn ".env not found at $_env_file — CLDCTL_GITHUB_TOKEN will be empty; check WORKFLOW_REPO_DIR"
 fi
