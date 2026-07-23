@@ -183,7 +183,7 @@ log "Starting SonataFlow devmode on port 8899..."
 # Check if launch script exists
 if [ ! -f "/home/kogito/launch/run-app-devmode.sh" ]; then
   warn "Launch script not found: /home/kogito/launch/run-app-devmode.sh"
-  ls -la /home/kogito/launch/ 2>&1 | head -20
+  find /home/kogito/launch -mindepth 1 -maxdepth 1 -print 2>&1 | head -20
   exit 1
 fi
 
