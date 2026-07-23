@@ -11,7 +11,12 @@ fail() { printf '[devspaces-start] ERROR: %s\n' "$*" >&2; exit 1; }
 run_script() {
   local s="$1" mode="${2:-}"
   [[ -f "$s" ]] || fail "$(basename "$s") not found"
-  if [[ "$mode" == "exec" ]]; then [[ -x "$s" ]] && exec "$s" || exec bash "$s"
+  if [[ "$mode" == "exec" ]]; then
+    if [[ -x "$s" ]]; then
+      exec "$s"
+    else
+      exec bash "$s"
+    fi
   elif [[ -x "$s" ]]; then
     "$s"
   else
