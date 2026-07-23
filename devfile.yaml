@@ -155,11 +155,11 @@ components:
           value: /projects/rhdh-local
         # ── Network & Proxy Settings (can be overridden at workspace level) ──
         - name: PROXY_HOST
-          value: "internet.gcp.ford.com"
+          value: ""
         - name: PROXY_PORT
-          value: "83"
+          value: ""
         - name: NON_PROXY_HOSTS
-          value: "172.30.0.1|localhost|127.0.0.0/8|19.0.0.0/8|10.0.0.0/8|172.16.0.0/12|192.168.0.0/16|*.ford.com|ford.com|*.appspot.com|appspot.com|*.cloudfunctions.net|cloudfunctions.net|*.cloudproxy.app|cloudproxy.app|*.composer.cloud.google.com|composer.cloud.google.com|*.composer.googleusercontent.com|composer.googleusercontent.com|*.datafusion.cloud.google.com|datafusion.cloud.google.com|*.datafusion.googleusercontent.com|datafusion.googleusercontent.com|*.gcr.io|gcr.io|*.internal|internal|*.googleadapis.com|googleadapis.com|*.googleapis.com|googleapis.com|*.gstatic.com|gstatic.com|*.ltsapis.goog|ltsapis.goog|*.packages.cloud.google.com|packages.cloud.google.com|*.pkg.dev|pkg.dev|*.pki.goog|pki.goog|*.run.app|run.app|*.source.developers.google.com|source.developers.google.com|*.gcp.cloud.es.io|gcp.cloud.es.io|*.smt-gce.susecloud.net|smt-gce.susecloud.net|*.fordcredit.com"
+          value: ""
         # ── QUARKUS & Kogito Settings ──
         - name: QUARKUS_HTTP_PORT
           value: "8899"
