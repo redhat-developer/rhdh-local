@@ -136,18 +136,11 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
    # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
-6. After a successful upgrade, remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml` so the upgrade does not run again on later restarts, then recreate the `db` container (so it starts without that env var):
-
-   ```yaml
-   environment:
-     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
-   ```
+6. Remove `POSTGRESQL_UPGRADE=copy` from the `db` service environment (leave `POSTGRESQL_ADMIN_PASSWORD` / `default.env` as before), then recreate the container:
 
    ```sh
    podman compose up -d --force-recreate db
    ```
-
-   `--force-recreate` replaces the existing `db` container even if Compose would otherwise keep it. The data volume is unchanged.
 
 7. Start RHDH again and verify the instance:
 
