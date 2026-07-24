@@ -5,7 +5,7 @@ services:
 
   # db:
   #   container_name: db
-  #   image: "registry.redhat.io/rhel8/postgresql-16:latest"
+  #   image: "registry.redhat.io/rhel10/postgresql-18:latest"
   #   volumes:
   #     - "/var/lib/pgsql/data"
   #   env_file:
