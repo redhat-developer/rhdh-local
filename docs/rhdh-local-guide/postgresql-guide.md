@@ -13,8 +13,6 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
    podman login registry.redhat.io
    ```
 
-   Also put `POSTGRES_PASSWORD` in the project `.env` file (for example `POSTGRES_PASSWORD=postgres`). Compose substitutes that value into `POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}` in `compose.yaml`. Having the password only in `default.env` is not enough for that substitution.
-
 2. Uncomment the `db` service block in [https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) file
 
    ```yaml
@@ -82,17 +80,11 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
 
 ## Upgrading PostgreSQL 16 to 18
 
-If you already run the optional Postgres service on `registry.redhat.io/rhel8/postgresql-16` and want to move to `registry.redhat.io/rhel10/postgresql-18`, use the image’s built-in major upgrade (`pg_upgrade`) by setting `POSTGRESQL_UPGRADE=copy` for a single boot. This keeps the existing data volume; do not delete the Postgres data directory for this path.
+If you already run the optional Postgres service on [`rhel8/postgresql-16`](https://catalog.redhat.com/en/software/containers/rhel8/postgresql-16/657c148efd40a94aa696f28e) and want to move to [`rhel10/postgresql-18`](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0), use the image’s built-in upgrade by setting `POSTGRESQL_UPGRADE=copy` for a single boot. That runs `pg_upgrade` inside the container and keeps the existing data volume; do not delete the Postgres data directory for this path.
 
-Background and details (do not restate the full procedures here):
-
-- [sclorg postgresql-container — Upgrading Database](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md) (`POSTGRESQL_UPGRADE=copy` or `hardlink`; prefer `copy`, and ensure enough free disk for a full data copy)
-- [PostgreSQL — Upgrading a PostgreSQL Cluster](https://www.postgresql.org/docs/current/upgrading.html) (general major-upgrade background; rhdh-local uses the container `POSTGRESQL_UPGRADE` / `pg_upgrade` path, not a manual `pg_dumpall` flow)
-- Images: [rhel8/postgresql-16](https://catalog.redhat.com/en/software/containers/rhel8/postgresql-16/657c148efd40a94aa696f28e) → [rhel10/postgresql-18](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0)
+See [sclorg postgresql-container — Upgrading Database](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md) for `POSTGRESQL_UPGRADE=copy` vs `hardlink` (prefer `copy`).
 
 > **Warning:** Schedule downtime. Back up the Postgres data volume (or take a host-level snapshot) before upgrading. The `copy` mode needs roughly as much free space as the current data directory.
-
-The examples use `podman` / `podman compose`. With Docker, replace `podman` with `docker` the same way as in the enablement steps above. The compose service and container name is `db`.
 
 ### Steps
 
@@ -144,7 +136,7 @@ The examples use `podman` / `podman compose`. With Docker, replace `podman` with
    # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
-6. After a successful upgrade, remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml` so the upgrade does not run again on later restarts, then recreate `db`:
+6. After a successful upgrade, remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml` so the upgrade does not run again on later restarts, then recreate the `db` container (so it starts without that env var):
 
    ```yaml
    environment:
@@ -154,6 +146,8 @@ The examples use `podman` / `podman compose`. With Docker, replace `podman` with
    ```sh
    podman compose up -d --force-recreate db
    ```
+
+   `--force-recreate` replaces the existing `db` container even if Compose would otherwise keep it. The data volume is unchanged.
 
 7. Start RHDH again and verify the instance:
 
