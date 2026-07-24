@@ -21,11 +21,6 @@ includes:
   # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
   #   disabled: false
 
-  # Quay backend (use the OCI overlay; the old ./dynamic-plugins/dist/backstage-community-plugin-quay
-  # path is not present in RHDH 1.10+ images and will fail install-dynamic-plugins with ENOENT)
-  # - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
-  #   disabled: false
-
 # # loading plugin from host directory
 #   - package: ./local-plugins/todo
 #     disabled: false
