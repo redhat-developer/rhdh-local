@@ -14,8 +14,7 @@ services:
   #     - path: "./.env"
   #       required: false
   #   environment:
-  #     # ${POSTGRES_PASSWORD} is taken from project `.env` or the shell (not from default.env).
-  #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+  #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
   #   healthcheck:
   #     test: ["CMD", "pg_isready", "-U", "postgres"]
   #     interval: 5s
