@@ -7,7 +7,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
-`POSTGRES_PASSWORD` is defined in `default.env`. Also set it in your project `.env` (for example `POSTGRES_PASSWORD=postgres`) so Compose can substitute `${POSTGRES_PASSWORD}` in `compose.yaml`.
+Set `POSTGRES_PASSWORD` in `.env` as well (Compose expands `${POSTGRES_PASSWORD}` from `.env`, not from `default.env`).
 
 1. Login to container registry with *Red Hat Login* credentials to use `postgresql` image
 
