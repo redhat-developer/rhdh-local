@@ -86,7 +86,7 @@ To move the optional Postgres service to a newer major version of the [sclorg Po
 
 The new image must support upgrading from your current major version (its `POSTGRESQL_PREV_VERSION` must match). See [Upgrading Database](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md) for `POSTGRESQL_UPGRADE=copy` vs `hardlink` (prefer `copy`).
 
-> **Warning:** Schedule downtime. Back up the Postgres data volume (or take a host-level snapshot) before upgrading. The `copy` mode needs roughly as much free space as the current data directory.
+> **Warning:** Back up the Postgres data volume (or take a host-level snapshot) before upgrading. Stop RHDH first so nothing writes to the database during the upgrade. The `copy` mode needs roughly as much free space as the current data directory.
 
 ### Steps
 
