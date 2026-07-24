@@ -26,7 +26,7 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
        - path: "./.env"
          required: false
      environment:
-       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
      healthcheck:
        test: ["CMD", "pg_isready", "-U", "postgres"]
        interval: 5s
@@ -109,7 +109,7 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
      image: "registry.redhat.io/rhel10/postgresql-18:latest"
      # ...existing volumes, env_file, healthcheck...
      environment:
-       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
        - POSTGRESQL_UPGRADE=copy
    ```
 
@@ -136,7 +136,7 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
    # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
-6. Remove `POSTGRESQL_UPGRADE=copy` from the `db` service environment (leave `POSTGRESQL_ADMIN_PASSWORD` / `default.env` as before), then recreate the container:
+6. Remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml`, then recreate `db` so the container no longer has that env var (data volume is kept):
 
    ```sh
    podman compose up -d --force-recreate db
