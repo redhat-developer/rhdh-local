@@ -13,6 +13,8 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
    podman login registry.redhat.io
    ```
 
+   Also put `POSTGRES_PASSWORD` in the project `.env` file (for example `POSTGRES_PASSWORD=postgres`). Compose substitutes that value into `POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}` in `compose.yaml`. Having the password only in `default.env` is not enough for that substitution.
+
 2. Uncomment the `db` service block in [https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) file
 
    ```yaml
@@ -125,13 +127,24 @@ The examples use `podman` / `podman compose`. With Docker, replace `podman` with
    podman compose up -d db
    ```
 
-   Wait until the container is healthy, then confirm the major version is 18:
+   Wait until `db` is healthy (`podman compose ps`), then confirm the major version is 18:
 
    ```sh
    podman exec db psql -U postgres -c "SHOW server_version;"
    ```
 
-5. After a successful upgrade, remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml` so the upgrade does not run again on later restarts, then recreate `db`:
+   Expect a `18.x` result. The first start can take a minute while `pg_upgrade` runs.
+
+5. Refresh collation versions if PostgreSQL warns about a collation mismatch (common when moving from an older RHEL base to rhel10). Run for `postgres`, `template1`, and each user database:
+
+   ```sh
+   podman exec db psql -U postgres -c 'ALTER DATABASE postgres REFRESH COLLATION VERSION;'
+   podman exec db psql -U postgres -c 'ALTER DATABASE template1 REFRESH COLLATION VERSION;'
+   # Repeat for each application database, for example:
+   # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
+   ```
+
+6. After a successful upgrade, remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml` so the upgrade does not run again on later restarts, then recreate `db`:
 
    ```yaml
    environment:
@@ -140,15 +153,6 @@ The examples use `podman` / `podman compose`. With Docker, replace `podman` with
 
    ```sh
    podman compose up -d --force-recreate db
-   ```
-
-6. Refresh collation versions if PostgreSQL warns about a collation mismatch (common when moving from an older RHEL base to rhel10). Run for `postgres`, `template1`, and each user database:
-
-   ```sh
-   podman exec db psql -U postgres -c 'ALTER DATABASE postgres REFRESH COLLATION VERSION;'
-   podman exec db psql -U postgres -c 'ALTER DATABASE template1 REFRESH COLLATION VERSION;'
-   # Repeat for each application database, for example:
-   # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
 7. Start RHDH again and verify the instance:
