@@ -3,7 +3,7 @@
 By default, in-memory db is used.
 If you want to use PostgreSQL with RHDH, here are the steps:
 
-> **NOTE**: You must have [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) to use the [rhel10/postgresql-18](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0) image from `registry.redhat.io`.
+> **NOTE**: You must have [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) to use the PostgreSQL image from `registry.redhat.io` (for example [rhel10/postgresql-18](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0)).
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
@@ -80,23 +80,22 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
          password: ${POSTGRES_PASSWORD}
    ```
 
-## Upgrading PostgreSQL 16 to 18
+## Upgrading PostgreSQL
 
-If you already run the optional Postgres service on [`rhel8/postgresql-16`](https://catalog.redhat.com/en/software/containers/rhel8/postgresql-16/657c148efd40a94aa696f28e) and want to move to [`rhel10/postgresql-18`](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0), use the image’s built-in upgrade by setting `POSTGRESQL_UPGRADE=copy` for a single boot. That runs `pg_upgrade` inside the container and keeps the existing data volume; do not delete the Postgres data directory for this path.
+To move the optional Postgres service to a newer major version of the [sclorg PostgreSQL container](https://github.com/sclorg/postgresql-container), use the image’s built-in upgrade by setting `POSTGRESQL_UPGRADE=copy` for a single boot. That runs `pg_upgrade` inside the container and keeps the existing data volume; do not delete the Postgres data directory for this path.
 
-See [sclorg postgresql-container — Upgrading Database](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md) for `POSTGRESQL_UPGRADE=copy` vs `hardlink` (prefer `copy`).
+The new image must support upgrading from your current major version (its `POSTGRESQL_PREV_VERSION` must match). See [Upgrading Database](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md) for `POSTGRESQL_UPGRADE=copy` vs `hardlink` (prefer `copy`).
 
 > **Warning:** Schedule downtime. Back up the Postgres data volume (or take a host-level snapshot) before upgrading. The `copy` mode needs roughly as much free space as the current data directory.
 
 ### Steps
 
-1. Confirm you are on PostgreSQL 16 and note the version:
+1. Note your current Postgres version and image:
 
    ```sh
    podman exec db psql -U postgres -c "SHOW server_version;"
+   podman inspect db --format '{{.Config.Image}}'
    ```
-
-   Expect a `16.x` result.
 
 2. Stop RHDH so it does not write during the upgrade:
 
@@ -104,11 +103,11 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
    podman compose stop rhdh
    ```
 
-3. In `compose.yaml`, change the `db` service image to PostgreSQL 18 and add `POSTGRESQL_UPGRADE=copy` for this boot only:
+3. In `compose.yaml`, set `db.image` to the newer Postgres image and add `POSTGRESQL_UPGRADE=copy` for this boot only:
 
    ```yaml
    db:
-     image: "registry.redhat.io/rhel10/postgresql-18:latest"
+     image: "registry.redhat.io/<newer-postgresql-image>:latest"
      # ...existing volumes, env_file, healthcheck...
      environment:
        - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
@@ -121,15 +120,15 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
    podman compose up -d db
    ```
 
-   Wait until `db` is healthy (`podman compose ps`), then confirm the major version is 18:
+   Wait until `db` is healthy (`podman compose ps`), then confirm the new major version:
 
    ```sh
    podman exec db psql -U postgres -c "SHOW server_version;"
    ```
 
-   Expect a `18.x` result. The first start can take a minute while `pg_upgrade` runs.
+   The first start can take a minute while `pg_upgrade` runs.
 
-5. Refresh collation versions if PostgreSQL warns about a collation mismatch (common when moving from an older RHEL base to rhel10). Run for `postgres`, `template1`, and each user database:
+5. Refresh collation versions if PostgreSQL warns about a collation mismatch (common when the image base OS changes). Run for `postgres`, `template1`, and each user database:
 
    ```sh
    podman exec db psql -U postgres -c 'ALTER DATABASE postgres REFRESH COLLATION VERSION;'
@@ -158,3 +157,4 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
 - Do not leave `POSTGRESQL_UPGRADE` set after the upgrade succeeds.
 - Prefer `copy` over `hardlink` unless you understand the [sclorg hardlink trade-offs](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md).
 - Do not wipe Lightspeed/RAG or other non-Postgres compose volumes when recycling the stack.
+- Do not skip a major version unless the target image documents that hop (`POSTGRESQL_PREV_VERSION`).
