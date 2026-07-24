@@ -7,6 +7,8 @@ If you want to use PostgreSQL with RHDH, here are the steps:
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
+`POSTGRES_PASSWORD` is defined in `default.env`. Also set it in your project `.env` (for example `POSTGRES_PASSWORD=postgres`) so Compose can substitute `${POSTGRES_PASSWORD}` in `compose.yaml`.
+
 1. Login to container registry with *Red Hat Login* credentials to use `postgresql` image
 
    ```sh
@@ -26,7 +28,7 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
        - path: "./.env"
          required: false
      environment:
-       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
      healthcheck:
        test: ["CMD", "pg_isready", "-U", "postgres"]
        interval: 5s
@@ -109,7 +111,7 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
      image: "registry.redhat.io/rhel10/postgresql-18:latest"
      # ...existing volumes, env_file, healthcheck...
      environment:
-       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
        - POSTGRESQL_UPGRADE=copy
    ```
 
@@ -136,7 +138,7 @@ See [sclorg postgresql-container — Upgrading Database](https://github.com/sclo
    # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
-6. Remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml`, then recreate `db` so the container no longer has that env var (data volume is kept):
+6. Remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml`, then recreate `db` so the new env applies (data volume is kept):
 
    ```sh
    podman compose up -d --force-recreate db
