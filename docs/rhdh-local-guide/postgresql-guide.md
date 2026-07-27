@@ -114,7 +114,7 @@ The new image must support upgrading from your current major version (its `POSTG
        - POSTGRESQL_UPGRADE=copy
    ```
 
-4. Recreate and start the `db` service (keep the same data volume; do not run `compose down --volumes`):
+4. Recreate and start the `db` **container** so it boots the new image against the **existing** data volume (do not run `compose down --volumes`):
 
    ```sh
    podman compose up -d db
@@ -126,7 +126,7 @@ The new image must support upgrading from your current major version (its `POSTG
    podman exec db psql -U postgres -c "SHOW server_version;"
    ```
 
-   The first start can take a minute while `pg_upgrade` runs.
+   The first start can take a minute while `pg_upgrade` runs. Your databases and rows stay on the mounted volume under `/var/lib/pgsql/data`; only the container/image changes.
 
 5. Refresh collation versions if PostgreSQL warns about a collation mismatch (common when the image base OS changes). Run for `postgres`, `template1`, and each user database:
 
@@ -137,11 +137,13 @@ The new image must support upgrading from your current major version (its `POSTG
    # podman exec db psql -U postgres -c 'ALTER DATABASE "<dbname>" REFRESH COLLATION VERSION;'
    ```
 
-6. Remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml`, then recreate `db` so the new env applies (data volume is kept):
+6. Remove `POSTGRESQL_UPGRADE=copy` from `compose.yaml`, then force-recreate only the `db` **container** so the updated environment takes effect:
 
    ```sh
    podman compose up -d --force-recreate db
    ```
+
+   `--force-recreate` replaces the container; it does **not** create a fresh database or wipe `/var/lib/pgsql/data`. Compose keeps the existing volume as long as you do not pass `--volumes` / `-v` to `down` or otherwise remove that volume.
 
 7. Start RHDH again and verify the instance:
 
@@ -153,7 +155,8 @@ The new image must support upgrading from your current major version (its `POSTG
 
 ### What not to do
 
-- Do not delete the Postgres data volume as part of this upgrade.
+- Do not delete the Postgres data volume as part of this upgrade (`compose down --volumes`, `volume rm`, pruning volumes, etc.).
+- Do not treat `--force-recreate db` as a data reset — it only recreates the container.
 - Do not leave `POSTGRESQL_UPGRADE` set after the upgrade succeeds.
 - Prefer `copy` over `hardlink` unless you understand the [sclorg hardlink trade-offs](https://github.com/sclorg/postgresql-container/blob/master/src/root/usr/share/container-scripts/postgresql/README.md).
 - Do not wipe Lightspeed/RAG or other non-Postgres compose volumes when recycling the stack.
