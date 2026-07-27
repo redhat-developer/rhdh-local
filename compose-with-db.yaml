@@ -10,7 +10,7 @@
 services:
   db:
     container_name: db
-    image: "registry.redhat.io/rhel10/postgresql-18:latest" # dclint disable-line service-image-require-explicit-tag
+    image: "${POSTGRES_IMAGE:-registry.redhat.io/rhel10/postgresql-18:latest}" # dclint disable-line service-image-require-explicit-tag
     volumes:
       - "/var/lib/pgsql/data"
     env_file:

@@ -1,0 +1,18 @@
+# Temporary override for a PostgreSQL major upgrade.
+# 1. Set POSTGRES_IMAGE in .env to the target major image (must support your
+#    current major via POSTGRESQL_PREV_VERSION).
+# 2. Copy this file to compose.override.yaml for a single upgrade boot.
+# 3. After upgrade succeeds, remove POSTGRESQL_UPGRADE (delete compose.override.yaml
+#    or strip that env) and recreate db.
+#
+# When using -f compose-with-db.yaml, Compose does not auto-load
+# compose.override.yaml — include it explicitly:
+#   podman compose -f compose.yaml -f compose-with-db.yaml -f compose.override.yaml up -d db
+#
+# See docs/rhdh-local-guide/postgresql-guide.md.
+
+services:
+  db:
+    environment:
+      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESQL_UPGRADE=copy
