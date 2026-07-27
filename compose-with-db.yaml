@@ -1,0 +1,32 @@
+# This Compose file is not usable on its own.
+# It needs to be used alongside the default compose.yaml file,
+# since it adds a PostgreSQL db service and makes rhdh wait for it.
+#
+# You can run `[podman|docker] compose -f compose.yaml -f compose-with-db.yaml config`
+# to view the effective merged config.
+#
+# Also configure app-config.local.yaml for Postgres (see docs/rhdh-local-guide/postgresql-guide.md).
+
+services:
+  db:
+    container_name: db
+    image: "registry.redhat.io/rhel10/postgresql-18:latest" # dclint disable-line service-image-require-explicit-tag
+    volumes:
+      - "/var/lib/pgsql/data"
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    environment:
+      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rhdh:
+    depends_on:
+      db:
+        condition: service_healthy
