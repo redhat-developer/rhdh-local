@@ -13,7 +13,7 @@ your PR targets the correct branch:
 - `release-x.y`: fixes for a specific supported release branch
 -->
 
-- [ ] I have verified this PR targets the correct branch
+- [ ] I have verified this PR targets the correct branch (see [branching strategy](../docs/rhdh-local-guide/help-and-contrib.md#branching-model))
 
 ## Description
 <!--
