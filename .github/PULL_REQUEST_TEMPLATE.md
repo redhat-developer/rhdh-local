@@ -2,6 +2,19 @@
 Thank you for opening a PR! Please take the time to fill in the details below.
 -->
 
+## Target branch
+
+<!--
+This repository uses a main/dev branching model. Please confirm that
+your PR targets the correct branch:
+
+- `dev`: next-release features and RHDH-version-specific changes
+- `main`: version-independent changes (documentation fixes, CI updates, etc.)
+- `release-x.y`: fixes for a specific supported release branch
+-->
+
+- [ ] I have verified this PR targets the correct branch
+
 ## Description
 <!--
 Please explain the changes you made here.
