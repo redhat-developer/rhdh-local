@@ -7,7 +7,7 @@ If you want to use PostgreSQL with RHDH, here are the steps:
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
-`default.env` already supplies the `POSTGRES_*` defaults via `env_file`. Put only the values you want to change in your project `.env` (or export them). You do not need to copy every `POSTGRES_*` key. You can pin the Postgres image with `POSTGRES_IMAGE` in `.env` (see `compose-with-db.yaml`).
+`default.env` already supplies the `POSTGRES_*` defaults via `env_file`. Put only the values you want to change in your project `.env` (or export them). You do not need to copy every `POSTGRES_*` key. You can pin the Postgres image with `POSTGRES_IMAGE` in `.env` (see [`compose-with-db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/compose-with-db.yaml)).
 
 > **Warning:** If you already run optional Postgres and have a persisted `/var/lib/pgsql/data` volume from an **older major** image, do **not** only bump `POSTGRES_IMAGE` (or the default image major). Follow [Upgrading PostgreSQL](#upgrading-postgresql) first so the volume is upgraded safely.
 
