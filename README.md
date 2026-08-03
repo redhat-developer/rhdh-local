@@ -92,8 +92,9 @@ To browse the existing issues, you can use this [Query](https://issues.redhat.co
 
 Contributions are welcome! This repository uses a `main`/`dev` branching model:
 
-- **`main`** (default branch) tracks the latest stable GA release of RHDH. Target `main` for version-independent changes (documentation fixes, GitHub Actions dependency updates, etc.).
-- **`dev`** tracks the upcoming RHDH release (`next` tag). Target `dev` for next-release features and RHDH-version-specific changes.
+- **`main`** (default branch) tracks the latest stable GA release of RHDH. Maintainers manage this branch; do not target PRs to `main` directly.
+- **`dev`** tracks the upcoming RHDH release (`next` tag). All development PRs should target `dev`.
+- **`release-x.y`** branches are used for release stabilization and bug fixes for a specific supported release.
 
 See the [built-in Contributing guide](./docs/rhdh-local-guide/help-and-contrib.md) for details.
 

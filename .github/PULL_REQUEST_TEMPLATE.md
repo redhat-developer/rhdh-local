@@ -8,9 +8,10 @@ Thank you for opening a PR! Please take the time to fill in the details below.
 This repository uses a main/dev branching model. Please confirm that
 your PR targets the correct branch:
 
-- `dev`: next-release features and RHDH-version-specific changes
-- `main`: version-independent changes (documentation fixes, CI updates, etc.)
-- `release-x.y`: fixes for a specific supported release branch
+- `dev`: all development work (features, docs, dependency updates, etc.)
+- `release-x.y`: bug fixes for a specific supported release
+
+Do not target `main` directly; maintainers manage it via merges and cherry-picks.
 -->
 
 - [ ] I have verified this PR targets the correct branch (see [branching strategy](https://github.com/redhat-developer/rhdh-local/blob/HEAD/docs/rhdh-local-guide/help-and-contrib.md#branching-model))

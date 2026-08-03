@@ -109,14 +109,12 @@ This repository uses a `main`/`dev` branching model to separate stable content f
 
 | Change type | Target branch |
 |---|---|
-| Next-release features or RHDH-version-specific changes | `dev` |
-| Version-independent changes (documentation fixes, CI updates, etc.) | `main` |
-| Fixes for a specific supported release | `release-x.y` |
+| All development work (features, docs, dependency updates, etc.) | `dev` |
+| Bug fixes for a specific supported release | `release-x.y` |
 
-At Feature Freeze, a `release-x.y` branch is created from `dev` for stabilization. At GA, the release branch is merged into `main`, so `main` always reflects the latest stable RHDH release.
+Do not target `main` directly. Maintainers manage `main` via merges and cherry-picks.
 
-!!! tip "When in doubt"
-    If your change is tied to a specific RHDH version, target `dev`. If it applies regardless of the RHDH version, target `main`.
+At Feature Freeze, a `release-x.y` branch is created from `dev` for stabilization. At GA, the release branch is merged into `main`, so `main` always reflects the latest stable RHDH release. Maintainers cherry-pick changes to `main` when appropriate (e.g., version-independent fixes that should not wait until the next GA).
 
 ### Contribution Workflow
 
@@ -130,11 +128,8 @@ git clone https://github.com/YOUR-USERNAME/rhdh-local.git && cd rhdh-local
 # Add upstream remote for staying current
 git remote add upstream https://github.com/redhat-developer/rhdh-local.git
 
-# Create a branch from the correct base (see "Which branch should my PR target?" above)
-# For next-release work:
+# Create a branch from dev (see "Which branch should my PR target?" above)
 git checkout -b feature/my-contribution upstream/dev
-# For version-independent changes:
-git checkout -b fix/my-fix upstream/main
 ```
 
 #### 2. Development Guidelines
