@@ -271,7 +271,7 @@ proxy:
 
 quay:
   # The UI url for Quay, used to generate the link to Quay
-  uiUrl: "https://quay.io"
+  apiUrl: "https://quay.io"
 
 # ==============================================================================
 # Developer Lightspeed Plugin Configuration
