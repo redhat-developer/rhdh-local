@@ -127,6 +127,7 @@ git clone https://github.com/YOUR-USERNAME/rhdh-local.git && cd rhdh-local
 
 # Add upstream remote for staying current
 git remote add upstream https://github.com/redhat-developer/rhdh-local.git
+git fetch upstream
 
 # Create a branch from dev (see "Which branch should my PR target?" above)
 git checkout -b feature/my-contribution upstream/dev
