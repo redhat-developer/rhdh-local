@@ -222,6 +222,14 @@ runs:
         cat <<EOF > configs/dynamic-plugins/dynamic-plugins.override.yaml
         includes: [dynamic-plugins.default.yaml]
         plugins:
+        # This is just to enable the /api/extensions endpoint, which is used in CI to validate the plugins list.
+        # TODO: we may need to update this ref
+        - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions-backend:bs_1.52.0__0.19.1'
+          disabled: false
+          pluginConfig:
+            extensions:
+              installation:
+                enabled: false
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
           disabled: false
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
