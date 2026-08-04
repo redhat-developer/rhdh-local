@@ -46,8 +46,10 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
-          - name: "orchestrator-workflow"
-            cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
+# TODO: re-enable this test once we can use the right references.
+# Tracked in https://redhat.atlassian.net/browse/RHDHBUGS-3559
+#          - name: "orchestrator-workflow"
+#            cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
 
     name: "${{ matrix.tool }} compose - ${{ matrix.composeConfig.name }}${{ matrix.os != 'ubuntu-24.04' && format(' - {0}', matrix.os) || '' }}${{ matrix.userConfig == 'true' && ' - user config' || '' }}"
     runs-on: ${{ matrix.os }}
