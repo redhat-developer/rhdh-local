@@ -82,7 +82,7 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
          password: ${POSTGRES_PASSWORD}
    ```
 
-## Upgrading PostgreSQL
+## Upgrading PostgreSQL {#upgrading-postgresql}
 
 To move the optional Postgres service to a newer major version of the [sclorg PostgreSQL container](https://github.com/sclorg/postgresql-container), use the image’s built-in upgrade by setting `POSTGRESQL_UPGRADE=copy` for a single boot. That runs `pg_upgrade` inside the container and keeps the existing data volume; do not delete the Postgres data directory for this path.
 
