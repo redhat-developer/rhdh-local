@@ -44,6 +44,14 @@ inputs:
     description: Log level to use
     required: false
     default: "info"
+  registry_redhat_io_username:
+    description: Username for registry.redhat.io (required when compose_config_name is with-db)
+    required: false
+    default: ""
+  registry_redhat_io_password:
+    description: Password or token for registry.redhat.io (required when compose_config_name is with-db)
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -179,6 +187,24 @@ runs:
       env:
         TOOL: ${{ inputs.container_tool }}
       run: $TOOL info
+
+    # Requires REGISTRY_REDHAT_IO_USERNAME / REGISTRY_REDHAT_IO_PASSWORD for with-db.
+    - name: Log in to registry.redhat.io
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'with-db' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        REGISTRY_USER: ${{ inputs.registry_redhat_io_username }}
+        REGISTRY_PASSWORD: ${{ inputs.registry_redhat_io_password }}
+        PODMAN_CONTAINER: ${{ steps.setup-podman.outputs.container-name }}
+      run: |
+        echo "$REGISTRY_PASSWORD" | docker login registry.redhat.io -u "$REGISTRY_USER" --password-stdin
+        if [ "$TOOL" = "podman" ]; then
+          # Compose uses docker-compose inside the container, which reads Docker
+          # config there (podman login / host-only docker login are not enough).
+          docker exec "$PODMAN_CONTAINER" mkdir -p /root/.docker
+          docker cp "$HOME/.docker/config.json" "$PODMAN_CONTAINER:/root/.docker/config.json"
+        fi
 
     - name: Create .env file to override defaults
       if: ${{ env.SKIP_TEST != 'true' && inputs.override_images == 'true' }}

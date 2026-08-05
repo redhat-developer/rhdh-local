@@ -19,7 +19,7 @@ services:
       - path: "./.env"
         required: false
     environment:
-      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s

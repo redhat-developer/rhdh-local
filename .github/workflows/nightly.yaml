@@ -63,6 +63,10 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          # Requires REGISTRY_REDHAT_IO_USERNAME and REGISTRY_REDHAT_IO_PASSWORD
+          # (Red Hat registry service-account username + token).
+          - name: "with-db"
+            cliArgs: "-f compose.yaml -f compose-with-db.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
           # TODO: Remove this and the exclude rules below once all supported
@@ -85,6 +89,10 @@ jobs:
             composeConfig:
               name: "dynamic-plugins-root"
               cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
+              name: "with-db"
+              cliArgs: "-f compose.yaml -f compose-with-db.yaml"
           - os: ubuntu-24.04-arm
             composeConfig:
               name: "developer-lightspeed"
@@ -126,3 +134,6 @@ jobs:
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
           override_images: "true"
+          registry_redhat_io_username: ${{ secrets.REGISTRY_REDHAT_IO_USERNAME }}
+          registry_redhat_io_password: ${{ secrets.REGISTRY_REDHAT_IO_PASSWORD }}
+
