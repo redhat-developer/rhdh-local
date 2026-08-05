@@ -7,15 +7,15 @@ includes:
 plugins:
   # Tech Radar frontend plugin
   - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
-    disabled: false
+    enabled: true
 
   # Quay plugin
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.52.0__1.17.0'
-    disabled: false
+    enabled: true
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
   - package: 'oci://quay.io/rhdh/backstage-plugin-scaffolder-backend-module-github:{{inherit}}'
-    disabled: false
+    enabled: true
 
   #########################################################
   # Enable dynamic plugins installation by using Extensions
@@ -23,11 +23,11 @@ plugins:
 
   # TODO: we may need to update this ref
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions:bs_1.52.0__0.19.1'
-    disabled: false
+    enabled: true
 
   # TODO: we may need to update this ref
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions-backend:bs_1.52.0__0.19.1'
-    disabled: false
+    enabled: true
     pluginConfig:
       extensions:
         installation:
@@ -44,9 +44,9 @@ plugins:
   # Lightspeed frontend plugin
   # TODO: re-enable this once the catalog index is stabilized
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-    disabled: true
+    enabled: false
 
   # Lightspeed backend plugin
   # TODO: re-enable this once the catalog index is stabilized
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-    disabled: true
+    enabled: false
