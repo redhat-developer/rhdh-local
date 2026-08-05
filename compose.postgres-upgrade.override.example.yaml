@@ -14,5 +14,5 @@
 services:
   db:
     environment:
-      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRESQL_UPGRADE=copy
