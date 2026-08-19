@@ -1,8 +1,8 @@
-# Maintaining Developer Lightspeed
+# Maintaining Developer Hub Intelligent Assistant
 
-This guide is for maintainers of the Developer Lightspeed integration within RHDH Local. It covers syncing upstream configuration files, overriding images, tuning resources, and understanding the service architecture.
+This guide is for maintainers of the Developer Hub Intelligent Assistant integration within RHDH Local. It covers syncing upstream configuration files, overriding images, tuning resources, and understanding the service architecture.
 
-For user-facing setup instructions (configuring LLM providers, troubleshooting, etc.), see [Working with Lightspeed](./working-with-lightspeed.md).
+For user-facing setup instructions (configuring LLM providers, troubleshooting, etc.), see [Working with Developer Hub Intelligent Assistant](./working-with-intelligent-assistant.md).
 
 ## Table of Contents
 1. [Architecture Overview](#architecture-overview)
@@ -14,12 +14,12 @@ For user-facing setup instructions (configuring LLM providers, troubleshooting, 
 
 ## Architecture Overview
 
-Developer Lightspeed runs as part of the default RHDH Local compose stack with the following services:
+Developer Hub Intelligent Assistant runs as part of the default RHDH Local compose stack with the following services:
 
-- **rhdh** -- The main Red Hat Developer Hub container, which includes the Lightspeed frontend and backend dynamic plugins.
+- **rhdh** -- The main Red Hat Developer Hub container, which includes the Developer Hub Intelligent Assistant frontend and backend dynamic plugins.
 - **lightspeed-core** -- Runs both Lightspeed Core and Llama Stack in a single container (library mode). Uses `network_mode: service:rhdh` to share the network namespace with the RHDH container. Depends on `rhdh` (started) and `rag-init` (completed).
 - **rag-init** -- An init container that copies RAG embeddings and vector database files from a pre-built image into shared volumes (`rag_embeddings`, `rag_vector_db`). Runs once at startup and exits.
-- **install-dynamic-plugins** -- Installs dynamic plugins (including Lightspeed plugins) into a shared volume.
+- **install-dynamic-plugins** -- Installs dynamic plugins (including Developer Hub Intelligent Assistant plugins) into a shared volume.
 
 ### Key Configuration Files
 
@@ -29,8 +29,8 @@ Developer Lightspeed runs as part of the default RHDH Local compose stack with t
 | `configs/extra-files/config.yaml` | Llama Stack v3 distro config (inference providers, RAG, safety/validation) |
 | `configs/extra-files/rhdh-profile.py` | Python profile with system prompts and response templates |
 | `configs/extra-files/templates/placeholder.json` | Placeholder for Vertex AI GCP credentials bind mount |
-| `configs/dynamic-plugins/dynamic-plugins.yaml` | Default dynamic plugins config (includes Lightspeed plugin entries) |
-| `configs/app-config/app-config.yaml` | Main RHDH app-config (includes Lightspeed plugin settings and CSP) |
+| `configs/dynamic-plugins/dynamic-plugins.yaml` | Default dynamic plugins config (includes Developer Hub Intelligent Assistant plugin entries) |
+| `configs/app-config/app-config.yaml` | Main RHDH app-config (includes Developer Hub Intelligent Assistant plugin settings and CSP) |
 
 ### Volumes
 
