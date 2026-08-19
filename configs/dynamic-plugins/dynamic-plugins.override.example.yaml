@@ -113,11 +113,11 @@ includes:
 #           # Also add the path in the 'includes' section of this file, so the plugins installed via the Extensions UI can be loaded at runtime.
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
-# # Uncomment the following to disable Developer Lightspeed plugins
-#   # Lightspeed frontend plugin
-#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+# # Uncomment the following to disable Developer Hub Intelligent Assistant plugins
+#   # Developer Hub Intelligent Assistant frontend plugin
+#   - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant:{{inherit}}'
 #     enabled: false
 #
-#   # Lightspeed backend plugin
-#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+#   # Developer Hub Intelligent Assistant backend plugin
+#   - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend:{{inherit}}'
 #     enabled: false

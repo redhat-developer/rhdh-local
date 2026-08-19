@@ -1,0 +1,8 @@
+# Copy this file to compose.override.yaml to disable Developer Hub Intelligent Assistant services.
+# This prevents rag-init and lightspeed-core from starting with `podman compose up -d`.
+# To re-enable, delete compose.override.yaml.
+services:
+  rag-init:
+    profiles: [intelligent-assistant]
+  lightspeed-core:
+    profiles: [intelligent-assistant]
