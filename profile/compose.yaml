@@ -1,0 +1,51 @@
+include:
+  - ${PROFILE}/services.yaml
+services:
+  rhdh:
+    container_name: rhdh
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
+    env_file:
+      - path: "../default.env"
+        required: true
+      - path: "../profile/${PROFILE}/default.env"
+        required: false
+      - path: "../profile/${PROFILE}/.env"
+        required: false
+    user: "1001"
+    entrypoint:
+      - "/opt/app-root/src/wait-for-plugins-and-start.sh"
+    ports: # dclint disable-line no-unbound-port-interfaces
+      - "7007:7007"
+      - "127.0.0.1:9229:9229"
+    environment:
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229 --no-node-snapshot"
+    volumes:
+      - ../wait-for-plugins-and-start.sh:/opt/app-root/src/wait-for-plugins-and-start.sh:Z
+      - ../profile/${PROFILE}:/opt/app-root/src/configs:Z
+      - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
+    depends_on:
+      install-dynamic-plugins:
+        condition: service_completed_successfully
+      # db:
+      #   condition: service_healthy
+
+  install-dynamic-plugins:
+    container_name: rhdh-plugins-installer
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.6}
+    # docker compose volumes are owned by root, so we need to run as root to write to them
+    # the main rhdh container will be able to read from this as files are world readable
+    user: "root"
+    entrypoint:
+      - "/opt/app-root/src/prepare-and-install-dynamic-plugins.sh"
+    env_file:
+      - path: "../default.env"
+        required: true
+      - path: "../profile/${PROFILE}/.env"
+        required: false
+    volumes:
+      - ../prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
+      - ../profile/${PROFILE}:/opt/app-root/src/configs:Z
+      - dynamic-plugins-root:/dynamic-plugins-root
+
+volumes:
+  dynamic-plugins-root:
