@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=\"$CLAUDE_FILE_PATH\"; case \"$FILE\" in *.yaml|*.yml) npx --yes dclint \"$FILE\" 2>/dev/null || true ;; *.sh) shellcheck \"$FILE\" 2>/dev/null || true ;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}
