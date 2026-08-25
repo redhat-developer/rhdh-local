@@ -5,6 +5,12 @@ includes:
   - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 plugins:
+  # Guest auth backend module — RHDH 2+ no longer bundles auth provider plugins statically (https://redhat.atlassian.net/browse/RHIDP-15348).
+  # These will be available dynamic plugins (https://redhat.atlassian.net/browse/RHIDP-16098)
+  # TODO: update this if/when it is listed in the DPDY. Remove this if it comes enabled by default in the DPDY.
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-auth-backend-module-guest-provider:bs_1.52.0__0.2.20'
+    disabled: false
+
   # Tech Radar frontend plugin
   - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
     disabled: false
