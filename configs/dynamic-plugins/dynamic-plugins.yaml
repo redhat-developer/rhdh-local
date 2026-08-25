@@ -21,12 +21,12 @@ plugins:
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # TODO: we may need to update this ref
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions:bs_1.52.0__0.19.1'
+  # TODO: update this ref once the OCI plugin ref is available in the DPDY
+  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions'
     disabled: false
 
-  # TODO: we may need to update this ref
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions-backend:bs_1.52.0__0.19.1'
+  # TODO: update this ref once the OCI plugin ref is available in the DPDY
+  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
     disabled: false
     pluginConfig:
       extensions:
