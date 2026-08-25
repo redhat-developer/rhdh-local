@@ -219,22 +219,23 @@ runs:
         EOF
 
         # Custom dynamic-plugins.override.yaml
-        cat <<EOF > configs/dynamic-plugins/dynamic-plugins.override.yaml
-        includes: [dynamic-plugins.default.yaml]
+        # Start from the default config so all baseline plugins are included,
+        # then merge in CI-specific overrides.
+        cp configs/dynamic-plugins/dynamic-plugins.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
+
+        # Override the extensions-backend entry to disable installation in CI
+        yq -i '(.plugins[] | select(.package | test("extensions-backend-dynamic")) | .pluginConfig.extensions.installation.enabled) = false' \
+          configs/dynamic-plugins/dynamic-plugins.override.yaml
+
+        # Append CI-specific plugins
+        cat <<EOF > /tmp/ci-plugins-override.yaml
         plugins:
-        # This is just to enable the /api/extensions endpoint, which is used in CI to validate the plugins list.
-        # TODO: we may need to update this ref
-        - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions-backend:bs_1.52.0__0.19.1'
-          disabled: false
-          pluginConfig:
-            extensions:
-              installation:
-                enabled: false
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
           disabled: false
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
           disabled: false
         EOF
+        yq -i '.plugins += load("/tmp/ci-plugins-override.yaml").plugins' configs/dynamic-plugins/dynamic-plugins.override.yaml
 
         # Custom extra files
         cp -vr configs/extra-files/github-app-credentials.example.yaml configs/extra-files/github-app-credentials.yaml
