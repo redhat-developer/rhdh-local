@@ -15,9 +15,25 @@ plugins:
   - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
     disabled: false
 
-  # Quay plugin
+  # Quay plugins
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.52.0__1.17.0'
     disabled: false
+  
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:bs_1.52.0__1.37.1'
+    disabled: false
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          backstage-community.plugin-quay:
+            mountPoints:
+              - mountPoint: entity.page.image-registry/cards
+                importName: QuayPage
+                config:
+                  layout:
+                    gridColumn: 1 / -1
+                  if:
+                    anyOf:
+                      - isQuayAvailable
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
   - package: 'oci://quay.io/rhdh/backstage-plugin-scaffolder-backend-module-github:{{inherit}}'
