@@ -46,8 +46,7 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
-          # Requires REGISTRY_REDHAT_IO_USERNAME and REGISTRY_REDHAT_IO_PASSWORD
-          # (Red Hat registry service-account username + token).
+          # Default db image is on registry.redhat.io; CI overrides via POSTGRES_IMAGE.
           - name: "with-db"
             cliArgs: "-f compose.yaml -f compose-with-db.yaml"
 # TODO: re-enable this test once we can use the right references.
@@ -62,6 +61,8 @@ jobs:
       PODMAN_IMAGE: quay.io/podman/stable:v5
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+      # The default Postgres image is located on registry.redhat.io, which requires authentication.
+      POSTGRES_IMAGE: quay.io/fedora/postgresql-18:latest
 
     steps:
       # Checkout default branch so .github/actions/* exists (release-* push may not include the composite).
@@ -73,5 +74,3 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
-          registry_redhat_io_username: ${{ secrets.REGISTRY_REDHAT_IO_USERNAME }}
-          registry_redhat_io_password: ${{ secrets.REGISTRY_REDHAT_IO_PASSWORD }}
