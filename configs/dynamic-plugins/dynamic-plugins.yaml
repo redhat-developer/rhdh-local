@@ -9,18 +9,18 @@ plugins:
   # These will be available as dynamic plugins (https://redhat.atlassian.net/browse/RHIDP-16098)
   # TODO: update this if/when it is listed in the DPDY. Remove this if it comes enabled by default in the DPDY.
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-auth-backend-module-guest-provider:bs_1.52.0__0.2.20'
-    disabled: false
+    enabled: true
 
   # Tech Radar frontend plugin
   - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
-    disabled: false
+    enabled: true
 
   # Quay plugins
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.52.0__1.17.0'
-    disabled: false
-  
+    enabled: true
+
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:bs_1.52.0__1.37.1'
-    disabled: false
+    enabled: true
     pluginConfig:
       dynamicPlugins:
         frontend:
@@ -37,19 +37,17 @@ plugins:
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
   - package: 'oci://quay.io/rhdh/backstage-plugin-scaffolder-backend-module-github:{{inherit}}'
-    disabled: false
+    enabled: true
 
   #########################################################
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # TODO: update this ref once the OCI plugin ref is available in the DPDY
-  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions'
-    disabled: false
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions'
+    enabled: true
 
-  # TODO: update this ref once the OCI plugin ref is available in the DPDY
-  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
-    disabled: false
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
+    enabled: true
     pluginConfig:
       extensions:
         installation:
@@ -66,9 +64,9 @@ plugins:
   # Lightspeed frontend plugin
   # TODO: re-enable this once the catalog index is stabilized
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-    disabled: true
+    enabled: false
 
   # Lightspeed backend plugin
   # TODO: re-enable this once the catalog index is stabilized
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-    disabled: true
+    enabled: false

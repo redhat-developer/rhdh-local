@@ -231,9 +231,9 @@ runs:
         cat <<EOF > /tmp/ci-plugins-override.yaml
         plugins:
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
-          disabled: false
+          enabled: true
         - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
-          disabled: false
+          enabled: true
         EOF
         yq -i '.plugins += load("/tmp/ci-plugins-override.yaml").plugins' configs/dynamic-plugins/dynamic-plugins.override.yaml
 
