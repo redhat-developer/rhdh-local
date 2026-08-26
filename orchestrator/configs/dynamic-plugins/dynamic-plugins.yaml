@@ -4,18 +4,18 @@ includes:
 
 plugins:
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:{{inherit}}'
-    disabled: false
+    enabled: true
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:{{inherit}}'
-    disabled: false
+    enabled: true
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:{{inherit}}'
-    disabled: false
+    enabled: true
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow:8899
   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:{{inherit}}'
-    disabled: false
+    enabled: true

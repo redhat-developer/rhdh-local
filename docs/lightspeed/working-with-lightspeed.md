@@ -273,17 +273,17 @@ To fully disable Lightspeed:
       configs/dynamic-plugins/dynamic-plugins.override.yaml
    ```
 
-   Then add (or uncomment) the following entries in the `plugins` section, setting `disabled: true` on both the Lightspeed frontend and backend plugins to remove all Lightspeed UI elements:
+   Then add (or uncomment) the following entries in the `plugins` section, setting `enabled: false` on both the Lightspeed frontend and backend plugins to remove all Lightspeed UI elements:
 
    ```yaml
    plugins:
      # Disable Lightspeed frontend plugin
      - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-       disabled: true
+       enabled: false
 
      # Disable Lightspeed backend plugin
      - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-       disabled: true
+       enabled: false
    ```
 
    !!! note
