@@ -5,9 +5,9 @@
 # You can run `[podman|docker] compose -f compose.yaml -f compose-with-db.yaml config`
 # to view the effective merged config.
 #
-# Postgres app-config is applied automatically when this overlay is used
-# (see docs/rhdh-local-guide/postgresql-guide.md). Optional overrides still go
-# in app-config.local.yaml.
+# Postgres app-config (configs/app-config/app-config.db.yaml) is loaded when
+# this overlay is used (see docs/rhdh-local-guide/postgresql-guide.md).
+# Optional overrides still go in app-config.local.yaml.
 
 services:
   db:

@@ -14,7 +14,7 @@ set -euo pipefail
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
-DB_APP_CONFIG="generated/app-config-db.yaml"
+DB_APP_CONFIG="configs/app-config/app-config.db.yaml"
 
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
@@ -51,17 +51,7 @@ fi
 # Loaded after the patched default config (SQLite) and before user local config.
 EXTRA_CONFIGS=""
 if [[ "${WITH_POSTGRES:-}" == "true" ]]; then
-  cat > "$DB_APP_CONFIG" <<'EOF'
-backend:
-  database:
-    client: pg
-    connection:
-      host: ${POSTGRES_HOST}
-      port: ${POSTGRES_PORT}
-      user: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
-EOF
-  echo "Using generated Postgres config: $DB_APP_CONFIG"
+  echo "Using Postgres config: $DB_APP_CONFIG"
   EXTRA_CONFIGS="$DB_APP_CONFIG"
 fi
 
