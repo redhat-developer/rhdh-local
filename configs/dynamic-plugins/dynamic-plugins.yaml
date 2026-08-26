@@ -5,13 +5,35 @@ includes:
   - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 plugins:
+  # Guest auth backend module — RHDH 2+ no longer bundles auth provider plugins statically (https://redhat.atlassian.net/browse/RHIDP-15348).
+  # These will be available as dynamic plugins (https://redhat.atlassian.net/browse/RHIDP-16098)
+  # TODO: update this if/when it is listed in the DPDY. Remove this if it comes enabled by default in the DPDY.
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-auth-backend-module-guest-provider:bs_1.52.0__0.2.20'
+    enabled: true
+
   # Tech Radar frontend plugin
   - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
     enabled: true
 
-  # Quay plugin
+  # Quay plugins
   - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.52.0__1.17.0'
     enabled: true
+
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:bs_1.52.0__1.37.1'
+    enabled: true
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          backstage-community.plugin-quay:
+            mountPoints:
+              - mountPoint: entity.page.image-registry/cards
+                importName: QuayPage
+                config:
+                  layout:
+                    gridColumn: 1 / -1
+                  if:
+                    anyOf:
+                      - isQuayAvailable
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
   - package: 'oci://quay.io/rhdh/backstage-plugin-scaffolder-backend-module-github:{{inherit}}'
@@ -21,12 +43,10 @@ plugins:
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # TODO: we may need to update this ref
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions:bs_1.52.0__0.19.1'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions'
     enabled: true
 
-  # TODO: we may need to update this ref
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-extensions-backend:bs_1.52.0__0.19.1'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
     enabled: true
     pluginConfig:
       extensions:

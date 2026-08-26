@@ -1,0 +1,16 @@
+# Baseline plugins that must always be loaded in RHDH Local,
+# regardless of the dynamic-plugins configuration.
+# Enforced by validate-loaded-plugins.sh.
+#
+# Ref: https://redhat.atlassian.net/browse/RHDHPLAN-573
+plugins:
+  - backstage-plugin-auth-backend-module-guest-provider
+  - backstage-community-plugin-tech-radar
+  - backstage-community-plugin-quay-backend
+  - backstage-community-plugin-quay
+  - backstage-plugin-scaffolder-backend-module-github
+  - red-hat-developer-hub-backstage-plugin-extensions
+  - red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
+  # TODO: re-enable once the catalog index is stabilized
+  # - red-hat-developer-hub-backstage-plugin-lightspeed
+  # - red-hat-developer-hub-backstage-plugin-lightspeed-backend
