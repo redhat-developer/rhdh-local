@@ -14,6 +14,7 @@ set -euo pipefail
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
+DB_APP_CONFIG="generated/app-config-db.yaml"
 
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
@@ -46,14 +47,31 @@ if [ -f "$USERS_OVERRIDE" ]; then
   sed -i "s|/opt/app-root/src/configs/catalog-entities/users.yaml|/opt/app-root/src/$USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
 
-# Add local config if available
+# Auto-wire Postgres when compose-with-db sets WITH_POSTGRES=true.
+# Loaded after the patched default config (SQLite) and before user local config.
 EXTRA_CONFIGS=""
+if [ "${WITH_POSTGRES:-}" = "true" ]; then
+  cat > "$DB_APP_CONFIG" <<'EOF'
+backend:
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+EOF
+  echo "Using generated Postgres config: $DB_APP_CONFIG"
+  EXTRA_CONFIGS="$DB_APP_CONFIG"
+fi
+
+# Add local config if available (always last so users can override)
 if [ -f "$USER_APP_CONFIG" ]; then
   echo "Using user config: $USER_APP_CONFIG"
-  EXTRA_CONFIGS="$USER_APP_CONFIG"
+  EXTRA_CONFIGS="$EXTRA_CONFIGS $USER_APP_CONFIG"
 elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
   echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to $USER_APP_CONFIG."
-  EXTRA_CONFIGS="$LEGACY_USER_APP_CONFIG"
+  EXTRA_CONFIGS="$EXTRA_CONFIGS $LEGACY_USER_APP_CONFIG"
 fi
 
 EXTRA_CLI_ARGS=""

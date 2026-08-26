@@ -29,39 +29,25 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
    podman compose -f compose.yaml -f compose-with-db.yaml -f compose-with-corporate-proxy.yaml up -d
    ```
 
-3. Comment out the SQLite in-memory configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
+   The overlay sets `WITH_POSTGRES=true` on the `rhdh` service. On startup, RHDH automatically generates a Postgres `backend.database` config and loads it after the default SQLite settings. You do not need to edit [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml) for basic Postgres use.
 
-   ```yaml
-   # database:
-   #   client: better-sqlite3
-   #   connection: ':memory:'
-   ```
+### Optional database overrides
 
-4. Add Postgres configuration in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml)
+Put database overrides in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml). That file is loaded last, so it wins over the generated Postgres config. For example, an explicit SQLite block would switch you back to in-memory storage even with the overlay.
 
-   ```yaml
-   database:
+If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), add this to `app-config.local.yaml`:
+
+```yaml
+backend:
+  database:
     client: pg
+    pluginDivisionMode: schema
     connection:
       host: ${POSTGRES_HOST}
       port: ${POSTGRES_PORT}
       user: ${POSTGRES_USER}
       password: ${POSTGRES_PASSWORD}
-   ```
-
-   If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), use this `backend.database` block in `app-config.local.yaml` instead of the snippet above:
-
-   ```yaml
-   backend:
-     database:
-       client: pg
-       pluginDivisionMode: schema
-       connection:
-         host: ${POSTGRES_HOST}
-         port: ${POSTGRES_PORT}
-         user: ${POSTGRES_USER}
-         password: ${POSTGRES_PASSWORD}
-   ```
+```
 
 ## Upgrading PostgreSQL
 
