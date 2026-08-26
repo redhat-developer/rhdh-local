@@ -36,13 +36,13 @@ fi
 cp -f "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
 # Wait until the dynamic plugin config is ready
-while [ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]; do
+while [[ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]]; do
   echo "Waiting for $DYNAMIC_PLUGINS_CONFIG to be created by install-dynamic-plugins container ..."
   sleep 2
 done
 
 # Apply overrides by replacing target paths in the patched config
-if [ -f "$USERS_OVERRIDE" ]; then
+if [[ -f "$USERS_OVERRIDE" ]]; then
   echo "Applying users override"
   sed -i "s|/opt/app-root/src/configs/catalog-entities/users.yaml|/opt/app-root/src/$USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
@@ -50,7 +50,7 @@ fi
 # Auto-wire Postgres when compose-with-db sets WITH_POSTGRES=true.
 # Loaded after the patched default config (SQLite) and before user local config.
 EXTRA_CONFIGS=""
-if [ "${WITH_POSTGRES:-}" = "true" ]; then
+if [[ "${WITH_POSTGRES:-}" == "true" ]]; then
   cat > "$DB_APP_CONFIG" <<'EOF'
 backend:
   database:
@@ -66,10 +66,10 @@ EOF
 fi
 
 # Add local config if available (always last so users can override)
-if [ -f "$USER_APP_CONFIG" ]; then
+if [[ -f "$USER_APP_CONFIG" ]]; then
   echo "Using user config: $USER_APP_CONFIG"
   EXTRA_CONFIGS="$EXTRA_CONFIGS $USER_APP_CONFIG"
-elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
+elif [[ -f "$LEGACY_USER_APP_CONFIG" ]]; then
   echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to $USER_APP_CONFIG."
   EXTRA_CONFIGS="$EXTRA_CONFIGS $LEGACY_USER_APP_CONFIG"
 fi
