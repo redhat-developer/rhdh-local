@@ -29,13 +29,13 @@ The examples below use `podman` and `podman compose`. If you use Docker, replace
    podman compose -f compose.yaml -f compose-with-db.yaml -f compose-with-corporate-proxy.yaml up -d
    ```
 
-   The overlay sets `WITH_POSTGRES=true` on the `rhdh` service. On startup, RHDH loads the Postgres `backend.database` config from [`configs/app-config/app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.db.yaml) after the default SQLite settings. You do not need to edit [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml) for basic Postgres use.
+   The overlay sets `WITH_POSTGRES=true` on the `rhdh` service. On startup, RHDH loads the Postgres `backend.database` config from [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.db.yaml) after the default SQLite settings. You do not need to edit [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml) for basic Postgres use.
 
 ### Optional database overrides
 
-Put database overrides in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml). That file is loaded last, so it wins over `app-config.db.yaml`. For example, an explicit SQLite block would switch you back to in-memory storage even with the overlay.
+Put database overrides in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.local.example.yaml). That file is loaded last, so it wins over [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.db.yaml). For example, an explicit SQLite block would switch you back to in-memory storage even with the overlay.
 
-If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), add this to `app-config.local.yaml`. Deep merge keeps `client` and `connection` from `app-config.db.yaml`:
+If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), add this to `app-config.local.yaml`. Deep merge keeps `client` and `connection` from [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/main/configs/app-config/app-config.db.yaml):
 
 ```yaml
 backend:
