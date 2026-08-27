@@ -26,7 +26,6 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 | File | Purpose |
 |------|---------|
 | `configs/extra-files/lightspeed-stack.yaml` | Lightspeed Core HTTP service config (port, auth, MCP, customization) |
-| `configs/extra-files/config.yaml` | Llama Stack v3 distro config (inference providers, RAG, safety/validation) |
 | `configs/extra-files/rhdh-profile.py` | Python profile with system prompts and response templates |
 | `configs/extra-files/templates/placeholder.json` | Placeholder for Vertex AI GCP credentials bind mount |
 | `configs/dynamic-plugins/dynamic-plugins.yaml` | Default dynamic plugins config (includes Developer Hub Intelligent Assistant plugin entries) |
@@ -45,7 +44,7 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 
 ## Syncing Lightspeed Configuration Files
 
-The Lightspeed Core configuration files (`config.yaml`, `rhdh-profile.py`, `lightspeed-stack.yaml`) are maintained upstream in the [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs) repository. The sync script downloads them into `configs/extra-files/`.
+The Lightspeed Core configuration files (`rhdh-profile.py`, `lightspeed-stack.yaml`) are maintained upstream in the [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs) repository. The sync script downloads them into `configs/extra-files/`.
 
 **Sync from default (main branch):**
 ```bash

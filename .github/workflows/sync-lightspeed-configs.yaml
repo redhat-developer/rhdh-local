@@ -81,7 +81,6 @@ jobs:
 
           ### Synced files
           - \`configs/extra-files/lightspeed-stack.yaml\`
-          - \`configs/extra-files/config.yaml\`
           - \`configs/extra-files/rhdh-profile.py\`
 
           > [!CAUTION]

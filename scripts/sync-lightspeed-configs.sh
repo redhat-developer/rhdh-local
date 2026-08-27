@@ -10,7 +10,6 @@ LIGHTSPEED_DIR="$(cd -- "${SCRIPT_DIR}/../configs/extra-files" && pwd)"
 
 TARGETS=(
   "lightspeed-core-configs/lightspeed-stack.yaml|${LIGHTSPEED_DIR}/lightspeed-stack.yaml"
-  "llama-stack-configs/config.yaml|${LIGHTSPEED_DIR}/config.yaml"
   "lightspeed-core-configs/rhdh-profile.py|${LIGHTSPEED_DIR}/rhdh-profile.py"
 )
 

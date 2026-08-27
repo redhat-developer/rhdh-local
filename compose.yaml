@@ -88,7 +88,6 @@ services:
     volumes:
       - ./configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
       - ./configs/extra-files/rhdh-profile.py:/app-root/rhdh-profile.py:Z
-      - ./configs/extra-files/config.yaml:/app-root/config.yaml:Z
       - rag_embeddings:/rag-content/embeddings_model
       - rag_vector_db:/rag-content/vector_db
       - ${VERTEX_AI_CREDENTIALS_PATH:-./configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
