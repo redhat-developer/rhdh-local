@@ -49,7 +49,7 @@ done
 echo "Config files: ${config_files[*]}"
 
 # Extract the raw plugin name from a package reference.
-# ./dynamic-plugins/dist/foo → foo
+# ./local-plugins/foo → foo
 # oci://host/path/foo:tag → foo
 # oci://host/path/foo:tag!bar → bar
 extract_plugin_name() {
@@ -86,29 +86,20 @@ for cfg in "${config_files[@]}"; do
         continue
     fi
 
-    enabled_output=$(yq -r '.plugins[] | select(.disabled != true and .enabled != false) | .package' "$cfg") || {
-        echo "ERROR: Failed to extract enabled plugins from $cfg" >&2
+    # Process plugins in YAML order so later entries override earlier ones.
+    # This matters when a dist path is disabled and an OCI path for the same
+    # plugin is enabled — the OCI entry must win.
+    all_output=$(yq -o=json '.plugins' "$cfg" | jq -r '.[] | .package + "|" + (if (.disabled == true or .enabled == false) then "disabled" else "enabled" end)') || {
+        echo "ERROR: Failed to extract plugins from $cfg" >&2
         exit 1
     }
-    while IFS= read -r raw_pkg; do
+    while IFS='|' read -r raw_pkg state; do
         [[ -z "$raw_pkg" ]] && continue
         name=$(extract_plugin_name "$raw_pkg")
         norm=$(normalize_plugin_name "$name")
-        plugin_state["$norm"]="enabled"
+        plugin_state["$norm"]="$state"
         plugin_display["$norm"]="$name"
-    done <<< "$enabled_output"
-
-    disabled_output=$(yq -r '.plugins[] | select(.disabled == true or .enabled == false) | .package' "$cfg") || {
-        echo "ERROR: Failed to extract disabled plugins from $cfg" >&2
-        exit 1
-    }
-    while IFS= read -r raw_pkg; do
-        [[ -z "$raw_pkg" ]] && continue
-        name=$(extract_plugin_name "$raw_pkg")
-        norm=$(normalize_plugin_name "$name")
-        plugin_state["$norm"]="disabled"
-        plugin_display["$norm"]="$name"
-    done <<< "$disabled_output"
+    done <<< "$all_output"
 done
 
 # Build final lists from the resolved state.
