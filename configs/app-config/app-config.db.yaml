@@ -1,0 +1,11 @@
+# Loaded only when compose-with-db.yaml sets WITH_POSTGRES=true on the rhdh
+# service. This is not app-config.local.yaml — put user overrides there instead.
+
+backend:
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}

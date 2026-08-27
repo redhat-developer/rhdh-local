@@ -63,6 +63,9 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          # Default db image is on registry.redhat.io; CI overrides via POSTGRES_IMAGE.
+          - name: "with-db"
+            cliArgs: "-f compose.yaml -f compose-with-db.yaml"
           - name: "orchestrator-workflow"
             cliArgs: "-f compose.yaml -f orchestrator/compose.yaml"
           # TODO: Remove this and the exclude rules below once all supported
@@ -87,6 +90,10 @@ jobs:
               cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
           - os: ubuntu-24.04-arm
             composeConfig:
+              name: "with-db"
+              cliArgs: "-f compose.yaml -f compose-with-db.yaml"
+          - os: ubuntu-24.04-arm
+            composeConfig:
               name: "developer-lightspeed"
               cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           # Skip developer-lightspeed on main and release-1.10: Lightspeed is
@@ -109,6 +116,8 @@ jobs:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+      # The default Postgres image is located on registry.redhat.io, which requires authentication.
+      POSTGRES_IMAGE: quay.io/fedora/postgresql-18:latest
       ACTIONS_RUNNER_DEBUG: ${{ vars.ACTIONS_RUNNER_DEBUG }}
 
     steps:
@@ -126,3 +135,4 @@ jobs:
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
           override_images: "true"
+

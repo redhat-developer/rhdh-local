@@ -1,25 +1,6 @@
 services:
-  # Uncomment the following block to use a PostgreSQL database
-  # don't forget to also uncomment 'depends_on' 'db' section in the rhdh service
-  # and comment out or delete 'database' section in app-config.yaml or app-config.local.yaml
-
-  # db:
-  #   container_name: db
-  #   image: "registry.redhat.io/rhel10/postgresql-18:latest"
-  #   volumes:
-  #     - "/var/lib/pgsql/data"
-  #   env_file:
-  #     - path: "./default.env"
-  #       required: true
-  #     - path: "./.env"
-  #       required: false
-  #   environment:
-  #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "postgres"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
+  # Optional PostgreSQL: merge compose-with-db.yaml (see docs/rhdh-local-guide/postgresql-guide.md)
+  # Example: podman compose -f compose.yaml -f compose-with-db.yaml up -d
 
   rhdh:
     container_name: rhdh
@@ -50,8 +31,6 @@ services:
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
-      # db:
-      #   condition: service_healthy
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer

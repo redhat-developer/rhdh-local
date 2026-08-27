@@ -160,6 +160,7 @@ runs:
         docker-compose-version: v5.0.1
         env: |
           CORPORATE_PROXY_IMAGE=docker.io/ubuntu/squid:latest
+          POSTGRES_IMAGE=quay.io/fedora/postgresql-18:latest
 
     - name: Display container engine version
       if: ${{ env.SKIP_TEST != 'true' }}

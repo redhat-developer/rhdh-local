@@ -46,6 +46,9 @@ jobs:
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          # Default db image is on registry.redhat.io; CI overrides via POSTGRES_IMAGE.
+          - name: "with-db"
+            cliArgs: "-f compose.yaml -f compose-with-db.yaml"
 # TODO: re-enable this test once we can use the right references.
 # Tracked in https://redhat.atlassian.net/browse/RHDHBUGS-3559
 #          - name: "orchestrator-workflow"
@@ -58,6 +61,8 @@ jobs:
       PODMAN_IMAGE: quay.io/podman/stable:v5
       # The default corporate proxy image is located on registry.redhat.io, which requires authentication.
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
+      # The default Postgres image is located on registry.redhat.io, which requires authentication.
+      POSTGRES_IMAGE: quay.io/fedora/postgresql-18:latest
 
     steps:
       # Checkout default branch so .github/actions/* exists (release-* push may not include the composite).
