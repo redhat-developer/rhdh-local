@@ -77,15 +77,13 @@ plugins:
   ########## End Extensions #################################
 
   #########################################################
-  # Developer Lightspeed plugins
+  # Developer Hub Intelligent Assistant plugins
   #########################################################
 
-  # Lightspeed frontend plugin
-  # TODO: re-enable this once the catalog index is stabilized
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-    enabled: false
+  # Developer Hub Intelligent Assistant frontend plugin
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant'
+    enabled: true
 
-  # Lightspeed backend plugin
-  # TODO: re-enable this once the catalog index is stabilized
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-    enabled: false
+  # Developer Hub Intelligent Assistant backend plugin
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend'
+    enabled: true

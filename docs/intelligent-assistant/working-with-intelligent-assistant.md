@@ -1,23 +1,23 @@
-# Working with Developer Lightspeed
+# Working with Developer Hub Intelligent Assistant
 
-Red Hat Developer Lightspeed (Developer Lightspeed) is a virtual assistant powered by generative AI that offers in-depth insights into Red Hat Developer Hub (RHDH), including its wide range of capabilities. You can interact with this assistant to explore and learn more about RHDH in greater detail.
+Developer Hub Intelligent Assistant is a virtual assistant powered by generative AI that offers in-depth insights into Red Hat Developer Hub (RHDH), including its wide range of capabilities. You can interact with this assistant to explore and learn more about RHDH in greater detail.
 
-Developer Lightspeed provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
+Developer Hub Intelligent Assistant provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Lightspeed is included in RHDH Local by default — no additional setup scripts or compose files are required. To disable it, see [Disabling Lightspeed](#disabling-lightspeed).
+Developer Hub Intelligent Assistant is included in RHDH Local by default — no additional setup scripts or compose files are required. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
 
 ## Supported Architecture
 
-Developer Lightspeed for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed Core.
+Developer Hub Intelligent Assistant for Red Hat Developer Hub is available as a plug-in on all platforms that host RHDH, and it requires the use of Lightspeed Core.
 
-Developer Lightspeed uses a **Bring Your Own Model (BYOM)** architecture. No inference provider is bundled by default — you must configure at least one external LLM provider. The application starts in an unconfigured state and the UI will reflect this until a provider is set up.
+Developer Hub Intelligent Assistant uses a **Bring Your Own Model (BYOM)** architecture. No inference provider is bundled by default — you must configure at least one external LLM provider. The application starts in an unconfigured state and the UI will reflect this until a provider is set up.
 
 ## Table of Contents
 1. [Configure an Inference Provider](#configure-an-inference-provider)
 2. [Query Validation Configuration](#query-validation-configuration-optional)
 3. [Verify Services Are Running](#verify-services-are-running)
 4. [Plugin Configuration Reference](#plugin-configuration-reference)
-5. [Disabling Lightspeed](#disabling-lightspeed)
+5. [Disabling Intelligent Assistant](#disabling-intelligent-assistant)
 6. [Troubleshooting](#troubleshooting)
 
 ---
@@ -26,9 +26,9 @@ Developer Lightspeed uses a **Bring Your Own Model (BYOM)** architecture. No inf
 
 !!! important
   
-    You **must** configure at least one inference provider in your `.env` file before the chatbot will be functional. Without a configured provider, Lightspeed will start in an unconfigured state.
+    You **must** configure at least one inference provider in your `.env` file before the chatbot will be functional. Without a configured provider, Developer Hub Intelligent Assistant will start in an unconfigured state.
 
-Developer Lightspeed supports any service that is **OpenAI API compatible**. Configure **at least one** of the following providers in your `.env` file. You can enable multiple providers simultaneously.
+Developer Hub Intelligent Assistant supports any service that is **OpenAI API compatible**. Configure **at least one** of the following providers in your `.env` file. You can enable multiple providers simultaneously.
 
 If you don't already have a `.env` file, create one from the template:
 
@@ -39,7 +39,7 @@ cp default.env .env
 !!! note
 
     **Supported Providers:**
-    Developer Lightspeed supports any service that is **OpenAI API compatible**, including but not limited to:
+    Developer Hub Intelligent Assistant supports any service that is **OpenAI API compatible**, including but not limited to:
     - **vLLM**: A high-performance inference server (self-hosted or cloud)
     - **OpenAI**: OpenAI's API (GPT-4, etc.)
     - **Ollama**: A locally or remotely hosted Ollama instance
@@ -134,7 +134,7 @@ Use Google Cloud's Vertex AI service to run Gemini models.
 
 !!! warning
   
-    **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Lightspeed (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
+    **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Hub Intelligent Assistant (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
 
 ```env
 # Enable Vertex AI provider
@@ -163,7 +163,7 @@ VERTEX_AI_PROJECT=your-gcp-project-id
 
 ## Query Validation Configuration (Optional)
 
-Developer Lightspeed supports query validation, which restricts the chatbot to RHDH-related questions. When enabled, off-topic queries (e.g., asking about the weather) will be rejected while development-related questions are allowed.
+Developer Hub Intelligent Assistant supports query validation, which restricts the chatbot to RHDH-related questions. When enabled, off-topic queries (e.g., asking about the weather) will be rejected while development-related questions are allowed.
 
 ```env
 # Enable query validation
@@ -206,18 +206,18 @@ You should see output similar to:
 - `rhdh-plugins-installer` and `rag-init` are init containers — they run once and exit with status `0`.
 - `rhdh` and `lightspeed-core` should show `Up` or `running`.
 
-Open http://localhost:7007/lightspeed in your browser to access Developer Lightspeed.
+Open http://localhost:7007/intelligent-assistant in your browser to access Developer Hub Intelligent Assistant.
 
-![Developer Lightspeed](../images/Developer-Lightspeed.png)
+![Developer Hub Intelligent Assistant](../images/Developer-Hub-Intelligent-Assistant.png)
 
 ---
 
 ## Plugin Configuration Reference
 
-The Lightspeed plugin can be configured in `configs/app-config/app-config.yaml`:
+The Developer Hub Intelligent Assistant plugin can be configured in `configs/app-config/app-config.yaml`:
 
 ```yaml
-lightspeed:
+intelligent-assistant:
   # OPTIONAL: Custom users prompts displayed to users
   # If not provided, the plugin uses built-in default prompts
   prompts:
@@ -225,7 +225,7 @@ lightspeed:
       message: <prompt_message>          # REQUIRED: The actual prompt text/question
   
   # OPTIONAL: Backend-only configurations
-  servicePort: 8080                      # OPTIONAL: Port for lightspeed service (default: 8080)
+  servicePort: 8080                      # OPTIONAL: Port for Lightspeed Core service (default: 8080)
   systemPrompt: <custom_system_prompt>   # OPTIONAL: Override default RHDH system prompt
 ```
 
@@ -236,13 +236,13 @@ lightspeed:
 | `prompts` | Array | No | Built-in prompts | Custom welcome prompts for users |
 | `prompts[].title` | String | Yes* | - | Display title for the prompt (*required if prompts array is provided) |
 | `prompts[].message` | String | Yes* | - | The actual prompt text/question (*required if prompts array is provided) |
-| `servicePort` | Number | No | `8080` | Port for lightspeed backend service |
+| `servicePort` | Number | No | `8080` | Port for Lightspeed Core service |
 | `systemPrompt` | String | No | RHDH default | Custom system prompt to override default behavior |
 
 ### Example Configuration
 
 ```yaml
-lightspeed:
+intelligent-assistant:
   prompts:
     - title: "Quick Start"
       message: "How do I enable a dynamic plugin?"
@@ -252,44 +252,44 @@ lightspeed:
 
 ---
 
-## Disabling Lightspeed
+## Disabling Intelligent Assistant
 
-If you don't configure an LLM provider, Lightspeed will remain in an unconfigured/dormant state and not affect your RHDH experience.
+If you don't configure an LLM provider, Developer Hub Intelligent Assistant will remain in an unconfigured/dormant state and not affect your RHDH experience.
 
-To fully disable Lightspeed:
+To fully disable Developer Hub Intelligent Assistant:
 
-1. **Stop the Lightspeed services** by copying the provided example override file:
+1. **Stop the Developer Hub Intelligent Assistant services** by copying the provided example override file:
 
    ```sh
-   cp compose.lightspeed-disabled.override.example.yaml compose.override.yaml
+   cp compose.intelligent-assistant-disabled.override.example.yaml compose.override.yaml
    ```
 
    This prevents `rag-init` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`.
 
-2. **Disable the Lightspeed plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
+2. **Disable the Developer Hub Intelligent Assistant plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
 
    ```sh
    cp configs/dynamic-plugins/dynamic-plugins.override.example.yaml \
       configs/dynamic-plugins/dynamic-plugins.override.yaml
    ```
 
-   Then add (or uncomment) the following entries in the `plugins` section, setting `enabled: false` on both the Lightspeed frontend and backend plugins to remove all Lightspeed UI elements:
+   Then add (or uncomment) the following entries in the `plugins` section, setting `enabled: false` on both the Developer Hub Intelligent Assistant frontend and backend plugins to remove all Developer Hub Intelligent Assistant UI elements:
 
    ```yaml
    plugins:
-     # Disable Lightspeed frontend plugin
-     - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
+     # Disable Developer Hub Intelligent Assistant frontend plugin
+     - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant'
        enabled: false
 
-     # Disable Lightspeed backend plugin
-     - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
+     # Disable Developer Hub Intelligent Assistant backend plugin
+     - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend'
        enabled: false
    ```
 
    !!! note
        Do **not** edit `configs/dynamic-plugins/dynamic-plugins.yaml` directly. The override file replaces the default configuration at runtime (see [How RHDH Local handles dynamic plugins configuration](../rhdh-local-guide/dynamic-plugins-management.md#how-rhdh-local-handles-dynamic-plugins-configuration)).
 
-Step 1 alone stops the Lightspeed backend services but leaves the plugins installed (the UI may appear in a non-functional state). Step 2 removes the Lightspeed UI elements entirely. Both steps are reversible.
+Step 1 alone stops the Lightspeed Core services but leaves the plugins installed (the UI may appear in a non-functional state). Step 2 removes the Developer Hub Intelligent Assistant UI elements entirely. Both steps are reversible.
 
 ---
 
@@ -314,7 +314,7 @@ Step 1 alone stops the Lightspeed backend services but leaves the plugins instal
 - Ensure you have the necessary permissions to access files and directories, especially when mounting volumes.
 - On Linux/macOS, you may need to adjust permissions with `chmod` or run commands with `sudo`.
 
-### 3. Web UI Not Accessible at http://localhost:7007/lightspeed
+### 3. Web UI Not Accessible at http://localhost:7007/intelligent-assistant
 
 - Make sure all containers are running:
   ```bash
@@ -326,7 +326,7 @@ Step 1 alone stops the Lightspeed backend services but leaves the plugins instal
 
 ### 4. Chatbot Shows Unconfigured State
 
-- Developer Lightspeed starts unconfigured by default. You must configure at least one inference provider in your `.env` file.
+- Developer Hub Intelligent Assistant starts unconfigured by default. You must configure at least one inference provider in your `.env` file.
 - **Verify provider is enabled**: Check that at least one of `ENABLE_VLLM=true`, `ENABLE_OPENAI=true`, `ENABLE_OLLAMA=true`, or `ENABLE_VERTEX_AI=true` is set in your `.env` file.
 - **Check required variables**: Ensure all required variables for your chosen provider are set.
 - **Verify connectivity**: Ensure the provider URL is accessible from within the container.

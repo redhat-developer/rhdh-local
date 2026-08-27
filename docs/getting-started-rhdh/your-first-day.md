@@ -163,7 +163,7 @@ The quickstarts dock can be customized by your administrator and often contains 
 
 **Productivity Quickstarts:**
 
-* **Ask Lightspeed To Help You** - Get AI-powered assistance (if available)
+* **Ask Developer Hub Intelligent Assistant To Help You** - Get AI-powered assistance (if available)
 * **Add Software To The Catalog** - Register components to the catalog
 * **Personalize Your Experience** - Customize your Developer Hub settings
 * **Learn New Skills** - Access learning paths and training
@@ -320,7 +320,7 @@ Now that you've completed your first day essentials, you're ready to explore mor
 
 * [What is Developer Hub and why is it useful?](index.md) - Understand the fundamentals
 * [Key Features & Benefits](highlights.md) - Explore what RHDH offers
-* [Understanding & Using Developer Lightspeed](developer-lightspeed.md) - Get AI-powered assistance (if available)
+* [Understanding & Using Developer Hub Intelligent Assistant](developer-intelligent-assistant.md) - Get AI-powered assistance (if available)
 
 !!! success "You're All Set! 🎉"
     You've learned the basics of logging in, navigating the homepage, using quickstarts, managing starred items, and customizing your profile. You're now ready to start using Developer Hub effectively in your daily work!

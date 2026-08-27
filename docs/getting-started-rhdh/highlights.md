@@ -51,7 +51,7 @@ Now that you understand the key features of Red Hat Developer Hub, explore these
 * [Understanding & Using Templates](templates.md) - Use templates to create new projects following best practices
 * [Understanding & Using TechDocs](techdocs.md) - Access and create documentation
 * [Using Search](search.md) - Find anything quickly across your organization
-* [Understanding & Using Developer Lightspeed](developer-lightspeed.md) - Get AI-powered assistance
+* [Understanding & Using Developer Hub Intelligent Assistant](developer-intelligent-assistant.md) - Get AI-powered assistance
 
 ### Learn More
 

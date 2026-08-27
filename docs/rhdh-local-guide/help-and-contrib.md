@@ -170,7 +170,7 @@ docs/
 │   ├── templates-authoring.md
 │   ├── ten_template_tips.md
 │   ├── extensions.md
-│   ├── developer-lightspeed.md
+│   ├── developer-intelligent-assistant.md
 │   └── references.md
 └── rhdh-local-guide/           # RHDH Local User Guide
     ├── index.md

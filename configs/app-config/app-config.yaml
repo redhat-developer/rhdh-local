@@ -274,20 +274,20 @@ quay:
   apiUrl: "https://quay.io"
 
 # ==============================================================================
-# Developer Lightspeed Plugin Configuration
+# Developer Hub Intelligent Assistant Plugin Configuration
 # ==============================================================================
-# For detailed documentation, see: docs/lightspeed/working-with-lightspeed.md
-# Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
-# Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
-lightspeed:
-  # OPTIONAL: Custom user prompts displayed in the Lightspeed UI
+# For detailed documentation, see: docs/intelligent-assistant/working-with-intelligent-assistant.md
+# Frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/intelligent-assistant/plugins/intelligent-assistant
+# Backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/intelligent-assistant/plugins/intelligent-assistant-backend#plugin-configurations
+intelligent-assistant:
+  # OPTIONAL: Custom user prompts displayed in the Developer Hub Intelligent Assistant UI
   # These appear as suggested questions/prompts to help users get started
   # If not provided, the plugin uses built-in default prompts
   prompts:
     - title: "Getting Started with Red Hat Developer Hub"
       message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
 
-  # OPTIONAL: Port for the Lightspeed backend service
+  # OPTIONAL: Port for the Lightspeed Core service
   # Default: 8080
   # Only change if you've configured a different port in lightspeed-stack.yaml
   # servicePort: 8080
