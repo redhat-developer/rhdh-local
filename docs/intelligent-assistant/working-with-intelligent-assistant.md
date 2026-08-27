@@ -4,7 +4,7 @@ Developer Hub Intelligent Assistant is a virtual assistant powered by generative
 
 Developer Hub Intelligent Assistant provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Hub Intelligent Assistant is included in RHDH Local by default — no additional setup scripts or compose files are required. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
+Developer Hub Intelligent Assistant is included in RHDH Local by default — the services start with the default compose file. To make the chatbot functional, enable an inference provider as described below. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
 
 ## Supported Architecture
 
@@ -26,9 +26,16 @@ Developer Hub Intelligent Assistant uses a **Bring Your Own Model (BYOM)** archi
 
 !!! important
   
-    You **must** configure at least one inference provider in your `.env` file before the chatbot will be functional. Without a configured provider, Developer Hub Intelligent Assistant will start in an unconfigured state.
+    You **must** enable at least one inference provider before the chatbot will be functional. Without a configured provider, Developer Hub Intelligent Assistant will start in an unconfigured state.
 
-Developer Hub Intelligent Assistant supports any service that is **OpenAI API compatible**. Configure **at least one** of the following providers in your `.env` file. You can enable multiple providers simultaneously.
+    Do **not** edit the tracked file `configs/extra-files/lightspeed-stack.yaml`. It is synced from upstream and will be overwritten. Copy it to `lightspeed-stack.local.yaml` instead.
+
+Enabling a provider is two steps:
+
+1. Copy the tracked stack file to `lightspeed-stack.local.yaml` and uncomment the provider block(s).
+2. Point compose at that file with `LIGHTSPEED_STACK_CONFIG` in `.env`, and set secrets and URLs there.
+
+Compose interpolates `LIGHTSPEED_STACK_CONFIG` from the project `.env` (same as `VERTEX_AI_CREDENTIALS_PATH`). If it is unset, compose mounts the tracked `lightspeed-stack.yaml`.
 
 If you don't already have a `.env` file, create one from the template:
 
@@ -42,12 +49,13 @@ cp default.env .env
     Developer Hub Intelligent Assistant supports any service that is **OpenAI API compatible**, including but not limited to:
     - **vLLM**: A high-performance inference server (self-hosted or cloud)
     - **OpenAI**: OpenAI's API (GPT-4, etc.)
-    - **Ollama**: A locally or remotely hosted Ollama instance
     - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
+
+    These are the providers commented in the synced stack file. Other OpenAI-compatible endpoints (Azure OpenAI, LM Studio, Ollama with a `/v1` API, and similar) can use the **vLLM** provider block.
 
 !!! note
 
-    If you intend to use any environment variables in the Lightspeed Core configuration file, `lightspeed-stack.yaml`, it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
+    If you intend to use any environment variables in your local Lightspeed Core configuration file (`lightspeed-stack.local.yaml`), it is important to note that Lightspeed Core parses environment variables differently than what is typical. Environment variables for this file must be in the form:
 
     `${env.VAR}`
 
@@ -57,14 +65,46 @@ cp default.env .env
 
 ---
 
+### 1. Create a local Lightspeed stack file
+
+```bash
+cp configs/extra-files/lightspeed-stack.yaml \
+   configs/extra-files/lightspeed-stack.local.yaml
+```
+
+Edit `configs/extra-files/lightspeed-stack.local.yaml` and uncomment the provider block(s) you want (`vllm`, `openai`, and/or `vertexai`). You can enable multiple providers. Leave secrets as `${env.VAR}` references — put the values in `.env`.
+
+### 2. Point compose at the local file and set secrets
+
+In `.env`:
+
+```env
+LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml
+```
+
+Configure **at least one** of the following providers in the same `.env` file, matching a block you uncommented in the local YAML.
+
+After creating or editing the local stack file or changing `LIGHTSPEED_STACK_CONFIG`, recreate `lightspeed-core` (not only `rhdh`):
+
+=== "Podman"
+    ```bash
+    podman compose up -d --force-recreate lightspeed-core
+    # or: podman compose stop lightspeed-core && podman compose start lightspeed-core
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose up -d --force-recreate lightspeed-core
+    # or: docker compose stop lightspeed-core && docker compose start lightspeed-core
+    ```
+
 ### Option A: vLLM Provider (or Any OpenAI API Compatible Endpoint)
 
 Use vLLM for high-performance inference with self-hosted or cloud-based vLLM servers. **This provider configuration also works with any OpenAI API compatible service** (Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.) that provides an OpenAI-compatible endpoint.
 
-```env
-# Enable vLLM provider (or generic OpenAI API compatible endpoint)
-ENABLE_VLLM=true
+Uncomment the `vllm` block in `lightspeed-stack.local.yaml`, then set:
 
+```env
 # REQUIRED: URL to your server (must end with /v1)
 # Examples:
 #   - vLLM server: https://your-vllm-server.com/v1
@@ -91,44 +131,25 @@ VLLM_API_KEY=your-api-key-here
     **Using Other OpenAI API Compatible Services:**
 
     If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.), you can use the **vLLM provider configuration** above. Simply:
-    1. Set `ENABLE_VLLM=true`
-    2. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
-    3. Set `VLLM_API_KEY` to your service's API key (if required)
+    1. Uncomment the `vllm` block in `lightspeed-stack.local.yaml`
+    2. Remount it with the compose override (step 2 above)
+    3. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
+    4. Set `VLLM_API_KEY` to your service's API key (if required)
 
-    The `remote::vllm` provider type accepts any OpenAI API compatible endpoint, not just vLLM servers.
+    The `vllm` provider type accepts any OpenAI API compatible endpoint, not just vLLM servers.
 
 ### Option B: OpenAI Provider
 
 Use OpenAI's API to access GPT models (GPT-4, etc.).
 
-```env
-# Enable OpenAI provider
-ENABLE_OPENAI=true
+Uncomment the `openai` block in `lightspeed-stack.local.yaml`, then set:
 
+```env
 # REQUIRED: Your OpenAI API key
 OPENAI_API_KEY=sk-your-openai-api-key-here
 ```
 
-### Option C: Ollama Provider
-
-Use an externally hosted Ollama instance to serve models. You must run your own Ollama server separately — it is not bundled in the compose setup.
-
-```env
-# Enable Ollama provider
-ENABLE_OLLAMA=true
-
-# REQUIRED: URL to your Ollama server (must end with /v1)
-# Examples:
-#   - Local Ollama: http://host.docker.internal:11434/v1
-#   - Remote Ollama: https://your-ollama-server.com:11434/v1
-OLLAMA_URL=http://host.docker.internal:11434/v1
-```
-
-!!! note
-  
-    Since Ollama runs outside the compose stack, you need to ensure the URL is accessible from within the containers. For a locally running Ollama, use `host.docker.internal` (Docker) or `host.containers.internal` (Podman) instead of `localhost`.
-
-### Option D: Vertex AI Provider (Experimental)
+### Option C: Vertex AI Provider (Experimental)
 
 Use Google Cloud's Vertex AI service to run Gemini models.
 
@@ -136,18 +157,17 @@ Use Google Cloud's Vertex AI service to run Gemini models.
   
     **Experimental Feature:** Using Vertex AI to run Google models is experimental. Vertex AI provides an OpenAI-compatible API for Gemini models, which is why it can work with Developer Hub Intelligent Assistant (which supports OpenAI API implementations). This is provided as an alternative way to access Google models since `remote:gemini` is not yet fully supported.
 
-```env
-# Enable Vertex AI provider
-ENABLE_VERTEX_AI=true
+Uncomment the `vertexai` block in `lightspeed-stack.local.yaml`, then set:
 
+```env
 # REQUIRED: Absolute path to your Google Cloud credentials JSON file
 VERTEX_AI_CREDENTIALS_PATH=/absolute/path/to/your/google-cloud-credentials.json
 
 # REQUIRED: Your GCP project ID
 VERTEX_AI_PROJECT=your-gcp-project-id
 
-# OPTIONAL: GCP location/region (default: us-central1)
-# VERTEX_AI_LOCATION=us-central1
+# OPTIONAL: GCP location/region (default: global)
+# VERTEX_AI_LOCATION=global
 ```
 
 !!! note
@@ -166,21 +186,21 @@ VERTEX_AI_PROJECT=your-gcp-project-id
 Developer Hub Intelligent Assistant supports query validation, which restricts the chatbot to RHDH-related questions. When enabled, off-topic queries (e.g., asking about the weather) will be rejected while development-related questions are allowed.
 
 ```env
-# Enable query validation
-ENABLE_VALIDATION=true
+# Enable query validation (stack YAML uses this as the shield provider_id)
+ENABLE_VALIDATION=question_validity
 
-# REQUIRED if validation is enabled: Must be one of your enabled providers
-# Example: if ENABLE_OPENAI=true, then set VALIDATION_PROVIDER=openai
+# REQUIRED if validation is enabled: Must match a provider id you uncommented
+# in lightspeed-stack.local.yaml (for example openai)
 VALIDATION_PROVIDER=openai
 
-# REQUIRED if validation is enabled: Must be an available model for the chosen provider
+# REQUIRED if validation is enabled: Must be an available model for that provider
 # Example: VALIDATION_MODEL_NAME=gpt-4o-mini
 VALIDATION_MODEL_NAME=gpt-4o-mini
 ```
 
 !!! note
   
-    The validation provider must be one of your enabled inference providers, and the model must be available on that provider.
+    The validation provider must be one of the inference providers you uncommented in `lightspeed-stack.local.yaml`, and the model must be available on that provider. Leave `ENABLE_VALIDATION` blank to keep validation disabled.
 
 ---
 
@@ -264,7 +284,7 @@ To fully disable Developer Hub Intelligent Assistant:
    cp compose.intelligent-assistant-disabled.override.example.yaml compose.override.yaml
    ```
 
-   This prevents `rag-init` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`.
+   This prevents `rag-init` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`. If you already use `compose.override.yaml` for something else, merge the `profiles` snippet instead of replacing the file.
 
 2. **Disable the Developer Hub Intelligent Assistant plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
 
@@ -326,9 +346,11 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 
 ### 4. Chatbot Shows Unconfigured State
 
-- Developer Hub Intelligent Assistant starts unconfigured by default. You must configure at least one inference provider in your `.env` file.
-- **Verify provider is enabled**: Check that at least one of `ENABLE_VLLM=true`, `ENABLE_OPENAI=true`, `ENABLE_OLLAMA=true`, or `ENABLE_VERTEX_AI=true` is set in your `.env` file.
-- **Check required variables**: Ensure all required variables for your chosen provider are set.
+- Developer Hub Intelligent Assistant starts unconfigured by default. You must uncomment at least one inference provider in a local stack file and point compose at it.
+- **Verify the local YAML**: `configs/extra-files/lightspeed-stack.local.yaml` exists and at least one provider block (`vllm`, `openai`, or `vertexai`) is uncommented. Do not edit the tracked `lightspeed-stack.yaml`.
+- **Verify `LIGHTSPEED_STACK_CONFIG`**: `.env` must set `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`. Compose interpolates this from the project `.env`; without it, the tracked stack file is mounted instead.
+- **Check required `.env` keys**: Ensure secrets and URLs for your uncommented provider are set (`VLLM_URL` / `VLLM_API_KEY`, `OPENAI_API_KEY`, or `VERTEX_AI_*`). Provider `ENABLE_*` flags are not used.
+- **Recreate `lightspeed-core`**: After editing the local stack file or `.env`, recreate `lightspeed-core` (`up -d --force-recreate lightspeed-core` or `stop`/`start`), not only `rhdh`.
 - **Verify connectivity**: Ensure the provider URL is accessible from within the container.
 - **Check logs**: Review `lightspeed-core` container logs for provider connection errors:
   ```bash
@@ -347,8 +369,8 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 
 If you enabled query validation but it isn't filtering queries:
 
-- **Verify validation is enabled**: Check that `ENABLE_VALIDATION=true` is set in your `.env` file.
-- **Check provider**: Ensure `VALIDATION_PROVIDER` is set to one of your enabled inference providers.
+- **Verify validation is enabled**: Check that `ENABLE_VALIDATION=question_validity` is set in your `.env` file.
+- **Check provider**: Ensure `VALIDATION_PROVIDER` is set to a provider id you uncommented in `lightspeed-stack.local.yaml`.
 - **Check model**: Ensure `VALIDATION_MODEL_NAME` is set to a model available on the validation provider.
 
 ### 7. Still Stuck?
