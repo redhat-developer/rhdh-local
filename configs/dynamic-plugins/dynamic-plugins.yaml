@@ -46,6 +46,7 @@ plugins:
   # RHDH no longer embeds these plugin wrappers in dynamic-plugins/dist.
   # Disable the obsolete catalog entries so they are omitted from generated
   # configuration, then replace them with the OCI artifacts.
+  # Remove once RHDHBUGS-3710 is resolved.
   - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic'
     enabled: false
 
