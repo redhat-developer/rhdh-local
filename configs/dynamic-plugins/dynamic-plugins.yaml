@@ -81,9 +81,9 @@ plugins:
   #########################################################
 
   # Developer Hub Intelligent Assistant frontend plugin
-  - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant:{{inherit}}'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant'
     enabled: true
 
   # Developer Hub Intelligent Assistant backend plugin
-  - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend:{{inherit}}'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend'
     enabled: true

@@ -278,11 +278,11 @@ To fully disable Developer Hub Intelligent Assistant:
    ```yaml
    plugins:
      # Disable Developer Hub Intelligent Assistant frontend plugin
-     - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant:{{inherit}}'
+     - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant'
        enabled: false
 
      # Disable Developer Hub Intelligent Assistant backend plugin
-     - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend:{{inherit}}'
+     - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend'
        enabled: false
    ```
 
