@@ -49,9 +49,10 @@ cp default.env .env
     Developer Hub Intelligent Assistant supports any service that is **OpenAI API compatible**, including but not limited to:
     - **vLLM**: A high-performance inference server (self-hosted or cloud)
     - **OpenAI**: OpenAI's API (GPT-4, etc.)
+    - **Ollama**: A locally or remotely hosted Ollama instance (via the `vllm` provider type)
     - **Vertex AI**: Google Cloud's Vertex AI service (experimental)
 
-    These are the providers commented in the synced stack file. Other OpenAI-compatible endpoints (Azure OpenAI, LM Studio, Ollama with a `/v1` API, and similar) can use the **vLLM** provider block.
+    Commented stubs in the synced stack file cover vLLM, OpenAI, and Vertex AI. Ollama is not a tracked stub — add it to `lightspeed-stack.local.yaml` as shown in Option C. Other OpenAI-compatible endpoints (Azure OpenAI, LM Studio, and similar) can use the **vLLM** provider block.
 
 !!! note
 
@@ -72,7 +73,7 @@ cp configs/extra-files/lightspeed-stack.yaml \
    configs/extra-files/lightspeed-stack.local.yaml
 ```
 
-Edit `configs/extra-files/lightspeed-stack.local.yaml` and uncomment the provider block(s) you want (`vllm`, `openai`, and/or `vertexai`). You can enable multiple providers. Leave secrets as `${env.VAR}` references — put the values in `.env`.
+Edit `configs/extra-files/lightspeed-stack.local.yaml` and uncomment the provider block(s) you want (`vllm`, `openai`, and/or `vertexai`). For Ollama, paste the extra `vllm` block from Option C — it is not a commented stub in the tracked file. You can enable multiple providers. Leave secrets as `${env.VAR}` references — put the values in `.env`.
 
 ### 2. Point compose at the local file and set secrets
 
@@ -132,7 +133,7 @@ VLLM_API_KEY=your-api-key-here
 
     If you have an OpenAI API compatible endpoint that doesn't have its own provider configuration (like Azure OpenAI, LM Studio, Mistral, Nvidia NIM, etc.), you can use the **vLLM provider configuration** above. Simply:
     1. Uncomment the `vllm` block in `lightspeed-stack.local.yaml`
-    2. Remount it with the compose override (step 2 above)
+    2. Set `LIGHTSPEED_STACK_CONFIG` in `.env` (step 2 above)
     3. Set `VLLM_URL` to your service's endpoint (must end with `/v1`)
     4. Set `VLLM_API_KEY` to your service's API key (if required)
 
@@ -149,7 +150,35 @@ Uncomment the `openai` block in `lightspeed-stack.local.yaml`, then set:
 OPENAI_API_KEY=sk-your-openai-api-key-here
 ```
 
-### Option C: Vertex AI Provider (Experimental)
+### Option C: Ollama Provider
+
+Lightspeed Core does not implement Llama Stack's `remote::ollama` provider. Use a second `type: vllm` entry pointed at Ollama's OpenAI-compatible `/v1` API. Ollama is not a commented stub in the tracked stack file — add this under `inference.providers` in `lightspeed-stack.local.yaml` (keep `sentence_transformers` and any other providers you already enabled):
+
+```yaml
+    - type: vllm
+      id: ollama
+      extra:
+        base_url: ${env.OLLAMA_URL:=http://localhost:11434/v1}
+```
+
+You must run your own Ollama server separately — it is not bundled in the compose setup. Then set in `.env`:
+
+```env
+# REQUIRED: URL to your Ollama server (must end with /v1)
+# Examples:
+#   - Local Ollama (Docker): http://host.docker.internal:11434/v1
+#   - Local Ollama (Podman): http://host.containers.internal:11434/v1
+#   - Remote Ollama: https://your-ollama-server.com:11434/v1
+OLLAMA_URL=http://host.containers.internal:11434/v1
+```
+
+!!! note
+
+    Since Ollama runs outside the compose stack, the URL must be reachable from the Lightspeed Core container. For a locally running Ollama, use `host.docker.internal` (Docker) or `host.containers.internal` (Podman) instead of `localhost`.
+
+Give the Ollama entry a distinct `id` (for example `ollama`) if you also enable the commented `vllm` stub. Two `type: vllm` providers with the same id collide.
+
+### Option D: Vertex AI Provider (Experimental)
 
 Use Google Cloud's Vertex AI service to run Gemini models.
 
@@ -347,9 +376,9 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 ### 4. Chatbot Shows Unconfigured State
 
 - Developer Hub Intelligent Assistant starts unconfigured by default. You must uncomment at least one inference provider in a local stack file and point compose at it.
-- **Verify the local YAML**: `configs/extra-files/lightspeed-stack.local.yaml` exists and at least one provider block (`vllm`, `openai`, or `vertexai`) is uncommented. Do not edit the tracked `lightspeed-stack.yaml`.
+- **Verify the local YAML**: `configs/extra-files/lightspeed-stack.local.yaml` exists and at least one provider is enabled (`vllm`, `openai`, `vertexai` uncommented, or an Ollama `type: vllm` block with `id: ollama`). Do not edit the tracked `lightspeed-stack.yaml`.
 - **Verify `LIGHTSPEED_STACK_CONFIG`**: `.env` must set `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`. Compose interpolates this from the project `.env`; without it, the tracked stack file is mounted instead.
-- **Check required `.env` keys**: Ensure secrets and URLs for your uncommented provider are set (`VLLM_URL` / `VLLM_API_KEY`, `OPENAI_API_KEY`, or `VERTEX_AI_*`). Provider `ENABLE_*` flags are not used.
+- **Check required `.env` keys**: Ensure secrets and URLs for your provider are set (`VLLM_URL` / `VLLM_API_KEY`, `OLLAMA_URL`, `OPENAI_API_KEY`, or `VERTEX_AI_*`). Provider `ENABLE_*` flags are not used.
 - **Recreate `lightspeed-core`**: After editing the local stack file or `.env`, recreate `lightspeed-core` (`up -d --force-recreate lightspeed-core` or `stop`/`start`), not only `rhdh`.
 - **Verify connectivity**: Ensure the provider URL is accessible from within the container.
 - **Check logs**: Review `lightspeed-core` container logs for provider connection errors:
