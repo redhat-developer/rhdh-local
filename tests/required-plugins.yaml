@@ -12,6 +12,5 @@ plugins:
   - red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions
   - red-hat-developer-hub-backstage-plugin-extensions
   - red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
-  # TODO: re-enable once the catalog index is stabilized
-  # - red-hat-developer-hub-backstage-plugin-lightspeed
-  # - red-hat-developer-hub-backstage-plugin-lightspeed-backend
+  - red-hat-developer-hub-backstage-plugin-intelligent-assistant
+  - red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend
