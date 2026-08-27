@@ -70,7 +70,7 @@ services:
       - ./prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:z
-      - dynamic-plugins-root:/dynamic-plugins-root
+      - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
   # RAG initialization service: Copies RAG embeddings and vector database to shared volumes
