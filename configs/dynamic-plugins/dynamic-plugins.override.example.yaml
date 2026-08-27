@@ -13,12 +13,12 @@ includes:
 # plugins: 
 # Functioning example using Tech Radar, uncomment to use
   #Tech Radar frontend plugin
-  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+  # - package: ref://backstage-community-plugin-tech-radar
   #   enabled: true
 
   # Tech Radar backend plugin. Required if you want to customize the tech radar URL 
   # (see the `techRadar.url` app-config property).
-  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+  # - package: ref://backstage-community-plugin-tech-radar-backend
   #   enabled: true
 
 # # loading plugin from host directory
@@ -75,8 +75,8 @@ includes:
 #               cadence: '*/15 * * * *'
 #       lifecycle: { timeToLive: { weeks: 2 } }
 
-# # loading plugin from directory inside the RHDH container
-#   - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
+# # loading plugin from the catalog index
+#   - package: ref://backstage-community-plugin-rbac
 #     enabled: false
 #     pluginConfig:
 #       dynamicPlugins:
@@ -98,10 +98,10 @@ includes:
 #                 importName: RbacPage
 
 # # Uncomment the following two plugins to enable dynamic plugins installation via the Extensions UI
-# - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions'
+# - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions'
 #   enabled: true
 
-# - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
+# - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions-backend'
 #   enabled: true
 #   pluginConfig:
 #     extensions:

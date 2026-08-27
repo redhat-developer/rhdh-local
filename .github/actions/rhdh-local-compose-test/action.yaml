@@ -223,16 +223,16 @@ runs:
         # then merge in CI-specific overrides.
         cp configs/dynamic-plugins/dynamic-plugins.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
 
-        # Override the extensions-backend entry to disable installation in CI
-        yq -i '(.plugins[] | select(.package | test("extensions-backend-dynamic")) | .pluginConfig.extensions.installation.enabled) = false' \
+        # Override the extensions backend entry to disable installation in CI
+        yq -i '(.plugins[] | select(.package | test("extensions-backend")) | .pluginConfig.extensions.installation.enabled) = false' \
           configs/dynamic-plugins/dynamic-plugins.override.yaml
 
         # Append CI-specific plugins
         cat <<EOF > /tmp/ci-plugins-override.yaml
         plugins:
-        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
+        - package: ref://red-hat-developer-hub-backstage-plugin-bulk-import-backend
           enabled: true
-        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
+        - package: ref://red-hat-developer-hub-backstage-plugin-bulk-import
           enabled: true
         EOF
         yq -i '.plugins += load("/tmp/ci-plugins-override.yaml").plugins' configs/dynamic-plugins/dynamic-plugins.override.yaml

@@ -9,6 +9,7 @@ plugins:
   - backstage-community-plugin-quay-backend
   - backstage-community-plugin-quay
   - backstage-plugin-scaffolder-backend-module-github
+  - red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions
   - red-hat-developer-hub-backstage-plugin-extensions
   - red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
   # TODO: re-enable once the catalog index is stabilized
