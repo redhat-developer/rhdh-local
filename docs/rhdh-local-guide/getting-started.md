@@ -14,7 +14,7 @@ To use RHDH Local you'll need a few things:
 4. (Optional) The `git` command line client for cloning this repository; or you can download and extract the [ZIP archive](https://github.com/redhat-developer/rhdh-local/archive/refs/heads/main.zip) from GitHub
 5. (Optional) A GitHub account, if you want to integrate GitHub features into RHDH
 6. (Optional) The node `npx` tool, if you intend to build dynamic plugins in RHDH. [Node.js](https://nodejs.org/en/download) v22.16.0 or newer is recommended to build, test, and run dynamic plugins effectively. This version of Node will also install [npx](https://docs.npmjs.com/cli/v11/commands/npx), which has been packaged with [npm](https://docs.npmjs.com/cli/v11/commands/npm) since v7.0.0 and newer.
-7. (Optional) A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2), if you want to use a PostgreSQL database or the commercially supported official RHDH images.
+7. A [Red Hat account](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) for the OKP image included with Developer Hub Intelligent Assistant. It is also needed if you use a PostgreSQL database or commercially supported RHDH images. This is optional only when Intelligent Assistant is disabled.
 
 !!! tip "GUI Alternative for the Container Runtime"
     If you prefer graphical tools, consider [Podman Desktop](https://podman-desktop.io/) for easier container management.
@@ -39,7 +39,23 @@ In most cases, when you don't need GitHub Authentication or testing different re
 
 You can optionally customize the application configuration and dynamic plugins to load. See [Configuration Overview](configuration.md) for more details.
 
-### 4. Start RHDH Local
+### 4. Authenticate with the Red Hat registry
+
+The default stack includes OKP for Intelligent Assistant document retrieval:
+
+=== "Podman"
+    ```bash
+    podman login registry.redhat.io
+    ```
+
+=== "Docker"
+    ```bash
+    docker login registry.redhat.io
+    ```
+
+Skip this step only if you [disable Intelligent Assistant](../intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
+
+### 5. Start RHDH Local
 
 Pick your container engine and run:
 
@@ -53,7 +69,7 @@ Pick your container engine and run:
     docker compose up -d
     ```
 
-### 5. Access the Interface
+### 6. Access the Interface
 
 Open your browser to: **http://localhost:7007**
 
@@ -61,7 +77,7 @@ You'll see the RHDH homepage once logged in. If GitHub authentication isn't conf
 
 ![Red Hat Developer Hub Homepage](../images/homepage.png){ width="850" }
 
-### 6. Explore Built-in TechDocs and test key features
+### 7. Explore Built-in TechDocs and test key features
 
 - **TechDocs**: Look for "[Docs](/docs)" section with your configured documentation
 - **Software Catalog**: Navigate to "[Catalog](/catalog)" in the sidebar

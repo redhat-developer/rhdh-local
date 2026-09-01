@@ -13,16 +13,17 @@ RHDH Local lets you quickly test software catalogs, TechDocs, plugins, templates
 
 ## Quick Start
 
-1. **Prerequisites**: [Podman](https://podman.io/docs/installation) v5.4.1+ (recommended) or [Docker](https://docs.docker.com/engine/) v28.1.0+ with Compose support
+1. **Prerequisites**: [Podman](https://podman.io/docs/installation) v5.4.1+ (recommended) or [Docker](https://docs.docker.com/engine/) v28.1.0+ with Compose support, plus a [Red Hat registry login](https://access.redhat.com/RegistryAuthentication) for the bundled OKP image
 
 2. **Clone and start**:
 
    ```sh
    git clone https://github.com/redhat-developer/rhdh-local.git && cd rhdh-local
+   podman login registry.redhat.io  # or: docker login registry.redhat.io
    podman compose up -d  # or: docker compose up -d
    ```
 
-   > **Developer Hub Intelligent Assistant** is included by default. To configure an LLM provider, see the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md). To disable Developer Hub Intelligent Assistant, see [Disabling Intelligent Assistant](./docs/intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
+   > **Developer Hub Intelligent Assistant** and OKP-backed product documentation are included by default. To configure an LLM provider, see the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md). To disable both services, see [Disabling Intelligent Assistant](./docs/intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
 
 3. **Access**: Open [http://localhost:7007](http://localhost:7007) and log in as 'Guest'
 

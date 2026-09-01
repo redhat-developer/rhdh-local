@@ -143,13 +143,12 @@ mcp_servers:
     url: 'http://localhost:7007/api/mcp-actions/v1'
     authorization_headers:
       Authorization: 'client'
-# TODO: Uncomment when OKP is added
-# rag:
-#   okp:
-#     rhokp_url: '${env.OKP_SERVICE_URL:=http://localhost:8080}'
-#     offline: true
-#     chunk_filter_query: 'product:*developer_hub*'
-#   retrieval:
-#     tool:
-#       sources:
-#         - okp
+rag:
+  okp:
+    rhokp_url: '${env.OKP_SERVICE_URL:=http://localhost:8080}'
+    offline: true
+    chunk_filter_query: 'product:*developer_hub*'
+  retrieval:
+    tool:
+      sources:
+        - okp
