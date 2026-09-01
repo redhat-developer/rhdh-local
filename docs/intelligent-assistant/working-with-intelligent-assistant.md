@@ -4,7 +4,7 @@ Developer Hub Intelligent Assistant is a virtual assistant powered by generative
 
 Developer Hub Intelligent Assistant provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Hub Intelligent Assistant is included in RHDH Local by default — the services start with the default compose file. To make the chatbot functional, enable an inference provider as described below. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
+Developer Hub Intelligent Assistant and OKP-backed Red Hat product documentation are included in RHDH Local by default. To make the chatbot functional, authenticate for the OKP image and enable an inference provider as described below. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
 
 ## Supported Architecture
 
@@ -15,10 +15,11 @@ Developer Hub Intelligent Assistant uses a **Bring Your Own Model (BYOM)** archi
 ## Table of Contents
 1. [Configure an Inference Provider](#configure-an-inference-provider)
 2. [Query Validation Configuration](#query-validation-configuration-optional)
-3. [Verify Services Are Running](#verify-services-are-running)
-4. [Plugin Configuration Reference](#plugin-configuration-reference)
-5. [Disabling Intelligent Assistant](#disabling-intelligent-assistant)
-6. [Troubleshooting](#troubleshooting)
+3. [OKP Document Retrieval](#okp-document-retrieval)
+4. [Verify Services Are Running](#verify-services-are-running)
+5. [Plugin Configuration Reference](#plugin-configuration-reference)
+6. [Disabling Intelligent Assistant](#disabling-intelligent-assistant)
+7. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -233,6 +234,21 @@ VALIDATION_MODEL_NAME=gpt-4o-mini
 
 ---
 
+## OKP Document Retrieval
+
+Offline Knowledge Portal (OKP) replaces the pre-built RHDH RAG image. It runs as a separate Compose service and provides product-document retrieval to Lightspeed Core.
+
+Authenticate before starting RHDH Local:
+
+```bash
+podman login registry.redhat.io
+# or: docker login registry.redhat.io
+```
+
+The tracked `lightspeed-stack.yaml` enables OKP as a `file_search` tool source. A local provider copy made from that file retains the OKP configuration. By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so they are accessible from browsers on Podman/Docker Desktop. The endpoint is also available directly as `http://localhost:8081` on the host. If `host.docker.internal` is not resolvable on your host, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser.
+
+---
+
 ## Verify Services Are Running
 
 After starting the application with `podman compose up -d` (or `docker compose up -d`), verify all services are running:
@@ -249,11 +265,11 @@ You should see output similar to:
 |--------------|-------|---------|--------|-------|
 | 31c3c681b742 | quay.io/rhdh-community/rhdh:next | 16 seconds ago | Exited (0) 5 seconds ago | rhdh-plugins-installer |
 | f7b74b9f241e | quay.io/rhdh-community/rhdh:next | 4 seconds ago | Up 5 seconds (starting) | rhdh |
-| a4e2b1f38d90 | quay.io/redhat-ai-dev/rag-content:release-1.10-... | 16 seconds ago | Exited (0) 10 seconds ago | rag-init |
-| 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.5.1 | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
+| a4e2b1f38d90 | registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:... | 30 seconds ago | Up 20 seconds (healthy) | okp |
+| 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-... | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
 
-- `rhdh-plugins-installer` and `rag-init` are init containers — they run once and exit with status `0`.
-- `rhdh` and `lightspeed-core` should show `Up` or `running`.
+- `rhdh-plugins-installer` is an init container — it runs once and exits with status `0`.
+- `rhdh`, `okp`, and `lightspeed-core` should show `Up` or `running`; OKP should become healthy before Lightspeed Core starts.
 
 Open http://localhost:7007/intelligent-assistant in your browser to access Developer Hub Intelligent Assistant.
 
@@ -313,7 +329,7 @@ To fully disable Developer Hub Intelligent Assistant:
    cp compose.intelligent-assistant-disabled.override.example.yaml compose.override.yaml
    ```
 
-   This prevents `rag-init` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`. If you already use `compose.override.yaml` for something else, merge the `profiles` snippet instead of replacing the file.
+   This prevents `okp` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`. If you already use `compose.override.yaml` for something else, merge the `profiles` snippet instead of replacing the file.
 
 2. **Disable the Developer Hub Intelligent Assistant plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
 
@@ -356,6 +372,7 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 - **Common causes:**
   - Port conflicts (another service is using the same port)
   - Insufficient memory or CPU resources
+  - Missing or expired `registry.redhat.io` authentication for the OKP image
   - Incorrect environment variables
 
 ### 2. "Permission Denied" or File Access Errors
