@@ -43,29 +43,13 @@ plugins:
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # RHDH no longer embeds these plugin wrappers in dynamic-plugins/dist.
-  # Disable the obsolete catalog entries so they are omitted from generated
-  # configuration, then replace them with the OCI artifacts.
-  # Remove once RHDHBUGS-3710 is resolved.
-  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic'
-    enabled: false
-
-  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions'
-    enabled: false
-
-  - package: './dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic'
-    enabled: false
-
-  - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions'
-    enabled: true
-    pluginConfig:
-      extensions:
-        directory: ${RHDH_EXTENSIONS_DIRECTORY}
-
-  - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions'
     enabled: true
 
-  - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions-backend'
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions'
+    enabled: true
+
+  - package: 'ref://red-hat-developer-hub-backstage-plugin-extensions-backend'
     enabled: true
     pluginConfig:
       extensions:
