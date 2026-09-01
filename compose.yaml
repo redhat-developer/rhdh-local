@@ -77,7 +77,7 @@ services:
   # Default image: quay.io/lightspeed-core/lightspeed-stack:0.5.1
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.6.2} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b} # dclint disable-line service-image-require-explicit-tag #todo: change tag to official release when available
     container_name: lightspeed-core
     network_mode: "service:rhdh"
     depends_on:
@@ -86,9 +86,8 @@ services:
       rag-init:
         condition: service_completed_successfully
     volumes:
-      - ./configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
+      - ${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}:/app-root/lightspeed-stack.yaml:Z
       - ./configs/extra-files/rhdh-profile.py:/app-root/rhdh-profile.py:Z
-      - ./configs/extra-files/config.yaml:/app-root/config.yaml:Z
       - rag_embeddings:/rag-content/embeddings_model
       - rag_vector_db:/rag-content/vector_db
       - ${VERTEX_AI_CREDENTIALS_PATH:-./configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
