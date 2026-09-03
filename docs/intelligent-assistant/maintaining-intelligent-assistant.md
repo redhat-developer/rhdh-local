@@ -45,7 +45,7 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 
 ## Syncing Lightspeed Configuration Files
 
-The Lightspeed Core configuration files (`rhdh-profile.py`, `lightspeed-stack.yaml`) are maintained upstream in the [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs) repository. The sync script downloads them into `configs/extra-files/`.
+The Lightspeed Core configuration files (`rhdh-profile.py`, `lightspeed-stack.yaml`) are maintained upstream in the [redhat-developer/rhdh-intelligent-assistant-configs](https://github.com/redhat-developer/rhdh-intelligent-assistant-configs) repository. The sync script downloads them into `configs/extra-files/`.
 
 **Sync from default (main branch):**
 ```bash

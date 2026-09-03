@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-DEFAULT_REPO="redhat-ai-dev/lightspeed-configs"
+DEFAULT_REPO="redhat-developer/rhdh-intelligent-assistant-configs"
 DEFAULT_REF="main"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
