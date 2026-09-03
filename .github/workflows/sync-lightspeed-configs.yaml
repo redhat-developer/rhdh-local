@@ -37,7 +37,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync Lightspeed config files
-        run: ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
+        run: |
+          if [[ "${{ matrix.branch }}" == "release-1.10" ]]; then
+            ./scripts/sync-lightspeed-configs.sh --repo redhat-ai-dev/lightspeed-configs --ref ${{ matrix.branch }}
+          else
+            ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
+          fi
 
       - name: Check for changes
         id: changes
@@ -58,6 +63,11 @@ jobs:
         run: |
           TITLE="chore(lightspeed): sync config files from upstream"
           BRANCH="chore/sync-lightspeed-configs-${TARGET_BRANCH}"
+          TARGET_REPO="redhat-developer/rhdh-intelligent-assistant-configs"
+          
+          if [[ "${TARGET_BRANCH}" == "release-1.10" ]]; then
+            TARGET_REPO="redhat-ai-dev/lightspeed-configs"
+          fi
 
           EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "${TARGET_BRANCH}" --state open --json number --jq '.[0].number // empty')
 
@@ -77,7 +87,7 @@ jobs:
             git push origin "${BRANCH}"
 
             BODY=$(cat <<EOF
-          Automated nightly sync of Lightspeed config files from [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs).
+          Automated nightly sync of Lightspeed config files from [${TARGET_REPO}](${TARGET_REPO}).
 
           ### Synced files
           - \`configs/extra-files/lightspeed-stack.yaml\`
