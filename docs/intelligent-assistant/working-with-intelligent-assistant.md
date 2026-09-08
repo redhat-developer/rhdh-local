@@ -247,6 +247,29 @@ podman login registry.redhat.io
 
 The tracked `lightspeed-stack.yaml` enables OKP as a `file_search` tool source. A local provider copy made from that file retains the OKP configuration. By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so they are accessible from browsers on Podman/Docker Desktop. The endpoint is also available directly as `http://localhost:8081` on the host. If `host.docker.internal` is not resolvable on your host, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser.
 
+### Running without OKP
+
+You can run Developer Hub Intelligent Assistant without OKP and without authenticating to `registry.redhat.io`. Copy the provided Compose override:
+
+```sh
+cp compose.okp-disabled.override.example.yaml compose.override.yaml
+```
+
+The override keeps Lightspeed Core and the Intelligent Assistant plugins enabled, prevents the OKP service from starting, removes `OKP_SERVICE_URL`, and mounts `lightspeed-stack-no-okp.yaml`, which has no RAG configuration.
+
+To configure an inference provider, create a local copy of the no-OKP configuration, uncomment the provider, and select it in `.env`:
+
+```sh
+cp configs/extra-files/lightspeed-stack-no-okp.yaml \
+   configs/extra-files/lightspeed-stack-no-okp.local.yaml
+```
+
+```env
+LIGHTSPEED_STACK_NO_OKP_CONFIG=./configs/extra-files/lightspeed-stack-no-okp.local.yaml
+```
+
+Start normally with `podman compose up -d` or `docker compose up -d`. The chatbot remains available, but answers do not include OKP-backed product documentation or citations. Delete `compose.override.yaml` to restore the default OKP-enabled deployment.
+
 ---
 
 ## Verify Services Are Running
