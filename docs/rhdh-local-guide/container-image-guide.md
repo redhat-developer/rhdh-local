@@ -23,13 +23,13 @@ You can switch between these different images by changing the container image na
 Looking for the bleeding edge? To use the most recent nightly community build of RHDH from the main branch, set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:next
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:1.10
 ```
 
 Or, for builds from a given `release-1.y` branch (for example, 1.10), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-1.10
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:1.10
 ```
 
 ### Using unsupported pre-release CI builds
@@ -38,7 +38,7 @@ Continuous Integration (CI) builds on from [quay.io/rhdh/rhdh-hub-rhel9](https:/
 
 NOTE: Only `linux-amd64` builds are currently commercially supported.
 
-To use the most recent nightly CI build of RHDH 1.y (for example, 1.11), set the variable as follows.
+To use the most recent nightly CI build of RHDH 1.y (for example, 1.10), set the variable as follows.
 
 ```sh
 RHDH_IMAGE=quay.io/rhdh/rhdh-hub-rhel9:1.11
@@ -51,7 +51,7 @@ To use the [official release of RHDH](https://catalog.redhat.com/software/contai
 NOTE: Using official builds also [requires authentication with the registry](https://access.redhat.com/articles/RegistryAuthentication). See also the section below `Configuring registry credentials` to make this authentication pervasive.
 
 ```sh
-RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.10.3
+RHDH_IMAGE=registry.redhat.io/rhdh/rhdh-hub-rhel9:1.10.4
 ```
 
 #### Using image digests
