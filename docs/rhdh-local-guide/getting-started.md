@@ -53,7 +53,7 @@ The default stack includes OKP for Intelligent Assistant document retrieval:
     docker login registry.redhat.io
     ```
 
-Skip this step only if you [disable Intelligent Assistant](../intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
+Skip this step if you [run Intelligent Assistant without OKP](../intelligent-assistant/working-with-intelligent-assistant.md#running-without-okp) or [disable Intelligent Assistant](../intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
 
 ### 5. Start RHDH Local
 

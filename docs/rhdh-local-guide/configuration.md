@@ -67,6 +67,7 @@ Common variables to customize:
 - `LOG_LEVEL`: RHDH application log level
 - GitHub authentication variables (see the [GitHub auth guide](github-auth.md))
 - `LIGHTSPEED_STACK_CONFIG`: Host path to the Lightspeed stack YAML (default: `configs/extra-files/lightspeed-stack.yaml`)
+- `LIGHTSPEED_STACK_NO_OKP_CONFIG`: Host path to the no-OKP Lightspeed stack YAML used by `compose.okp-disabled.override.example.yaml` (default: `configs/extra-files/lightspeed-stack-no-okp.yaml`)
 - `OKP_IMAGE`: OKP image override (default: the pinned `registry.redhat.io/offline-knowledge-portal/rhokp-rhel9` image in `compose.yaml`)
 - `OKP_SERVICE_URL`: URL Lightspeed Core uses for OKP retrieval and generated citation links (default: `http://host.docker.internal:8081`, the host-published OKP endpoint)
 

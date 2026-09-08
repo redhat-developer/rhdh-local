@@ -27,6 +27,7 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 | File | Purpose |
 |------|---------|
 | `configs/extra-files/lightspeed-stack.yaml` | Tracked unified Lightspeed Core config, including OKP retrieval (synced from upstream). Do not edit to enable providers. |
+| `configs/extra-files/lightspeed-stack-no-okp.yaml` | Generated tracked variant with the top-level `rag` section removed. Used when running Intelligent Assistant without OKP. |
 | `configs/extra-files/lightspeed-stack.local.yaml` | Gitignored overlay. Copy `lightspeed-stack.yaml` here, uncomment providers, and set `LIGHTSPEED_STACK_CONFIG` in `.env`. Sync does **not** touch this file. |
 | `configs/extra-files/rhdh-profile.py` | Python profile with system prompts and response templates |
 | `configs/extra-files/templates/placeholder.json` | Placeholder for Vertex AI GCP credentials bind mount |
@@ -78,6 +79,8 @@ Some upstream refs still ship the OKP block commented with a TODO. When syncing 
 
 Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}`. Presence of `lightspeed-stack.local.yaml` does not change the in-container config until `.env` sets `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`.
 
+The sync script also derives `lightspeed-stack-no-okp.yaml` by removing the top-level `rag` section. `compose.okp-disabled.override.example.yaml` mounts that variant and disables the OKP service. A user-specific no-OKP provider configuration should be named `lightspeed-stack-no-okp.local.yaml` and selected with `LIGHTSPEED_STACK_NO_OKP_CONFIG`; sync does not touch local files.
+
 ---
 
 ## Overriding the Lightspeed Core Image
@@ -95,7 +98,7 @@ LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd1
 The default OKP image is pinned in `compose.yaml`. Authenticate with `registry.redhat.io` before starting the stack. To test another build, set `OKP_IMAGE` in `.env`:
 
 ```env
-OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.10-1786628394
+OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041
 ```
 
 Lightspeed Core reaches OKP through the host-published endpoint at `http://host.docker.internal:8081`. LCORE also uses this URL as the base for browser-facing citation links. Port `8081` exposes the OKP httpd endpoint on the host (`http://localhost:8081`), while `8983` exposes Solr for local diagnostics. Override `OKP_SERVICE_URL` in `.env` when the default hostname is not reachable from both the container and browser.
