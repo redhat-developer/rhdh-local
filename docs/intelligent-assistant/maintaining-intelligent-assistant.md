@@ -75,7 +75,7 @@ cp configs/extra-files/lightspeed-stack.yaml \
 # then re-uncomment provider blocks
 ```
 
-Some upstream refs still ship the OKP block commented with a TODO. When syncing one of those refs, preserve or reactivate the `rag.okp` and `rag.retrieval.tool.sources: [okp]` block used by this Compose integration.
+The tracked `lightspeed-stack.yaml` is copied verbatim from upstream. The current upstream `main` configuration includes the active OKP RAG configuration used by this integration.
 
 Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}`. Presence of `lightspeed-stack.local.yaml` does not change the in-container config until `.env` sets `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`.
 
@@ -107,7 +107,7 @@ Lightspeed Core reaches OKP through the host-published endpoint at `http://host.
 
 ## Increasing Container Runtime Memory
 
-If you encounter out-of-memory issues with the Lightspeed Core or OKP container, you can increase the memory available to your Podman or Docker virtual machine:
+OKP and Lightspeed Core increase the local environment's memory usage. If containers are terminated due to insufficient memory, increase the memory allocated to the Podman or Docker virtual machine. Actual requirements depend on the enabled services and workload. For example:
 
 ```bash
 podman machine stop
@@ -115,7 +115,7 @@ podman machine set --memory=8192
 podman machine start
 ```
 
-- The example above sets the memory to **8 GiB** (`8192` MB).
+- The example above sets the memory to **8 GiB** (`8192` MB); it is not a validated minimum requirement.
 - Adjust the value as needed (e.g., `--memory=16384` for 16 GiB). OKP's Solr process is configured with a 1 GiB Java heap.
 - Ensure your host system has enough free RAM.
 
