@@ -51,6 +51,15 @@ else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
+# If a registry auth file was mounted (not the placeholder), set REGISTRY_AUTH_FILE
+REGISTRY_AUTH_PATH="/opt/app-root/src/.config/containers/auth.json"
+if [ -z "${REGISTRY_AUTH_FILE:-}" ] && [ -f "$REGISTRY_AUTH_PATH" ] && [ "$(cat "$REGISTRY_AUTH_PATH")" != "{}" ]; then
+    echo "Found registry auth file, setting REGISTRY_AUTH_FILE"
+    export REGISTRY_AUTH_FILE="$REGISTRY_AUTH_PATH"
+else
+    echo "No registry auth file mounted, skipping REGISTRY_AUTH_FILE"
+fi
+
 DYNAMIC_PLUGINS_EXTENSIONS_FILE="/dynamic-plugins-root/dynamic-plugins.extensions.yaml"
 if [ ! -f "$DYNAMIC_PLUGINS_EXTENSIONS_FILE" ]; then
     echo "$DYNAMIC_PLUGINS_EXTENSIONS_FILE does not exist - creating it to enable dynamic plugins installation by using Extensions..."

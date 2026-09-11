@@ -1,12 +1,43 @@
 ## Configuring registry credentials
 
-Place your registry credentials in `./configs/extra-files`, then reference the auth file in your `.env`:
+If you need to pull RHDH images or install dynamic plugins from private OCI registries (such as `registry.redhat.io`), you need to configure registry authentication. There are two options:
+
+### Option A: Mount host credentials directly (recommended)
+
+If you already have credentials on your host (from `podman login` or `docker login`), point `REGISTRY_AUTH_FILE_PATH` in your `.env` to that file:
+
+```bash
+# Podman (Linux)
+REGISTRY_AUTH_FILE_PATH=${XDG_RUNTIME_DIR}/containers/auth.json
+
+# Podman (macOS) or when XDG_RUNTIME_DIR is not set
+REGISTRY_AUTH_FILE_PATH=~/.config/containers/auth.json
+
+# Docker
+REGISTRY_AUTH_FILE_PATH=~/.docker/config.json
+```
+
+The auth file is bind-mounted into the `install-dynamic-plugins` container automatically. When the file contains valid credentials, `REGISTRY_AUTH_FILE` is set internally — no additional configuration needed.
+
+If you haven't logged in yet, do so first:
+
+```bash
+podman login registry.redhat.io
+```
+
+### Option B: Copy credentials into the project
+
+Copy your registry credentials file into `./configs/extra-files/`, then set the `REGISTRY_AUTH_FILE` variable in your `.env`:
+
+```bash
+cp ~/.config/containers/auth.json ./configs/extra-files/auth.json
+```
 
 ```bash
 REGISTRY_AUTH_FILE=/opt/app-root/src/configs/extra-files/auth.json
 ```
 
-This allows RHDH-local to pull OCI artifacts from registries like registry.redhat.io without authentication errors.
+This works because the `configs/` directory is already mounted into the container. Files in `configs/extra-files/` are gitignored, so your credentials will not be committed.
 
 ## Changing the container image
 
