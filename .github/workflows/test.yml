@@ -41,11 +41,13 @@ jobs:
           - "true"
         composeConfig:
           - name: "default"
-            cliArgs: ""
+            cliArgs: "-f compose.yaml"
           - name: "corporate-proxy"
             cliArgs: "-f compose.yaml -f compose-with-corporate-proxy.yaml"
           - name: "dynamic-plugins-root"
             cliArgs: "-f compose.yaml -f compose-dynamic-plugins-root.yaml"
+          - name: "intelligent-assistant-without-okp"
+            cliArgs: "-f compose.yaml -f compose.okp-disabled.override.example.yaml"
           # Default db image is on registry.redhat.io; CI overrides via POSTGRES_IMAGE.
           - name: "with-db"
             cliArgs: "-f compose.yaml -f compose-with-db.yaml"
@@ -74,3 +76,4 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
+          disable_intelligent_assistant: ${{ matrix.composeConfig.name != 'intelligent-assistant-without-okp' && 'true' || 'false' }}

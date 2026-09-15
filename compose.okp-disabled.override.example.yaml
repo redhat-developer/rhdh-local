@@ -1,0 +1,14 @@
+# Copy this file to compose.override.yaml to run Developer Hub Intelligent Assistant without OKP.
+# This avoids pulling the authenticated registry.redhat.io OKP image while keeping Lightspeed Core enabled.
+services:
+  lightspeed-core:
+    depends_on:
+      okp:
+        condition: service_healthy
+        required: false
+    volumes:
+      - ${LIGHTSPEED_STACK_NO_OKP_CONFIG:-./configs/extra-files/lightspeed-stack-no-okp.yaml}:/app-root/lightspeed-stack.yaml:Z
+    environment:
+      OKP_SERVICE_URL: null
+  okp:
+    profiles: [okp]

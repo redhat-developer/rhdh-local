@@ -81,6 +81,7 @@ jobs:
 
           ### Synced files
           - \`configs/extra-files/lightspeed-stack.yaml\`
+          - \`configs/extra-files/lightspeed-stack-no-okp.yaml\`
           - \`configs/extra-files/rhdh-profile.py\`
 
           > [!CAUTION]

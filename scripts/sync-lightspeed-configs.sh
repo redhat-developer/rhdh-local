@@ -9,9 +9,29 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 LIGHTSPEED_DIR="$(cd -- "${SCRIPT_DIR}/../configs/extra-files" && pwd)"
 
 TARGETS=(
-  "lightspeed-core-configs/lightspeed-stack.yaml|${LIGHTSPEED_DIR}/lightspeed-stack.yaml"
-  "lightspeed-core-configs/rhdh-profile.py|${LIGHTSPEED_DIR}/rhdh-profile.py"
+  "lightspeed-core-configs/lightspeed-stack.yaml|${LIGHTSPEED_DIR}/lightspeed-stack.yaml|copy_fetched_file"
+  "lightspeed-core-configs/lightspeed-stack.yaml|${LIGHTSPEED_DIR}/lightspeed-stack-no-okp.yaml|strip_okp_config"
+  "lightspeed-core-configs/rhdh-profile.py|${LIGHTSPEED_DIR}/rhdh-profile.py|copy_fetched_file"
 )
+
+copy_fetched_file() {
+  local source_file=$1
+  local destination_file=$2
+
+  cp "${source_file}" "${destination_file}"
+}
+
+strip_okp_config() {
+  local source_file=$1
+  local destination_file=$2
+
+  # Remove the top-level RAG section without introducing a YAML-tool dependency.
+  awk '
+    /^rag:[[:space:]]*($|#)/ { skipping_rag = 1; next }
+    skipping_rag && /^[^[:space:]#][^:]*:/ { skipping_rag = 0 }
+    !skipping_rag { print }
+  ' "${source_file}" > "${destination_file}"
+}
 
 usage() {
   cat <<EOF
@@ -104,22 +124,24 @@ trap cleanup EXIT
 changed_count=0
 
 for target in "${TARGETS[@]}"; do
-  IFS='|' read -r source_path destination_path <<< "${target}"
+  IFS='|' read -r source_path destination_path transform_function <<< "${target}"
   relative_destination=${destination_path#"${LIGHTSPEED_DIR}/"}
   upstream_url="https://raw.githubusercontent.com/${repo}/${ref}/${source_path}"
   fetched_file="${tmpdir}/$(basename "${destination_path}")"
+  transformed_file="${tmpdir}/rendered-$(basename "${destination_path}")"
 
   fetch_file "${upstream_url}" "${fetched_file}"
+  "${transform_function}" "${fetched_file}" "${transformed_file}"
 
-  if [[ -f "${destination_path}" ]] && cmp -s "${destination_path}" "${fetched_file}"; then
+  if [[ -f "${destination_path}" ]] && cmp -s "${destination_path}" "${transformed_file}"; then
     echo "up to date: ${relative_destination}"
     continue
   fi
 
   if [[ "${check_only}" == true ]]; then
-    print_diff "${destination_path}" "${fetched_file}" "${relative_destination}"
+    print_diff "${destination_path}" "${transformed_file}" "${relative_destination}"
   else
-    cp "${fetched_file}" "${destination_path}"
+    cp "${transformed_file}" "${destination_path}"
     echo "updated: ${relative_destination} <- ${upstream_url}"
   fi
 

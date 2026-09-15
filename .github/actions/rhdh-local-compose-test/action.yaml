@@ -44,10 +44,19 @@ inputs:
     description: Log level to use
     required: false
     default: "info"
+  disable_intelligent_assistant:
+    description: "Disable Intelligent Assistant services when registry.redhat.io credentials are unavailable"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
+    - name: Configure Intelligent Assistant test profile
+      if: ${{ inputs.disable_intelligent_assistant == 'true' }}
+      shell: bash
+      run: echo "COMPOSE_INTELLIGENT_ASSISTANT_ARGS=-f compose.intelligent-assistant-disabled.override.example.yaml" >> "$GITHUB_ENV"
+
     # Set RHDH_TAG and optionally RHDH_IMAGE/CATALOG_INDEX_IMAGE based on the branch name for container image selection
     - name: Set RHDH tag, image and catalog index
       if: ${{ inputs.override_images == 'true' }}
@@ -196,7 +205,7 @@ runs:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
         CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
-      run: $TOOL compose $CLI_ARGS config
+      run: $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS config
 
     - name: Add user-specific configuration
       if: ${{ env.SKIP_TEST != 'true' && inputs.user_config_enabled == 'true' }}
@@ -276,8 +285,8 @@ runs:
         CLI_ARGS: ${{ inputs.compose_cli_args }}
         CATALOG_INDEX_IMAGE: ${{ env.CATALOG_INDEX_IMAGE }}
       run: |
-        $TOOL compose $CLI_ARGS up --detach --quiet-pull
-        $TOOL compose $CLI_ARGS ps
+        $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS up --detach --quiet-pull
+        $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS ps
 
     - name: Wait for HTTP 200 response from homepage
       if: ${{ env.SKIP_TEST != 'true' }}
@@ -319,9 +328,9 @@ runs:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: |
-        for svc in $($TOOL compose $CLI_ARGS config --services | sort); do
+        for svc in $($TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS config --services | sort); do
           echo "*** $svc ***"
-          $TOOL compose $CLI_ARGS logs --timestamps "$svc" || true
+          $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS logs --timestamps "$svc" || true
           echo "************"
           echo
         done
@@ -333,8 +342,8 @@ runs:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: |
-        $TOOL compose $CLI_ARGS ps || true
-        $TOOL compose $CLI_ARGS down --volumes || true
+        $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS ps || true
+        $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS down --volumes || true
 
     - name: Cleanup Podman container environment
       if: ${{ always() && env.SKIP_TEST != 'true' && inputs.container_tool == 'podman' }}
