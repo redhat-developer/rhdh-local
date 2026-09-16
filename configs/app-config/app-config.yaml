@@ -165,7 +165,7 @@ backend:
       - "'self'"
       - "'unsafe-eval'"
       - "https://cdn.jsdelivr.net"
-  # comment out the following 'database' section to use the PostgreSQL database
+      
   database:
     client: better-sqlite3
     connection: ":memory:"

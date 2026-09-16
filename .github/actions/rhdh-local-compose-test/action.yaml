@@ -298,6 +298,37 @@ runs:
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
 
+    - name: Assert Backstage plugin databases exist in PostgreSQL
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+      run: |
+        set -euo pipefail
+        echo "Listing databases in the db container..."
+        $TOOL exec -e PGPASSWORD=postgres db \
+        psql -U postgres -d postgres -c '\l'
+        
+        plugin_dbs=$($TOOL exec -e PGPASSWORD=postgres db \
+          psql -U postgres -d postgres -Atc \
+          "SELECT datname FROM pg_database WHERE datname LIKE 'backstage_plugin_%' ORDER BY 1;")
+        
+        echo "Backstage plugin databases:"
+        echo "$plugin_dbs"
+
+        if [ -z "$plugin_dbs" ]; then
+          echo "ERROR: Postgres is up but no backstage_plugin_* databases were found" >&2
+          echo "RHDH is probably using SQLite, or never migrated plugins." >&2
+          exit 1
+        fi
+
+        if ! echo "$plugin_dbs" | grep -qx 'backstage_plugin_catalog'; then
+          echo "ERROR: missing required database backstage_plugin_catalog" >&2
+          exit 1
+        fi
+
+        echo "Postgres plugin databases look Ok."
+
     - name: Validate loaded plugins
       if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash

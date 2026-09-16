@@ -32,6 +32,7 @@ services:
     environment:
       - HTTP_PROXY=http://proxy:3128
       - HTTPS_PROXY=http://proxy:3128
+      - NO_PROXY=localhost,127.0.0.1,db
       # NO_PROXY configured in the .env file, but can be overridden here
     networks:
       - internal_net
@@ -49,6 +50,7 @@ services:
     environment:
       - HTTP_PROXY=http://proxy:3128
       - HTTPS_PROXY=http://proxy:3128
+      - NO_PROXY=localhost,127.0.0.1,db
       # NO_PROXY configured in the .env file, but can be overridden here
     networks:
       - internal_net
