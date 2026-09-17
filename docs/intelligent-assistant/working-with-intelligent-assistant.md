@@ -4,7 +4,7 @@ Developer Hub Intelligent Assistant is a virtual assistant powered by generative
 
 Developer Hub Intelligent Assistant provides a natural language interface within the RHDH console, helping you easily find information about the product, understand its features, and get answers to your questions as they come up.
 
-Developer Hub Intelligent Assistant and OKP-backed Red Hat product documentation are included in RHDH Local by default. To make the chatbot functional, authenticate for the OKP image and enable an inference provider as described below. To disable it, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
+Developer Hub Intelligent Assistant is included in RHDH Local by default, but OKP-backed Red Hat product documentation is disabled. To make the chatbot functional, enable an inference provider as described below. You can then [enable OKP document retrieval](#enable-okp-document-retrieval) explicitly if required. To disable Intelligent Assistant, see [Disabling Intelligent Assistant](#disabling-intelligent-assistant).
 
 ## Supported Architecture
 
@@ -15,7 +15,7 @@ Developer Hub Intelligent Assistant uses a **Bring Your Own Model (BYOM)** archi
 ## Table of Contents
 1. [Configure an Inference Provider](#configure-an-inference-provider)
 2. [Query Validation Configuration](#query-validation-configuration-optional)
-3. [OKP Document Retrieval](#okp-document-retrieval)
+3. [Enable OKP Document Retrieval](#enable-okp-document-retrieval)
 4. [Verify Services Are Running](#verify-services-are-running)
 5. [Plugin Configuration Reference](#plugin-configuration-reference)
 6. [Disabling Intelligent Assistant](#disabling-intelligent-assistant)
@@ -29,14 +29,14 @@ Developer Hub Intelligent Assistant uses a **Bring Your Own Model (BYOM)** archi
   
     You **must** enable at least one inference provider before the chatbot will be functional. Without a configured provider, Developer Hub Intelligent Assistant will start in an unconfigured state.
 
-    Do **not** edit the tracked file `configs/extra-files/lightspeed-stack.yaml`. It is synced from upstream and will be overwritten. Copy it to `lightspeed-stack.local.yaml` instead.
+    Do **not** edit the tracked files in `configs/extra-files/`. They are synced or generated from upstream and will be overwritten. Copy `lightspeed-stack-no-okp.yaml` to `lightspeed-stack.local.yaml` instead.
 
 Enabling a provider is two steps:
 
-1. Copy the tracked stack file to `lightspeed-stack.local.yaml` and uncomment the provider block(s).
+1. Copy the tracked no-OKP stack file to `lightspeed-stack.local.yaml` and uncomment the provider block(s).
 2. Point compose at that file with `LIGHTSPEED_STACK_CONFIG` in `.env`, and set secrets and URLs there.
 
-Compose interpolates `LIGHTSPEED_STACK_CONFIG` from the project `.env` (same as `VERTEX_AI_CREDENTIALS_PATH`). If it is unset, compose mounts the tracked `lightspeed-stack.yaml`.
+Compose interpolates `LIGHTSPEED_STACK_CONFIG` from the project `.env` (same as `VERTEX_AI_CREDENTIALS_PATH`). If it is unset, compose mounts the tracked `lightspeed-stack-no-okp.yaml`.
 
 If you don't already have a `.env` file, create one from the template:
 
@@ -70,7 +70,7 @@ cp default.env .env
 ### 1. Create a local Lightspeed stack file
 
 ```bash
-cp configs/extra-files/lightspeed-stack.yaml \
+cp configs/extra-files/lightspeed-stack-no-okp.yaml \
    configs/extra-files/lightspeed-stack.local.yaml
 ```
 
@@ -234,9 +234,17 @@ VALIDATION_MODEL_NAME=gpt-4o-mini
 
 ---
 
-## OKP Document Retrieval
+## Enable OKP Document Retrieval
 
-Offline Knowledge Portal (OKP) replaces the pre-built RHDH RAG image. It runs as a separate Compose service and provides product-document retrieval to Lightspeed Core.
+Offline Knowledge Portal (OKP) provides Red Hat product-document retrieval and citations to Lightspeed Core. It is disabled by default and must be enabled explicitly.
+
+!!! note
+
+    RHDH product-documentation assistance in Intelligent Assistant is therefore disabled by default. Intelligent Assistant can still answer using the configured model, but it will not retrieve or cite RHDH documentation until OKP is enabled.
+
+!!! warning
+
+    Enabling OKP requires downloading the relatively large OKP container image, so the first startup takes longer and uses additional disk space and memory.
 
 Authenticate before starting RHDH Local:
 
@@ -245,30 +253,28 @@ podman login registry.redhat.io
 # or: docker login registry.redhat.io
 ```
 
-The tracked `lightspeed-stack.yaml` enables OKP as a `file_search` tool source. A local provider copy made from that file retains the OKP configuration. By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so they are accessible from browsers on Podman/Docker Desktop. The endpoint is also available directly as `http://localhost:8081` on the host. If `host.docker.internal` is not resolvable on your host, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser.
-
-### Running without OKP
-
-You can run Developer Hub Intelligent Assistant without OKP and without authenticating to `registry.redhat.io`. Copy the provided Compose override:
+Copy the provided Compose override:
 
 ```sh
-cp compose.okp-disabled.override.example.yaml compose.override.yaml
+cp compose.okp-enabled.override.example.yaml compose.override.yaml
 ```
 
-The override keeps Lightspeed Core and the Intelligent Assistant plugins enabled, prevents the OKP service from starting, removes `OKP_SERVICE_URL`, and mounts `lightspeed-stack-no-okp.yaml`, which has no RAG configuration.
+The override starts OKP, waits for it to become healthy, adds `OKP_SERVICE_URL`, and mounts the full `lightspeed-stack.yaml` configuration containing the OKP RAG settings.
 
-To configure an inference provider, create a local copy of the no-OKP configuration, uncomment the provider, and select it in `.env`:
+If you use a local provider configuration, create it from the full OKP configuration, uncomment the same provider block, and select it in `.env`:
 
 ```sh
-cp configs/extra-files/lightspeed-stack-no-okp.yaml \
-   configs/extra-files/lightspeed-stack-no-okp.local.yaml
+cp configs/extra-files/lightspeed-stack.yaml \
+   configs/extra-files/lightspeed-stack-okp.local.yaml
 ```
 
 ```env
-LIGHTSPEED_STACK_NO_OKP_CONFIG=./configs/extra-files/lightspeed-stack-no-okp.local.yaml
+LIGHTSPEED_STACK_OKP_CONFIG=./configs/extra-files/lightspeed-stack-okp.local.yaml
 ```
 
-Start normally with `podman compose up -d` or `docker compose up -d`. The chatbot remains available, but answers do not include OKP-backed product documentation or citations. Delete `compose.override.yaml` to restore the default OKP-enabled deployment.
+Start normally with `podman compose up -d` or `docker compose up -d`. By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so they are accessible from browsers on Podman/Docker Desktop. The endpoint is also available directly as `http://localhost:8081` on the host. If `host.docker.internal` is not resolvable on your host, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser.
+
+Delete `compose.override.yaml` to disable OKP again. Intelligent Assistant remains enabled, but responses no longer include OKP-backed product documentation or citations.
 
 ---
 
@@ -288,11 +294,11 @@ You should see output similar to:
 |--------------|-------|---------|--------|-------|
 | 31c3c681b742 | quay.io/rhdh-community/rhdh:next | 16 seconds ago | Exited (0) 5 seconds ago | rhdh-plugins-installer |
 | f7b74b9f241e | quay.io/rhdh-community/rhdh:next | 4 seconds ago | Up 5 seconds (starting) | rhdh |
-| a4e2b1f38d90 | registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:... | 30 seconds ago | Up 20 seconds (healthy) | okp |
 | 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-... | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
 
 - `rhdh-plugins-installer` is an init container — it runs once and exits with status `0`.
-- `rhdh`, `okp`, and `lightspeed-core` should show `Up` or `running`; OKP should become healthy before Lightspeed Core starts.
+- `rhdh` and `lightspeed-core` should show `Up` or `running`.
+- When OKP is enabled, `okp` should also show `Up` and `healthy` before Lightspeed Core starts.
 
 Open http://localhost:7007/intelligent-assistant in your browser to access Developer Hub Intelligent Assistant.
 
@@ -352,7 +358,7 @@ To fully disable Developer Hub Intelligent Assistant:
    cp compose.intelligent-assistant-disabled.override.example.yaml compose.override.yaml
    ```
 
-   This prevents `okp` and `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`. If you already use `compose.override.yaml` for something else, merge the `profiles` snippet instead of replacing the file.
+   This prevents `lightspeed-core` from starting. To re-enable, delete `compose.override.yaml`. If you already use `compose.override.yaml` for something else, merge the `profiles` snippet instead of replacing the file.
 
 2. **Disable the Developer Hub Intelligent Assistant plugins** in your `configs/dynamic-plugins/dynamic-plugins.override.yaml`. If you don't have one yet, copy the example file:
 
@@ -395,7 +401,7 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 - **Common causes:**
   - Port conflicts (another service is using the same port)
   - Insufficient memory or CPU resources
-  - Missing or expired `registry.redhat.io` authentication for the OKP image
+  - When OKP is enabled, missing or expired `registry.redhat.io` authentication for the OKP image
   - Incorrect environment variables
 
 ### 2. "Permission Denied" or File Access Errors
@@ -416,7 +422,7 @@ Step 1 alone stops the Lightspeed Core services but leaves the plugins installed
 ### 4. Chatbot Shows Unconfigured State
 
 - Developer Hub Intelligent Assistant starts unconfigured by default. You must uncomment at least one inference provider in a local stack file and point compose at it.
-- **Verify the local YAML**: `configs/extra-files/lightspeed-stack.local.yaml` exists and at least one provider is enabled (`vllm`, `openai`, `vertexai` uncommented, or an Ollama `type: vllm` block with `id: ollama`). Do not edit the tracked `lightspeed-stack.yaml`.
+- **Verify the local YAML**: `configs/extra-files/lightspeed-stack.local.yaml` exists and at least one provider is enabled (`vllm`, `openai`, `vertexai` uncommented, or an Ollama `type: vllm` block with `id: ollama`). Do not edit the tracked stack files.
 - **Verify `LIGHTSPEED_STACK_CONFIG`**: `.env` must set `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`. Compose interpolates this from the project `.env`; without it, the tracked stack file is mounted instead.
 - **Check required `.env` keys**: Ensure secrets and URLs for your provider are set (`VLLM_URL` / `VLLM_API_KEY`, `OLLAMA_URL`, `OPENAI_API_KEY`, or `VERTEX_AI_*`). Provider `ENABLE_*` flags are not used.
 - **Recreate `lightspeed-core`**: After editing the local stack file or `.env`, recreate `lightspeed-core` (`up -d --force-recreate lightspeed-core` or `stop`/`start`), not only `rhdh`.

@@ -45,7 +45,7 @@ inputs:
     required: false
     default: "info"
   disable_intelligent_assistant:
-    description: "Disable Intelligent Assistant services when registry.redhat.io credentials are unavailable"
+    description: "Disable Intelligent Assistant services for compose profiles that do not exercise them"
     required: false
     default: "false"
 
@@ -196,6 +196,55 @@ runs:
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS config
 
+    - name: Validate Intelligent Assistant Compose profiles
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'intelligent-assistant' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        set -euo pipefail
+
+        default_config=$(mktemp)
+        okp_config=$(mktemp)
+        trap 'rm -f "$default_config" "$okp_config"' EXIT
+
+        $TOOL compose $CLI_ARGS config --format json > "$default_config"
+
+        if jq -e '.services | has("okp")' "$default_config" > /dev/null; then
+          echo "ERROR: OKP must not be part of the default Intelligent Assistant profile."
+          exit 1
+        fi
+
+        if jq -e '(.services["lightspeed-core"].environment // {}) | has("OKP_SERVICE_URL")' "$default_config" > /dev/null; then
+          echo "ERROR: OKP_SERVICE_URL must not be set by the default Intelligent Assistant profile."
+          exit 1
+        fi
+
+        jq -e '
+          any(
+            .services["lightspeed-core"].volumes[];
+            .target == "/app-root/lightspeed-stack.yaml"
+            and (.source | endswith("/configs/extra-files/lightspeed-stack-no-okp.yaml"))
+          )
+        ' "$default_config" > /dev/null
+
+        # Render and validate the opt-in profile without pulling or starting OKP.
+        $TOOL compose \
+          -f compose.yaml \
+          -f compose.okp-enabled.override.example.yaml \
+          config --format json > "$okp_config"
+
+        jq -e '.services | has("okp")' "$okp_config" > /dev/null
+        jq -e '(.services["lightspeed-core"].environment // {}) | has("OKP_SERVICE_URL")' "$okp_config" > /dev/null
+        jq -e '
+          any(
+            .services["lightspeed-core"].volumes[];
+            .target == "/app-root/lightspeed-stack.yaml"
+            and (.source | endswith("/configs/extra-files/lightspeed-stack.yaml"))
+          )
+        ' "$okp_config" > /dev/null
+
     - name: Add user-specific configuration
       if: ${{ env.SKIP_TEST != 'true' && inputs.user_config_enabled == 'true' }}
       shell: bash
@@ -294,6 +343,46 @@ runs:
         done
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
+
+    - name: Validate Intelligent Assistant runtime
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'intelligent-assistant' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: |
+        set -euo pipefail
+
+        max=30
+        i=0
+        echo "Waiting for Lightspeed Core readiness..."
+        until $TOOL compose $CLI_ARGS exec -T rhdh curl -fsS http://localhost:8080/readiness | jq -e '.ready == true' > /dev/null; do
+          i=$((i+1))
+          if [ "$i" -ge "$max" ]; then
+            echo "ERROR: Lightspeed Core did not become ready."
+            exit 1
+          fi
+          echo "($i/$max) Waiting for Lightspeed Core readiness..."
+          sleep 5
+        done
+
+        if $TOOL compose $CLI_ARGS ps --all --services | grep -qx okp; then
+          echo "ERROR: An OKP container is running in the default Intelligent Assistant profile."
+          exit 1
+        fi
+
+        if $TOOL compose $CLI_ARGS exec -T lightspeed-core env | grep -q '^OKP_SERVICE_URL='; then
+          echo "ERROR: OKP_SERVICE_URL is set in the default Intelligent Assistant profile."
+          exit 1
+        fi
+
+        expected_config_sha=$(sha256sum configs/extra-files/lightspeed-stack-no-okp.yaml | awk '{print $1}')
+        mounted_config_sha=$($TOOL compose $CLI_ARGS exec -T lightspeed-core \
+          sha256sum /app-root/lightspeed-stack.yaml | awk '{print $1}')
+        if [ "$mounted_config_sha" != "$expected_config_sha" ]; then
+          echo "ERROR: Lightspeed Core is not using the expected no-OKP configuration."
+          exit 1
+        fi
 
     - name: Validate loaded plugins
       if: ${{ env.SKIP_TEST != 'true' }}

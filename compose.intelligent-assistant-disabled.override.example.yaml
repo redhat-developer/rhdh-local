@@ -1,8 +1,6 @@
 # Copy this file to compose.override.yaml to disable Developer Hub Intelligent Assistant services.
-# This prevents okp and lightspeed-core from starting with `podman compose up -d`.
+# This prevents lightspeed-core from starting with `podman compose up -d`.
 # To re-enable, delete compose.override.yaml.
 services:
   lightspeed-core:
-    profiles: [intelligent-assistant]
-  okp:
     profiles: [intelligent-assistant]
