@@ -18,8 +18,8 @@ For user-facing setup instructions (configuring LLM providers, troubleshooting, 
 Developer Hub Intelligent Assistant runs as part of the default RHDH Local compose stack with the following services:
 
 - **rhdh** -- The main Red Hat Developer Hub container, which includes the Developer Hub Intelligent Assistant frontend and backend dynamic plugins.
-- **lightspeed-core** -- Runs Lightspeed Core with the unified embedded stack configuration. Uses `network_mode: service:rhdh` to share the network namespace with the RHDH container. Depends on `rhdh` and a healthy `okp` service.
-- **okp** -- Runs Offline Knowledge Portal as a separate Solr and httpd workload. It replaces the pre-built FAISS RAG content container and provides Red Hat product documentation over HTTP.
+- **lightspeed-core** -- Runs Lightspeed Core with the unified embedded stack configuration. Uses `network_mode: service:rhdh` to share the network namespace with the RHDH container. It uses the generated no-OKP configuration by default.
+- **okp** -- Optional Offline Knowledge Portal service defined by `compose.okp-enabled.override.example.yaml`. It runs as a separate Solr and httpd workload and provides Red Hat product documentation over HTTP.
 - **install-dynamic-plugins** -- Installs dynamic plugins (including Developer Hub Intelligent Assistant plugins) into a shared volume.
 
 ### Key Configuration Files
@@ -28,7 +28,8 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 |------|---------|
 | `configs/extra-files/lightspeed-stack.yaml` | Tracked unified Lightspeed Core config, including OKP retrieval (synced from upstream). Do not edit to enable providers. |
 | `configs/extra-files/lightspeed-stack-no-okp.yaml` | Generated tracked variant with the top-level `rag` section removed. Used when running Intelligent Assistant without OKP. |
-| `configs/extra-files/lightspeed-stack.local.yaml` | Gitignored overlay. Copy `lightspeed-stack.yaml` here, uncomment providers, and set `LIGHTSPEED_STACK_CONFIG` in `.env`. Sync does **not** touch this file. |
+| `configs/extra-files/lightspeed-stack.local.yaml` | Gitignored default overlay. Copy `lightspeed-stack-no-okp.yaml` here, uncomment providers, and set `LIGHTSPEED_STACK_CONFIG` in `.env`. Sync does **not** touch this file. |
+| `configs/extra-files/lightspeed-stack-okp.local.yaml` | Gitignored OKP overlay. Copy `lightspeed-stack.yaml` here, uncomment providers, and set `LIGHTSPEED_STACK_OKP_CONFIG` in `.env`. |
 | `configs/extra-files/rhdh-profile.py` | Python profile with system prompts and response templates |
 | `configs/extra-files/templates/placeholder.json` | Placeholder for Vertex AI GCP credentials bind mount |
 | `configs/dynamic-plugins/dynamic-plugins.yaml` | Default dynamic plugins config (includes Developer Hub Intelligent Assistant plugin entries) |
@@ -67,19 +68,19 @@ bash ./scripts/sync-lightspeed-configs.sh --repo your-org/your-fork
 bash ./scripts/sync-lightspeed-configs.sh --check
 ```
 
-The sync script fetches upstream `lightspeed-stack.yaml` and `rhdh-profile.py`. It does **not** touch gitignored `lightspeed-stack.local.yaml`. After sync, recopy the tracked stack file if you want upstream changes plus your uncommented providers:
+The sync script fetches upstream `lightspeed-stack.yaml` and `rhdh-profile.py`, then derives `lightspeed-stack-no-okp.yaml`. It does **not** touch gitignored local files. After sync, recopy the no-OKP stack file if you want upstream changes plus your uncommented providers in the default configuration:
 
 ```bash
-cp configs/extra-files/lightspeed-stack.yaml \
+cp configs/extra-files/lightspeed-stack-no-okp.yaml \
    configs/extra-files/lightspeed-stack.local.yaml
 # then re-uncomment provider blocks
 ```
 
 The tracked `lightspeed-stack.yaml` is copied verbatim from upstream. The current upstream `main` configuration includes the active OKP RAG configuration used by this integration.
 
-Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}`. Presence of `lightspeed-stack.local.yaml` does not change the in-container config until `.env` sets `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`.
+Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack-no-okp.yaml}` by default. Presence of `lightspeed-stack.local.yaml` does not change the in-container config until `.env` sets `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`.
 
-The sync script also derives `lightspeed-stack-no-okp.yaml` by removing the top-level `rag` section. `compose.okp-disabled.override.example.yaml` mounts that variant and disables the OKP service. A user-specific no-OKP provider configuration should be named `lightspeed-stack-no-okp.local.yaml` and selected with `LIGHTSPEED_STACK_NO_OKP_CONFIG`; sync does not touch local files.
+`compose.okp-enabled.override.example.yaml` defines the OKP service and mounts `${LIGHTSPEED_STACK_OKP_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}` into Lightspeed Core. This preserves the full upstream OKP RAG configuration only when users opt in.
 
 ---
 
@@ -95,7 +96,7 @@ LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd1
 
 ## Overriding the OKP Image
 
-The default OKP image is pinned in `compose.yaml`. Authenticate with `registry.redhat.io` before starting the stack. To test another build, set `OKP_IMAGE` in `.env`:
+The default OKP image is pinned in `compose.okp-enabled.override.example.yaml`. Authenticate with `registry.redhat.io` before enabling OKP. To test another build, set `OKP_IMAGE` in `.env`:
 
 ```env
 OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041

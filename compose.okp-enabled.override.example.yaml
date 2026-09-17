@@ -1,0 +1,39 @@
+# Copy this file to compose.override.yaml to enable OKP-backed product documentation.
+# Authenticate with registry.redhat.io before starting the stack.
+services:
+  lightspeed-core:
+    depends_on:
+      okp:
+        condition: service_healthy
+    volumes:
+      - ${LIGHTSPEED_STACK_OKP_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}:/app-root/lightspeed-stack.yaml:Z
+    environment:
+      OKP_SERVICE_URL: ${OKP_SERVICE_URL:-http://host.docker.internal:8081}
+
+  okp:
+    image: ${OKP_IMAGE:-registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041} # dclint disable-line service-image-require-explicit-tag
+    container_name: okp
+    environment:
+      SOLR_HOST_BIND: "0.0.0.0"
+      MIMIR_HTTPD_SERVER_NAME: "localhost"
+      COMPRESSED: "true"
+      ENCRYPT: "false"
+    ports: # dclint disable-line no-unbound-port-interfaces
+      - "8081:8080"
+      - "8983:8983"
+    command:
+      - |
+        set -e
+        if [ "$$(uname -m)" = "aarch64" ]; then
+          export JAVA_TOOL_OPTIONS="-XX:UseSVE=0"
+        fi
+        /opt/solr/bin/solr start --user-managed --force -m 1g
+        rm -f /etc/httpd/conf.d/ssl.conf
+        exec httpd -D FOREGROUND
+    entrypoint: ["/bin/bash", "-c"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8080/ && curl -fsS -o /dev/null http://127.0.0.1:8983/solr/admin/info/system"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
