@@ -303,13 +303,14 @@ runs:
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: |
         set -euo pipefail
         echo "Listing databases in the db container..."
-        $TOOL exec -e PGPASSWORD=postgres db \
-        psql -U postgres -d postgres -c '\l'
+        $TOOL compose $CLI_ARGS exec -T -e PGPASSWORD=postgres db \
+          psql -U postgres -d postgres -c '\l'
         
-        plugin_dbs=$($TOOL exec -e PGPASSWORD=postgres db \
+        plugin_dbs=$($TOOL compose $CLI_ARGS exec -T -e PGPASSWORD=postgres db \
           psql -U postgres -d postgres -Atc \
           "SELECT datname FROM pg_database WHERE datname LIKE 'backstage_plugin_%' ORDER BY 1;")
         
@@ -341,7 +342,7 @@ runs:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: |
-        $TOOL exec rhdh curl -i --head --fail http://localhost:7007
+        $TOOL compose $CLI_ARGS exec -T rhdh curl -i --head --fail http://localhost:7007
 
     - name: Compose logs
       if: ${{ always() && env.SKIP_TEST != 'true' }}
