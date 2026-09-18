@@ -19,7 +19,7 @@ Developer Hub Intelligent Assistant runs as part of the default RHDH Local compo
 
 - **rhdh** -- The main Red Hat Developer Hub container, which includes the Developer Hub Intelligent Assistant frontend and backend dynamic plugins.
 - **lightspeed-core** -- Runs Lightspeed Core with the unified embedded stack configuration. Uses `network_mode: service:rhdh` to share the network namespace with the RHDH container. It uses the generated no-OKP configuration by default.
-- **okp** -- Optional Offline Knowledge Portal service defined by `compose.okp-enabled.override.example.yaml`. It runs as a separate Solr and httpd workload and provides Red Hat product documentation over HTTP.
+- **okp** -- Optional Offline Knowledge Portal service defined by `intelligent-assistant/compose-with-okp.yaml`. It runs as a separate Solr and httpd workload and provides Red Hat product documentation over HTTP.
 - **install-dynamic-plugins** -- Installs dynamic plugins (including Developer Hub Intelligent Assistant plugins) into a shared volume.
 
 ### Key Configuration Files
@@ -80,7 +80,7 @@ The tracked `lightspeed-stack.yaml` is copied verbatim from upstream. The curren
 
 Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack-no-okp.yaml}` by default. Presence of `lightspeed-stack.local.yaml` does not change the in-container config until `.env` sets `LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml`.
 
-`compose.okp-enabled.override.example.yaml` defines the OKP service and mounts `${LIGHTSPEED_STACK_OKP_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}` into Lightspeed Core. This preserves the full upstream OKP RAG configuration only when users opt in.
+`intelligent-assistant/compose-with-okp.yaml` defines the OKP service and mounts `${LIGHTSPEED_STACK_OKP_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}` into Lightspeed Core. This preserves the full upstream OKP RAG configuration only when users opt in.
 
 ---
 
@@ -96,13 +96,13 @@ LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd1
 
 ## Overriding the OKP Image
 
-The default OKP image is pinned in `compose.okp-enabled.override.example.yaml`. Authenticate with `registry.redhat.io` before enabling OKP. To test another build, set `OKP_IMAGE` in `.env`:
+The default OKP image is pinned in `intelligent-assistant/compose-with-okp.yaml`. Authenticate with `registry.redhat.io` before enabling OKP. To test another build, set `OKP_IMAGE` in `.env`:
 
 ```env
 OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041
 ```
 
-Lightspeed Core reaches OKP through the host-published endpoint at `http://host.docker.internal:8081`. LCORE also uses this URL as the base for browser-facing citation links. Port `8081` exposes the OKP httpd endpoint on the host (`http://localhost:8081`), while `8983` exposes Solr for local diagnostics. Override `OKP_SERVICE_URL` in `.env` when the default hostname is not reachable from both the container and browser.
+Lightspeed Core reaches OKP through the host-published endpoint at `http://host.docker.internal:8081`. LCORE also uses this URL as the base for browser-facing citation links. Port `8081` exposes the OKP httpd endpoint on the host (`http://localhost:8081`), while Solr port `8983` is bound to loopback for local diagnostics only. On native Linux, override `OKP_SERVICE_URL` in `.env` when the default hostname is not reachable from both the container and browser.
 
 ---
 
