@@ -127,10 +127,12 @@ for target in "${TARGETS[@]}"; do
   IFS='|' read -r source_path destination_path transform_function <<< "${target}"
   relative_destination=${destination_path#"${LIGHTSPEED_DIR}/"}
   upstream_url="https://raw.githubusercontent.com/${repo}/${ref}/${source_path}"
-  fetched_file="${tmpdir}/$(basename "${destination_path}")"
+  fetched_file="${tmpdir}/source-${source_path//\//_}"
   transformed_file="${tmpdir}/rendered-$(basename "${destination_path}")"
 
-  fetch_file "${upstream_url}" "${fetched_file}"
+  if [[ ! -f "${fetched_file}" ]]; then
+    fetch_file "${upstream_url}" "${fetched_file}"
+  fi
   "${transform_function}" "${fetched_file}" "${transformed_file}"
 
   if [[ -f "${destination_path}" ]] && cmp -s "${destination_path}" "${transformed_file}"; then

@@ -197,7 +197,7 @@ runs:
       run: $TOOL compose $CLI_ARGS $COMPOSE_INTELLIGENT_ASSISTANT_ARGS config
 
     - name: Validate Intelligent Assistant Compose profiles
-      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'intelligent-assistant' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'default' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}
@@ -232,7 +232,7 @@ runs:
         # Render and validate the opt-in profile without pulling or starting OKP.
         $TOOL compose \
           -f compose.yaml \
-          -f compose.okp-enabled.override.example.yaml \
+          -f intelligent-assistant/compose-with-okp.yaml \
           config --format json > "$okp_config"
 
         jq -e '.services | has("okp")' "$okp_config" > /dev/null
@@ -345,7 +345,7 @@ runs:
         curl -i --insecure http://localhost:7007
 
     - name: Validate Intelligent Assistant runtime
-      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'intelligent-assistant' }}
+      if: ${{ env.SKIP_TEST != 'true' && inputs.compose_config_name == 'default' }}
       shell: bash
       env:
         TOOL: ${{ inputs.container_tool }}

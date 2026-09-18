@@ -253,10 +253,11 @@ podman login registry.redhat.io
 # or: docker login registry.redhat.io
 ```
 
-Copy the provided Compose override:
+Start RHDH Local with the provided OKP Compose overlay:
 
 ```sh
-cp compose.okp-enabled.override.example.yaml compose.override.yaml
+podman compose -f compose.yaml -f intelligent-assistant/compose-with-okp.yaml up -d
+# or: docker compose -f compose.yaml -f intelligent-assistant/compose-with-okp.yaml up -d
 ```
 
 The override starts OKP, waits for it to become healthy, adds `OKP_SERVICE_URL`, and mounts the full `lightspeed-stack.yaml` configuration containing the OKP RAG settings.
@@ -272,9 +273,9 @@ cp configs/extra-files/lightspeed-stack.yaml \
 LIGHTSPEED_STACK_OKP_CONFIG=./configs/extra-files/lightspeed-stack-okp.local.yaml
 ```
 
-Start normally with `podman compose up -d` or `docker compose up -d`. By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so they are accessible from browsers on Podman/Docker Desktop. The endpoint is also available directly as `http://localhost:8081` on the host. If `host.docker.internal` is not resolvable on your host, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser.
+By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so it is directly resolvable by browsers on Podman and Docker Desktop. The endpoint is also available as `http://localhost:8081` on the host. On native Linux, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser if `host.docker.internal` is unavailable.
 
-Delete `compose.override.yaml` to disable OKP again. Intelligent Assistant remains enabled, but responses no longer include OKP-backed product documentation or citations.
+Start the base stack without `-f intelligent-assistant/compose-with-okp.yaml` to disable OKP again. Intelligent Assistant remains enabled, but responses no longer include OKP-backed product documentation or citations.
 
 ---
 

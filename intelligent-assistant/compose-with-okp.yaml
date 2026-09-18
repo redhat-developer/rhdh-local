@@ -1,4 +1,4 @@
-# Copy this file to compose.override.yaml to enable OKP-backed product documentation.
+# Enable OKP-backed product documentation for Developer Hub Intelligent Assistant.
 # Authenticate with registry.redhat.io before starting the stack.
 services:
   lightspeed-core:
@@ -18,9 +18,9 @@ services:
       MIMIR_HTTPD_SERVER_NAME: "localhost"
       COMPRESSED: "true"
       ENCRYPT: "false"
-    ports: # dclint disable-line no-unbound-port-interfaces
-      - "8081:8080"
-      - "8983:8983"
+    ports:
+      - "8081:8080" # dclint disable-line no-unbound-port-interfaces
+      - "127.0.0.1:8983:8983"
     command:
       - |
         set -e
