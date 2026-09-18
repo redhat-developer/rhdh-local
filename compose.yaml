@@ -52,29 +52,9 @@ services:
       - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
-  # RAG initialization service: Copies RAG embeddings and vector database to shared volumes
-  # This runs once at startup to prepare the RAG data for the lightspeed-core container
-  rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.10-lls-0.5.0-8c231a3b5177f12fff9db042dfa4091d8f2f26b3'
-    container_name: rag-init
-    user: "root"
-    volumes:
-      - rag_embeddings:/data/embeddings_model
-      - rag_vector_db:/data/vector_db
-    entrypoint: [ "/bin/sh", "-c" ]
-    command: |
-      "set -e; echo 'Copying RAG data...' && \
-      mkdir -p /data/vector_db /data/embeddings_model && \
-      cp -r /rag/vector_db/* /data/vector_db/ && \
-      cp -r /rag/embeddings_model/* /data/embeddings_model/ && \
-      chown -R 1001:0 /data/vector_db /data/embeddings_model || true && \
-      chmod -R a+rwX /data/vector_db /data/embeddings_model && \
-      echo 'Copy complete.'"
-    restart: "no"
-
   # Lightspeed Core Service (Library Mode)
-  # Runs both Lightspeed Core and Llama Stack in a single container
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.5.1
+  # Runs Lightspeed Core with its unified embedded stack configuration
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
     image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b} # dclint disable-line service-image-require-explicit-tag #todo: change tag to official release when available
@@ -83,17 +63,14 @@ services:
     depends_on:
       rhdh:
         condition: service_started
-      rag-init:
-        condition: service_completed_successfully
     volumes:
-      - ${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}:/app-root/lightspeed-stack.yaml:Z
+      - ${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack-no-okp.yaml}:/app-root/lightspeed-stack.yaml:Z
       - ./configs/extra-files/rhdh-profile.py:/app-root/rhdh-profile.py:Z
-      - rag_embeddings:/rag-content/embeddings_model
-      - rag_vector_db:/rag-content/vector_db
       - ${VERTEX_AI_CREDENTIALS_PATH:-./configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
       SERVICE_HOST: 0.0.0.0
+      OTEL_SDK_DISABLED: "true"
     env_file:
       - path: "./default.env"
         required: true
@@ -109,5 +86,3 @@ services:
 volumes:
   dynamic-plugins-root:
   extensions-catalog:
-  rag_embeddings:
-  rag_vector_db:

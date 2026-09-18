@@ -36,10 +36,10 @@ cp configs/catalog-entities/users.override.example.yaml \
 cp configs/catalog-entities/components.override.example.yaml \
    configs/catalog-entities/components.override.yaml
 
-# Lightspeed stack (Intelligent Assistant providers)
+# Lightspeed stack (Intelligent Assistant providers, without OKP)
 # Then set in .env:
 #   LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml
-cp configs/extra-files/lightspeed-stack.yaml \
+cp configs/extra-files/lightspeed-stack-no-okp.yaml \
    configs/extra-files/lightspeed-stack.local.yaml
 ```
 
@@ -66,7 +66,10 @@ Common variables to customize:
 - `EXTRA_CATALOG_INDEX_IMAGES`: Additional catalog index images (comma-separated). See the [catalog index docs](dynamic-plugins-management.md#extra-catalog-index-images) for details
 - `LOG_LEVEL`: RHDH application log level
 - GitHub authentication variables (see the [GitHub auth guide](github-auth.md))
-- `LIGHTSPEED_STACK_CONFIG`: Host path to the Lightspeed stack YAML (default: `configs/extra-files/lightspeed-stack.yaml`)
+- `LIGHTSPEED_STACK_CONFIG`: Host path to the default no-OKP Lightspeed stack YAML (default: `configs/extra-files/lightspeed-stack-no-okp.yaml`)
+- `LIGHTSPEED_STACK_OKP_CONFIG`: Host path to the OKP-enabled Lightspeed stack YAML used by `intelligent-assistant/compose-with-okp.yaml` (default: `configs/extra-files/lightspeed-stack.yaml`)
+- `OKP_IMAGE`: OKP image override (default: the pinned `registry.redhat.io/offline-knowledge-portal/rhokp-rhel9` image in `intelligent-assistant/compose-with-okp.yaml`)
+- `OKP_SERVICE_URL`: URL Lightspeed Core uses for OKP retrieval and generated citation links (default: `http://host.docker.internal:8081`, the host-published OKP endpoint)
 
 ## Applying Configuration Changes
 
