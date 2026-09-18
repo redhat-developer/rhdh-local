@@ -104,7 +104,8 @@ Stop all services while preserving data:
 
 This preserves:
 
-- Database contents (catalog entities, user preferences) if you are using a PostgreSQL database. By default, RHDH Local makes use of an in-memory SQLite database, so changes might get lost when the application restarts.
+- Database contents (catalog entities, user preferences) in the Postgres volume `postgresqldata` of rhdh-local. `compose down` keeps these contents; `compose down --volumes` deletes these contents;
+An in-memory SQLite override in `app-config.local.yaml` is still lost on restart of rhdh-local
 - Local volumes (like the default dynamic plugins root local volume) and persistent data
 
 ### Graceful Restart

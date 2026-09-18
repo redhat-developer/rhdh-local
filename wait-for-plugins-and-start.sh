@@ -51,6 +51,23 @@ fi
 # Loaded after the patched default config (SQLite) and before user local config.
 EXTRA_CONFIGS=""
 if [[ "${WITH_POSTGRES:-}" == "true" ]]; then
+  PG_HOST="${POSTGRES_HOST:-db}"
+  PG_PORT="${POSTGRES_PORT:-5432}"
+  PG_TIMEOUT="${POSTGRES_WAIT_TIMEOUT:-60}"
+  elapsed=0
+
+  echo "Waiting for Postgres at ${PG_HOST}:${PG_PORT} ..."
+  until bash -c "exec 3<>/dev/tcp/${PG_HOST}/${PG_PORT}" 2>/dev/null; do
+    if [ "${elapsed}" -ge "${PG_TIMEOUT}" ]; then
+      echo "Timed out waiting for PostgresSQL at ${PG_HOST}:${PG_PORT} after ${PG_TIMEOUT}s" >&2
+      exit 1
+    fi
+    echo "PostgreSQL is not reachable yet, retrying..."
+    sleep 2
+    elapsed=$((elapsed + 2))
+  done
+  echo "PostgresSQL at reachable at ${PG_HOST}:${PG_PORT}"
+
   echo "Using Postgres config: $DB_APP_CONFIG"
   EXTRA_CONFIGS="$DB_APP_CONFIG"
 fi
