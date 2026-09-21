@@ -12,17 +12,16 @@ RHDH Local uses PostgreSQL by default. The `db` service in [`compose.yaml`](http
     docker compose up -d
     ```
 
-You do not need [`compose-with-db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/compose-with-db.yaml) or [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.local.example.yaml) to use Postgres. That overlay remains for CI and back-compat; a normal start does not use it.
-
-`compose.yaml` sets `WITH_POSTGRES=true` on `rhdh`. On startup, RHDH loads [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.db.yaml) (`client: pg`) after the SQLite block in [`app-config.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.yaml).
+Default [`app-config.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.yaml) uses `client: pg` and the `POSTGRES_*` values from `default.env`. 
+You do not need a separate db overlay or a `WITH_POSTGRES` flag.
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
-> **NOTE**: The default image is [`registry.redhat.io/rhel10/postgresql-18`](https://catalog.redhat.com/en/software/containers/rhel10/postgresql-18/6942a60aab9edd836017e3d0). That registry needs a [Red Hat Login](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (`podman login registry.redhat.io`). To skip login, set `POSTGRES_IMAGE` in `.env` (for example `quay.io/fedora/postgresql-18:latest`).
+> **NOTE**: The default image is [`quay.io/fedora/postgresql-18:latest`](https://quay.io/repository/fedora/postgresql-18). No registry login is required for a normal start. To use the commercially supported image, set `POSTGRES_IMAGE=registry.redhat.io/rhel10/postgresql-18:latest` in `.env` and [log in to `registry.redhat.io`](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (`podman login registry.redhat.io`).
 
 `default.env` already supplies the `POSTGRES_*` defaults via `env_file` (`POSTGRES_HOST=db`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`). Put only the values you want to change in your project `.env` (or export them). You do not need to copy every `POSTGRES_*` key. Pin the image with `POSTGRES_IMAGE` in `.env`.
 
-Data is stored in the named volume `postgresqldata`, mounted at `/var/lib/pgsql/data` inside the container.
+Data is stored under `/var/lib/pgsql/data` in the `db` container (Compose anonymous volume).
 
 - `podman compose stop` / `start` and `podman compose down` keep the volume.
 - `podman compose down --volumes` deletes it. Catalog and plugin data are lost.
@@ -31,7 +30,8 @@ Data is stored in the named volume `postgresqldata`, mounted at `/var/lib/pgsql/
 
 ### Optional database overrides
 
-Put database overrides in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.local.example.yaml). That file is loaded last, so it wins over [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.db.yaml). For example, this switches you back to in-memory SQLite:
+Put database overrides in [`app-config.local.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.local.example.yaml) - overriding the default `client: pg` settings in [`app-config.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.yaml).
+Below switches back to in-memory SQLite:
 
 ```yaml
 backend:
@@ -40,7 +40,8 @@ backend:
     connection: ':memory:'
 ```
 
-If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), add this to `app-config.local.yaml`. Deep merge keeps `client` and `connection` from [`app-config.db.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.db.yaml):
+If you need `pluginDivisionMode: schema` (one database, one schema per plugin — useful when the DB user cannot create multiple databases), add this to `app-config.local.yaml`. 
+Deep merge keeps `client` and `connection` from the default [`app-config.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/configs/app-config/app-config.yaml):
 
 ```yaml
 backend:
@@ -58,7 +59,7 @@ The new image must support upgrading from your current major version (its `POSTG
 
 Do not edit tracked [`compose.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/compose.yaml) for the upgrade. Put temporary settings in gitignored `compose.override.yaml` instead. Pulling a newer default image major in `compose.yaml` is not a silent safe upgrade for an existing data volume — follow the steps below when the image major changes.
 
-Plain `podman compose` / `docker compose` loads `compose.yaml` and `compose.override.yaml` automatically. If you pass extra `-f` overlays (for example [`compose-with-corporate-proxy.yaml`](corporate-proxy-setup-sim.md)), include `compose.override.yaml` on those commands as well. `compose-with-db.yaml` is not required for this upgrade path.
+Plain `podman compose` / `docker compose` loads `compose.yaml` and `compose.override.yaml` automatically. If you pass extra `-f` overlays (for example [`compose-with-corporate-proxy.yaml`](corporate-proxy-setup-sim.md)), include `compose.override.yaml` on those commands as well.
 
 The `psql` examples below use `POSTGRES_USER` from the container environment (`default.env` / `.env`). `sh -c` is required so the variable expands inside the container.
 

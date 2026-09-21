@@ -104,8 +104,10 @@ Stop all services while preserving data:
 
 This preserves:
 
-- Database contents (catalog entities, user preferences) in the Postgres volume `postgresqldata` of rhdh-local. `compose down` keeps these contents; `compose down --volumes` deletes these contents;
-An in-memory SQLite override in `app-config.local.yaml` is still lost on restart of rhdh-local
+- Database contents (catalog entities, user preferences) under `/var/lib/pgsql/data` in the `db` container (Compose anonymous volume). 
+`compose down` keeps this data; 
+`compose down --volumes` deletes it
+- An in-memory SQLite override in `app-config.local.yaml` is still lost when rhdh-local restarts
 - Local volumes (like the default dynamic plugins root local volume) and persistent data
 
 ### Graceful Restart
