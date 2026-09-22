@@ -86,10 +86,10 @@ Compose mounts `${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stac
 
 ## Overriding the Lightspeed Core Image
 
-By default, the compose setup uses `quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b`. To use a different image (e.g., a newer version or a custom build), set the `LIGHTSPEED_CORE_IMAGE` environment variable in your `.env` file:
+By default, the compose setup uses `quay.io/lightspeed-core/lightspeed-stack:0.7.0rc3`. To use a different image (e.g., a newer version or a custom build), set the `LIGHTSPEED_CORE_IMAGE` environment variable in your `.env` file:
 
 ```env
-LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b
+LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:0.7.0rc3
 ```
 
 ---
