@@ -70,7 +70,7 @@ Once enabled, Developer Hub Intelligent Assistant appears in the left-hand navig
     
     * Installation of the Developer Hub Intelligent Assistant plugin
     * Configuration of Lightspeed Core Service (LCS) and Llama Stack sidecar containers
-    * Setup of a Large Language Model (LLM) provider that's compatible with the OpenAI API (such as OpenAI, Ollama, or vLLM)
+    * Setup of a Large Language Model (LLM) provider that's compatible with the OpenAI API (such as OpenAI or vLLM)
     
     If you're a platform engineer setting this up, see the [official installation documentation](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.8/html-single/interacting_with_red_hat_developer_lightspeed_for_red_hat_developer_hub/index) for detailed instructions.
 
@@ -189,7 +189,7 @@ Use the thumbs up/down buttons to help improve Developer Hub Intelligent Assista
 
 !!! warning "Data Privacy and Security"
 
-    **Important**: Developer Hub Intelligent Assistant sends your questions to the configured LLM provider (such as OpenAI, Ollama, or vLLM). Do not include:
+    **Important**: Developer Hub Intelligent Assistant sends your questions to the configured LLM provider (such as OpenAI or vLLM). Do not include:
     
     * Personal information
     * Sensitive business data
