@@ -54,10 +54,10 @@ services:
 
   # Lightspeed Core Service (Library Mode)
   # Runs Lightspeed Core with its unified embedded stack configuration
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.7.0rc3
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b} # dclint disable-line service-image-require-explicit-tag #todo: change tag to official release when available
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.7.0rc3} # dclint disable-line service-image-require-explicit-tag #todo: change tag to official release when available
     container_name: lightspeed-core
     network_mode: "service:rhdh"
     depends_on:

@@ -295,7 +295,7 @@ You should see output similar to:
 |--------------|-------|---------|--------|-------|
 | 31c3c681b742 | quay.io/rhdh-community/rhdh:next | 16 seconds ago | Exited (0) 5 seconds ago | rhdh-plugins-installer |
 | f7b74b9f241e | quay.io/rhdh-community/rhdh:next | 4 seconds ago | Up 5 seconds (starting) | rhdh |
-| 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:dev-... | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
+| 2860fc13b036 | quay.io/lightspeed-core/lightspeed-stack:0.7.0rc3 | 15 seconds ago | Up 5 seconds (starting) | lightspeed-core |
 
 - `rhdh-plugins-installer` is an init container — it runs once and exits with status `0`.
 - `rhdh` and `lightspeed-core` should show `Up` or `running`.
