@@ -1,6 +1,22 @@
 services:
-  # Optional PostgreSQL: merge compose-with-db.yaml (see docs/rhdh-local-guide/postgresql-guide.md)
-  # Example: podman compose -f compose.yaml -f compose-with-db.yaml up -d
+
+  db:
+    container_name: db
+    image: "${POSTGRES_IMAGE:-quay.io/fedora/postgresql-18@sha256:9ff34b7dd85956cb5cfbaeff193c66ddc4f410aceb20848330d6432b18a99bd5}" # dclint disable-line service-image-require-explicit-tag
+    volumes:
+      - "/var/lib/pgsql/data"
+    env_file:
+      - path: "./default.env"
+        required: true
+      - path: "./.env"
+        required: false
+    environment:
+      - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   rhdh:
     container_name: rhdh
@@ -31,6 +47,8 @@ services:
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
+      db:
+        condition: service_healthy
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
