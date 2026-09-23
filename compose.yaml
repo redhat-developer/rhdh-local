@@ -2,7 +2,7 @@ services:
 
   db:
     container_name: db
-    image: "${POSTGRES_IMAGE:-quay.io/fedora/postgresql-18:latest}" # dclint disable-line service-image-require-explicit-tag
+    image: "${POSTGRES_IMAGE:-quay.io/fedora/postgresql-18@sha256:9ff34b7dd85956cb5cfbaeff193c66ddc4f410aceb20848330d6432b18a99bd5}" # dclint disable-line service-image-require-explicit-tag
     volumes:
       - "/var/lib/pgsql/data"
     env_file:

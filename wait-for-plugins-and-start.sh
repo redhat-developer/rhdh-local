@@ -62,7 +62,7 @@ elapsed=0
     sleep 2
     elapsed=$((elapsed + 2))
   done
-  echo "PostgreSQL at reachable at ${PG_HOST}:${PG_PORT}"
+  echo "PostgreSQL is reachable at ${PG_HOST}:${PG_PORT}"
 
 # Add local config if available (always last so users can override)
 if [[ -f "$USER_APP_CONFIG" ]]; then

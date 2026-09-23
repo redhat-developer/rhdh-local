@@ -17,15 +17,18 @@ You do not need a separate db overlay or a `WITH_POSTGRES` flag.
 
 The examples below use `podman` and `podman compose`. If you use Docker, replace `podman` with `docker` (for example `docker login`, `docker compose`, `docker exec`).
 
-> **NOTE**: The default image is [`quay.io/fedora/postgresql-18:latest`](https://quay.io/repository/fedora/postgresql-18). No registry login is required for a normal start. To use the commercially supported image, set `POSTGRES_IMAGE=registry.redhat.io/rhel10/postgresql-18:latest` in `.env` and [log in to `registry.redhat.io`](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (`podman login registry.redhat.io`).
+> **NOTE**: The default image is [`quay.io/fedora/postgresql-18`](https://quay.io/repository/fedora/postgresql-18), pinned by digest in [`compose.yaml`](https://github.com/redhat-developer/rhdh-local/blob/HEAD/compose.yaml) so pulls stay reproducible. No registry login is required for a normal start. To use the moving `:latest` tag instead, set `POSTGRES_IMAGE=quay.io/fedora/postgresql-18:latest` in `.env`. To use the commercially supported image, set `POSTGRES_IMAGE=registry.redhat.io/rhel10/postgresql-18:latest` in `.env` and [log in to `registry.redhat.io`](https://access.redhat.com/RegistryAuthentication#getting-a-red-hat-login-2) (`podman login registry.redhat.io`).
 
-`default.env` already supplies the `POSTGRES_*` defaults via `env_file` (`POSTGRES_HOST=db`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`). Put only the values you want to change in your project `.env` (or export them). You do not need to copy every `POSTGRES_*` key. Pin the image with `POSTGRES_IMAGE` in `.env`.
+`default.env` already supplies the `POSTGRES_*` defaults via `env_file` (`POSTGRES_HOST=db`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`). Put only the values you want to change in your project `.env` (or export them). You do not need to copy every `POSTGRES_*` key. 
+Connection defaults (`POSTGRES_HOST`, port, user, password) come from `default.env`. Override individual keys in `.env` if needed.
 
 Data is stored under `/var/lib/pgsql/data` in the `db` container (Compose anonymous volume). RHDH does not support database downgrades, so this volume is ephemeral.
 
 - `podman compose stop` / `start` (or `restart`) keep the volume and catalog data.
-- `podman compose down` then `podman compose up` creates a new empty volume. Use this when switching RHDH versions.
-- `podman compose down --volumes` also deletes other Compose volumes (plugins, RAG, and so on).
+- `podman compose down` then `podman compose up` creates a new empty volume, catalog and plugin data is wiped. Use this when switching RHDH versions.
+- `podman compose down --volumes` also deletes other Compose volumes (plugins, RAG, Postgres, and so on).
+
+Catalog and plugin data live in Postgres on disk (`/var/lib/pgsql/data`) until that volume is replaced (`compose down` then `up`) or removed (`compose down --volumes`). The defaults in `default.env` (`POSTGRES_USER` / `POSTGRES_PASSWORD` = `postgres`) are for local development only — do not use them in production.
 
 > **Warning:** If you already have a persisted `/var/lib/pgsql/data` volume from an **older major** image, do **not** only bump `POSTGRES_IMAGE` (or the default image major). Follow [Upgrading PostgreSQL](#upgrading-postgresql) first so the volume is upgraded safely.
 

@@ -118,7 +118,7 @@ jobs:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
-      POSTGRES_IMAGE: quay.io/fedora/postgresql-18:latest
+      POSTGRES_IMAGE: quay.io/fedora/postgresql-18@sha256:9ff34b7dd85956cb5cfbaeff193c66ddc4f410aceb20848330d6432b18a99bd5
       ACTIONS_RUNNER_DEBUG: ${{ vars.ACTIONS_RUNNER_DEBUG }}
 
     steps:
