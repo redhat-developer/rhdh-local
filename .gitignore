@@ -21,6 +21,7 @@ compose.override.yaml*
 /configs/extra-files/*
 !/configs/extra-files/github-app-credentials.example.yaml
 !/configs/extra-files/lightspeed-stack.yaml
+!/configs/extra-files/lightspeed-stack-no-okp.yaml
 !/configs/extra-files/rhdh-profile.py
 !/configs/extra-files/templates
 

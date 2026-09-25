@@ -144,4 +144,3 @@ jobs:
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
           override_images: ${{ startsWith(matrix.branch, 'release-') && 'true' || 'false' }}
-
