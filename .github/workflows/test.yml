@@ -72,4 +72,3 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
-          disable_intelligent_assistant: ${{ matrix.composeConfig.name != 'default' && 'true' || 'false' }}
