@@ -29,8 +29,6 @@ If you want to use PostgreSQL with RHDH, here are the steps:
          required: true
        - path: "./.env"
          required: false
-     environment:
-       - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
      healthcheck:
        test: ["CMD", "pg_isready", "-U", "postgres"]
        interval: 5s
