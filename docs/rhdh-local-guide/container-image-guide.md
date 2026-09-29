@@ -10,7 +10,7 @@ This allows RHDH-local to pull OCI artifacts from registries like registry.redha
 
 ## Changing the container image
 
-By default, the [compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:2.1](https://quay.io/rhdh-community/rhdh:2.1), which includes both `linux-amd64` and `linux-arm64` images.
+By default, the [compose.yaml](https://github.com/redhat-developer/rhdh-local/blob/main/compose.yaml) points to the latest, stable **community build of RHDH** at [quay.io/rhdh-community/rhdh:next-2.1](https://quay.io/rhdh-community/rhdh:next-2.1), which includes both `linux-amd64` and `linux-arm64` images.
 
 Community builds are [built with Github Actions](https://github.com/redhat-developer/rhdh/blob/main/.github/workflows/next-build-image.yaml#L46-L47) and [docker buildx](https://github.com/redhat-developer/rhdh/blob/main/.github/actions/docker-build/action.yaml), using the same sources as the commercially supported builds.
 
@@ -23,13 +23,13 @@ You can switch between these different images by changing the container image na
 Looking for the bleeding edge? To use the most recent nightly community build of RHDH from the main branch, set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:2.1
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-2.1
 ```
 
 Or, for builds from a given `release-1.y` branch (for example, 2.1), set the variable as follows.
 
 ```sh
-RHDH_IMAGE=quay.io/rhdh-community/rhdh:2.1
+RHDH_IMAGE=quay.io/rhdh-community/rhdh:next-2.1
 ```
 
 ### Using unsupported pre-release CI builds
