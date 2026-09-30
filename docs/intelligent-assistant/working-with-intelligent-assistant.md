@@ -273,7 +273,15 @@ cp configs/extra-files/lightspeed-stack.yaml \
 LIGHTSPEED_STACK_OKP_CONFIG=./configs/extra-files/lightspeed-stack-okp.local.yaml
 ```
 
-By default, Lightspeed Core reaches the host-published OKP endpoint at `http://host.docker.internal:8081`. LCORE uses this same base URL for generated citation links, so it is directly resolvable by browsers on Podman and Docker Desktop. The endpoint is also available as `http://localhost:8081` on the host. On native Linux, set `OKP_SERVICE_URL` in `.env` to a hostname or IP that is reachable from both the container and browser if `host.docker.internal` is unavailable.
+Lightspeed Core uses `OKP_SERVICE_URL` for both document retrieval and browser-facing citation links, so the URL must be reachable from both the container and your browser. The default is `http://host.docker.internal:8081`. No additional configuration is needed in desktop or Podman machine environments where this hostname resolves from both contexts.
+
+On native Linux, set `OKP_SERVICE_URL` in `.env` to a hostname or host IP address that both the container and browser can reach, for example:
+
+```env
+OKP_SERVICE_URL=http://10.10.10.105:8081
+```
+
+To use an OKP instance running outside the Compose stack, set `OKP_SERVICE_URL` to that instance's URL instead.
 
 Start the base stack without `-f intelligent-assistant/compose-with-okp.yaml` to disable OKP again. Intelligent Assistant remains enabled, but responses no longer include OKP-backed product documentation or citations.
 
