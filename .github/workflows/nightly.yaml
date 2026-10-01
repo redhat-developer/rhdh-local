@@ -32,7 +32,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            
             // Keep main, dev, and the latest 3 release branches (e.g release-1.2, release-1.1, release-1.0) - to cover EOL branches and period between FF and GA of new releases
             const names = branches.map(b => b.name);
             const topReleaseBranches = names
@@ -118,7 +117,7 @@ jobs:
       DOCKER_COMPOSE_VERSION: v5.0.1
       PODMAN_IMAGE: quay.io/podman/stable:v5
       CORPORATE_PROXY_IMAGE: docker.io/ubuntu/squid:latest
-      POSTGRES_IMAGE: quay.io/fedora/postgresql-18@sha256:9ff34b7dd85956cb5cfbaeff193c66ddc4f410aceb20848330d6432b18a99bd5
+      POSTGRES_IMAGE: quay.io/fedora/postgresql-18:latest
       ACTIONS_RUNNER_DEBUG: ${{ vars.ACTIONS_RUNNER_DEBUG }}
 
     steps:

@@ -90,7 +90,7 @@ Exit log streaming with `Ctrl+C`.
 
 ### Stopping RHDH Local
 
-Keep the current database (same containers):
+Stop all services while preserving data:
 
 === "Podman"
    ```bash
@@ -102,9 +102,9 @@ Keep the current database (same containers):
    docker compose stop
    ```
 
-Bring it back with `podman compose start` (or `docker compose start`). Catalog data in Postgres is unchanged.
+Bring it back with `podman compose start` (or `docker compose start`). Data in Postgres is unchanged.
 
-Remove containers and start a **new** Postgres volume (safe when testing another RHDH version; RHDH does not support DB downgrades):
+Remove containers and start a **new** Postgres volume (safe when testing another RHDH version; RHDH does not support downgrades):
 
 === "Podman"
    ```bash
@@ -118,7 +118,7 @@ Remove containers and start a **new** Postgres volume (safe when testing another
    docker compose up -d
    ```
 
-`compose down --volumes` / `-v` also deletes named volumes such as dynamic plugins cache.
+`podman|docker compose down --volumes|-v` also deletes named volumes such as dynamic plugins cache.
 
 ### Graceful Restart
 
@@ -252,7 +252,7 @@ Check configuration syntax before restarting:
 
 By default, RHDH Local stores data in:
 
-- **Anonymous volume on `db`** (`/var/lib/pgsql/data`): catalog and plugin databases. Kept on `compose stop` / `start`. Replaced by a new empty volume after `compose down` then `compose up`.
+- **Anonymous volume on `db`** (`/var/lib/pgsql/data`): plugin databases. Kept on `podman|docker compose stop` / `start`. Replaced by a new empty volume after `podman|docker compose down` then `podman|docker compose up`.
 - **Named volume `rhdh-local_dynamic-plugins-root`**: cached dynamic plugins. Kept on `compose down`. Removed with `compose down -v`.
 
 ### Cleaning Up Data

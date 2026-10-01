@@ -52,17 +52,17 @@ PG_PORT="${POSTGRES_PORT:-5432}"
 PG_TIMEOUT="${POSTGRES_WAIT_TIMEOUT:-60}"
 elapsed=0
 
-  echo "Waiting for Postgres at ${PG_HOST}:${PG_PORT} ..."
-  until bash -c "exec 3<>/dev/tcp/${PG_HOST}/${PG_PORT}" 2>/dev/null; do
-    if [ "${elapsed}" -ge "${PG_TIMEOUT}" ]; then
-      echo "Timed out waiting for PostgreSQL at ${PG_HOST}:${PG_PORT} after ${PG_TIMEOUT}s" >&2
-      exit 1
-    fi
-    echo "PostgreSQL is not reachable yet, retrying..."
-    sleep 2
-    elapsed=$((elapsed + 2))
-  done
-  echo "PostgreSQL is reachable at ${PG_HOST}:${PG_PORT}"
+echo "Waiting for Postgres at ${PG_HOST}:${PG_PORT} ..."
+until bash -c "exec 3<>/dev/tcp/${PG_HOST}/${PG_PORT}" 2>/dev/null; do
+  if [[ "${elapsed}" -ge "${PG_TIMEOUT}" ]]; then
+    echo "Timed out waiting for PostgreSQL at ${PG_HOST}:${PG_PORT} after ${PG_TIMEOUT}s" >&2
+    exit 1
+  fi
+  echo "PostgreSQL is not reachable yet, retrying..."
+  sleep 2
+  elapsed=$((elapsed + 2))
+done
+echo "PostgreSQL is reachable at ${PG_HOST}:${PG_PORT}"
 
 # Add local config if available (always last so users can override)
 if [[ -f "$USER_APP_CONFIG" ]]; then
