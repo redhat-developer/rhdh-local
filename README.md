@@ -79,7 +79,7 @@ If you would like to change your RHDH-Local setup, or add additional features or
 1. [Plugins Guide](./docs/rhdh-local-guide/plugins-guide.md) - how to include your own plugins
 2. [Container Image Guide](docs/rhdh-local-guide/container-image-guide.md) - how to switch to a more bleeding edge, or commercially supported version of RHDH
 3. [Simulated Proxy Setup](docs/rhdh-local-guide/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
-4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
+4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL
 5. [Orchestrator Workflow Guide](./orchestrator/README.md) - using Orchestrator with RHDH to develop workflows.
 6. [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md) - configuring an LLM provider for the built-in Developer Hub Intelligent Assistant.
 7. [Developer Hub Intelligent Assistant Maintainer Guide](./docs/intelligent-assistant/maintaining-intelligent-assistant.md) - maintaining and syncing Lightspeed Core configuration files.
