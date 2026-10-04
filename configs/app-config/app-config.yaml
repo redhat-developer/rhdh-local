@@ -165,10 +165,14 @@ backend:
       - "'self'"
       - "'unsafe-eval'"
       - "https://cdn.jsdelivr.net"
-  # comment out the following 'database' section to use the PostgreSQL database
+      
   database:
-    client: better-sqlite3
-    connection: ":memory:"
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
   # static auth provider for development and testing purposes. This is not meant for production use.
   auth:
     externalAccess:

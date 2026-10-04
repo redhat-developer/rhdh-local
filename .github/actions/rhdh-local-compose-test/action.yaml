@@ -298,7 +298,7 @@ runs:
         TOOL: ${{ inputs.container_tool }}
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: |
-        $TOOL exec rhdh curl -i --head --fail http://localhost:7007
+        $TOOL compose $CLI_ARGS exec -T rhdh curl -i --head --fail http://localhost:7007
 
     - name: Compose logs
       if: ${{ always() && env.SKIP_TEST != 'true' }}
