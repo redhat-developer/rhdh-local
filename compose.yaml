@@ -53,7 +53,7 @@ services:
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
   # Lightspeed Core Service (Library Mode)
-  # Runs both Lightspeed Core and Llama Stack in a single container
+  # Runs Lightspeed Core with its unified embedded stack configuration
   # Default image: quay.io/lightspeed-core/lightspeed-stack:0.7.0
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
