@@ -13,8 +13,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch:
-          - release-1.10
+        include:
+          - branch: release-1.10
+            source_repo: redhat-ai-dev/lightspeed-configs
+            secondary_file: config.yaml
+          - branch: release-2.1
+            source_repo: redhat-developer/rhdh-intelligent-assistant-configs
+            secondary_file: lightspeed-stack-no-okp.yaml
 
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.branch }}
@@ -37,7 +42,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync Lightspeed config files
-        run: ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
+        run: ./scripts/sync-lightspeed-configs.sh --repo "${{ matrix.source_repo }}" --ref "${{ matrix.branch }}"
 
       - name: Check for changes
         id: changes
@@ -55,6 +60,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TARGET_BRANCH: ${{ matrix.branch }}
+          SOURCE_REPO: ${{ matrix.source_repo }}
+          SECONDARY_FILE: ${{ matrix.secondary_file }}
         run: |
           TITLE="chore(lightspeed): sync config files from upstream"
           BRANCH="chore/sync-lightspeed-configs-${TARGET_BRANCH}"
@@ -77,11 +84,11 @@ jobs:
             git push origin "${BRANCH}"
 
             BODY=$(cat <<EOF
-          Automated nightly sync of Lightspeed config files from [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs).
+          Automated nightly sync of Lightspeed config files from [${SOURCE_REPO}](https://github.com/${SOURCE_REPO}).
 
           ### Synced files
           - \`configs/extra-files/lightspeed-stack.yaml\`
-          - \`configs/extra-files/config.yaml\`
+          - \`configs/extra-files/${SECONDARY_FILE}\`
           - \`configs/extra-files/rhdh-profile.py\`
 
           > [!CAUTION]
