@@ -44,7 +44,6 @@ inputs:
     description: Log level to use
     required: false
     default: "info"
-
 runs:
   using: "composite"
   steps:
@@ -187,6 +186,14 @@ runs:
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: $TOOL compose $CLI_ARGS config
 
+    - name: Validate Intelligent Assistant Compose profiles
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: ./tests/validate-intelligent-assistant-compose.sh
+
     - name: Add user-specific configuration
       if: ${{ env.SKIP_TEST != 'true' && inputs.user_config_enabled == 'true' }}
       shell: bash
@@ -285,6 +292,14 @@ runs:
         done
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
+
+    - name: Validate Intelligent Assistant runtime
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: ./tests/validate-intelligent-assistant-runtime.sh
 
     - name: Validate loaded plugins
       if: ${{ env.SKIP_TEST != 'true' }}
