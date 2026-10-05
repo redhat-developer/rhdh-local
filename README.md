@@ -22,7 +22,7 @@ RHDH Local lets you quickly test software catalogs, TechDocs, plugins, templates
    podman compose up -d  # or: docker compose up -d
    ```
 
-   > **Developer Hub Intelligent Assistant** is included by default. To configure an LLM provider, see the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md). To disable Developer Hub Intelligent Assistant, see [Disabling Intelligent Assistant](./docs/intelligent-assistant/working-with-intelligent-assistant.md#disabling-intelligent-assistant).
+   > **Developer Hub Intelligent Assistant** is included by default without OKP-backed product documentation. To configure an LLM provider, opt in to OKP, or disable Intelligent Assistant, see the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md).
 
 3. **Access**: Open [http://localhost:7007](http://localhost:7007) and log in as 'Guest'
 
