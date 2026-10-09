@@ -33,14 +33,19 @@ jobs:
               repo: context.repo.repo,
             });
 
-            // Keep main and the latest 3 release branches (e.g. release-1.2, release-1.1, release-1.0) - to cover EOL branches and period between FF and GA of new releases
-            const topReleaseBranches = branches
-              .map(b => b.name)
+            // Keep main, dev, and the latest 3 release branches (e.g release-1.2, release-1.1, release-1.0) - to cover EOL branches and period between FF and GA of new releases
+            const names = branches.map(b => b.name);
+            const topReleaseBranches = names
               .filter(name => /^release-\d+\.\d+$/.test(name))
               .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
               .slice(0, 3);
+            const matrix = [
+              'main',
+              'dev',
+              ...topReleaseBranches,
+            ];
 
-            core.setOutput('branches', JSON.stringify(['main', ...topReleaseBranches]));
+            core.setOutput('branches', JSON.stringify(matrix));
   test:
     needs: discover-branches
     strategy:
@@ -89,13 +94,17 @@ jobs:
             composeConfig:
               name: "developer-lightspeed"
               cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
-          # Skip developer-lightspeed on main and release-1.10: Lightspeed is
+          # Skip developer-lightspeed on main, dev and release-1.10 branches: Lightspeed is
           # fully integrated with the base deployment.
           - branch: "main"
             composeConfig:
               name: "developer-lightspeed"
               cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
           - branch: "release-1.10"
+            composeConfig:
+              name: "developer-lightspeed"
+              cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
+          - branch: "dev"
             composeConfig:
               name: "developer-lightspeed"
               cliArgs: "-f compose.yaml -f developer-lightspeed/compose.yaml"
@@ -125,4 +134,4 @@ jobs:
           compose_cli_args: ${{ matrix.composeConfig.cliArgs }}
           compose_config_name: ${{ matrix.composeConfig.name }}
           user_config_enabled: ${{ matrix.userConfig }}
-          override_images: "true"
+          override_images: ${{ startsWith(matrix.branch, 'release-') && 'true' || 'false' }}
