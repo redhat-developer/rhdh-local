@@ -9,9 +9,10 @@ services:
       - ${LIGHTSPEED_STACK_OKP_CONFIG:-./configs/extra-files/lightspeed-stack.yaml}:/app-root/lightspeed-stack.yaml:Z
     environment:
       OKP_SERVICE_URL: ${OKP_SERVICE_URL:-http://host.docker.internal:8081}
+      SOLR_EMBEDDING_MODEL: ${SOLR_EMBEDDING_MODEL:-ibm-granite/granite-embedding-small-english-r2}
 
   okp:
-    image: ${OKP_IMAGE:-registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041} # dclint disable-line service-image-require-explicit-tag
+    image: ${OKP_IMAGE:-registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.3.0-1792010339} # dclint disable-line service-image-require-explicit-tag
     container_name: okp
     environment:
       SOLR_HOST_BIND: "0.0.0.0"
