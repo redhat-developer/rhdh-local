@@ -99,8 +99,10 @@ LIGHTSPEED_CORE_IMAGE=quay.io/lightspeed-core/lightspeed-stack:0.7.0
 The default OKP image is pinned in `intelligent-assistant/compose-with-okp.yaml`. Authenticate with `registry.redhat.io` before enabling OKP. To test another build, set `OKP_IMAGE` in `.env`:
 
 ```env
-OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041
+OKP_IMAGE=registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.3.0-1792010339
 ```
+
+The OKP overlay sets `SOLR_EMBEDDING_MODEL=ibm-granite/granite-embedding-small-english-r2` in Lightspeed Core to match the OKP 1.3 index. When testing an image built with another embedding model, also override `SOLR_EMBEDDING_MODEL` in `.env` with its Hugging Face model ID or a path available inside LCORE. Do not add the `sentence-transformers/` provider prefix. This setting is applied only when the OKP overlay is enabled.
 
 Lightspeed Core reaches OKP through the host-published endpoint at `http://host.docker.internal:8081`. LCORE also uses this URL as the base for browser-facing citation links. Port `8081` exposes the OKP httpd endpoint on the host (`http://localhost:8081`), while Solr port `8983` is bound to loopback for local diagnostics only. On native Linux, override `OKP_SERVICE_URL` in `.env` when the default hostname is not reachable from both the container and browser.
 
