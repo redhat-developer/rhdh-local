@@ -74,6 +74,7 @@ To use RHDH Local effectively, you need:
 Ready to dive in? Start with our [Getting Started Guide](getting-started.md) for a quick setup, or explore specific topics:
 
 - [Configuration](configuration.md) - Understand RHDH Local configuration
+- [Dev Spaces Guide](devspaces-guide.md) - Run and operate RHDH Local in OpenShift Dev Spaces
 - [Loading Content](loading-content.md) - Configure catalogs, templates, and TechDocs
 - [Dynamic Plugin Management](dynamic-plugins-management.md) - Add, remove, and configure plugins  
 - [Local Plugin Development](plugins-guide.md) - Build plugins locally
