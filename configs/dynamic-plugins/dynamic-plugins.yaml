@@ -2,42 +2,55 @@
 includes:
   - dynamic-plugins.default.yaml
   # Writable path in the init container for extensions plugin configuration.
-  - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
+  - /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 plugins:
-  # Tech Radar frontend plugin
-# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-  # - package: 'oci://quay.io/rhdh/backstage-community-plugin-tech-radar:{{inherit}}'
-  - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
-    disabled: false
+  # Guest auth backend module — RHDH 2+ no longer bundles auth provider plugins statically (https://redhat.atlassian.net/browse/RHIDP-15348).
+  # These will be available as dynamic plugins (https://redhat.atlassian.net/browse/RHIDP-16098)
+  # TODO: update this if/when it is listed in the DPDY. Remove this if it comes enabled by default in the DPDY.
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-auth-backend-module-guest-provider:bs_1.52.0__0.2.20'
+    enabled: true
 
-  # Quay plugin
-  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:{{inherit}}'
-    disabled: false
+  # Tech Radar frontend plugin
+  - package: ref://backstage-community-plugin-tech-radar
+    enabled: true
+
+  # Quay plugins
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.52.0__1.17.0'
+    enabled: true
+
+  - package: 'oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:bs_1.52.0__1.37.1'
+    enabled: true
+    pluginConfig:
+      dynamicPlugins:
+        frontend:
+          backstage-community.plugin-quay:
+            mountPoints:
+              - mountPoint: entity.page.image-registry/cards
+                importName: QuayPage
+                config:
+                  layout:
+                    gridColumn: 1 / -1
+                  if:
+                    anyOf:
+                      - isQuayAvailable
 
   # Scaffolder Github plugin - used by Dynamic Plugin Software Templates
-  - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
-    disabled: false
-
-  # Floating Action Button plugin with submenu actions
-  # TODO: This plugin will be removed in RHDH 2.1 (https://redhat.atlassian.net/browse/RHDHPLAN-1006)
-  # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-global-floating-action-button:{{inherit}}'
-  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
-    disabled: true # disabled as conflicts with Lightspeed FAB, will be deprecated / removed.
+  - package: ref://backstage-plugin-scaffolder-backend-module-github
+    enabled: true
 
   #########################################################
   # Enable dynamic plugins installation by using Extensions
   #########################################################
 
-  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-  # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:{{inherit}}'
-  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
-    disabled: false
+  - package: ref://red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions
+    enabled: true
 
-  # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-  # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:{{inherit}}'
-  - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
-    disabled: false
+  - package: ref://red-hat-developer-hub-backstage-plugin-extensions
+    enabled: true
+
+  - package: ref://red-hat-developer-hub-backstage-plugin-extensions-backend
+    enabled: true
     pluginConfig:
       extensions:
         installation:
@@ -48,13 +61,13 @@ plugins:
   ########## End Extensions #################################
 
   #########################################################
-  # Developer Lightspeed plugins
+  # Developer Hub Intelligent Assistant plugins
   #########################################################
 
-  # Lightspeed frontend plugin
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-    disabled: false
+  # Developer Hub Intelligent Assistant frontend plugin
+  - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant
+    enabled: true
 
-  # Lightspeed backend plugin
-  - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-    disabled: false
+  # Developer Hub Intelligent Assistant backend plugin
+  - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend
+    enabled: true

@@ -16,8 +16,8 @@ if [ -d "dynamic-plugins-root" ]; then
     echo "dynamic-plugins-root exists"
     if [ ! -f "dynamic-plugins-root/app-config.dynamic-plugins.yaml" ]; then
         echo "app-config.dynamic-plugins.yaml does not exist"
-        echo "Removing dynamic-plugins-root to fix RHIDP-3939"
-        rm -rf ./dynamic-plugins-root
+        echo "Clearing dynamic-plugins-root contents to fix RHIDP-3939"
+        rm -rf ./dynamic-plugins-root/* ./dynamic-plugins-root/.* 2>/dev/null || true
     fi
 fi
 
@@ -51,7 +51,8 @@ else
     echo "No .npmrc found, skipping NPM_CONFIG_USERCONFIG"
 fi
 
-DYNAMIC_PLUGINS_EXTENSIONS_FILE="/dynamic-plugins-root/dynamic-plugins.extensions.yaml"
+DYNAMIC_PLUGINS_ROOT="/opt/app-root/src/dynamic-plugins-root"
+DYNAMIC_PLUGINS_EXTENSIONS_FILE="$DYNAMIC_PLUGINS_ROOT/dynamic-plugins.extensions.yaml"
 if [ ! -f "$DYNAMIC_PLUGINS_EXTENSIONS_FILE" ]; then
     echo "$DYNAMIC_PLUGINS_EXTENSIONS_FILE does not exist - creating it to enable dynamic plugins installation by using Extensions..."
     cat <<EOF > "$DYNAMIC_PLUGINS_EXTENSIONS_FILE"
@@ -60,11 +61,9 @@ includes:
 
 plugins: []
 EOF
-    # The file needs to be writable by the main RHDH container user.
-    # Otherwise, the extensions backend plugin will not be able to save the dynamic plugins configuration
     chown 1001 "$DYNAMIC_PLUGINS_EXTENSIONS_FILE"
     echo '... file '$DYNAMIC_PLUGINS_EXTENSIONS_FILE' created!'
 fi
 
 echo "Running install-dynamic-plugins.sh"
-./install-dynamic-plugins.sh /dynamic-plugins-root
+./install-dynamic-plugins.sh "$DYNAMIC_PLUGINS_ROOT"

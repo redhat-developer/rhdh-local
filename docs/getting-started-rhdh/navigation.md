@@ -124,7 +124,7 @@ The left sidebar typically includes these core sections:
 
 As plugins are enabled in your Developer Hub instance, they may add their own navigation items to the left sidebar. These could include:
 
-* AI tools like Developer Lightspeed
+* AI tools like Developer Hub Intelligent Assistant
 * Bulk Import to fill your software catalog quickly
 * Learning Paths for training and learning
 * Custom tools and workflows specific to your organization
@@ -159,7 +159,7 @@ Make the most of Developer Hub by following these tips to streamline your workfl
 If you're ever unsure about where to find something:
 
 1. **Use the Search**: The search function in the Global Header is often the fastest way to find what you need
-2. **Use Developer Lightspeed**: Let AI help you find answers to common problems (if installed)
+2. **Use Developer Hub Intelligent Assistant**: Let AI help you find answers to common problems (if installed)
 3. **Check the Catalog**: Most resources are accessible through the Catalog section
 4. **Review Documentation**: The Docs section contains guides and documentation
 5. **Contact Support**: Use the Support button in the Global Header for assistance

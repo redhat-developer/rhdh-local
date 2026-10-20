@@ -13,6 +13,7 @@ configs/
 │   └── components.override.yaml       # Custom component entities
 └── extra-files/
     └── github-app-credentials.yaml    # GitHub App credentials
+    └── lightspeed-stack.local.yaml    # Local Lightspeed stack (uncomment providers)
     └── any-extra-file                 # Any custom extra file
 ```
 
@@ -34,6 +35,12 @@ cp configs/catalog-entities/users.override.example.yaml \
    configs/catalog-entities/users.override.yaml
 cp configs/catalog-entities/components.override.example.yaml \
    configs/catalog-entities/components.override.yaml
+
+# Lightspeed stack (Intelligent Assistant providers, without OKP)
+# Then set in .env:
+#   LIGHTSPEED_STACK_CONFIG=./configs/extra-files/lightspeed-stack.local.yaml
+cp configs/extra-files/lightspeed-stack-no-okp.yaml \
+   configs/extra-files/lightspeed-stack.local.yaml
 ```
 
 ## Environment Variables
@@ -59,6 +66,10 @@ Common variables to customize:
 - `EXTRA_CATALOG_INDEX_IMAGES`: Additional catalog index images (comma-separated). See the [catalog index docs](dynamic-plugins-management.md#extra-catalog-index-images) for details
 - `LOG_LEVEL`: RHDH application log level
 - GitHub authentication variables (see the [GitHub auth guide](github-auth.md))
+- `LIGHTSPEED_STACK_CONFIG`: Host path to the default no-OKP Lightspeed stack YAML (default: `configs/extra-files/lightspeed-stack-no-okp.yaml`)
+- `LIGHTSPEED_STACK_OKP_CONFIG`: Host path to the OKP-enabled Lightspeed stack YAML used by `intelligent-assistant/compose-with-okp.yaml` (default: `configs/extra-files/lightspeed-stack.yaml`)
+- `OKP_IMAGE`: OKP image override (default: the pinned `registry.redhat.io/offline-knowledge-portal/rhokp-rhel9` image in `intelligent-assistant/compose-with-okp.yaml`)
+- `OKP_SERVICE_URL`: URL Lightspeed Core uses for OKP retrieval and generated citation links (default: `http://host.docker.internal:8081`, the host-published OKP endpoint)
 
 ## Applying Configuration Changes
 
@@ -74,6 +85,9 @@ After making configuration changes:
     podman compose run install-dynamic-plugins
     podman compose stop rhdh
     podman compose start rhdh
+
+    # For Lightspeed stack changes (configs/extra-files/lightspeed-stack.local.yaml)
+    podman compose up -d --force-recreate lightspeed-core
     ```
 
 === "Docker"
@@ -86,4 +100,7 @@ After making configuration changes:
     docker compose run install-dynamic-plugins
     docker compose stop rhdh
     docker compose start rhdh
+
+    # For Lightspeed stack changes (configs/extra-files/lightspeed-stack.local.yaml)
+    docker compose up -d --force-recreate lightspeed-core
     ```

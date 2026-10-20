@@ -13,4 +13,4 @@ services:
 
   install-dynamic-plugins:
     volumes:
-      - ./dynamic-plugins-root:/dynamic-plugins-root
+      - ./dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root

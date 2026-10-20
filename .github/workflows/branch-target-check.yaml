@@ -1,0 +1,55 @@
+name: Branch Target Check
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  warn-main-target:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for existing warning comment
+        id: check
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          script: |
+            const marker = '<!-- branch-target-check -->';
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+            const existing = comments.data.find(c => c.body.includes(marker));
+            return !!existing;
+
+      - name: Post warning comment
+        if: steps.check.outputs.result != 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          script: |
+            const marker = '<!-- branch-target-check -->';
+            const body = [
+              marker,
+              '> [!WARNING]',
+              '> **This PR targets `main`.** This repository uses a `main`/`dev` branching model.',
+              '>',
+              '> - All development work (features, docs, dependency updates) should target **`dev`**.',
+              '> - Bug fixes for a supported release should target **`release-x.y`**.',
+              '> - Only maintainer-managed merges and cherry-picks should go into `main`.',
+              '>',
+              '> If this is intentional (e.g., a backport or maintainer merge), you can ignore this message.',
+              '> Otherwise, please retarget your PR to `dev`.',
+              '>',
+              '> See the [branching strategy](https://github.com/redhat-developer/rhdh-local/blob/HEAD/docs/rhdh-local-guide/help-and-contrib.md#branching-model) for details.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });

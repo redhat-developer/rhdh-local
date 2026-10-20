@@ -5,14 +5,20 @@ on:
     - cron: '0 4 * * *'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   sync-lightspeed:
-    name: Sync Lightspeed Configs
+    name: Sync Lightspeed Configs (${{ matrix.branch }})
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - release-1.10
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.branch }}
+      cancel-in-progress: true
 
     permissions:
       contents: write
@@ -20,8 +26,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: ${{ matrix.branch }}
           fetch-depth: 0
 
       - name: Configure Git
@@ -30,7 +37,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync Lightspeed config files
-        run: ./scripts/sync-lightspeed-configs.sh
+        run: |
+          if [[ "${{ matrix.branch }}" == "release-1.10" ]]; then
+            ./scripts/sync-lightspeed-configs.sh --repo redhat-ai-dev/lightspeed-configs --ref ${{ matrix.branch }}
+          else
+            ./scripts/sync-lightspeed-configs.sh --ref ${{ matrix.branch }}
+          fi
 
       - name: Check for changes
         id: changes
@@ -47,11 +59,17 @@ jobs:
         if: steps.changes.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_BRANCH: ${{ matrix.branch }}
         run: |
           TITLE="chore(lightspeed): sync config files from upstream"
-          BRANCH="chore/sync-lightspeed-configs"
+          BRANCH="chore/sync-lightspeed-configs-${TARGET_BRANCH}"
+          TARGET_REPO="redhat-developer/rhdh-intelligent-assistant-configs"
+          
+          if [[ "${TARGET_BRANCH}" == "release-1.10" ]]; then
+            TARGET_REPO="redhat-ai-dev/lightspeed-configs"
+          fi
 
-          EXISTING_PR=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "${TARGET_BRANCH}" --state open --json number --jq '.[0].number // empty')
 
           git checkout -b "${BRANCH}"
 
@@ -69,11 +87,11 @@ jobs:
             git push origin "${BRANCH}"
 
             BODY=$(cat <<EOF
-          Automated nightly sync of Lightspeed config files from [redhat-ai-dev/lightspeed-configs](https://github.com/redhat-ai-dev/lightspeed-configs).
+          Automated nightly sync of Lightspeed config files from [${TARGET_REPO}](${TARGET_REPO}).
 
           ### Synced files
           - \`configs/extra-files/lightspeed-stack.yaml\`
-          - \`configs/extra-files/config.yaml\`
+          - \`configs/extra-files/lightspeed-stack-no-okp.yaml\`
           - \`configs/extra-files/rhdh-profile.py\`
 
           > [!CAUTION]
@@ -84,5 +102,5 @@ jobs:
             gh pr create \
               --title "${TITLE}" \
               --body "${BODY}" \
-              --base "${{ github.ref_name }}"
+              --base "${TARGET_BRANCH}"
           fi

@@ -1,29 +1,10 @@
 services:
-  # Uncomment the following block to use a PostgreSQL database
-  # don't forget to also uncomment 'depends_on' 'db' section in the rhdh service
-  # and comment out or delete 'database' section in app-config.yaml or app-config.local.yaml
-
-  # db:
-  #   container_name: db
-  #   image: "registry.redhat.io/rhel8/postgresql-16:latest"
-  #   volumes:
-  #     - "/var/lib/pgsql/data"
-  #   env_file:
-  #     - path: "./default.env"
-  #       required: true
-  #     - path: "./.env"
-  #       required: false
-  #   environment:
-  #     - POSTGRESQL_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "postgres"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
+  # Optional PostgreSQL: merge compose-with-db.yaml (see docs/rhdh-local-guide/postgresql-guide.md)
+  # Example: podman compose -f compose.yaml -f compose-with-db.yaml up -d
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:next}
     env_file:
       - path: "./default.env"
         required: true
@@ -50,12 +31,10 @@ services:
     depends_on:
       install-dynamic-plugins:
         condition: service_completed_successfully
-      # db:
-      #   condition: service_healthy
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:next}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
@@ -70,52 +49,28 @@ services:
       - ./prepare-and-install-dynamic-plugins.sh:/opt/app-root/src/prepare-and-install-dynamic-plugins.sh:Z
       - ./local-plugins:/opt/app-root/src/local-plugins:Z
       - ./configs:/opt/app-root/src/configs:z
-      - dynamic-plugins-root:/dynamic-plugins-root
+      - dynamic-plugins-root:/opt/app-root/src/dynamic-plugins-root
       - extensions-catalog:${CATALOG_ENTITIES_EXTRACT_DIR:-/extensions}
 
-  # RAG initialization service: Copies RAG embeddings and vector database to shared volumes
-  # This runs once at startup to prepare the RAG data for the lightspeed-core container
-  rag-init:
-    image: 'quay.io/redhat-ai-dev/rag-content:release-1.10-lls-0.5.0-8c231a3b5177f12fff9db042dfa4091d8f2f26b3'
-    container_name: rag-init
-    user: "root"
-    volumes:
-      - rag_embeddings:/data/embeddings_model
-      - rag_vector_db:/data/vector_db
-    entrypoint: [ "/bin/sh", "-c" ]
-    command: |
-      "set -e; echo 'Copying RAG data...' && \
-      mkdir -p /data/vector_db /data/embeddings_model && \
-      cp -r /rag/vector_db/* /data/vector_db/ && \
-      cp -r /rag/embeddings_model/* /data/embeddings_model/ && \
-      chown -R 1001:0 /data/vector_db /data/embeddings_model || true && \
-      chmod -R a+rwX /data/vector_db /data/embeddings_model && \
-      echo 'Copy complete.'"
-    restart: "no"
-
   # Lightspeed Core Service (Library Mode)
-  # Runs both Lightspeed Core and Llama Stack in a single container
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.5.1
+  # Runs Lightspeed Core with its unified embedded stack configuration
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.7.0
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.5.1} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.7.1} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core
     network_mode: "service:rhdh"
     depends_on:
       rhdh:
         condition: service_started
-      rag-init:
-        condition: service_completed_successfully
     volumes:
-      - ./configs/extra-files/lightspeed-stack.yaml:/app-root/lightspeed-stack.yaml:Z
+      - ${LIGHTSPEED_STACK_CONFIG:-./configs/extra-files/lightspeed-stack-no-okp.yaml}:/app-root/lightspeed-stack.yaml:Z
       - ./configs/extra-files/rhdh-profile.py:/app-root/rhdh-profile.py:Z
-      - ./configs/extra-files/config.yaml:/app-root/config.yaml:Z
-      - rag_embeddings:/rag-content/embeddings_model
-      - rag_vector_db:/rag-content/vector_db
       - ${VERTEX_AI_CREDENTIALS_PATH:-./configs/extra-files/templates/placeholder.json}:/app-root/credentials.json:Z
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /app-root/credentials.json
       SERVICE_HOST: 0.0.0.0
+      OTEL_SDK_DISABLED: "true"
     env_file:
       - path: "./default.env"
         required: true
@@ -131,5 +86,3 @@ services:
 volumes:
   dynamic-plugins-root:
   extensions-catalog:
-  rag_embeddings:
-  rag_vector_db:

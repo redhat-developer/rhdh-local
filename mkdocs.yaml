@@ -21,7 +21,7 @@ nav:
     - "Writing Your Own Templates": getting-started-rhdh/templates-authoring.md
     - "Top 10 Tips For Better Software Templates": getting-started-rhdh/ten_template_tips.md
     - "Understanding & Using Extensions (Plugins)": getting-started-rhdh/extensions.md
-    - "Understanding & Using Developer Lightspeed": getting-started-rhdh/developer-lightspeed.md
+    - "Understanding & Using Developer Hub Intelligent Assistant": getting-started-rhdh/developer-intelligent-assistant.md
     - "References": getting-started-rhdh/references.md
   - "RHDH Local User Guide":
     - "What is RHDH Local And Why Use It?": rhdh-local-guide/index.md
@@ -36,6 +36,6 @@ nav:
     - "PostgreSQL Guide": rhdh-local-guide/postgresql-guide.md
     #- "Orchestrator": ../orchestrator/README.md
     - "Operating RHDH Local": rhdh-local-guide/operating-rhdh-local.md
-    - "Working With Lightspeed": lightspeed/working-with-lightspeed.md
-    - "Maintenance Guide for Lightspeed": lightspeed/maintaining-lightspeed.md
+    - "Working With Developer Hub Intelligent Assistant": intelligent-assistant/working-with-intelligent-assistant.md
+    - "Maintenance Guide for Developer Hub Intelligent Assistant": intelligent-assistant/maintaining-intelligent-assistant.md
     - "Getting Help & Contributing": rhdh-local-guide/help-and-contrib.md

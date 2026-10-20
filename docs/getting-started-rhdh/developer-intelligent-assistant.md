@@ -1,28 +1,28 @@
-Developer Lightspeed for Red Hat Developer Hub (often shortened to "Developer Lightspeed for RHDH" or simply "Lightspeed") is a general-purpose AI-powered virtual assistant designed to help developers with a multitude of daily questions and tasks. Whether you need help with coding, debugging, understanding technologies, or navigating Red Hat Developer Hub, Developer Lightspeed is available 24/7 to provide assistance. Developer Lightspeed is an optional feature (an '[extension](extensions.md) or plugin') that must be installed and configured by your administrator, so it may not be available on your Developer Hub instance.
+Developer Hub Intelligent Assistant for Red Hat Developer Hub (often shortened to "Developer Hub Intelligent Assistant for RHDH") is a general-purpose AI-powered virtual assistant designed to help developers with a multitude of daily questions and tasks. Whether you need help with coding, debugging, understanding technologies, or navigating Red Hat Developer Hub, Developer Hub Intelligent Assistant is available 24/7 to provide assistance. Developer Hub Intelligent Assistant is an optional feature (an '[extension](extensions.md) or plugin') that must be installed and configured by your administrator, so it may not be available on your Developer Hub instance.
 
-## What is Developer Lightspeed and why is it useful?
+## What is Developer Hub Intelligent Assistant and why is it useful?
 
-**Developer Lightspeed for RHDH** is a natural language interface powered by generative AI that serves as your general-purpose development assistant. It can help with coding questions, technology explanations, troubleshooting, best practices, and much more. When answering questions about Red Hat Developer Hub specifically, it can provide accurate, cited answers based on official documentation.
+**Developer Hub Intelligent Assistant for RHDH** is a natural language interface powered by generative AI that serves as your general-purpose development assistant. It can help with coding questions, technology explanations, troubleshooting, best practices, and much more. When answering questions about Red Hat Developer Hub specifically, it can provide accurate, cited answers based on official documentation.
 
 !!! info "AI-Powered 🤖"
 
-    Developer Lightspeed uses Generative AI LLM models and Retrieval Augmented Generation (RAG) technology, which means when answering questions about Red Hat Developer Hub, it has access to official documentation and can provide accurate, cited answers based on those sources. For general development questions, it leverages its entire model training data to provide helpful guidance and explanations.
+    Developer Hub Intelligent Assistant uses Generative AI LLM models and Retrieval Augmented Generation (RAG) technology, which means when answering questions about Red Hat Developer Hub, it has access to official documentation and can provide accurate, cited answers based on those sources. For general development questions, it leverages its entire model training data to provide helpful guidance and explanations.
 
 !!! tip "Always Available 💬"
 
-    Unlike waiting for a colleague to be available or searching through multiple documentation sites, Developer Lightspeed is always ready to help. Ask questions at any time, in any order, and get immediate responses to a wide variety of development-related questions.
+    Unlike waiting for a colleague to be available or searching through multiple documentation sites, Developer Hub Intelligent Assistant is always ready to help. Ask questions at any time, in any order, and get immediate responses to a wide variety of development-related questions.
 
 !!! success "General-Purpose 🛠️"
 
-    Developer Lightspeed isn't limited to Red Hat Developer Hub questions (assuming your administrator has turned off 'safety guard' mode). It can help with coding challenges, technology explanations, debugging assistance, architecture decisions, best practices, and any other development-related questions you might have throughout your day. 
+    Developer Hub Intelligent Assistant isn't limited to Red Hat Developer Hub questions (assuming your administrator has turned off 'safety guard' mode). It can help with coding challenges, technology explanations, debugging assistance, architecture decisions, best practices, and any other development-related questions you might have throughout your day. 
 
 !!! note "Safety Guard Mode 🛡️"
 
-    Developer Lightspeed can operate in different modes. When in **"Safety Guard" mode**, it uses Llama Guard to filter content for safety, ensuring responses are appropriate. In standard mode without safety guard, it provides broader assistance across a wide range of topics. This mode is generally managed by your RHDH administrator.
+    Developer Hub Intelligent Assistant can operate in different modes. When in **"Safety Guard" mode**, it uses Llama Guard to filter content for safety, ensuring responses are appropriate. In standard mode without safety guard, it provides broader assistance across a wide range of topics. This mode is generally managed by your RHDH administrator.
 
-### Why Developer Lightspeed Matters
+### Why Developer Hub Intelligent Assistant Matters
 
-Developer Lightspeed solves common challenges developers face:
+Developer Hub Intelligent Assistant solves common challenges developers face:
 
 **Natural Language Interface**
 
@@ -34,7 +34,7 @@ No more clicking through multiple pages, reading entire documentation sections, 
 
 **Versatile Helper**
 
-Developer Lightspeed can assist with:
+Developer Hub Intelligent Assistant can assist with:
 * Coding questions and syntax help
 * Technology explanations and comparisons
 * Debugging and troubleshooting guidance
@@ -45,30 +45,30 @@ Developer Lightspeed can assist with:
 
 !!! warning "Developer Preview Feature ⚠️"
 
-    Developer Lightspeed for RHDH is currently a **Developer Preview** feature. This means:
+    Developer Hub Intelligent Assistant for RHDH is currently a **Developer Preview** feature. This means:
     
     * It's not supported by Red Hat for production use
     * Features may change or be removed
     * It's provided for testing and feedback purposes
     * Your input helps improve the feature for future releases
 
-## Accessing Developer Lightspeed
+## Accessing Developer Hub Intelligent Assistant
 
-Developer Lightspeed is an optional feature that must be installed and configured by your platform engineer or administrator. If you don't see it in your navigation, contact your administrator to have it enabled.
+Developer Hub Intelligent Assistant is an optional feature that must be installed and configured by your platform engineer or administrator. If you don't see it in your navigation, contact your administrator to have it enabled.
 
 ### From the Left Navigation Pane
 
-Once enabled, Developer Lightspeed appears in the left-hand navigation pane of Red Hat Developer Hub:
+Once enabled, Developer Hub Intelligent Assistant appears in the left-hand navigation pane of Red Hat Developer Hub:
 
-1. Look for **"Lightspeed"** in the navigation menu
-2. Click on it to open the Developer Lightspeed interface
+1. Look for **"Developer Hub Intelligent Assistant"** in the navigation menu
+2. Click on it to open the Developer Hub Intelligent Assistant interface
 3. You'll see the chat interface with your conversation history (if any)
 
 !!! note "Administrator Setup Required"
 
-    Developer Lightspeed requires:
+    Developer Hub Intelligent Assistant requires:
     
-    * Installation of the Developer Lightspeed plugin
+    * Installation of the Developer Hub Intelligent Assistant plugin
     * Configuration of Lightspeed Core Service (LCS) and Llama Stack sidecar containers
     * Setup of a Large Language Model (LLM) provider that's compatible with the OpenAI API (such as OpenAI, Ollama, or vLLM)
     
@@ -76,15 +76,15 @@ Once enabled, Developer Lightspeed appears in the left-hand navigation pane of R
 
 ## Starting a chat
 
-When you first open Developer Lightspeed, you'll see the chat interface. Here's how to get started:
+When you first open Developer Hub Intelligent Assistant, you'll see the chat interface. Here's how to get started:
 
 ### Your First Chat
 
-1. **Open Developer Lightspeed** from the left navigation pane
+1. **Open Developer Hub Intelligent Assistant** from the left navigation pane
 2. **Review the Important notice** at the top of the chat window—this reminds you not to include personal or sensitive information in your messages
 3. **Type your question** in the message input field at the bottom
 4. **Click send** (or press Enter) to submit your question
-5. **Wait for the response**—Developer Lightspeed will process your question and provide an answer
+5. **Wait for the response**—Developer Hub Intelligent Assistant will process your question and provide an answer
 
 For Red Hat Developer Hub questions, responses may include citations to official documentation that you can verify.
 
@@ -102,7 +102,7 @@ After your first chat, you can create additional conversations:
 
 ### Chat History
 
-Developer Lightspeed maintains a history of your conversations:
+Developer Hub Intelligent Assistant maintains a history of your conversations:
 
 * **View previous chats** in the middle panel labeled "Chat history"
 * **Search your history** using the "Search previous chats..." box
@@ -111,7 +111,7 @@ Developer Lightspeed maintains a history of your conversations:
 
 ## Getting help with your questions
 
-Developer Lightspeed is a general-purpose assistant that can help with a wide variety of development questions and tasks. Here are some examples of what you can ask:
+Developer Hub Intelligent Assistant is a general-purpose assistant that can help with a wide variety of development questions and tasks. Here are some examples of what you can ask:
 
 ### Example Questions
 
@@ -147,7 +147,7 @@ Developer Lightspeed is a general-purpose assistant that can help with a wide va
 
 ### Understanding Responses
 
-When Developer Lightspeed answers your questions, you'll notice:
+When Developer Hub Intelligent Assistant answers your questions, you'll notice:
 
 **Cited Sources (for RHDH questions)**
 
@@ -167,9 +167,9 @@ After each response, you can provide feedback:
 
 !!! tip "Ask Follow-Up Questions"
 
-    Developer Lightspeed maintains context within a conversation. You can ask follow-up questions like "Can you show me an example?" or "How do I do that?" without repeating the original context.
+    Developer Hub Intelligent Assistant maintains context within a conversation. You can ask follow-up questions like "Can you show me an example?" or "How do I do that?" without repeating the original context.
 
-### Best Practices for Using Developer Lightspeed
+### Best Practices for Using Developer Hub Intelligent Assistant
 
 **Be Specific**
 
@@ -181,15 +181,15 @@ You don't need to use technical jargon or exact terminology. Ask questions the w
 
 **Review Citations (when provided)**
 
-When Developer Lightspeed provides citations (typically for Red Hat Developer Hub questions), always check them for important information. The citations link directly to the relevant documentation.
+When Developer Hub Intelligent Assistant provides citations (typically for Red Hat Developer Hub questions), always check them for important information. The citations link directly to the relevant documentation.
 
 **Provide Feedback**
 
-Use the thumbs up/down buttons to help improve Developer Lightspeed. Your feedback helps make the feature better for everyone.
+Use the thumbs up/down buttons to help improve Developer Hub Intelligent Assistant. Your feedback helps make the feature better for everyone.
 
 !!! warning "Data Privacy and Security"
 
-    **Important**: Developer Lightspeed sends your questions to the configured LLM provider (such as OpenAI, Ollama, or vLLM). Do not include:
+    **Important**: Developer Hub Intelligent Assistant sends your questions to the configured LLM provider (such as OpenAI, Ollama, or vLLM). Do not include:
     
     * Personal information
     * Sensitive business data
@@ -202,21 +202,21 @@ Use the thumbs up/down buttons to help improve Developer Lightspeed. Your feedba
 
 ### Official Documentation
 
-For detailed information about Developer Lightspeed, including installation, configuration, and advanced features, see:
+For detailed information about Developer Hub Intelligent Assistant, including installation, configuration, and advanced features, see:
 
 * [Interacting with Red Hat Developer Lightspeed for Red Hat Developer Hub](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.8/html-single/interacting_with_red_hat_developer_lightspeed_for_red_hat_developer_hub/index) - Complete official documentation
 
 ### Related Features
 
-Developer Lightspeed works alongside other Red Hat Developer Hub features:
+Developer Hub Intelligent Assistant works alongside other Red Hat Developer Hub features:
 
-* [Understanding & Using the Software Catalog](software-catalog.md) - Learn about the catalog that Lightspeed can help you navigate
+* [Understanding & Using the Software Catalog](software-catalog.md) - Learn about the catalog that Developer Hub Intelligent Assistant can help you navigate
 * [Understanding & Using Templates](templates.md) - Get help creating and using templates
-* [Understanding & Using TechDocs](techdocs.md) - Learn about documentation that Lightspeed can reference
+* [Understanding & Using TechDocs](techdocs.md) - Learn about documentation that Developer Hub Intelligent Assistant can reference
 * [Using Search](search.md) - Alternative way to find information in RHDH
 
 !!! success "Start Exploring"
 
-    The best way to learn Developer Lightspeed is to use it! Open a chat and start asking questions—whether they're about coding, technologies, Red Hat Developer Hub, or any other development topic. The more you use it, the more you'll discover how helpful it can be for your daily development work.
+    The best way to learn Developer Hub Intelligent Assistant is to use it! Open a chat and start asking questions—whether they're about coding, technologies, Red Hat Developer Hub, or any other development topic. The more you use it, the more you'll discover how helpful it can be for your daily development work.
 
 *[RHDH]: Red Hat Developer Hub
