@@ -9,6 +9,16 @@ auth:
     #     clientId: ${AUTH_GITHUB_CLIENT_ID}
     #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
+# Tell the frontend sign-in page which auth provider(s) to display.
+# In RHDH 2+, auth provider configs (auth.providers.*) have backend-only visibility,
+# so the frontend app-auth plugin cannot auto-discover them. This explicit list
+# bridges that gap. See: https://redhat.atlassian.net/browse/RHDHBUGS-3962
+# If you enable additional providers (e.g. GitHub), override this in
+# app-config.local.yaml — for example: signInPage: github
+# To show multiple providers, use a list: signInPage: [guest, github]
+# See: https://github.com/redhat-developer/rhdh/blob/main/docs/auth.md#sign-in-page-configuration-value
+signInPage: guest
+
 # integrations:
 #   github:
 #     - host: github.com
