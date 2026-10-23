@@ -75,7 +75,14 @@ auth:
           resolvers:
             - resolver: usernameMatchingUserEntityName
               dangerouslyAllowSignInWithoutUserInCatalog: true
-        
+
+# Override the default guest sign-in page to show GitHub instead.
+# In RHDH 2+, auth providers have backend-only visibility, so the frontend
+# needs this explicit directive to know which sign-in button to display.
+# Use a list to offer multiple sign-in options: signInPage: [guest, github]
+# See: https://github.com/redhat-developer/rhdh/blob/main/docs/auth.md#sign-in-page-configuration-value
+signInPage: github
+
 # GitHub integration for catalog discovery
 integrations:
   github:
