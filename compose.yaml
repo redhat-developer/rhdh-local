@@ -21,7 +21,7 @@ services:
 
   rhdh:
     container_name: rhdh
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10.4}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10.6}
     env_file:
       - path: "./default.env"
         required: true
@@ -53,7 +53,7 @@ services:
 
   install-dynamic-plugins:
     container_name: rhdh-plugins-installer
-    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10.4}
+    image: ${RHDH_IMAGE:-quay.io/rhdh-community/rhdh:1.10.6}
     # docker compose volumes are owned by root, so we need to run as root to write to them
     # the main rhdh container will be able to read from this as files are world readable
     user: "root"
@@ -93,10 +93,10 @@ services:
 
   # Lightspeed Core Service (Library Mode)
   # Runs both Lightspeed Core and Llama Stack in a single container
-  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.5.1
+  # Default image: quay.io/lightspeed-core/lightspeed-stack:0.6.5
   # To override: Set LIGHTSPEED_CORE_IMAGE in your .env file
   lightspeed-core:
-    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.6.2} # dclint disable-line service-image-require-explicit-tag
+    image: ${LIGHTSPEED_CORE_IMAGE:-quay.io/lightspeed-core/lightspeed-stack:0.6.5} # dclint disable-line service-image-require-explicit-tag
     container_name: lightspeed-core
     network_mode: "service:rhdh"
     depends_on:
