@@ -293,6 +293,21 @@ runs:
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
 
+    - name: Validate sign-in page has auth providers
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      run: |
+        echo "Verifying frontend config exposes at least one auth provider..."
+        tmpfile=$(mktemp)
+        trap 'rm -f "$tmpfile"' EXIT
+        curl -sS -f http://localhost:7007 -o "$tmpfile"
+        if grep -q '"signInPage"' "$tmpfile" || grep -q '"providers":{' "$tmpfile"; then
+          echo "Sign-in page auth config OK"
+        else
+          echo "FAIL: No auth providers visible to frontend sign-in page" >&2
+          exit 1
+        fi
+
     - name: Validate Intelligent Assistant runtime
       if: ${{ env.SKIP_TEST != 'true' }}
       shell: bash
