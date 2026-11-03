@@ -18,5 +18,8 @@
       "kind/security"
     ]
   },
-  "osvVulnerabilityAlerts": true
+  "osvVulnerabilityAlerts": true,
+  "labels": [
+    "kind/dependency upgrade"
+  ]
 }
