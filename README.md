@@ -90,7 +90,13 @@ To report issues against this repository, please use [JIRA](https://issues.redha
 
 To browse the existing issues, you can use this [Query](https://issues.redhat.com/issues/?filter=-4&jql=project%20%3D%20%22Red%20Hat%20Internal%20Developer%20Platform%22%20%20AND%20component%20%3D%20%22RHDH%20Local%22%20AND%20resolution%20%3D%20Unresolved%20ORDER%20BY%20status%2C%20priority%2C%20updated%20%20%20%20DESC).
 
-Contributions are welcome!
+Contributions are welcome! This repository uses a `main`/`dev` branching model:
+
+- **`main`** (default branch) tracks the latest stable GA release of RHDH. Maintainers manage this branch; do not target PRs to `main` directly.
+- **`dev`** tracks the upcoming RHDH release (`next` tag). All development PRs should target `dev`.
+- **`release-x.y`** branches are used for release stabilization and bug fixes for a specific supported release.
+
+See the [built-in Contributing guide](./docs/rhdh-local-guide/help-and-contrib.md) for details.
 
 
 ## Breaking changes and known issues

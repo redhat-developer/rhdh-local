@@ -95,6 +95,27 @@ We actively encourage contributions of all types! Here's how you can help:
 - **Create example setups** for specific scenarios
 - **Document best practices** from real-world usage
 
+### Branching Model
+
+This repository uses a `main`/`dev` branching model to separate stable content from active development:
+
+| Branch | Purpose | Tracks |
+|---|---|---|
+| **`main`** (default) | Latest stable GA release of RHDH | Current GA RHDH version |
+| **`dev`** | Active development for the upcoming RHDH release | RHDH `next` tag |
+| **`release-x.y`** | Release stabilization and patch releases | Specific RHDH version |
+
+#### Which branch should my PR target?
+
+| Change type | Target branch |
+|---|---|
+| All development work (features, docs, dependency updates, etc.) | `dev` |
+| Bug fixes for a specific supported release | `release-x.y` |
+
+Do not target `main` directly. Maintainers manage `main` via merges and cherry-picks.
+
+At Feature Freeze, a `release-x.y` branch is created from `dev` for stabilization. At GA, the release branch is merged into `main`, so `main` always reflects the latest stable RHDH release. Maintainers cherry-pick changes to `main` when appropriate (e.g., version-independent fixes that should not wait until the next GA).
+
 ### Contribution Workflow
 
 #### 1. Prepare Your Environment
@@ -106,9 +127,10 @@ git clone https://github.com/YOUR-USERNAME/rhdh-local.git && cd rhdh-local
 
 # Add upstream remote for staying current
 git remote add upstream https://github.com/redhat-developer/rhdh-local.git
+git fetch upstream
 
-# Create a development branch
-git checkout -b feature/my-contribution
+# Create a branch from dev (see "Which branch should my PR target?" above)
+git checkout -b feature/my-contribution upstream/dev
 ```
 
 #### 2. Development Guidelines
