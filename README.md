@@ -95,6 +95,75 @@ Contributions are welcome!
 
 ## Breaking changes and known issues
 
+### Upgrading to RHDH 2.1
+
+If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may need to:
+
+1. **Use `ref://` syntax for plugin references in `dynamic-plugins.override.yaml`**
+
+   Plugin references can now use `ref://plugin-name` instead of hardcoded `./dynamic-plugins/dist/` paths or full `oci://` URLs with `{{inherit}}`. The `ref://` syntax resolves the plugin package from the catalog index listed under `includes`.
+
+   For example, instead of:
+   ```yaml
+   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+   ```
+
+   Use:
+   ```yaml
+   - package: ref://backstage-community-plugin-tech-radar
+   ```
+
+   The `oci://` syntax with `{{inherit}}` is still supported and required when you need to specify a `!plugin-path` suffix. See [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details.
+
+2. **Use `enabled` instead of `disabled`**
+
+   The legacy per-plugin `disabled` key in `dynamic-plugins.yaml` remains supported but is deprecated. Use `enabled` for new or updated entries. For example, replace `disabled: false` with `enabled: true`.
+
+3. **Enable the guest auth provider in your override file**
+
+   RHDH 2+ no longer bundles auth provider plugins statically. If you use a `dynamic-plugins.override.yaml` and need Guest authentication, add:
+
+   ```yaml
+   - package: ref://backstage-plugin-auth-backend-module-guest-provider
+     enabled: true
+   ```
+
+4. **Developer Lightspeed renamed to Developer Hub Intelligent Assistant**
+
+   The Lightspeed plugins have been renamed to Developer Hub Intelligent Assistant. This feature remains enabled by default, so no action is required unless you reference Lightspeed plugins in your `dynamic-plugins.override.yaml`. If so, update to the new names:
+
+   ```yaml
+   - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant
+   - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend
+   ```
+
+   The LLM provider configuration has also changed. See the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md) for the updated setup.
+
+5. **Update Orchestrator plugin references**
+
+   If you use the [Orchestrator](./orchestrator/README.md), update the plugin references in your configuration from `oci://` URLs to `ref://` syntax:
+
+   ```yaml
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator-backend
+   - package: ref://red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+   ```
+
+   See the [Orchestrator Workflow Guide](./orchestrator/README.md) for the full updated configuration and [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details on the `ref://` syntax.
+
+6. **Use the Compose overlay for PostgreSQL**
+
+   PostgreSQL is no longer configured by editing `compose.yaml` or `app-config.yaml` directly. Instead, use the separate [`compose-with-db.yaml`](compose-with-db.yaml) overlay:
+
+   ```sh
+   podman compose -f compose.yaml -f compose-with-db.yaml up -d
+   ```
+
+   See the [PostgreSQL Guide](./docs/rhdh-local-guide/postgresql-guide.md) for details on optional overrides and major version upgrades.
+
+Also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for a full example.
+
 ### Upgrading to RHDH 1.9
 
 More details in the [RHDH 1.9 Release Notes](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.9/html/red_hat_developer_hub_release_notes/index).
