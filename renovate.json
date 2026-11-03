@@ -1,9 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:best-practices",
+    ":gitSignOff",
+    ":rebaseStalePrs",
+    "docker:disableMajor",
+    "helpers:pinGitHubActionDigests"
   ],
-  "baseBranches": [
-    "dev"
-  ]
+  "baseBranchPatterns": [
+    "dev",
+    "/^release-1\\.(9|\\d{2,}).*/",
+    "/^release-([2-9]|\\d{2,})\\..*/"
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "addLabels": [
+      "kind/security"
+    ]
+  },
+  "osvVulnerabilityAlerts": true
 }
