@@ -20,7 +20,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+        with:
+          files: |
+            **/compose*.yaml
+            .github/workflows/test.yml
+
       - name: Lint
+        if: steps.changed-files.outputs.any_changed == 'true'
         # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
         run: |
           npx --yes dclint .
@@ -58,7 +71,35 @@ jobs:
     steps:
       # Checkout default branch so .github/actions/* exists (release-* push may not include the composite).
       - uses: actions/checkout@v7
-      - uses: ./.github/actions/rhdh-local-compose-test
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+        with:
+          files: |
+            compose*.yaml
+            default.env
+            mkdocs.yaml
+            catalog-info.yaml
+            prepare-and-install-dynamic-plugins.sh
+            wait-for-plugins-and-start.sh
+            configs/**
+            docs/**
+            tests/**
+            orchestrator/**
+            developer-lightspeed/**
+            intelligent-assistant/**
+            .github/workflows/test.yml
+            .github/actions/**
+          files_ignore: |
+            **/README.md
+            **/OWNERS
+
+      - if: steps.changed-files.outputs.any_changed == 'true'
+        uses: ./.github/actions/rhdh-local-compose-test
         with:
           git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
           container_tool: ${{ matrix.tool }}
