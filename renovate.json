@@ -21,5 +21,13 @@
   "osvVulnerabilityAlerts": true,
   "labels": [
     "kind/dependency upgrade"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    }
   ]
 }
