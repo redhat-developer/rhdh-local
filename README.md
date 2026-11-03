@@ -97,11 +97,17 @@ Contributions are welcome!
 
 ### Upgrading to RHDH 2.1
 
-If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may need to:
+Check out the [RHDH 2.1 Release Notes](https://docs.redhat.com/en/documentation/red_hat_developer_hub/2.1/html-single/red_hat_developer_hub_release_notes/index) for a complete list of new features and enhancements, breaking changes, and known issues.
 
-1. **Use `ref://` syntax for plugin references in `dynamic-plugins.override.yaml`**
+If you [switch your `RHDH_IMAGE`](docs/rhdh-local-guide/container-image-guide.md#changing-the-container-image) to 2.1+, be aware of the following potential breaking changes:
 
-   Plugin references can now use `ref://plugin-name` instead of hardcoded `./dynamic-plugins/dist/` paths or full `oci://` URLs with `{{inherit}}`. The `ref://` syntax resolves the plugin package from the catalog index listed under `includes`.
+1. **Plugin wrappers removed from the RHDH image**
+
+   All plugin wrappers have been removed from the RHDH container image ([RHDHPLAN-934](https://issues.redhat.com/browse/RHDHPLAN-934)). RHDH GA and TP supported plugins are no longer built into the image and are instead fetched as OCI artifacts from a container registry at runtime. This means `./dynamic-plugins/dist/` paths no longer work. Use `ref://plugin-name` for plugins included in the default plugin catalog index image, or `oci://` with the full package reference otherwise.
+
+2. **Use `ref://` or `oci://` syntax for plugin references in `dynamic-plugins.override.yaml`**
+
+   Use `ref://plugin-name` to resolve the plugin package from the catalog index listed under `includes`, or use `oci://` with a full package reference for plugins not in the catalog index.
 
    For example, instead of:
    ```yaml
@@ -115,20 +121,20 @@ If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may 
 
    The `oci://` syntax with `{{inherit}}` is still supported and required when you need to specify a `!plugin-path` suffix. See [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details.
 
-2. **Use `enabled` instead of `disabled`**
+3. **Use `enabled` instead of `disabled`**
 
-   The legacy per-plugin `disabled` key in `dynamic-plugins.yaml` remains supported but is deprecated. Use `enabled` for new or updated entries. For example, replace `disabled: false` with `enabled: true`.
+   The legacy per-plugin `disabled` key in the dynamic plugins configuration file remains supported but is deprecated. Use `enabled` for new or updated entries. For example, replace `disabled: false` with `enabled: true`.
 
-3. **Enable the guest auth provider in your override file**
+4. **Enable the guest auth provider in your override file**
 
-   RHDH 2+ no longer bundles auth provider plugins statically. If you use a `dynamic-plugins.override.yaml` and need Guest authentication, add:
+   RHDH 2+ no longer bundles auth provider plugins statically. If you are overriding the plugins configuration and need Guest authentication, add:
 
    ```yaml
    - package: ref://backstage-plugin-auth-backend-module-guest-provider
      enabled: true
    ```
 
-4. **Developer Lightspeed renamed to Developer Hub Intelligent Assistant**
+5. **Developer Lightspeed renamed to Developer Hub Intelligent Assistant**
 
    The Lightspeed plugins have been renamed to Developer Hub Intelligent Assistant. This feature remains enabled by default, so no action is required unless you reference Lightspeed plugins in your `dynamic-plugins.override.yaml`. If so, update to the new names:
 
@@ -139,7 +145,7 @@ If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may 
 
    The LLM provider configuration has also changed. See the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md) for the updated setup.
 
-5. **Update Orchestrator plugin references**
+6. **Update Orchestrator plugin references**
 
    If you use the [Orchestrator](./orchestrator/README.md), update the plugin references in your configuration from `oci://` URLs to `ref://` syntax:
 
@@ -152,7 +158,7 @@ If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may 
 
    See the [Orchestrator Workflow Guide](./orchestrator/README.md) for the full updated configuration and [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details on the `ref://` syntax.
 
-6. **Use the Compose overlay for PostgreSQL**
+7. **Use the Compose overlay for PostgreSQL**
 
    PostgreSQL is no longer configured by editing `compose.yaml` or `app-config.yaml` directly. Instead, use the separate [`compose-with-db.yaml`](compose-with-db.yaml) overlay:
 
@@ -162,7 +168,7 @@ If you switch your `RHDH_IMAGE` to 2.1+ (default value in this branch), you may 
 
    See the [PostgreSQL Guide](./docs/rhdh-local-guide/postgresql-guide.md) for details on optional overrides and major version upgrades.
 
-Also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for a full example.
+For dynamic plugin configuration, also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for a full example.
 
 ### Upgrading to RHDH 1.9
 
