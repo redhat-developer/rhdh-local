@@ -25,8 +25,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "(^|/)default\\.env$"
+      "managerFilePatterns": [
+        "/(^|/)default\\.env$/"
       ],
       "matchStrings": [
         "CATALOG_INDEX_IMAGE=(?<depName>[^:]+):(?<currentValue>\\S+)"
@@ -36,8 +36,8 @@
     {
       "customType": "regex",
       "description": "Track OCI plugin images with __-delimited versioning",
-      "fileMatch": [
-        "(^|/)dynamic-plugins[^/]*\\.yaml$"
+      "managerFilePatterns": [
+        "/(^|/)dynamic-plugins[^/]*\\.yaml$/"
       ],
       "matchStrings": [
         "package:\\s*['\"]?oci://(?<depName>[^:]+):(?<currentValue>[^'\"\\s!]*__[^'\"\\s!]+)"
@@ -70,7 +70,7 @@
         "docker"
       ],
       "matchPackageNames": [
-        "/^ghcr\\.io/redhat-developer/rhdh-plugin-export-overlays//"
+        "/^ghcr\\.io\\/redhat-developer\\/rhdh-plugin-export-overlays\\//"
       ],
       "groupName": "RHDH plugin overlay images"
     },
