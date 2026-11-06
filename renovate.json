@@ -52,7 +52,7 @@
         "/(^|/)dynamic-plugins[^/]*\\.yaml$/"
       ],
       "matchStrings": [
-        "package:\\s*['\"]?oci://(?<depName>[^:]+):(?<currentValue>(?!.*__)[^'\"\\s!{}]+)"
+        "package:\\s*['\"]?oci://(?<depName>[^:]+):(?<currentValue>v?\\d+\\.\\d+\\.\\d+[^'\"\\s!{}]*)"
       ],
       "datasourceTemplate": "docker"
     }
