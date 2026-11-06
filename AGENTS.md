@@ -9,9 +9,12 @@ Everything below is available through the `Makefile`; run `make help` for the fu
 - Start: `make start` (`podman compose up -d`)
 - Stop RHDH only: `make stop` (`podman compose stop rhdh`)
 - Restart RHDH only, for configuration changes: `make restart`
+- Follow logs for all services, or one: `make logs` / `make logs SERVICE=rhdh`
+- Inspect the setup: `make ps` (all containers, stopped included), `make list-services` (service names), `make effective-compose` (merged config)
 - Reinstall plugins, then restart RHDH: `make plugins-install`
 - Stop and remove all containers: `make down`
 - Teardown including volumes: `make clean`
+- Full reset, including every pulled image (runtime and lint, they download again on next use): `make reset`
 - Compose overlays: `make start OVERLAYS="db orchestrator"` — space-separated names, applied on top of `compose.yaml`, which the Makefile then names explicitly. Available names: `db`, `corporate-proxy`, `dynamic-plugins-root`, `orchestrator`; any `*.yaml` path also works for personal overrides. A local `compose.override.yaml` only applies when `OVERLAYS` is empty.
 - Lint tracked compose files and shell scripts: `make lint`
 
@@ -19,7 +22,7 @@ Everything below is available through the `Makefile`; run `make help` for the fu
 
 CI runs these through `.github/actions/rhdh-local-compose-test/action.yaml`; run whichever covers what you changed. All of the lint checks need only the container engine; the runtime validators need RHDH running plus `yq`, `jq`, and `curl`.
 
-- Compose change: render the config for the overlay you touched, e.g. `podman compose -f compose.yaml -f compose-with-db.yaml config`
+- Compose change: render the config for the overlay you touched, e.g. `make effective-compose OVERLAYS=db` (or `make list-services OVERLAYS=db` to check which services it adds). Because it interpolates `.env`, `make effective-compose` output can contain secrets — never paste it into a PR or issue.
 - Dynamic plugins actually load (RHDH must be running; needs `yq`, `jq`, `curl`): `./tests/validate-loaded-plugins.sh`
 - Intelligent Assistant: `./tests/validate-intelligent-assistant-compose.sh` and `./tests/validate-intelligent-assistant-runtime.sh`
 - Single compose file: `podman run --rm -v "$PWD":/app:ro,z -w /app docker.io/zavoloklom/dclint:3.1.0 <file.yaml>`, using the same image as `make lint`
@@ -62,6 +65,7 @@ Plugin development is a first-class use case, not an afterthought: RHDH Local lo
 - Conventional Commits are used: `fix:`, `feat:`, `chore:`, `ci:`, `docs:`, etc.
 - Scope examples: `nightly`, `deps`, `lightspeed`, `plugins`
 - Agent-assisted commits should include an `Assisted-by: <model>` footer
+- **Always follow the PR template**: `.github/PULL_REQUEST_TEMPLATE.md` — keep all of its sections (description, related issue, acceptance criteria checklist, how to test) and either tick each checklist item or say why it does not apply. GitHub prefills it in the web UI, but a `gh pr create` body has to reproduce it.
 - Report issues to Jira project RHIDP with Component: **RHDH Local**
 
 ## Pattern References
