@@ -12,6 +12,7 @@ set -euo pipefail
 # this script replaces their paths in the base config accordingly.
 
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
+DYNAMIC_PLUGINS_LOCK="dynamic-plugins-root/install-dynamic-plugins.lock"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
 DB_APP_CONFIG="configs/app-config/app-config.db.yaml"
@@ -35,9 +36,15 @@ fi
 
 cp -f "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
-# Wait until the dynamic plugin config is ready
-while [[ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]]; do
-  echo "Waiting for $DYNAMIC_PLUGINS_CONFIG to be created by install-dynamic-plugins container ..."
+# Wait until the dynamic plugin installer has finished.
+# The installer creates a lock file while it is extracting plugins and generating
+# the config. We must wait for BOTH conditions:
+#   1. The config YAML exists (installer has started writing output)
+#   2. The lock file is gone (installer has finished extracting ALL plugins)
+# Without the lock check, RHDH can start before auth provider plugins (like the
+# guest provider) are fully extracted, causing "No authentication providers" errors.
+while [[ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]] || [[ -f "$DYNAMIC_PLUGINS_LOCK" ]]; do
+  echo "Waiting for dynamic plugins installation to complete ..."
   sleep 2
 done
 
