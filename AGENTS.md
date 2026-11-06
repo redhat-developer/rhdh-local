@@ -29,17 +29,24 @@ CI runs these through `.github/actions/rhdh-local-compose-test/action.yaml`; run
 
 ## Key Conventions
 
-<!-- TODO (maintainers): Add 2-3 conventions that an agent couldn't discover by reading the code.
-     Examples: naming conventions for compose override files, how *.local.yaml files work,
-     how dynamic plugin configs are structured, or how user configs interact with default.env. -->
+- **Branching**: `main` is the latest stable GA release, `dev` carries development for the next release, `release-x.y` stabilizes a release and takes its patch fixes. Target `dev` for features, docs, and dependency updates; `release-x.y` for bug fixes on a supported release; do not target `main`, which maintainers update by merge and cherry-pick. `.github/workflows/branch-target-check.yaml` comments a warning on every PR opened against `main`.
+- **Docs are part of the product**: everything under `docs/` is rendered as TechDocs through `mkdocs.yaml`, so a new page also needs a `nav` entry. `docs/`, `mkdocs.yaml`, and `catalog-info.yaml` are mounted read-only and copied into a writable workdir at startup, so restart `rhdh` to preview edits.
+- **User configuration is never committed**: `.env`, `configs/**/*.override.yaml`, `configs/**/*.local.yaml`, and `compose.override.yaml` are git-ignored. Change the tracked `*.example.yaml` counterparts instead; CI's "user config" matrix copies them into place verbatim, so they must stay valid and self-contained.
+- **Dynamic plugin configuration replaces, it does not merge**: `configs/dynamic-plugins/dynamic-plugins.override.yaml` wins over the deprecated `configs/dynamic-plugins.yaml`, which wins over `configs/dynamic-plugins/dynamic-plugins.yaml`. The selected file replaces the default plugin list entirely, so start from a copy of the default before adding or removing entries.
+- **Plugins under development are configured in `configs/app-config/app-config.local.yaml`** under `dynamicPlugins`, not in `dynamic-plugins.override.yaml`. Export them with `@red-hat-developer-hub/cli plugin export --dev --dynamic-plugins-root <dir>`; re-exporting and refreshing the browser is enough, no container restart. The Node.js debugger is already exposed on port 9229.
+- **Both container tools are supported**: compose changes and documented instructions must work with Podman and Docker, and CI runs the matrix on both. Docs present the pair as TechDocs content tabs (`=== "Podman"` / `=== "Docker"`).
+- **Images and behavior are tuned through environment variables**: pin `RHDH_IMAGE`, `CATALOG_INDEX_IMAGE`, `LIGHTSPEED_CORE_IMAGE`, `WITH_POSTGRES`, and similar in `.env`/`default.env` instead of editing `compose*.yaml`.
+- **Baseline plugins**: `tests/required-plugins.yaml` lists plugins that must load regardless of configuration; `tests/validate-loaded-plugins.sh` fails when one disappears.
 
 ## Architecture
 
-<!-- TODO (maintainers): Add non-obvious architectural decisions or places where things live
-     unexpectedly. Examples: why configs/ is laid out as it is, how compose overlay files
-     relate to compose.yaml, how prepare-and-install-dynamic-plugins.sh interacts with
-     the dynamic-plugins-root compose variant, or how the wait-for-plugins-and-start.sh
-     startup sequence works. -->
+- `compose.yaml` is the only base file. Each capability is an overlay that has to be named alongside it: `compose-with-db.yaml` (PostgreSQL), `compose-with-corporate-proxy.yaml`, `compose-dynamic-plugins-root.yaml`, `orchestrator/compose.yaml`, `intelligent-assistant/compose-with-okp.yaml`. `make … OVERLAYS=…` always passes `-f compose.yaml` first.
+- Startup is two-stage. `install-dynamic-plugins` runs `prepare-and-install-dynamic-plugins.sh` as root, selects the plugin config, and extracts plugins into the `dynamic-plugins-root` and `extensions-catalog` volumes. `rhdh` then runs `wait-for-plugins-and-start.sh` as uid 1001, blocks until the installer's lock file is gone, and execs the Backstage backend.
+- Runtime config layering, last one wins: base `app-config.yaml` → generated `app-config.dynamic-plugins.yaml` → `generated/app-config.patched.yaml` → `configs/app-config/app-config.db.yaml` when `WITH_POSTGRES=true` → `configs/app-config/app-config.local.yaml`. The patched copy only rewrites the users catalog path; components are referenced directly by the base config.
+- `configs/` is bind-mounted whole at `/opt/app-root/src/configs`; `generated/` is runtime output and git-ignored. `local-plugins/` holds local plugin artifacts and is git-ignored apart from its `.gitignore`, and `dynamic-plugins-root` is a named volume used as the plugin cache.
+- Optional components live in self-contained directories: `orchestrator/` (compose file, configs, workflow examples, and a README that explains adding its plugins to the override file) and `intelligent-assistant/` (OKP overlay).
+- `tests/` is not a unit-test suite: each script asserts against a running instance through guest auth and `/api/extensions/loaded-plugins`, and needs `yq`, `jq`, and `curl`. CI invokes the same scripts from `.github/actions/rhdh-local-compose-test/action.yaml`.
+- Intelligent Assistant config in `configs/extra-files/lightspeed-stack*.yaml` and `rhdh-profile.py` is generated from upstream by `scripts/sync-lightspeed-configs.sh`, which a scheduled workflow runs; fix those files upstream rather than hand-editing them.
 
 ## PR Conventions
 
@@ -52,8 +59,10 @@ CI runs these through `.github/actions/rhdh-local-compose-test/action.yaml`; run
 
 - Compose overlay: see `compose-with-corporate-proxy.yaml` for how to extend `compose.yaml`
 - Dynamic plugins config: see files in `configs/dynamic-plugins/` for plugin configuration patterns
-- Orchestrator integration: see `orchestrator/compose.yaml` for adding services via overlay
+- Orchestrator integration: see `orchestrator/compose.yaml` for adding services via overlay, and `orchestrator/README.md` for registering its plugins
 - Shell utility scripts: see `prepare-and-install-dynamic-plugins.sh` and `wait-for-plugins-and-start.sh`
+- Plugin development walkthrough: `docs/rhdh-local-guide/plugins-guide.md` (export, debug, local overrides) and `docs/rhdh-local-guide/dynamic-plugins-management.md` (catalog index, Extensions UI)
+- Day-to-day operations and troubleshooting: `docs/rhdh-local-guide/operating-rhdh-local.md`
 - Local overrides: copy values from `default.env` into `.env` (git-ignored) to pin images, tags, and feature flags instead of editing compose files
 - CI verification: see `.github/actions/rhdh-local-compose-test/action.yaml` and `tests/`
 - User-facing docs (rendered as TechDocs): see `docs/`, plus `README.md` for the quick commands
