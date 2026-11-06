@@ -1,0 +1,19 @@
+name: PR Renovate Config Validator
+
+on:
+  pull_request:
+    paths:
+      - 'renovate.json'
+    # Renovate always uses the config from the repository default branch
+    # https://docs.renovatebot.com/configuration-options/
+    branches: [ 'main' ]
+
+jobs:
+  renovate-config-validator:
+    runs-on: ubuntu-latest
+    name: Renovate Config Validator
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Validate config
+        # See https://docs.renovatebot.com/config-validation/
+        run: docker run --rm -v "$PWD:$PWD" -w "$PWD" ghcr.io/renovatebot/renovate renovate-config-validator --strict renovate.json

@@ -22,12 +22,81 @@
   "labels": [
     "kind/dependency upgrade"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)default\\.env$/"
+      ],
+      "matchStrings": [
+        "CATALOG_INDEX_IMAGE=(?<depName>[^:]+):(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Track OCI plugin images with __-delimited versioning",
+      "managerFilePatterns": [
+        "/(^|/)dynamic-plugins[^/]*\\.yaml$/"
+      ],
+      "matchStrings": [
+        "package:\\s*['\"]?oci://(?<depName>[^:]+):(?<currentValue>[^'\"\\s!]*__[^'\"\\s!]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "regex:^(?<compatibility>.+)__(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Track OCI plugin images with plain semver tags",
+      "managerFilePatterns": [
+        "/(^|/)dynamic-plugins[^/]*\\.yaml$/"
+      ],
+      "matchStrings": [
+        "package:\\s*['\"]?oci://(?<depName>[^:]+):(?<currentValue>v?\\d+\\.\\d+\\.\\d+[^'\"\\s!{}]*)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
   "packageRules": [
     {
       "matchDatasources": [
         "docker"
       ],
       "pinDigests": false
+    },
+    {
+      "description": "Group RHDH and plugin catalog index image updates together",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "quay.io/rhdh-community/rhdh",
+        "quay.io/rhdh/plugin-catalog-index"
+      ],
+      "groupName": "RHDH images"
+    },
+    {
+      "description": "Group RHDH plugin overlay image updates together",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "/^ghcr\\.io\\/redhat-developer\\/rhdh-plugin-export-overlays\\//"
+      ],
+      "groupName": "RHDH plugin overlay images"
+    },
+    {
+      "description": "Only allow patch-level Docker image updates on release branches",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchBaseBranches": [
+        "/^release-.*/"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "enabled": false
     }
   ]
 }
