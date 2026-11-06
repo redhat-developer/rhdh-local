@@ -1,6 +1,6 @@
 # rhdh-local
 
-Red Hat Developer Hub (RHDH) Local — a Docker/Podman Compose setup for running RHDH locally for development and testing. Not a substitute for production RHDH; intended for individual developer use on a laptop/desktop.
+RHDH Local runs Red Hat Developer Hub on your machine with Docker or Podman Compose — a fast inner loop for catalog entries, TechDocs, templates, app config, and dynamic plugin development. It is a testing and development tool only: not a supported product, not for production, not suitable for teams.
 
 Everything below is available through the `Makefile`; run `make help` for the full list. Commands default to Podman — pass `TOOL=docker` for Docker. `make lint` runs both linters from pinned container images (`DCLINT_IMAGE`, `SHELLCHECK_IMAGE`), so no Node.js, npx, or host linter installation is required.
 
@@ -33,7 +33,7 @@ CI runs these through `.github/actions/rhdh-local-compose-test/action.yaml`; run
 - **Docs are part of the product**: everything under `docs/` is rendered as TechDocs through `mkdocs.yaml`, so a new page also needs a `nav` entry. `docs/`, `mkdocs.yaml`, and `catalog-info.yaml` are mounted read-only and copied into a writable workdir at startup, so restart `rhdh` to preview edits.
 - **User configuration is never committed**: `.env`, `configs/**/*.override.yaml`, `configs/**/*.local.yaml`, and `compose.override.yaml` are git-ignored. Change the tracked `*.example.yaml` counterparts instead; CI's "user config" matrix copies them into place verbatim, so they must stay valid and self-contained.
 - **Dynamic plugin configuration replaces, it does not merge**: `configs/dynamic-plugins/dynamic-plugins.override.yaml` wins over the deprecated `configs/dynamic-plugins.yaml`, which wins over `configs/dynamic-plugins/dynamic-plugins.yaml`. The selected file replaces the default plugin list entirely, so start from a copy of the default before adding or removing entries.
-- **Plugins under development are configured in `configs/app-config/app-config.local.yaml`** under `dynamicPlugins`, not in `dynamic-plugins.override.yaml`. Export them with `@red-hat-developer-hub/cli plugin export --dev --dynamic-plugins-root <dir>`; re-exporting and refreshing the browser is enough, no container restart. The Node.js debugger is already exposed on port 9229.
+- **Plugins under development**: keep the plugin's `dynamicPlugins` entry in `configs/app-config/app-config.local.yaml`, not in `dynamic-plugins.override.yaml`. See [Plugin Development](#plugin-development) for the export, iteration, and debug loops.
 - **Both container tools are supported**: compose changes and documented instructions must work with Podman and Docker, and CI runs the matrix on both. Docs present the pair as TechDocs content tabs (`=== "Podman"` / `=== "Docker"`).
 - **Images and behavior are tuned through environment variables**: pin `RHDH_IMAGE`, `CATALOG_INDEX_IMAGE`, `LIGHTSPEED_CORE_IMAGE`, `WITH_POSTGRES`, and similar in `.env`/`default.env` instead of editing `compose*.yaml`.
 - **Baseline plugins**: `tests/required-plugins.yaml` lists plugins that must load regardless of configuration; `tests/validate-loaded-plugins.sh` fails when one disappears.
@@ -47,6 +47,15 @@ CI runs these through `.github/actions/rhdh-local-compose-test/action.yaml`; run
 - Optional components live in self-contained directories: `orchestrator/` (compose file, configs, workflow examples, and a README that explains adding its plugins to the override file) and `intelligent-assistant/` (OKP overlay).
 - `tests/` is not a unit-test suite: each script asserts against a running instance through guest auth and `/api/extensions/loaded-plugins`, and needs `yq`, `jq`, and `curl`. CI invokes the same scripts from `.github/actions/rhdh-local-compose-test/action.yaml`.
 - Intelligent Assistant config in `configs/extra-files/lightspeed-stack*.yaml` and `rhdh-profile.py` is generated from upstream by `scripts/sync-lightspeed-configs.sh`, which a scheduled workflow runs; fix those files upstream rather than hand-editing them.
+
+## Plugin Development
+
+Plugin development is a first-class use case, not an afterthought: RHDH Local loads dynamic plugins at boot, so a rebuilt plugin runs in a real RHDH UI and backend without publishing to a registry or deploying to a cluster. The full walkthrough is `docs/rhdh-local-guide/plugins-guide.md`; the short version:
+
+- **Load an exported plugin**: put the package in `local-plugins/` (mounted at `/opt/app-root/src/local-plugins` and loaded without downloading) or copy `dist-dynamic` into the `dynamic-plugins-root` volume, then reference it from the plugin config. Files must be readable by the container — `chmod -R 777 local-plugins` for quick tests.
+- **Frontend iteration**: `npx @red-hat-developer-hub/cli@latest plugin export --dev --dynamic-plugins-root <rhdh-local>/dynamic-plugins-root`, start with `make start OVERLAYS=dynamic-plugins-root`, and keep the plugin's `dynamicPlugins` entry in `configs/app-config/app-config.local.yaml`. After a code change, re-run the export and refresh the browser — no container restart.
+- **Backend debugging**: copy `dist-dynamic` into the running container (`podman cp dist-dynamic rhdh:/opt/app-root/src/dynamic-plugins-root/<plugin>`), `make restart`, and attach a Node debugger to port 9229 with `remoteRoot` at that in-container path and `localRoot` at the plugin source. Repeat copy + restart after each rebuild.
+- **Start clean** before a frontend iteration — `make clean` (`down --volumes`) — because exported plugins persist in the `dynamic-plugins-root` volume.
 
 ## PR Conventions
 
