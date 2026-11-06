@@ -14,10 +14,10 @@ jobs:
     name: Renovate Config Validator
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install renovate
+        run: npm install --ignore-scripts --no-save renovate@latest
       - name: Print actual renovate version
-        run: |
-          npx --yes --package renovate@latest -- renovate --version
+        run: ./node_modules/.bin/renovate --version
       - name: Validate config
         # See https://docs.renovatebot.com/config-validation/
-        run: |
-          npx --yes --package renovate@latest -- renovate-config-validator --strict renovate.json
+        run: ./node_modules/.bin/renovate-config-validator --strict renovate.json
