@@ -6,9 +6,11 @@
 #                     e.g. make start OVERLAYS="db orchestrator"
 #   DCLINT_IMAGE      dclint image used by `make lint`, pinned to a release tag
 #   SHELLCHECK_IMAGE  shellcheck image used by `make lint`, pinned to a release tag
+#   SERVICE           service to act on for `make logs`, default all services
 #
 TOOL ?= podman
 OVERLAYS ?=
+SERVICE ?=
 
 # Named overlays, so nobody has to remember compose file names.
 OVERLAY_NAMES := db corporate-proxy dynamic-plugins-root orchestrator
@@ -32,7 +34,7 @@ DCLINT_IMAGE ?= docker.io/zavoloklom/dclint:3.1.0
 SHELLCHECK_IMAGE ?= docker.io/koalaman/shellcheck:v0.11.0
 LINT_MOUNT := -v "$(CURDIR)":/app:ro,z -w /app
 
-.PHONY: help start stop restart plugins-install down clean lint
+.PHONY: help start stop restart logs ps list-services effective-compose plugins-install down clean reset lint
 
 .DEFAULT_GOAL := help
 
@@ -41,6 +43,7 @@ help: ## Show this help
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-17s\033[0m %s\n", $$1, $$2}'
 	@printf '\n  OVERLAYS: %s (or a path to any compose file)\n' "$(OVERLAY_NAMES)"
 	@printf '  e.g. make start OVERLAYS="db orchestrator"\n'
+	@printf '  e.g. make logs SERVICE=rhdh\n'
 
 start: ## Start RHDH Local
 	$(COMPOSE) up -d
@@ -52,6 +55,18 @@ restart: ## Restart RHDH only, for configuration changes
 	$(COMPOSE) stop rhdh
 	$(COMPOSE) start rhdh
 
+logs: ## Follow logs for all services, or SERVICE=rhdh for one
+	$(COMPOSE) logs -f $(SERVICE)
+
+ps: ## Show all containers, including stopped ones
+	$(COMPOSE) ps -a
+
+list-services: ## List the services defined by the compose files
+	$(COMPOSE) config --services
+
+effective-compose: ## Render the effective Compose config
+	$(COMPOSE) config
+
 plugins-install: ## Reinstall dynamic plugins, then restart RHDH
 	$(COMPOSE) run install-dynamic-plugins
 	$(COMPOSE) stop rhdh
@@ -62,6 +77,10 @@ down: ## Stop and remove all containers and the network, keeping volumes
 
 clean: ## Stop everything and remove volumes
 	$(COMPOSE) down --volumes
+
+reset: ## Remove containers, volumes, and every pulled image
+	$(COMPOSE) down --volumes --rmi all
+	-$(TOOL) rmi $(DCLINT_IMAGE) $(SHELLCHECK_IMAGE) 2>/dev/null
 
 lint: ## Lint the tracked compose files and shell scripts
 	$(TOOL) run --rm $(LINT_MOUNT) $(DCLINT_IMAGE) \
