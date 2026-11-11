@@ -35,3 +35,6 @@ git pull
 git merge <x.y.z> --no-ff   # e.g. git merge 2.1.0 --no-ff
 # resolve any conflicts, then commit and push
 ```
+
+After the merge, pin the RHDH container image tag from `next-x.y` to `x.y.z`
+wherever applicable (e.g., `compose.yaml`, documentation, environment files).
