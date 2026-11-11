@@ -96,7 +96,7 @@ If you're new to Red Hat Developer Hub or Backstage, we've got you covered! Star
     * [**Understanding & Using the Software Catalog**](../getting-started-rhdh/software-catalog.md) - Discover and manage your services and components
     * [**Understanding & Using TechDocs**](../getting-started-rhdh/techdocs.md) - Access and create documentation
     * [**Understanding & Using Templates**](../getting-started-rhdh/templates.md) - Use templates to create new projects
-    * [**Understanding & Using Developer Lightspeed**](../getting-started-rhdh/developer-lightspeed.md) - Get AI-powered assistance
+    * [**Understanding & Using Developer Hub Intelligent Assistant**](../getting-started-rhdh/developer-intelligent-assistant.md) - Get AI-powered assistance
 
 !!! info "Backstage vs RHDH"
 

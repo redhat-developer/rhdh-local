@@ -65,6 +65,11 @@ jobs:
         run: |
           TITLE="chore(lightspeed): sync config files from upstream"
           BRANCH="chore/sync-lightspeed-configs-${TARGET_BRANCH}"
+          TARGET_REPO="redhat-developer/rhdh-intelligent-assistant-configs"
+          
+          if [[ "${TARGET_BRANCH}" == "release-1.10" ]]; then
+            TARGET_REPO="redhat-ai-dev/lightspeed-configs"
+          fi
 
           EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "${TARGET_BRANCH}" --state open --json number --jq '.[0].number // empty')
 

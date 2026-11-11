@@ -12,8 +12,10 @@ set -euo pipefail
 # this script replaces their paths in the base config accordingly.
 
 DYNAMIC_PLUGINS_CONFIG="dynamic-plugins-root/app-config.dynamic-plugins.yaml"
+DYNAMIC_PLUGINS_LOCK="dynamic-plugins-root/install-dynamic-plugins.lock"
 DEFAULT_APP_CONFIG="configs/app-config/app-config.yaml"
 PATCHED_APP_CONFIG="generated/app-config.patched.yaml"
+DB_APP_CONFIG="configs/app-config/app-config.db.yaml"
 
 USER_APP_CONFIG="configs/app-config/app-config.local.yaml"
 LEGACY_USER_APP_CONFIG="configs/app-config.local.yaml"
@@ -34,26 +36,39 @@ fi
 
 cp -f "$DEFAULT_APP_CONFIG" "$PATCHED_APP_CONFIG"
 
-# Wait until the dynamic plugin config is ready
-while [ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]; do
-  echo "Waiting for $DYNAMIC_PLUGINS_CONFIG to be created by install-dynamic-plugins container ..."
+# Wait until the dynamic plugin installer has finished.
+# The installer creates a lock file while it is extracting plugins and generating
+# the config. We must wait for BOTH conditions:
+#   1. The config YAML exists (installer has started writing output)
+#   2. The lock file is gone (installer has finished extracting ALL plugins)
+# Without the lock check, RHDH can start before auth provider plugins (like the
+# guest provider) are fully extracted, causing "No authentication providers" errors.
+while [[ ! -f "$DYNAMIC_PLUGINS_CONFIG" ]] || [[ -f "$DYNAMIC_PLUGINS_LOCK" ]]; do
+  echo "Waiting for dynamic plugins installation to complete ..."
   sleep 2
 done
 
 # Apply overrides by replacing target paths in the patched config
-if [ -f "$USERS_OVERRIDE" ]; then
+if [[ -f "$USERS_OVERRIDE" ]]; then
   echo "Applying users override"
   sed -i "s|/opt/app-root/src/configs/catalog-entities/users.yaml|/opt/app-root/src/$USERS_OVERRIDE|" "$PATCHED_APP_CONFIG"
 fi
 
-# Add local config if available
+# Auto-wire Postgres when compose-with-db sets WITH_POSTGRES=true.
+# Loaded after the patched default config (SQLite) and before user local config.
 EXTRA_CONFIGS=""
-if [ -f "$USER_APP_CONFIG" ]; then
+if [[ "${WITH_POSTGRES:-}" == "true" ]]; then
+  echo "Using Postgres config: $DB_APP_CONFIG"
+  EXTRA_CONFIGS="$DB_APP_CONFIG"
+fi
+
+# Add local config if available (always last so users can override)
+if [[ -f "$USER_APP_CONFIG" ]]; then
   echo "Using user config: $USER_APP_CONFIG"
-  EXTRA_CONFIGS="$USER_APP_CONFIG"
-elif [ -f "$LEGACY_USER_APP_CONFIG" ]; then
+  EXTRA_CONFIGS="$EXTRA_CONFIGS $USER_APP_CONFIG"
+elif [[ -f "$LEGACY_USER_APP_CONFIG" ]]; then
   echo "[warn] Using legacy app-config.local.yaml. This is deprecated. Please migrate to $USER_APP_CONFIG."
-  EXTRA_CONFIGS="$LEGACY_USER_APP_CONFIG"
+  EXTRA_CONFIGS="$EXTRA_CONFIGS $LEGACY_USER_APP_CONFIG"
 fi
 
 EXTRA_CLI_ARGS=""

@@ -9,6 +9,16 @@ auth:
     #     clientId: ${AUTH_GITHUB_CLIENT_ID}
     #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
+# Tell the frontend sign-in page which auth provider(s) to display.
+# In RHDH 2+, auth provider configs (auth.providers.*) have backend-only visibility,
+# so the frontend app-auth plugin cannot auto-discover them. This explicit list
+# bridges that gap. See: https://redhat.atlassian.net/browse/RHDHBUGS-3962
+# If you enable additional providers (e.g. GitHub), override this in
+# app-config.local.yaml — for example: signInPage: github
+# To show multiple providers, use a list: signInPage: [guest, github]
+# See: https://github.com/redhat-developer/rhdh/blob/main/docs/auth.md#sign-in-page-configuration-value
+signInPage: guest
+
 # integrations:
 #   github:
 #     - host: github.com
@@ -271,23 +281,23 @@ proxy:
 
 quay:
   # The UI url for Quay, used to generate the link to Quay
-  uiUrl: "https://quay.io"
+  apiUrl: "https://quay.io"
 
 # ==============================================================================
-# Developer Lightspeed Plugin Configuration
+# Developer Hub Intelligent Assistant Plugin Configuration
 # ==============================================================================
-# For detailed documentation, see: docs/lightspeed/working-with-lightspeed.md
-# Lightspeed frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed
-# Lightspeed backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/lightspeed/plugins/lightspeed-backend#plugin-configurations
-lightspeed:
-  # OPTIONAL: Custom user prompts displayed in the Lightspeed UI
+# For detailed documentation, see: docs/intelligent-assistant/working-with-intelligent-assistant.md
+# Frontend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/intelligent-assistant/plugins/intelligent-assistant
+# Backend: https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/intelligent-assistant/plugins/intelligent-assistant-backend#plugin-configurations
+intelligent-assistant:
+  # OPTIONAL: Custom user prompts displayed in the Developer Hub Intelligent Assistant UI
   # These appear as suggested questions/prompts to help users get started
   # If not provided, the plugin uses built-in default prompts
   prompts:
     - title: "Getting Started with Red Hat Developer Hub"
       message: Can you guide me through the first steps to start using Developer Hub as a developer, like exploring the Software Catalog and adding my service?
 
-  # OPTIONAL: Port for the Lightspeed backend service
+  # OPTIONAL: Port for the Lightspeed Core service
   # Default: 8080
   # Only change if you've configured a different port in lightspeed-stack.yaml
   # servicePort: 8080
@@ -300,4 +310,4 @@ lightspeed:
     enabled: false
     queryDefaults:
       model: ${NOTEBOOKS_QUERY_MODEL} # Model to use for answering queries. Must map to a model available through the provider set in $NOTEBOOKS_QUERY_PROVIDER_ID
-      provider_id: ${NOTEBOOKS_QUERY_PROVIDER_ID} # AI provider for the query model. Must map to a provider enabled in your Lightspeed config.yaml
+      provider_id: ${NOTEBOOKS_QUERY_PROVIDER_ID} # AI provider for the query model. Must map to a provider enabled in your Lightspeed lightspeed-stack.yaml

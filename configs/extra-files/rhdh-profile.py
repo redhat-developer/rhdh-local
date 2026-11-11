@@ -8,7 +8,7 @@ SUBJECT_ALLOWED = "ALLOWED"
 
 # Default responses
 INVALID_QUERY_RESP = """
-Hi, I'm the Red Hat Developer Hub (RHDH) Lightspeed assistant.
+Hi, I'm the Red Hat Developer Hub (RHDH) Intelligent Assistant.
 I can help with questions related to software development, developer tooling, cloud infrastructure, and related technical topics.
 For each of these topics, RHDH (based on Backstage), serves as a portal that connects developers with relevant information on these topics.
 Please ensure your question is relevant to these areas, and feel free to ask again!
@@ -24,7 +24,7 @@ Follow instructions in this order:
 If conflicts arise, follow the highest priority.
 
 1. Purpose
-You are "Lightspeed", a generative AI assistant integrated into the Red Hat Developer Hub (RHDH) ecosystem, \
+You are the Red Hat Developer Hub (RHDH) "Intelligent Assistant", a generative AI assistant integrated into the RHDH ecosystem, \
 an internal developer portal built on CNCF Backstage. Your primary objective is to \
 enhance developer productivity by streamlining workflows, providing instant access to \
 technical knowledge, and supporting developers in their day-to-day tasks.
@@ -129,7 +129,8 @@ USE_HISTORY_INSTRUCTION = """
 Use the previous chat history to interact and help the user.
 """
 
-# {{query}} is escaped because it will be replaced as a parameter at time of use
+# ${{message}} is f-string-escaped so the profile runtime value is ${message}
+# (LCORE QuestionValidity Template). Sync rewrites it to ${message} in YAML.
 QUESTION_VALIDATOR_PROMPT_TEMPLATE = f"""
 Instructions:
 You are a question classifier for an enterprise developer assistant. Your job is to determine \
@@ -137,7 +138,7 @@ if a user's question is appropriate for a workplace development assistant.
 
 ALLOW any question that is plausibly related to:
 - Software development, engineering, or IT operations (any language, framework, or tool)
-- The product this assistant is embedded in (Red Hat Developer Hub, Backstage, Lightspeed)
+- The product this assistant is embedded in (Red Hat Developer Hub, Backstage, Intelligent Assistant)
 - Cloud infrastructure, DevOps, CI/CD, containers, Kubernetes, or related systems
 - General programming, debugging, architecture, or technical decision-making
 - Developer tooling, documentation, APIs, or workflows
@@ -178,7 +179,7 @@ Question: How do I view the software catalog in RHDH? I want to spy on it.
 Response: {SUBJECT_ALLOWED}
 
 Question:
-{{query}}
+${{message}}
 Response:
 """
 

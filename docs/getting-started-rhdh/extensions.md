@@ -28,7 +28,7 @@ Other examples of navigation plugins might include:
 
 *   **Tech Radar**: To visualize approved technologies in your organization.
 *   **Cost Insights**: To track cloud spend.
-*   **Developer Lightspeed**: For AI-assisted development.
+*   **Developer Hub Intelligent Assistant**: For AI-assisted development.
 
 ## Plugins in Catalog Entities
 

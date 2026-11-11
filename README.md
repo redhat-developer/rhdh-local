@@ -22,7 +22,7 @@ RHDH Local lets you quickly test software catalogs, TechDocs, plugins, templates
    podman compose up -d  # or: docker compose up -d
    ```
 
-   > **Developer Lightspeed** is included by default. To configure an LLM provider, see the [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md). To disable Lightspeed, see [Disabling Lightspeed](./docs/lightspeed/working-with-lightspeed.md#disabling-lightspeed).
+   > **Developer Hub Intelligent Assistant** is included by default without OKP-backed product documentation. To configure an LLM provider, opt in to OKP, or disable Intelligent Assistant, see the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md).
 
 3. **Access**: Open [http://localhost:7007](http://localhost:7007) and log in as 'Guest'
 
@@ -81,8 +81,8 @@ If you would like to change your RHDH-Local setup, or add additional features or
 3. [Simulated Proxy Setup](docs/rhdh-local-guide/corporate-proxy-setup-sim.md) - testing in a simulated proxy environment
 4. [PostgreSQL Guide](docs/rhdh-local-guide/postgresql-guide.md) - using PostgreSQL instead of an in-memory database
 5. [Orchestrator Workflow Guide](./orchestrator/README.md) - using Orchestrator with RHDH to develop workflows.
-6. [Developer Lightspeed Guide](./docs/lightspeed/working-with-lightspeed.md) - configuring an LLM provider for the built-in Developer Lightspeed assistant.
-7. [Developer Lightspeed Maintainer Guide](./docs/lightspeed/maintaining-lightspeed.md) - maintaining and syncing Lightspeed configuration files.
+6. [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md) - configuring an LLM provider for the built-in Developer Hub Intelligent Assistant.
+7. [Developer Hub Intelligent Assistant Maintainer Guide](./docs/intelligent-assistant/maintaining-intelligent-assistant.md) - maintaining and syncing Lightspeed Core configuration files.
 
 ## Contributing and reporting issues
 
@@ -100,6 +100,81 @@ See the [built-in Contributing guide](./docs/rhdh-local-guide/help-and-contrib.m
 
 
 ## Breaking changes and known issues
+
+### Upgrading to RHDH 2.1
+
+Check out the [RHDH 2.1 Release Notes](https://docs.redhat.com/en/documentation/red_hat_developer_hub/2.1/html-single/red_hat_developer_hub_release_notes/index) for a complete list of new features and enhancements, breaking changes, and known issues.
+
+If you [switch your `RHDH_IMAGE`](docs/rhdh-local-guide/container-image-guide.md#changing-the-container-image) to 2.1+, be aware of the following potential breaking changes:
+
+1. **Plugin wrappers removed from the RHDH image**
+
+   All plugin wrappers have been removed from the RHDH container image ([RHDHPLAN-934](https://issues.redhat.com/browse/RHDHPLAN-934)). RHDH GA and TP supported plugins are no longer built into the image and are instead fetched as OCI artifacts from a container registry at runtime. This means `./dynamic-plugins/dist/` paths no longer work. Use `ref://plugin-name` for plugins included in the default plugin catalog index image, or `oci://` with the full package reference otherwise.
+
+2. **Use `ref://` or `oci://` syntax for plugin references in `dynamic-plugins.override.yaml`**
+
+   Use `ref://plugin-name` to resolve the plugin package from the catalog index listed under `includes`, or use `oci://` with a full package reference for plugins not in the catalog index.
+
+   For example, instead of:
+   ```yaml
+   - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+   ```
+
+   Use:
+   ```yaml
+   - package: ref://backstage-community-plugin-tech-radar
+   ```
+
+   The `oci://` syntax with `{{inherit}}` is still supported and required when you need to specify a `!plugin-path` suffix. See [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details.
+
+3. **Use `enabled` instead of `disabled`**
+
+   The legacy per-plugin `disabled` key in the dynamic plugins configuration file remains supported but is deprecated. Use `enabled` for new or updated entries. For example, replace `disabled: false` with `enabled: true`.
+
+4. **Enable the guest auth provider in your override file**
+
+   RHDH 2+ no longer bundles auth provider plugins statically. If you are overriding the plugins configuration and need Guest authentication, add:
+
+   ```yaml
+   - package: ref://backstage-plugin-auth-backend-module-guest-provider
+     enabled: true
+   ```
+
+5. **Developer Lightspeed renamed to Developer Hub Intelligent Assistant**
+
+   The Lightspeed plugins have been renamed to Developer Hub Intelligent Assistant. This feature remains enabled by default, so no action is required unless you reference Lightspeed plugins in your `dynamic-plugins.override.yaml`. If so, update to the new names:
+
+   ```yaml
+   - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant
+   - package: ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend
+   ```
+
+   The LLM provider configuration has also changed. See the [Developer Hub Intelligent Assistant Guide](./docs/intelligent-assistant/working-with-intelligent-assistant.md) for the updated setup.
+
+6. **Update Orchestrator plugin references**
+
+   If you use the [Orchestrator](./orchestrator/README.md), update the plugin references in your configuration from `oci://` URLs to `ref://` syntax:
+
+   ```yaml
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator-backend
+   - package: ref://red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+   - package: ref://red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+   ```
+
+   See the [Orchestrator Workflow Guide](./orchestrator/README.md) for the full updated configuration and [Plugin references](https://github.com/redhat-developer/rhdh/blob/release-2.1/docs/dynamic-plugins/installing-plugins.md#plugin-references) for more details on the `ref://` syntax.
+
+7. **Use the Compose overlay for PostgreSQL**
+
+   PostgreSQL is no longer configured by editing `compose.yaml` or `app-config.yaml` directly. Instead, use the separate [`compose-with-db.yaml`](compose-with-db.yaml) overlay:
+
+   ```sh
+   podman compose -f compose.yaml -f compose-with-db.yaml up -d
+   ```
+
+   See the [PostgreSQL Guide](./docs/rhdh-local-guide/postgresql-guide.md) for details on optional overrides and major version upgrades.
+
+For dynamic plugin configuration, also see [configs/dynamic-plugins/dynamic-plugins.override.example.yaml](configs/dynamic-plugins/dynamic-plugins.override.example.yaml) for a full example.
 
 ### Upgrading to RHDH 1.9
 

@@ -5,7 +5,7 @@ includes:
   - dynamic-plugins.default.yaml
   # Uncomment the following line (and the corresponding 'red-hat-developer-hub-backstage-plugin-extensions*' plugins)
   # to enable dynamic plugins installation using the Extensions UI.
-  # - /dynamic-plugins-root/dynamic-plugins.extensions.yaml
+  # - /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
 # # Below you can add custom dynamic plugins, including local ones.
 
@@ -13,17 +13,17 @@ includes:
 # plugins: 
 # Functioning example using Tech Radar, uncomment to use
   #Tech Radar frontend plugin
-  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
-  #   disabled: false
+  # - package: ref://backstage-community-plugin-tech-radar
+  #   enabled: true
 
   # Tech Radar backend plugin. Required if you want to customize the tech radar URL 
   # (see the `techRadar.url` app-config property).
-  # - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
-  #   disabled: false
+  # - package: ref://backstage-community-plugin-tech-radar-backend
+  #   enabled: true
 
 # # loading plugin from host directory
 #   - package: ./local-plugins/todo
-#     disabled: false
+#     enabled: true
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -38,7 +38,7 @@ includes:
 
 # # loading image from container image
 #   - package: oci://docker.io/tomaskral/simple-chat:v0.0.1!internal-backstage-plugin-simple-chat
-#     disabled: false
+#     enabled: true
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -54,7 +54,7 @@ includes:
 #                     icon: chatIcon
 
 # # loading image from tarball URL
-#   - disabled: false
+#   - enabled: true
 #     package: >-
 #         https://github.com/redhat-developer/rhdh-plugin-export-backstage-community-plugins/releases/download/v1.2.0/backstage-community-plugin-tech-insights-dynamic-0.3.28.tgz
 #     integrity: sha512-cNHXSwPa5fOi2BcNVSe7tfdLyM0JY988CE5t+P9p/XlboP1QpQbMcLBmqPrlXZdpedAyp81Zz3yPQYGnPuy9ww==
@@ -75,9 +75,9 @@ includes:
 #               cadence: '*/15 * * * *'
 #       lifecycle: { timeToLive: { weeks: 2 } }
 
-# # loading plugin from directory inside the RHDH container
-#   - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
-#     disabled: true
+# # loading plugin from the catalog index
+#   - package: ref://backstage-community-plugin-rbac
+#     enabled: false
 #     pluginConfig:
 #       dynamicPlugins:
 #         frontend:
@@ -98,15 +98,11 @@ includes:
 #                 importName: RbacPage
 
 # # Uncomment the following two plugins to enable dynamic plugins installation via the Extensions UI
-# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-# # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:{{inherit}}'
-# - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
-#   disabled: false
+# - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions'
+#   enabled: true
 
-# # TODO: Replace the `./dynamic-plugins/dist/` path with the OCI reference once we switch to that in the dynamic-plugins.default.yaml (DPDY) file in the catalog index image - see https://issues.redhat.com/browse/RHDHPLAN-934 and https://issues.redhat.com/browse/RHDHPLAN-256
-# # - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:{{inherit}}'
-# - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
-#   disabled: false
+# - package: 'oci://quay.io/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend:2.0.0--0.19.1!red-hat-developer-hub-backstage-plugin-extensions-backend'
+#   enabled: true
 #   pluginConfig:
 #     extensions:
 #       installation:
@@ -117,11 +113,11 @@ includes:
 #           # Also add the path in the 'includes' section of this file, so the plugins installed via the Extensions UI can be loaded at runtime.
 #           file: /opt/app-root/src/dynamic-plugins-root/dynamic-plugins.extensions.yaml
 
-# # Uncomment the following to disable Developer Lightspeed plugins
-#   # Lightspeed frontend plugin
-#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed:{{inherit}}'
-#     disabled: true
+# # Uncomment the following to disable Developer Hub Intelligent Assistant plugins
+#   # Developer Hub Intelligent Assistant frontend plugin
+#   - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant'
+#     enabled: false
 #
-#   # Lightspeed backend plugin
-#   - package: 'oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-lightspeed-backend:{{inherit}}'
-#     disabled: true
+#   # Developer Hub Intelligent Assistant backend plugin
+#   - package: 'ref://red-hat-developer-hub-backstage-plugin-intelligent-assistant-backend'
+#     enabled: false

@@ -84,7 +84,7 @@ Now that you understand what RHDH is and why it's valuable, let's explore how to
 * [APIs](apis.md) - Find and test APIs
 * [Templates](templates.md) - Use and create project templates
 * [Search](search.md) - Find anything quickly
-* [Developer Lightspeed](developer-lightspeed.md) - Get AI-powered assistance
+* [Developer Hub Intelligent Assistant](developer-intelligent-assistant.md) - Get AI-powered assistance
 
 *[RHDH]: Red Hat Developer Hub
 *[CNCF]: Cloud Native Computing Foundation

@@ -195,6 +195,26 @@ After modifying configuration files, restart to apply changes:
     docker compose start rhdh
     ```
 
+**For Lightspeed stack changes** (`configs/extra-files/lightspeed-stack.local.yaml`):
+
+Recreate `lightspeed-core`, not only `rhdh`. A `stop`/`start` of `rhdh` does not pick up stack-file edits.
+
+=== "Podman"
+    ```bash
+    podman compose stop lightspeed-core
+    podman compose start lightspeed-core
+    # or: podman compose up -d --force-recreate lightspeed-core
+    ```
+
+=== "Docker"
+    ```bash
+    docker compose stop lightspeed-core
+    docker compose start lightspeed-core
+    # or: docker compose up -d --force-recreate lightspeed-core
+    ```
+
+If you just created the local YAML, set `LIGHTSPEED_STACK_CONFIG` in `.env` before recreating `lightspeed-core`. Compose interpolates that variable from the project `.env`.
+
 ### Validating Configuration
 
 Check configuration syntax before restarting:

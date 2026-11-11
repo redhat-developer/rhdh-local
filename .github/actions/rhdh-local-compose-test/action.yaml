@@ -44,7 +44,6 @@ inputs:
     description: Log level to use
     required: false
     default: "info"
-
 runs:
   using: "composite"
   steps:
@@ -151,6 +150,7 @@ runs:
         docker-compose-version: v5.0.1
         env: |
           CORPORATE_PROXY_IMAGE=docker.io/ubuntu/squid:latest
+          POSTGRES_IMAGE=quay.io/fedora/postgresql-18:latest
 
     - name: Display container engine version
       if: ${{ env.SKIP_TEST != 'true' }}
@@ -186,6 +186,14 @@ runs:
         CLI_ARGS: ${{ inputs.compose_cli_args }}
       run: $TOOL compose $CLI_ARGS config
 
+    - name: Validate Intelligent Assistant Compose profiles
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: ./tests/validate-intelligent-assistant-compose.sh
+
     - name: Add user-specific configuration
       if: ${{ env.SKIP_TEST != 'true' && inputs.user_config_enabled == 'true' }}
       shell: bash
@@ -208,14 +216,23 @@ runs:
         EOF
 
         # Custom dynamic-plugins.override.yaml
-        cat <<EOF > configs/dynamic-plugins/dynamic-plugins.override.yaml
-        includes: [dynamic-plugins.default.yaml]
+        # Start from the default config so all baseline plugins are included,
+        # then merge in CI-specific overrides.
+        cp configs/dynamic-plugins/dynamic-plugins.yaml configs/dynamic-plugins/dynamic-plugins.override.yaml
+
+        # Override the extensions backend entry to disable installation in CI
+        yq -i '(.plugins[] | select(.package | test("extensions-backend")) | .pluginConfig.extensions.installation.enabled) = false' \
+          configs/dynamic-plugins/dynamic-plugins.override.yaml
+
+        # Append CI-specific plugins
+        cat <<EOF > /tmp/ci-plugins-override.yaml
         plugins:
-        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
-          disabled: false
-        - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
-          disabled: false
+        - package: ref://red-hat-developer-hub-backstage-plugin-bulk-import-backend
+          enabled: true
+        - package: ref://red-hat-developer-hub-backstage-plugin-bulk-import
+          enabled: true
         EOF
+        yq -i '.plugins += load("/tmp/ci-plugins-override.yaml").plugins' configs/dynamic-plugins/dynamic-plugins.override.yaml
 
         # Custom extra files
         cp -vr configs/extra-files/github-app-credentials.example.yaml configs/extra-files/github-app-credentials.yaml
@@ -275,6 +292,14 @@ runs:
         done
         echo "[$(date)] RHDH is ready"
         curl -i --insecure http://localhost:7007
+
+    - name: Validate Intelligent Assistant runtime
+      if: ${{ env.SKIP_TEST != 'true' }}
+      shell: bash
+      env:
+        TOOL: ${{ inputs.container_tool }}
+        CLI_ARGS: ${{ inputs.compose_cli_args }}
+      run: ./tests/validate-intelligent-assistant-runtime.sh
 
     - name: Validate loaded plugins
       if: ${{ env.SKIP_TEST != 'true' }}

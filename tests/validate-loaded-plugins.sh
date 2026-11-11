@@ -11,6 +11,8 @@
 #
 # The script determines the effective dynamic-plugins config
 # (override if it exists, else default) and parses it using yq.
+# A baseline list from tests/required-plugins.yaml is merged in so
+# that removing a plugin from the config still triggers a failure.
 # Any extra config files (e.g., orchestrator) can be passed as arguments.
 # Assumes CWD is the repository root.
 
@@ -28,6 +30,7 @@ done
 
 RHDH_URL="${RHDH_URL:-http://localhost:7007}"
 DYN_PLUGINS_DIR="configs/dynamic-plugins"
+REQUIRED_PLUGINS_FILE="tests/required-plugins.yaml"
 
 primary_config="$DYN_PLUGINS_DIR/dynamic-plugins.yaml"
 if [[ -f "$DYN_PLUGINS_DIR/dynamic-plugins.override.yaml" ]]; then
@@ -46,7 +49,7 @@ done
 echo "Config files: ${config_files[*]}"
 
 # Extract the raw plugin name from a package reference.
-# ./dynamic-plugins/dist/foo → foo
+# ./local-plugins/foo → foo
 # oci://host/path/foo:tag → foo
 # oci://host/path/foo:tag!bar → bar
 extract_plugin_name() {
@@ -72,32 +75,66 @@ normalize_plugin_name() {
     echo "$name"
 }
 
-expected_plugins=()
-disabled_plugins=()
+# Track plugin state with an associative array so later config files
+# (e.g. override) take precedence over earlier ones (e.g. default).
+declare -A plugin_state  # normalized_name → "enabled" | "disabled"
+declare -A plugin_display # normalized_name → raw display name
+
 for cfg in "${config_files[@]}"; do
     if ! yq -e '.plugins' "$cfg" > /dev/null 2>&1; then
         echo "Config $cfg has no .plugins array, skipping."
         continue
     fi
 
-    enabled_output=$(yq -r '.plugins[] | select(.disabled != true and .enabled != false) | .package' "$cfg") || {
-        echo "ERROR: Failed to extract enabled plugins from $cfg" >&2
+    # Process plugins in YAML order so later entries override earlier ones.
+    # This matters when a dist path is disabled and an OCI path for the same
+    # plugin is enabled — the OCI entry must win.
+    all_output=$(yq -o=json '.plugins' "$cfg" | jq -r '.[] | .package + "|" + (if (.disabled == true or .enabled == false) then "disabled" else "enabled" end)') || {
+        echo "ERROR: Failed to extract plugins from $cfg" >&2
         exit 1
     }
-    while IFS= read -r raw_pkg; do
+    while IFS='|' read -r raw_pkg state; do
         [[ -z "$raw_pkg" ]] && continue
-        expected_plugins+=("$(extract_plugin_name "$raw_pkg")")
-    done <<< "$enabled_output"
-
-    disabled_output=$(yq -r '.plugins[] | select(.disabled == true or .enabled == false) | .package' "$cfg") || {
-        echo "ERROR: Failed to extract disabled plugins from $cfg" >&2
-        exit 1
-    }
-    while IFS= read -r raw_pkg; do
-        [[ -z "$raw_pkg" ]] && continue
-        disabled_plugins+=("$(extract_plugin_name "$raw_pkg")")
-    done <<< "$disabled_output"
+        name=$(extract_plugin_name "$raw_pkg")
+        norm=$(normalize_plugin_name "$name")
+        plugin_state["$norm"]="$state"
+        plugin_display["$norm"]="$name"
+    done <<< "$all_output"
 done
+
+# Build final lists from the resolved state.
+expected_plugins=()
+disabled_plugins=()
+for norm in "${!plugin_state[@]}"; do
+    if [[ "${plugin_state[$norm]}" = "enabled" ]]; then
+        expected_plugins+=("${plugin_display[$norm]}")
+    else
+        disabled_plugins+=("${plugin_display[$norm]}")
+    fi
+done
+
+# Merge baseline required plugins (deduplicated) into the expected list.
+if [[ -f "$REQUIRED_PLUGINS_FILE" ]]; then
+    echo "Required plugins file: $REQUIRED_PLUGINS_FILE"
+    required_output=$(yq -r '.plugins[]' "$REQUIRED_PLUGINS_FILE" 2>/dev/null) || true
+    while IFS= read -r req_plugin; do
+        [[ -z "$req_plugin" ]] && continue
+        norm_req=$(normalize_plugin_name "$req_plugin")
+        already_listed=false
+        for existing in "${expected_plugins[@]}"; do
+            if [[ "$(normalize_plugin_name "$existing")" = "$norm_req" ]]; then
+                already_listed=true
+                break
+            fi
+        done
+        if ! $already_listed; then
+            expected_plugins+=("$req_plugin")
+            echo "  Adding baseline plugin: $req_plugin"
+        fi
+    done <<< "$required_output"
+else
+    echo "WARNING: Required plugins file not found: $REQUIRED_PLUGINS_FILE"
+fi
 
 if [[ ${#expected_plugins[@]} -eq 0 ]] && [[ ${#disabled_plugins[@]} -eq 0 ]]; then
     echo "WARNING: No plugins found in config files. Nothing to validate."
