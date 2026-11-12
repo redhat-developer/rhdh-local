@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - name: Lint
       # Based on https://github.com/zavoloklom/docker-compose-linter/tree/main?tab=readme-ov-file
       run: |
@@ -58,7 +58,7 @@ jobs:
 
     steps:
       # Checkout default branch so .github/actions/* exists (release-* push may not include the composite).
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: ./.github/actions/rhdh-local-compose-test
         with:
           git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
