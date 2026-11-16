@@ -30,6 +30,7 @@ services:
 
   rhdh:
     environment:
+      - NODE_USE_ENV_PROXY=1
       - HTTP_PROXY=http://proxy:3128
       - HTTPS_PROXY=http://proxy:3128
       # NO_PROXY configured in the .env file, but can be overridden here
@@ -47,6 +48,7 @@ services:
 
   install-dynamic-plugins:
     environment:
+      - NODE_USE_ENV_PROXY=1
       - HTTP_PROXY=http://proxy:3128
       - HTTPS_PROXY=http://proxy:3128
       # NO_PROXY configured in the .env file, but can be overridden here

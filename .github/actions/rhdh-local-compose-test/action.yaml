@@ -204,7 +204,6 @@ runs:
         # Custom .env file
         cat <<EOF >> .env
         LOG_LEVEL=$LOG_LEVEL
-        ROARR_LOG=true
         NODE_DEBUG=fetch
 
         GITHUB_APP_APP_ID=123456
