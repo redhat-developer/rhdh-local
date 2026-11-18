@@ -26,6 +26,7 @@ nav:
   - "RHDH Local User Guide":
     - "What is RHDH Local And Why Use It?": rhdh-local-guide/index.md
     - "Getting Started With RHDH Local": rhdh-local-guide/getting-started.md
+    - "Dev Spaces Guide": rhdh-local-guide/devspaces-guide.md
     - "Configuration": rhdh-local-guide/configuration.md
     - "Loading Content": rhdh-local-guide/loading-content.md
     - "Dynamic Plugin Management": rhdh-local-guide/dynamic-plugins-management.md
