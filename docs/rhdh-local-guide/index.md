@@ -57,6 +57,12 @@ RHDH Local serves multiple purposes for platform engineers, developers, and orga
     * Use plugin scaffolding templates
     * Integrate locally-built plugins for development workflows
 
+## Architecture Overview
+
+The following diagram illustrates the RHDH Local service flow, showing how the container services, entry scripts, shared volumes, and environment configuration fit together when you run `compose up`.
+
+![RHDH Local — Service Flow](../images/rhdh-local-runtime-architecture.png){ width="850" }
+
 ## Key Requirements of RHDH Local
 
 To use RHDH Local effectively, you need:
