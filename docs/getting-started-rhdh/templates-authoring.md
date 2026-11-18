@@ -450,7 +450,7 @@ This guide provides an introduction to creating Software Templates, but there's 
 Once you're comfortable with the basics of creating templates, explore these advanced topics to enhance your templates with custom functionality and sophisticated features:
 
 * [Custom Field Extensions](https://backstage.io/docs/features/software-templates/writing-custom-field-extensions/) - Create custom form fields for templates
-* [Template Filters](https://backstage.io/docs/features/software-templates/template-extensions) - Process and transform template values
+* [Template Filters](https://backstage.io/docs/features/software-templates/templating-extensions/) - Process and transform template values
 * [Nunjucks Templating](https://mozilla.github.io/nunjucks/templating.html) - Template syntax reference for skeleton files
 * [Ten Template Tips](ten_template_tips.md) - Advanced tips and best practices for creating better templates
 
