@@ -148,7 +148,7 @@ If you're wondering why this might be necessary, consider a scenario where a tem
 
 ## Tip #5: Process Structured Data Using Template Filters
 
-Backstage [Template Filters](https://backstage.io/docs/features/software-templates/template-extensions) are functions that operate on objects in your templates. For example, consider the previous custom field extensions that return [Entity References as strings](https://backstage.io/docs/features/software-catalog/references#string-references). A template might collect a reference to a component using an EntityPicker field as follows:
+Backstage [Template Filters](https://backstage.io/docs/features/software-templates/templating-extensions/) are functions that operate on objects in your templates. For example, consider the previous custom field extensions that return [Entity References as strings](https://backstage.io/docs/features/software-catalog/references#string-references). A template might collect a reference to a component using an EntityPicker field as follows:
 
 ```yaml
 properties:
@@ -163,7 +163,7 @@ properties:
         kind: Component
 ```
 
-The resulting value of `${{ params.component }}` will have the format `component:namespace/component-name`. Actions in the template can use the [`parseEntityRef`](https://backstage.io/docs/reference/catalog-model.parseentityref/) filter to extract properties from the entity reference, such as the namespace or name, as follows.
+The resulting value of `${{ params.component }}` will have the format `component:namespace/component-name`. Actions in the template can use the [`parseEntityRef`](https://backstage.io/api/stable/functions/_backstage_catalog-model.index.parseEntityRef.html) filter to extract properties from the entity reference, such as the namespace or name, as follows.
 
 ```yaml
 id: openPullRequest
